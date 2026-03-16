@@ -1,4 +1,4 @@
-# My Best Practices Skills (Rails Edition)
+# Rails Agent Skills
 
 A curated library of AI agent skills for **Ruby on Rails** development. These skills provide specialized knowledge, conventions, and workflow patterns that AI coding assistants use to deliver higher-quality code.
 
@@ -78,25 +78,27 @@ See [docs/implementation-guide.md](docs/implementation-guide.md) for detailed se
 
 ```bash
 # Option A: Symlink (if you already have the repo cloned)
-ln -s /path/to/my-cursor-skills ~/.cursor/skills-cursor/my-cursor-skills
+ln -s /path/to/rails-agent-skills ~/.cursor/skills-cursor/rails-agent-skills
 
 # Option B: Clone directly
-git clone <your-repo-url> ~/.cursor/skills-cursor/my-cursor-skills
+git clone git@github.com:igmarin/rails-agent-skills.git ~/.cursor/skills-cursor/rails-agent-skills
 ```
 
 ### Codex
 
 ```bash
-git clone <your-repo-url> ~/.codex/my-cursor-skills
-mkdir -p ~/.agents/skills
-ln -s ~/.codex/my-cursor-skills ~/.agents/skills/my-cursor-skills
+# Option A: Clone directly into Codex skills
+git clone git@github.com:igmarin/rails-agent-skills.git ~/.codex/skills/rails-agent-skills
+
+# Option B: Symlink (if you already have the repo cloned)
+ln -s /path/to/rails-agent-skills ~/.codex/skills/rails-agent-skills
 ```
 
 ### Claude Code
 
 ```bash
 # From the Claude Code interface, add as a plugin:
-/add-plugin /path/to/my-cursor-skills
+/add-plugin /path/to/rails-agent-skills
 ```
 
 ## Skills Catalog
