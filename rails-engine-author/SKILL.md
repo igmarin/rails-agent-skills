@@ -1,6 +1,6 @@
 ---
 name: rails-engine-author
-description: Design and create Ruby on Rails engines using maintainable conventions. Use when creating, scaffolding, or refactoring a Rails engine, mountable engine, gemified Rails component, engine.rb setup, isolated namespaces, engine file layout, or host-app contract design.
+description: Use when creating, scaffolding, or refactoring a Rails engine. Trigger words: mountable engine, Railtie, engine.rb, isolate_namespace, engine file layout, host-app contract, gemified Rails component, engine structure, engine generators, dummy app.
 ---
 # Rails Engine Author
 
@@ -9,6 +9,29 @@ Use this skill when the task is to create, scaffold, or refactor a Rails engine.
 Favor maintainability over cleverness. A good engine has a narrow purpose, a clear host-app integration story, and a small public API.
 
 Keep this skill focused on structure and design. Use adjacent skills for installer details, deep test coverage, release workflow, or documentation work.
+
+## Quick Reference
+
+| Engine Type | When to Use |
+|-------------|-------------|
+| Plain gem | No Rails hooks or app directories needed; pure Ruby library |
+| Railtie | Needs Rails initialization hooks but not models/controllers/routes/views |
+| Engine | Needs Rails autoload paths, initializers, migrations, assets, jobs, or host integration |
+| Mountable engine | Needs its own routes, controllers, views, assets, and namespace boundary |
+
+## Common Mistakes
+
+| Mistake | Reality |
+|---------|---------|
+| Starting with mountable when plain gem suffices | Use the lightest option; mountable adds routes, controllers, views — only when you need them |
+| Missing `isolate_namespace` | Mountable and public-facing engines must isolate to avoid constant collisions with host |
+| No host contract defined | Without a documented contract, integration becomes guesswork and breaks across host apps |
+
+## Red Flags
+
+- No namespace isolation for mountable or public engines
+- Engine depends on host internals (direct constants, private APIs)
+- No dummy app for integration verification
 
 ## Workflow
 
@@ -163,3 +186,12 @@ When asked to create or refactor an engine:
 If a real-world engine corpus is available, inspect comparable engines before making structural decisions. Prefer matching successful patterns from mature engines over inventing new conventions.
 
 For a reusable starter layout and file stubs, read [reference.md](reference.md).
+
+## Integration
+
+| Skill | When to chain |
+|-------|----------------|
+| rails-engine-testing | Dummy app setup, integration tests, regression coverage |
+| rails-engine-reviewer | Findings-first audits, structural review |
+| rails-engine-docs | README, installation guide, host-app contract documentation |
+| rails-engine-installers | Generator-heavy setup, install scripts, copy migrations |

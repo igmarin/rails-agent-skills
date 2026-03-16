@@ -1,0 +1,15 @@
+{
+  "name": "ruby-on-rails-igmarin-skills-dev",
+  "description": "Development marketplace for Rails skills library",
+  "owner": {
+    "name": "igmarin"
+  },
+  "plugins": [
+    {
+      "name": "my-cursor-skills",
+      "description": "Ruby on Rails skills library: code review, architecture, security, engines, service objects, RSpec testing, and development workflow patterns",
+      "version": "1.0.0",
+      "source": "./"
+    }
+  ]
+}

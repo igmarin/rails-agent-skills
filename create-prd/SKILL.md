@@ -1,6 +1,10 @@
 ---
 name: create-prd
-description: Generate a Product Requirements Document (PRD) in Markdown from a feature description. Use when the user asks to create a PRD, define product requirements, plan a feature, write a requirements doc, or mentions PRD.
+description: >
+  Use when the user asks to create a PRD, define product requirements, plan a feature,
+  write a requirements document, or mentions PRD. Generates a clear, actionable Product
+  Requirements Document in Markdown from a feature description. Covers goals, user stories,
+  functional requirements, and success metrics.
 ---
 
 # Generating a Product Requirements Document (PRD)
@@ -8,6 +12,26 @@ description: Generate a Product Requirements Document (PRD) in Markdown from a f
 ## Goal
 
 Create a clear, actionable PRD in Markdown that a junior developer can use to understand and implement a feature. Focus on *what* and *why*, not *how*.
+
+**Core principle:** Design before implementation. No code until the PRD is approved.
+
+## Quick Reference
+
+| Step | Action | Output |
+|------|--------|--------|
+| 1 | Receive feature description | Raw input |
+| 2 | Ask clarifying questions (only if ambiguous) | Shared understanding |
+| 3 | Generate PRD | `prd-[feature-name].md` |
+| 4 | Save to `/tasks/` | File on disk |
+| 5 | Suggest next step | Link to **generate-tasks** |
+
+## HARD-GATE
+
+```
+DO NOT implement the PRD. Only produce the document.
+DO NOT skip clarifying questions when the prompt is ambiguous.
+DO NOT start generating tasks without user confirmation.
+```
 
 ## When to Use
 
@@ -18,12 +42,14 @@ Create a clear, actionable PRD in Markdown that a junior developer can use to un
 ## Process
 
 1. **Receive prompt:** User provides a feature description or request.
-2. **Decide on questions:**
+2. **Socratic questioning phase:**
    - If the prompt is **already detailed** (clear goal, scope, and success criteria), skip clarifying questions and generate the PRD directly.
-   - If anything is **ambiguous**, ask only the most essential questions (3–5 max). Understand "what" and "why", not "how". Use letter/number options for quick answers.
+   - If anything is **ambiguous**, ask only the most essential questions (3-5 max). Understand "what" and "why", not "how". Use letter/number options for quick answers.
+   - Ask one question at a time when possible — do not overwhelm with a wall of questions.
 3. **Generate PRD:** Use the structure below. Derive `[feature-name]` from the feature (lowercase, hyphenated slug, e.g. `user-onboarding`, `export-csv`).
 4. **Save:** Save as `prd-[feature-name].md` in the `/tasks` directory (create the directory if needed).
-5. **Do NOT** start implementing the PRD. Offer to generate tasks if the user wants an implementation checklist.
+5. **Verify:** Re-read the saved file and confirm it matches the agreed scope.
+6. **Do NOT** start implementing the PRD. Offer to generate tasks if the user wants an implementation checklist.
 
 ## Clarifying Questions (Only When Needed)
 
@@ -75,9 +101,30 @@ Generate the document with these sections. Use concrete wording; avoid vague phr
 
 Write for a **junior developer**: explicit, unambiguous, minimal jargon. Each requirement should be implementable without guessing.
 
-## Final Instructions
+## Common Mistakes
 
-1. Do **not** implement the PRD; only produce the document.
-2. Ask clarifying questions only when the prompt is ambiguous; otherwise generate directly.
-3. Incorporate user answers into the PRD when they were asked.
-4. After saving, suggest generating an implementation task list from this PRD if appropriate.
+| Mistake | Reality |
+|---------|---------|
+| Jumping straight to PRD without understanding the problem | Ask clarifying questions first — garbage in, garbage out |
+| PRD describes "how" instead of "what" | PRD is requirements, not implementation. Leave "how" for tasks |
+| Vague requirements ("make it fast", "good UX") | Every requirement must be testable and unambiguous |
+| Asking 10+ clarifying questions | Max 3-5 essential questions. Infer the rest |
+| Starting implementation after writing PRD | HARD-GATE: only produce the document. Suggest generate-tasks next |
+| Skipping Non-Goals section | Non-Goals prevent scope creep. Always include them |
+
+## Red Flags
+
+- PRD contains implementation details (specific code, database schema)
+- Requirements use words like "should", "might", "could" instead of "must"
+- No success metrics defined
+- User stories are too generic ("As a user, I want a good experience")
+- PRD was generated without any clarifying questions on an ambiguous prompt
+- Implementation started before PRD was approved
+
+## Integration
+
+| Skill | When to chain |
+|-------|---------------|
+| **generate-tasks** | After PRD is approved — break down into implementation tasks |
+| **rails-architecture-review** | When PRD reveals architectural concerns |
+| **rails-stack-conventions** | When PRD is for a Rails feature |

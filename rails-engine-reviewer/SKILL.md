@@ -1,12 +1,22 @@
 ---
 name: rails-engine-reviewer
-description: Review existing Ruby on Rails engines for architecture, coupling, and maintainability. Use when reviewing an engine, mountable engine, engine.rb file, host-app integration, install generators, dummy app coverage, namespace boundaries, or Rails engine best practices.
+description: Use when reviewing a Rails engine, mountable engine, engine.rb, host-app integration, install generators, dummy app coverage, namespace boundaries, or engine best practices. Trigger words: review, engine.rb, isolate_namespace, host integration, dummy app, coupling, architecture.
 ---
 # Rails Engine Reviewer
 
 Use this skill when the task is to review an existing Rails engine or propose improvements.
 
 Prioritize architectural risks over style comments. The main review targets are coupling, unclear host contracts, unsafe initialization, and weak integration coverage.
+
+## Quick Reference
+
+| Review Area | Key Checks |
+|-------------|------------|
+| Namespace | `isolate_namespace` used; clear boundaries; no host constant leakage |
+| Host integration | Configuration seams, adapters; no direct host model access |
+| Init | No side effects at load time; reload-safe hooks in `config.to_prepare` |
+| Migrations | Documented, copied via generator; no implicit or destructive steps |
+| Dummy app | Present in spec/; used for integration tests; exercises real mount and config |
 
 ## Review Order
 
@@ -17,6 +27,20 @@ Prioritize architectural risks over style comments. The main review targets are 
 5. Check migrations, generators, and install flow.
 6. Check dummy-app and integration tests.
 7. Summarize findings by severity.
+
+## Common Mistakes
+
+| Mistake | Reality |
+|---------|---------|
+| Reviewing code style before architecture | Style is low impact; coupling, host assumptions, and unsafe init cause production failures |
+| Missing dummy app coverage check | Dummy app must exist and be used; engines without it cannot prove host integration works |
+| Ignoring engine.rb | engine.rb often contains boot-time side effects; always inspect it |
+
+## Red Flags
+
+- engine.rb with side effects at load time (writes, mutations, eager loading of host code)
+- No namespace isolation; engine routes or models collide with host
+- Test suite passes only with a specific host app; no dummy app or generic integration coverage
 
 ## What Good Looks Like
 
@@ -101,3 +125,11 @@ class MyEngine::SomeService
   end
 end
 ```
+
+## Integration
+
+| Skill | When to chain |
+|-------|---------------|
+| rails-engine-author | When implementing suggested fixes or refactoring the engine |
+| rails-engine-testing | When adding missing dummy-app or integration coverage |
+| rails-engine-compatibility | When assessing Rails/Ruby version support or deprecation impact |

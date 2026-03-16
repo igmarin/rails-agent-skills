@@ -1,12 +1,39 @@
 ---
 name: rails-engine-docs
-description: Write and maintain documentation for Ruby on Rails engines. Use when creating or updating an engine README, installation guide, configuration docs, host integration examples, mount instructions, migration notes, or extension-point documentation.
+description: Use when writing or maintaining documentation for Rails engines. Trigger words: engine README, installation guide, configuration docs, mount instructions, migration notes, extension points, host integration examples, setup documentation.
 ---
 # Rails Engine Docs
 
 Use this skill when the task is to write or improve documentation for a Rails engine.
 
 Engine docs should optimize for host-app adoption. Readers need to know what the engine does, how to install it, how to configure it, and where the boundaries are.
+
+## Quick Reference
+
+| Doc Section | Purpose |
+|-------------|---------|
+| Purpose | What the engine does and when to use it |
+| Installation | Gemfile, bundle install, install generator |
+| Mounting / initialization | Where and how to mount the engine (routes, initializer) |
+| Configuration | Options, defaults, required vs optional |
+| Usage examples | Copyable code showing typical workflows |
+| Migrations / operational steps | Install migrations, run generators, one-time setup |
+| Extension points | Adapters, callbacks, config blocks for customization |
+| Development and testing | How to run tests, contribute, or develop locally |
+
+## Common Mistakes
+
+| Mistake | Reality |
+|---------|---------|
+| No installation instructions | README must show the exact steps: add gem, bundle, run generator, mount |
+| Missing mount instructions | Host apps need to know where to mount; implied mounting leads to confusion |
+| No extension point docs | Configuration and adapters exist in code but readers cannot discover or use them |
+
+## Red Flags
+
+- README only says "add to Gemfile" with no further steps
+- No configuration docs despite config options in code
+- No migration notes when migrations or install generators exist
 
 ## Recommended README Shape
 
@@ -86,3 +113,11 @@ When asked to write docs:
 2. Show one realistic configuration example.
 3. Document operational steps explicitly.
 4. Keep sections short and task-oriented.
+
+## Integration
+
+| Skill | When to chain |
+|-------|----------------|
+| rails-engine-author | Host-app contract, structure, extension points to document |
+| rails-engine-installers | Install generators, setup steps to document |
+| rails-engine-release | Changelog, upgrade notes, version documentation |

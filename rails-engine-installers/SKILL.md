@@ -1,12 +1,21 @@
 ---
 name: rails-engine-installers
-description: Design install and setup flows for Ruby on Rails engines. Use when creating generators, copied migrations, initializer installers, route mount setup, idempotent install tasks, or improving host-app onboarding for an engine.
+description: Use when creating install generators, copied migrations, initializer installers, route mount setup, idempotent install tasks, host-app onboarding, install:migrations, install docs, or improving how a host app configures a Rails engine. Trigger words: generator, migrations, initializer, routes, mount, install, idempotent, setup flow.
 ---
 # Rails Engine Installers
 
 Use this skill when the task is to design or review how a host app installs and configures a Rails engine.
 
 Good installation flows are explicit, repeatable, and safe to rerun.
+
+## Quick Reference
+
+| Installer Component | Purpose |
+|--------------------|---------|
+| Generator | Creates initializer, route mount, or optional setup files; must be idempotent |
+| Migrations | Copies engine migrations into host `db/migrate`; host owns and runs them |
+| Initializer | Provides configuration defaults; generated once, editable by host |
+| Routes | Adds `mount Engine, at: '/path'`; document or generate, avoid duplicates |
 
 ## Primary Goals
 
@@ -22,6 +31,21 @@ Good installation flows are explicit, repeatable, and safe to rerun.
 - add or document route mounting
 - seed optional setup files or permissions
 - expose a single install command when it improves usability
+
+## Common Mistakes
+
+| Mistake | Reality |
+|---------|---------|
+| Non-idempotent generators | Generators must be safe to run multiple times; check before injecting routes or files |
+| Mutating host in boot | Never modify host files or state from initializers or engine.rb at load time |
+| No rollback for install | Document manual rollback steps; generators cannot reliably undo all changes |
+
+## Red Flags
+
+- Generator that overwrites host files without checking for existing content
+- Install flow modifies boot sequence or runs code at require time
+- No idempotency check before injecting routes, initializer, or migrations
+- Setup steps hidden inside initializers instead of explicit generator output
 
 ## Rules
 
@@ -102,3 +126,11 @@ When asked to implement setup flow:
 1. State what must be generated versus manually configured.
 2. Implement the install path with idempotency in mind.
 3. Add generator tests and concise user-facing instructions.
+
+## Integration
+
+| Skill | When to chain |
+|-------|---------------|
+| rails-engine-author | When designing the engine structure that installers will configure |
+| rails-engine-docs | When documenting install steps or upgrade instructions |
+| rails-engine-testing | When adding generator specs or dummy-app install coverage |

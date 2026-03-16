@@ -1,16 +1,44 @@
 ---
 name: rails-stack-conventions
-description: Apply Rails, PostgreSQL, Hotwire (Turbo/Stimulus), and Tailwind CSS conventions when writing or generating code. Use when building features, controllers, views, models, or when the user works with this stack (Rails, Hotwire, Tailwind, PostgreSQL).
+description: >
+  Use when writing or generating code for a Rails project with PostgreSQL, Hotwire
+  (Turbo + Stimulus), and Tailwind CSS. Covers Ruby style, naming, MVC structure,
+  ActiveRecord patterns, error handling, performance, security defaults, and testing
+  conventions.
 ---
 
 # Rails Stack Conventions
 
 When **writing or generating** code for this project, follow these conventions. Stack: Ruby on Rails, PostgreSQL, Hotwire (Turbo + Stimulus), Tailwind CSS.
 
+**Core principle:** Follow Rails conventions. When in doubt, check the official Rails guides.
+
+## HARD-GATE: Tests Gate Implementation
+
+```
+ALL new code MUST have its test written and validated BEFORE implementation.
+  1. Write the spec for the behavior
+  2. Run the spec — verify it fails because the feature does not exist yet
+  3. ONLY THEN write the implementation code
+See rspec-best-practices for the full gate cycle.
+```
+
+## Quick Reference
+
+| Aspect | Convention |
+|--------|-----------|
+| Style | Ruby Style Guide, single quotes, `unless`/`||=`/`&.` |
+| Naming | `snake_case` files/methods, `CamelCase` classes |
+| Models | MVC, concerns, service objects for complex logic |
+| Queries | Eager loading (`includes`), avoid N+1 |
+| Frontend | Hotwire (Turbo + Stimulus), Tailwind CSS |
+| Testing | RSpec or Minitest, TDD/BDD, FactoryBot |
+| Security | Devise/Pundit, strong params, guard XSS/CSRF/SQLi |
+
 ## Code Style and Structure
 
 - Concise, idiomatic Ruby; follow Rails conventions
-- OOP and functional patterns as appropriate; prefer iteration and modularization over duplication
+- OOP and functional patterns as appropriate; prefer modularization over duplication
 - Descriptive names: `user_signed_in?`, `calculate_total`
 - Structure: MVC, concerns, helpers per Rails conventions
 
@@ -54,7 +82,7 @@ When **writing or generating** code for this project, follow these conventions. 
 
 - RESTful routes; concerns for shared behavior
 - **Service objects** for non-trivial business logic
-- **Background jobs** (e.g. Sidekiq) for long-running work
+- **Background jobs** for long-running work
 
 ## Testing
 
@@ -66,6 +94,33 @@ When **writing or generating** code for this project, follow these conventions. 
 - Auth/authz (e.g. Devise, Pundit); strong parameters
 - Guard against XSS, CSRF, SQL injection
 
+## Common Mistakes
+
+| Mistake | Reality |
+|---------|---------|
+| Logic in views | Use helpers, presenters, or Stimulus controllers |
+| N+1 queries ignored in development | They compound in production. Always eager load. |
+| Raw SQL without parameterization | SQL injection risk. Use ActiveRecord query methods. |
+| Skipping FactoryBot for "quick" test | Fixtures are brittle. Factories are faster to maintain. |
+| Ignoring Ruby Style Guide | Consistent style reduces review friction. Follow the guide. |
+
+## Red Flags
+
+- Controller action with more than 15 lines of logic
+- Model with no validations
+- View with embedded Ruby conditionals spanning 10+ lines
+- No `includes` on associations used in loops
+- Hardcoded strings that should be in I18n
+
+## Integration
+
+| Skill | When to chain |
+|-------|---------------|
+| **rails-code-review** | When reviewing existing code against these conventions |
+| **ruby-service-objects** | When extracting business logic into services |
+| **rspec-best-practices** | For testing conventions |
+| **rails-architecture-review** | For structural review beyond conventions |
+
 ## Reference
 
-Follow the [official Rails guides](https://guides.rubyonrails.org/) for routing, controllers, models, views, and related topics. When **reviewing** existing code, use **rails-code-review** for a structured checklist.
+Follow the [official Rails guides](https://guides.rubyonrails.org/) for routing, controllers, models, views, and related topics.

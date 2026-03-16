@@ -1,9 +1,36 @@
 ---
 name: ruby-service-objects
-description: Create Ruby service objects following project conventions with module namespacing, YARD documentation, frozen_string_literal, constants, factory methods, the .call orchestrator pattern, standardized responses, transactions, and error handling. Use when creating new service classes, adding business logic classes, or refactoring code into service objects.
+description: >
+  Use when creating new service classes, adding business logic classes, or refactoring
+  code into service objects. Covers the .call pattern, module namespacing, YARD documentation,
+  frozen_string_literal, standardized responses, orchestrator delegation, transaction
+  wrapping, and error handling conventions for Ruby on Rails.
 ---
 
 # Ruby Service Objects
+
+## HARD-GATE: Tests Gate Implementation
+
+```
+EVERY service object MUST have its test written and validated BEFORE implementation.
+  1. Write the spec for .call (with contexts for success, error, edge cases)
+  2. Run the spec — verify it fails because the service does not exist yet
+  3. ONLY THEN write the service implementation
+See rspec-best-practices for the full gate cycle.
+```
+
+## Quick Reference
+
+| Convention | Rule |
+|-----------|------|
+| Entry point | `.call` class method delegating to `new.call` |
+| Response format | `{ success: true/false, response: { ... } }` |
+| File location | `app/services/module_name/service_name.rb` |
+| Pragma | `frozen_string_literal: true` in every file |
+| Docs | YARD on every public method |
+| Validation | Raise early on invalid input |
+| Errors | Rescue, log, return error hash — don't leak exceptions |
+| Transactions | Wrap multi-step DB operations |
 
 ## Structure
 
@@ -12,23 +39,21 @@ All service objects live under `app/services/` namespaced by module. Use `frozen
 ```
 app/services/
 └── module_name/
-    ├── README.md              # Module documentation
-    ├── main_service.rb        # Orchestrator service
-    ├── validator.rb           # Input validation
-    ├── classifier.rb          # Classification / decision logic
-    ├── creator.rb             # Record creation / persistence
-    ├── response_builder.rb    # API response construction
-    ├── auth.rb                # Authentication (if external API)
-    ├── client.rb              # HTTP client (if external API)
-    ├── fetcher.rb             # Data retrieval / polling
-    └── builder.rb             # Response transformation
+    ├── README.md
+    ├── main_service.rb
+    ├── validator.rb
+    ├── classifier.rb
+    ├── creator.rb
+    ├── response_builder.rb
+    ├── auth.rb
+    ├── client.rb
+    ├── fetcher.rb
+    └── builder.rb
 ```
 
 ## Core Patterns
 
 ### 1. The `.call` Pattern (Orchestrator)
-
-The primary entry point for service objects. Use `self.call` + `new.call`:
 
 ```ruby
 module AnimalTransfers
@@ -59,72 +84,38 @@ module AnimalTransfers
 end
 ```
 
-Variants for bang methods when side effects are the main purpose:
-
-```ruby
-def self.call!(promises:)
-  new(promises:).call!
-end
-```
-
-### 2. The `.call` with splat delegation
-
-```ruby
-def self.call(*, **)
-  new(*, **).call
-end
-
-def self.call(**args)
-  new(**args).call
-end
-```
-
-### 3. Standardized Response Format
-
-All services return a hash with `success:` and `response:` or `data:`/`error:`:
+### 2. Standardized Response Format
 
 ```ruby
 # Success
 { success: true, response: { successful_items: [...] } }
 
-# Success with data
-{ success: true, data: { shelter_id: 1, items: [...], total_count: 5 } }
-
 # Error
 { success: false, response: { error: { message: '...', failed_items: [...] } } }
 
-# Simple error
-{ success: false, error: 'shelter_id is required' }
-
-# Partial success (success with error section)
+# Partial success
 {
   success: true,
   response: {
     successful_transfers: ['TAG001'],
-    error: {
-      message: 'Some animals were not found...',
-      failed_transfers: ['TAG002']
-    }
+    error: { message: 'Some animals were not found...', failed_transfers: ['TAG002'] }
   }
 }
 ```
 
-### 4. Orchestrator Pattern
+### 3. Orchestrator Pattern
 
 Main service coordinates sub-services, each with a single responsibility:
 
 ```ruby
 def call
   validate_shelters!
-  validate_shelter_codes!
-
   return empty_response if items.blank?
 
   classification = Classifier.classify(items, context)
   return all_failed_response(classification) if all_failed?(classification)
 
   persistence = Creator.create(classification, context)
-
   ResponseBuilder.success_response(classification, persistence)
 rescue StandardError => e
   log_error('Processing Error', e, include_backtrace: true)
@@ -132,9 +123,9 @@ rescue StandardError => e
 end
 ```
 
-### 5. Class-only Services (Static Methods)
+### 4. Class-only Services (Static Methods)
 
-When no instance state is needed, use only class methods:
+When no instance state is needed:
 
 ```ruby
 class ShelterValidator
@@ -146,28 +137,7 @@ class ShelterValidator
 end
 ```
 
-### 6. Classifier Pattern
-
-Separate classification/decision logic into its own service:
-
-```ruby
-class AnimalClassifier
-  def self.classify_animals(tag_numbers, shelter)
-    return empty_result if tag_numbers.empty?
-
-    animals = Animal.where(tag_number: tag_numbers, shelter:).index_by(&:tag_number)
-    holding_pens = HoldingPen.where(tag_number: tag_numbers, shelter:).index_by(&:tag_number)
-
-    classify_all(tag_numbers, animals, holding_pens)
-  end
-
-  private_class_method :classify_all
-end
-```
-
-### 7. Response Builder Pattern
-
-Dedicated class for constructing API responses:
+### 5. Response Builder Pattern
 
 ```ruby
 class ResponseBuilder
@@ -176,14 +146,7 @@ class ResponseBuilder
   end
 
   def self.error_response(shelter_id, message, failed_items)
-    {
-      success: false,
-      response: {
-        shelter: { shelter_id: },
-        successful_items: [],
-        error: { message:, failed_items: }
-      }
-    }
+    { success: false, response: { shelter: { shelter_id: }, error: { message:, failed_items: } } }
   end
 end
 ```
@@ -197,35 +160,18 @@ end
 
 module ModuleName
   class ServiceName
-    # class body
   end
-end
-```
-
-Alternative (used for model-adjacent services):
-
-```ruby
-# frozen_string_literal: true
-
-class HoldingPen::AnimalActivator
-  # class body
 end
 ```
 
 ### Constants for configuration
 
-Define attributes, queries, error messages, and defaults as constants:
-
 ```ruby
 MISSING_CONFIGURATION_ERROR = 'Missing required configuration'
-DEFAULT_ERROR_MESSAGE = 'Transfer request not found; check IDs and tag_number for typos'
 DEFAULT_TIMEOUT = 30
-DESIRED_STATUS = 'new_rdr'
 ```
 
 ### Factory methods with `self.default`
-
-Provide a `self.default` class method for default configuration from env vars:
 
 ```ruby
 def self.default
@@ -237,47 +183,22 @@ end
 
 ### YARD documentation
 
-Document every public method with `@param`, `@return`, `@raise`, and `@example`:
-
 ```ruby
-# Main entry point for processing a transfer
 # @param params [Hash] Transfer parameters
 # @option params [Hash] :source_shelter Shelter hash with :shelter_id
-# @option params [Array<String>] :tag_numbers_to_transfer List of animal tag numbers
 # @return [Hash] Result hash with :success flag and :response data
 def self.call(params)
 ```
 
 ### Input validation
 
-Validate early in `initialize` or a dedicated `validate_params!` method:
-
 ```ruby
 def initialize(token:, host:, warehouse_id:)
   raise Error, MISSING_CONFIGURATION_ERROR if [token, host, warehouse_id].any?(&:blank?)
 end
-
-# Or as a separate step:
-def validate_params!
-  raise ArgumentError, 'shelter_id is required' if shelter_id.blank?
-  raise ArgumentError, 'IDs must be different' if source_id == target_id
-end
-```
-
-### Bang validation methods
-
-Use `!` suffix for methods that raise on invalid input:
-
-```ruby
-def validate_shelters!
-  @source_shelter = ShelterValidator.validate_source_shelter!(source_shelter_id)
-  @target_shelter = ShelterValidator.validate_target_shelter!(target_shelter_id)
-end
 ```
 
 ### Transaction wrapping
-
-Wrap multi-step database operations in transactions:
 
 ```ruby
 def call
@@ -291,20 +212,6 @@ def call
 end
 ```
 
-### Graceful error handling
-
-For non-critical operations, rescue and log without raising:
-
-```ruby
-def call
-  return unless holding_pen
-  update_holding_pen
-rescue StandardError => e
-  Rails.logger.warn("Error activating HoldingPen for tag #{animal.tag_number}: #{e.message}")
-  nil
-end
-```
-
 ### Error logging with context
 
 ```ruby
@@ -314,17 +221,7 @@ def log_error(context, error, include_backtrace: false)
 end
 ```
 
-### Custom error classes
-
-```ruby
-class Client
-  class Error < StandardError; end
-end
-```
-
 ### SQL sanitization
-
-Always use `ActiveRecord::Base.sanitize_sql` for dynamic queries:
 
 ```ruby
 def self.find(tag_number:)
@@ -333,37 +230,7 @@ def self.find(tag_number:)
 end
 ```
 
-### Batch operations with `activerecord-import`
-
-```ruby
-records = build_records(classifications)
-result = Model.import(records, validate: true)
-failed_items = result.failed_instances.map(&:identifier)
-```
-
-### Efficient lookups with `index_by`
-
-```ruby
-animals = Animal.where(tag_number: tag_numbers, shelter:).index_by(&:tag_number)
-existing = Model.where(tag_number: tag_numbers).index_by(&:tag_number)
-```
-
-## README Documentation
-
-Every service module should include a `README.md` with:
-- Overview and purpose
-- Architecture diagram (ASCII art showing component relationships)
-- Core components with responsibilities
-- Model information (attributes, validations, scopes)
-- Automatic updates / side effects
-- Rails console examples
-- Error handling documentation
-- Response structure examples
-- Best practices
-- Related models
-- Testing information
-
-## Checklist for new service objects
+## Checklist for New Service Objects
 
 - [ ] `frozen_string_literal: true` pragma
 - [ ] Module namespace matching directory structure
@@ -378,8 +245,33 @@ Every service module should include a `README.md` with:
 - [ ] SQL sanitization for dynamic queries
 - [ ] `README.md` documenting the module
 
-## Related skills
+## Common Mistakes
 
-- **ruby-api-client-integration:** For external API integrations (Auth, Client, Fetcher, Builder, domain entities); same `app/services/` layout.
-- **strategy-factory-null-calculator:** For variant-based calculators with a single entry point (Factory + Strategy + Null Object).
-- **rspec-service-testing:** For testing service objects; **rspec-best-practices** for general RSpec structure.
+| Mistake | Reality |
+|---------|---------|
+| Returning raw exceptions instead of error hash | Callers should get `{ success: false, ... }`, not unhandled exceptions |
+| No `.call` entry point | Inconsistent API. Always use `.call` for the orchestrator pattern |
+| Business logic in the controller | Extract to service. Controller should only handle request/response |
+| Missing `frozen_string_literal` pragma | Inconsistent string behavior. Add to every file |
+| No YARD docs on public methods | Other developers can't understand the contract |
+| Skipping input validation | Bad input causes cryptic errors deep in the call chain |
+| Transaction wrapping everything | Only wrap multi-step DB operations that must be atomic |
+
+## Red Flags
+
+- Service object with no tests
+- `.call` method longer than 20 lines (needs sub-service extraction)
+- Service that directly renders HTTP responses (that's controller's job)
+- No error handling — exceptions bubble up to caller unhandled
+- Service that modifies unrelated models (unclear responsibility boundary)
+- Duplicated validation logic across services (extract to shared validator)
+
+## Integration
+
+| Skill | When to chain |
+|-------|---------------|
+| **ruby-api-client-integration** | For external API integrations (Auth, Client, Fetcher, Builder layers) |
+| **strategy-factory-null-calculator** | For variant-based calculators (Factory + Strategy + Null Object) |
+| **rspec-service-testing** | For testing service objects |
+| **rspec-best-practices** | For general RSpec structure |
+| **rails-architecture-review** | When service extraction is part of an architecture review |

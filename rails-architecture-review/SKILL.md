@@ -1,12 +1,28 @@
 ---
 name: rails-architecture-review
-description: Review Ruby on Rails application architecture for maintainability and clear boundaries. Use when reviewing Rails code structure, fat models or controllers, callbacks, concerns, service extraction, domain boundaries, or general Rails best practices.
+description: >
+  Use when reviewing Rails application structure, identifying fat models or controllers,
+  auditing callbacks, concerns, service extraction, domain boundaries, or general Rails
+  architecture decisions. Covers controller orchestration, model responsibilities, and
+  abstraction quality.
 ---
+
 # Rails Architecture Review
 
 Use this skill when the task is to review or improve the structure of a Rails application or library.
 
-Prioritize boundary problems over style. Prefer simple objects and explicit flow over hidden behavior.
+**Core principle:** Prioritize boundary problems over style. Prefer simple objects and explicit flow over hidden behavior.
+
+## Quick Reference
+
+| Area | What to check |
+|------|--------------|
+| Controllers | Coordinate only — no domain logic |
+| Models | Own persistence + cohesive domain rules, not orchestration |
+| Services | Create real boundaries, not just moved code |
+| Callbacks | Small and unsurprising — no hidden business logic |
+| Concerns | One coherent capability per concern |
+| External integrations | Behind dedicated collaborators |
 
 ## Review Order
 
@@ -26,21 +42,23 @@ Prioritize boundary problems over style. Prefer simple objects and explicit flow
 - Concerns represent one coherent capability.
 - External integrations sit behind dedicated collaborators.
 
-## High-Severity Findings
+## Severity Levels
 
-- business logic hidden in callbacks or broad concerns
-- controllers orchestrating multi-step domain workflows inline
-- models coupled directly to HTTP, jobs, mailers, or external APIs
-- abstractions that add indirection without a clear responsibility
-- cross-layer constant reach that makes code hard to change
+### High-Severity Findings
 
-## Medium-Severity Findings
+- Business logic hidden in callbacks or broad concerns
+- Controllers orchestrating multi-step domain workflows inline
+- Models coupled directly to HTTP, jobs, mailers, or external APIs
+- Abstractions that add indirection without a clear responsibility
+- Cross-layer constant reach that makes code hard to change
 
-- duplicated workflow logic across controllers or jobs
-- scopes or class methods carrying too much query or policy logic
-- helpers or presenters leaking domain behavior
-- service objects wrapping trivial one-liners
-- concerns combining unrelated responsibilities
+### Medium-Severity Findings
+
+- Duplicated workflow logic across controllers or jobs
+- Scopes or class methods carrying too much query or policy logic
+- Helpers or presenters leaking domain behavior
+- Service objects wrapping trivial one-liners
+- Concerns combining unrelated responsibilities
 
 ## Examples
 
@@ -51,10 +69,10 @@ Prioritize boundary problems over style. Prefer simple objects and explicit flow
 class OrdersController < ApplicationController
   def create
     order = Order.new(order_params)
-    Inventory.check!(order.line_items)  # domain rule
-    Pricing.apply_promotions!(order)    # domain rule
+    Inventory.check!(order.line_items)
+    Pricing.apply_promotions!(order)
     order.save!
-    NotifyWarehouseJob.perform_later(order.id)  # orchestration
+    NotifyWarehouseJob.perform_later(order.id)
     redirect_to order
   end
 end
@@ -65,7 +83,6 @@ end
 **Good (single responsibility):**
 
 ```ruby
-# Good: controller delegates to service
 class OrdersController < ApplicationController
   def create
     result = Orders::CreateOrder.call(order_params)
@@ -74,15 +91,42 @@ class OrdersController < ApplicationController
 end
 ```
 
+## Common Mistakes
+
+| Mistake | Reality |
+|---------|---------|
+| "Fat model is fine, controllers should be skinny" | Both should be focused. Extract to services, not models. |
+| "One concern per model keeps it clean" | Concerns that combine unrelated behavior are worse than inline code. |
+| "Service objects for everything" | Trivial one-liner wrappers add indirection without value. |
+| Callbacks for business workflows | Callbacks should be persistence-level. Use explicit service calls. |
+| "It works, so the architecture is fine" | Working code with poor boundaries becomes unmaintainable. |
+
+## Red Flags
+
+- Model with 500+ lines and multiple concerns
+- Controller action with more than 15 lines of logic
+- Callback chain that triggers jobs, mailers, or external API calls
+- Concern used by only one class (just inline it)
+- Service object that only calls one ActiveRecord method
+- No clear separation between read and write paths
+
 ## Output Style
 
 Write findings first.
 
 For each finding include:
-
-- severity
-- affected files or area
-- why the structure is risky
-- the smallest credible improvement
+- Severity
+- Affected files or area
+- Why the structure is risky
+- The smallest credible improvement
 
 Then list open assumptions and recommended next refactor steps.
+
+## Integration
+
+| Skill | When to chain |
+|-------|---------------|
+| **rails-code-review** | For detailed code-level review after architecture review |
+| **refactor-safely** | When architecture review identifies extraction candidates |
+| **ruby-service-objects** | When recommending service extraction |
+| **rails-security-review** | When architecture review reveals security boundary concerns |

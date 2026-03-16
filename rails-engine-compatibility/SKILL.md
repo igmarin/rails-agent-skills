@@ -1,12 +1,35 @@
 ---
 name: rails-engine-compatibility
-description: Maintain compatibility for Ruby on Rails engines across Rails and Ruby versions. Use when checking Zeitwerk, autoloading, Rails upgrades, dependency bounds, asset integration, Active Job or Action Mailer hooks, or cross-version engine support.
+description: Use when maintaining compatibility for Rails engines across Rails and Ruby versions. Trigger words: Zeitwerk, autoloading, Rails upgrade, dependency bounds, gemspec, feature detection, CI matrix, reload safety, deprecated APIs, cross-version support.
 ---
 # Rails Engine Compatibility
 
 Use this skill when the task is to make an engine stable across framework versions and host environments.
 
 Compatibility work should reduce surprises for host applications. Prefer explicit support targets over accidental compatibility.
+
+## Quick Reference
+
+| Compatibility Aspect | Check |
+|----------------------|-------|
+| Zeitwerk | File paths match constant names; no anonymous or root-level constants |
+| Gemspec bounds | `add_dependency` and `required_ruby_version` match tested versions |
+| Feature detection | Use `respond_to?`, `defined?`, or adapter seams instead of `Rails.version` |
+| Test matrix | CI runs against each claimed Rails/Ruby combination |
+
+## Common Mistakes
+
+| Mistake | Reality |
+|---------|---------|
+| Hardcoding Rails version checks | Use feature detection or adapter seams; version branching is brittle and often wrong |
+| Missing Zeitwerk compatibility | File paths must match constant names; mismatches break autoloading in Rails 6+ |
+| No CI matrix | Claiming support for multiple versions without testing them leads to silent breakage |
+
+## Red Flags
+
+- No version bounds in gemspec
+- Direct `Rails.version` checks instead of feature detection
+- No reload safety for `to_prepare` or initializer hooks
 
 ## Core Checks
 
@@ -85,3 +108,11 @@ When asked to improve compatibility:
 2. List the most likely breakpoints.
 3. Make compatibility changes in isolated, testable seams.
 4. Recommend matrix coverage if it does not exist.
+
+## Integration
+
+| Skill | When to chain |
+|-------|----------------|
+| rails-engine-testing | Test matrix setup, CI configuration, multi-version tests |
+| rails-engine-author | Engine structure, host contract, namespace design |
+| rails-engine-release | Versioning, changelog, upgrade notes for compatibility changes |

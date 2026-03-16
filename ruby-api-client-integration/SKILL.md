@@ -1,29 +1,45 @@
 ---
 name: ruby-api-client-integration
-description: Build Ruby API client integrations using the layered Auth, Client, Fetcher, Builder, and Domain entity pattern. Use when integrating with external APIs, creating HTTP clients, building data pipelines from external services, or adding new API consumers.
+description: >
+  Use when integrating with external APIs, creating HTTP clients, building data pipelines
+  from external services, or adding new API consumers. Covers the layered Auth, Client,
+  Fetcher, Builder, and Domain Entity pattern with token caching, retry logic, pagination,
+  and FactoryBot hash factories for test data.
 ---
 
 # Ruby API Client Integration
 
-Follow **ruby-service-objects** for shared conventions (YARD, constants, response format, `app/services/` layout). This skill adds the layered Auth → Client → Fetcher → Builder → Domain Entity pattern for external APIs.
+Follow **ruby-service-objects** for shared conventions (YARD, constants, response format, `app/services/` layout). This skill adds the layered Auth -> Client -> Fetcher -> Builder -> Domain Entity pattern for external APIs.
+
+## HARD-GATE: Tests Gate Implementation
+
+```
+EVERY layer (Auth, Client, Fetcher, Builder, Entity) MUST have its test
+written and validated BEFORE implementation.
+  1. Write the spec for the layer (instance_double for unit, hash factories for API responses)
+  2. Run the spec — verify it fails because the layer does not exist yet
+  3. ONLY THEN write the layer implementation
+  4. Repeat for each layer in order: Auth → Client → Fetcher → Builder → Entity
+See rspec-best-practices for the full gate cycle.
+```
+
+## Quick Reference
+
+| Layer | Responsibility | File |
+|-------|---------------|------|
+| **Auth** | OAuth/token management, caching | `auth.rb` |
+| **Client** | HTTP requests, response parsing, error wrapping | `client.rb` |
+| **Fetcher** | Query orchestration, polling, pagination | `fetcher.rb` |
+| **Builder** | Response -> structured data transformation | `builder.rb` |
+| **Domain Entity** | Domain-specific config, query definitions | `entity.rb` |
 
 ## Architecture
-
-External API integrations follow a 5-layer architecture. Each layer has a single responsibility:
 
 ```
 Auth → Client → Fetcher → Builder → Domain Entity
 ```
 
-| Layer | Responsibility | File |
-|-------|---------------|------|
-| **Auth** | OAuth/token management | `auth.rb` |
-| **Client** | HTTP requests & response parsing | `client.rb` |
-| **Fetcher** | Query orchestration, polling, pagination | `fetcher.rb` |
-| **Builder** | Response → structured data transformation | `builder.rb` |
-| **Domain Entity** | Domain-specific config & query definitions | `entity.rb` |
-
-## Layer details
+## Layer Details
 
 ### 1. Auth (`auth.rb`)
 
@@ -46,21 +62,12 @@ module ServiceName
 
     def initialize(client_id:, client_secret:, account_id:, timeout: DEFAULT_TIMEOUT)
       raise 'Missing required credentials' if [client_id, client_secret, account_id].any?(&:blank?)
-      # configure base_uri and options
       @token = nil
     end
 
     def token
       return @token if @token
       # fetch and cache token
-    end
-
-    def authenticated?
-      !@token.nil?
-    end
-
-    def clear_token
-      @token = nil
     end
   end
 end
@@ -89,7 +96,6 @@ module ServiceName
 
     def initialize(token:, host:, timeout: DEFAULT_TIMEOUT, max_retries: DEFAULT_RETRIES)
       raise Error, MISSING_CONFIGURATION_ERROR if [token, host].any?(&:blank?)
-      # configure HTTParty
     end
 
     def execute_query(payload)
@@ -103,7 +109,7 @@ end
 
 ### 3. Fetcher (`fetcher.rb`)
 
-Orchestrates query execution. Handles polling for async APIs. Manages pagination.
+Orchestrates query execution. Handles polling and pagination.
 
 ```ruby
 module ServiceName
@@ -111,9 +117,6 @@ module ServiceName
     MAX_RETRIES = 3
     RETRY_DELAY_IN_SECONDS = 2
 
-    # @param client [#execute_query, #get_statement_status] API client
-    # @param data_builder [#build] Object that transforms raw responses
-    # @param default_query [String] Default query/payload
     def initialize(client, data_builder:, default_query:)
       @client = client
       @data_builder = data_builder
@@ -122,7 +125,6 @@ module ServiceName
 
     def execute_query(query = @default_query)
       raw_response = @client.execute_query(query)
-      # poll if async, paginate if needed
       @data_builder.build(complete_response)
     end
     alias query execute_query
@@ -130,37 +132,23 @@ module ServiceName
 end
 ```
 
-Key patterns:
-- Accepts dependencies via constructor (DI)
-- Delegates HTTP to Client, transformation to Builder
-- Handles retry with exponential backoff: `sleep(RETRY_DELAY_IN_SECONDS**retries)`
-- Handles pagination by fetching all chunks and combining data
+Key patterns: constructor DI, delegates HTTP to Client, delegates transformation to Builder, retries with exponential backoff.
 
 ### 4. Builder (`builder.rb`)
 
-Transforms raw API response into an array of attribute-filtered hashes.
+Transforms raw API response into attribute-filtered hashes.
 
 ```ruby
 module ServiceName
   class Builder
-    # @param attributes [Array<String>] Whitelist of attributes to include
     def initialize(attributes:)
       @attributes = attributes
     end
 
-    # @param response [Hash] Raw API response
-    # @return [Array<Hash>] Array of filtered data hashes
     def build(response)
       schema = response['manifest']['schema']['columns']
       data_array = response['result']['data_array'] || []
-
-      data_array.map do |row|
-        data_hash = schema.each_with_index.with_object({}) do |(col, index), hash|
-          hash[col['name']] = row[index]
-        end.with_indifferent_access
-
-        data_hash.slice(*@attributes)
-      end
+      data_array.map { |row| build_hash(schema, row).slice(*@attributes) }
     end
   end
 end
@@ -186,23 +174,11 @@ module ServiceName
       query = ActiveRecord::Base.sanitize_sql([SEARCH_QUERY, tag_number])
       fetcher.execute_query(query)
     end
-
-    def self.search(search_query:)
-      query = ActiveRecord::Base.sanitize_sql([SEARCH_QUERY, search_query])
-      fetcher.execute_query(query)
-    end
   end
 end
 ```
 
-Domain entity patterns:
-- `ATTRIBUTES` constant: whitelist of fields to return
-- `DEFAULT_QUERY` constant: full-table query
-- `SEARCH_QUERY` constant: parameterized query with `?` placeholders
-- `.fetcher` factory method: wires Client + Builder + Fetcher
-- `.find` / `.search` class methods: sanitize SQL and delegate to fetcher
-
-## Adding a new domain entity
+## Adding a New Domain Entity
 
 1. Define `ATTRIBUTES`, `DEFAULT_QUERY`, and optionally `SEARCH_QUERY` constants
 2. Implement `.fetcher` class method wiring `Builder` and `Fetcher`
@@ -210,24 +186,7 @@ Domain entity patterns:
 4. Create a FactoryBot hash factory in `spec/factories/module_name/`
 5. Write spec in `spec/services/module_name/` covering `.fetcher`, `.find`/`.search`
 
-## Usage from application code
-
-```ruby
-# Fetch all records
-data = ServiceName::Animal.fetcher.execute_query
-
-# Find by identifier
-record = ServiceName::Animal.find(tag_number: 'ANIMAL-001')
-
-# Search with custom query
-results = ServiceName::EmployeeLocation.search(search_query: 'john')
-
-# Custom client
-client = ServiceName::Client.new(token: custom_token, host: custom_host)
-data = ServiceName::Animal.fetcher(client:).execute_query
-```
-
-## Checklist for new API integration
+## Checklist for New API Integration
 
 - [ ] Create module directory under `app/services/`
 - [ ] Implement `Auth` with `self.default` and token caching
@@ -235,10 +194,35 @@ data = ServiceName::Animal.fetcher(client:).execute_query
 - [ ] Implement `Fetcher` with polling/pagination if needed
 - [ ] Implement `Builder` with attribute filtering
 - [ ] Create domain entities with constants and `.fetcher`
-- [ ] Add `readme.md` with usage examples and error handling docs
+- [ ] Add `README.md` with usage examples and error handling docs
 - [ ] Write comprehensive specs for all layers
 - [ ] Create FactoryBot hash factories for API responses
 
-## Related skills
+## Common Mistakes
 
-- **ruby-service-objects:** Base conventions (`.call`, responses, transactions, README). **rspec-service-testing** and **rspec-best-practices** for specs.
+| Mistake | Reality |
+|---------|---------|
+| Skipping the Auth layer | Token management scattered across services. Centralize in Auth. |
+| Client without `Error` class | Callers can't distinguish API errors from other exceptions |
+| No retry logic in Fetcher | Transient failures kill the pipeline. Add exponential backoff. |
+| Builder that returns all fields | Whitelist with ATTRIBUTES. Don't leak internal API structure. |
+| Hardcoded credentials | Use `self.default` from encrypted credentials, never hardcode |
+| No FactoryBot hash factories | Tests become brittle fixtures. Use factories for API responses. |
+
+## Red Flags
+
+- Credentials or tokens hardcoded or committed to git
+- HTTP calls without timeout configuration
+- No error wrapping — raw HTTParty exceptions bubble up
+- Builder that doesn't filter attributes (leaks full API response)
+- Missing specs for error scenarios (network failure, invalid JSON, 4xx/5xx)
+- Fetcher without pagination support when API returns paginated results
+
+## Integration
+
+| Skill | When to chain |
+|-------|---------------|
+| **ruby-service-objects** | Base conventions (.call, responses, transactions, README) |
+| **rspec-service-testing** | For testing all layers with instance_double and hash factories |
+| **rspec-best-practices** | For general RSpec structure |
+| **rails-security-review** | When auditing credential handling and input validation |
