@@ -1,6 +1,10 @@
 ---
 name: rails-engine-testing
-description: Use when setting up a dummy app, adding engine request specs, routing specs, generator specs, reload-safety tests, host integration coverage, or improving confidence in a Rails engine. Trigger words: dummy app, request spec, routing spec, generator spec, config spec, reload-safety, integration test.
+description: >
+  Use when setting up a dummy app, adding engine request specs, routing specs,
+  generator specs, reload-safety tests, host integration coverage, or improving
+  confidence in a Rails engine. Trigger words: dummy app, request spec, routing spec,
+  generator spec, config spec, reload-safety, integration test.
 ---
 # Rails Engine Testing
 

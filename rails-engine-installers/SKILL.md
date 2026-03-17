@@ -1,6 +1,10 @@
 ---
 name: rails-engine-installers
-description: Use when creating install generators, copied migrations, initializer installers, route mount setup, idempotent install tasks, host-app onboarding, install:migrations, install docs, or improving how a host app configures a Rails engine. Trigger words: generator, migrations, initializer, routes, mount, install, idempotent, setup flow.
+description: >
+  Use when creating install generators, copied migrations, initializer installers,
+  route mount setup, idempotent install tasks, host-app onboarding, install:migrations,
+  install docs, or improving how a host app configures a Rails engine. Trigger words:
+  generator, migrations, initializer, routes, mount, install, idempotent, setup flow.
 ---
 # Rails Engine Installers
 

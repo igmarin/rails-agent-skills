@@ -1,6 +1,9 @@
 ---
 name: rails-engine-docs
-description: Use when writing or maintaining documentation for Rails engines. Trigger words: engine README, installation guide, configuration docs, mount instructions, migration notes, extension points, host integration examples, setup documentation.
+description: >
+  Use when writing or maintaining documentation for Rails engines. Trigger words:
+  engine README, installation guide, configuration docs, mount instructions,
+  migration notes, extension points, host integration examples, setup documentation.
 ---
 # Rails Engine Docs
 

@@ -1,6 +1,10 @@
 ---
 name: rails-engine-reviewer
-description: Use when reviewing a Rails engine, mountable engine, engine.rb, host-app integration, install generators, dummy app coverage, namespace boundaries, or engine best practices. Trigger words: review, engine.rb, isolate_namespace, host integration, dummy app, coupling, architecture.
+description: >
+  Use when reviewing a Rails engine, mountable engine, engine.rb, host-app integration,
+  install generators, dummy app coverage, namespace boundaries, or engine best practices.
+  Trigger words: review, engine.rb, isolate_namespace, host integration, dummy app,
+  coupling, architecture.
 ---
 # Rails Engine Reviewer
 

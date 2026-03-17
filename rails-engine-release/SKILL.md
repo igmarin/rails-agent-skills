@@ -1,6 +1,10 @@
 ---
 name: rails-engine-release
-description: Use when preparing a release, updating gemspec, writing changelog, handling deprecations, setting semantic version, planning upgrade notes, migration guide, or shipping a Rails engine as a gem. Trigger words: version bump, changelog, deprecation, gemspec, upgrade, migration guide, release.
+description: >
+  Use when preparing a release, updating gemspec, writing changelog, handling
+  deprecations, setting semantic version, planning upgrade notes, migration guide,
+  or shipping a Rails engine as a gem. Trigger words: version bump, changelog,
+  deprecation, gemspec, upgrade, migration guide, release.
 ---
 # Rails Engine Release
 

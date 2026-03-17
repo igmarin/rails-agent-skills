@@ -1,6 +1,9 @@
 ---
 name: rails-engine-compatibility
-description: Use when maintaining compatibility for Rails engines across Rails and Ruby versions. Trigger words: Zeitwerk, autoloading, Rails upgrade, dependency bounds, gemspec, feature detection, CI matrix, reload safety, deprecated APIs, cross-version support.
+description: >
+  Use when maintaining compatibility for Rails engines across Rails and Ruby versions.
+  Trigger words: Zeitwerk, autoloading, Rails upgrade, dependency bounds, gemspec,
+  feature detection, CI matrix, reload safety, deprecated APIs, cross-version support.
 ---
 # Rails Engine Compatibility
 

@@ -1,6 +1,10 @@
 ---
 name: rails-engine-author
-description: Use when creating, scaffolding, or refactoring a Rails engine. Trigger words: mountable engine, Railtie, engine.rb, isolate_namespace, engine file layout, host-app contract, gemified Rails component, engine structure, engine generators, dummy app.
+description: >
+  Use when creating, scaffolding, or refactoring a Rails engine. Trigger words:
+  mountable engine, Railtie, engine.rb, isolate_namespace, engine file layout,
+  host-app contract, gemified Rails component, engine structure, engine generators,
+  dummy app.
 ---
 # Rails Engine Author
 

@@ -1,6 +1,9 @@
 ---
 name: rails-engine-extraction
-description: Use when extracting existing Rails app code into a reusable engine. Trigger words: extract to engine, move feature to engine, host coupling, adapters, extraction slices, preserve behavior, incremental extraction, bounded feature.
+description: >
+  Use when extracting existing Rails app code into a reusable engine. Trigger words:
+  extract to engine, move feature to engine, host coupling, adapters, extraction slices,
+  preserve behavior, incremental extraction, bounded feature.
 ---
 # Rails Engine Extraction
 
