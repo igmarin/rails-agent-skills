@@ -7,7 +7,8 @@ How to use skills in typical Rails development workflows.
 **Tests are a gate between planning and code.** Once a PRD and tasks exist, the test for each behavior must be written, run, and validated as failing BEFORE any implementation code is written.
 
 ```
-PRD → Tasks → [GATE: Write test → Run test → Verify it fails] → Implementation → Verify it passes
+PRD → Tasks → [GATE: Write test → Run test → Verify it fails] → Implementation → Verify passes
+  → YARD (public API) → Update README / diagrams / domain docs → Self code review → PR
 ```
 
 The gate is non-negotiable. Implementation code cannot exist before its test has been:
@@ -25,23 +26,35 @@ flowchart LR
     B --> C[User reviews PRD]
     C --> D[generate-tasks]
     D --> E[User reviews tasks]
-    E --> F[Implementation]
+    E --> F[Implementation with TDD gate]
+    F --> G[yard-documentation]
+    G --> H[README diagrams docs]
+    H --> I[rails-code-review then PR]
 ```
 
 1. **create-prd**: Describe the feature. The skill generates a PRD with goals, user stories, functional requirements, and success metrics. Saved to `/tasks/prd-[feature-name].md`.
 
-2. **generate-tasks**: Point to the PRD. The skill breaks it into parent tasks and sub-tasks with exact file paths. Saved to `/tasks/tasks-[feature-name].md`.
+2. **generate-tasks**: Point to the PRD. The skill breaks it into parent tasks and sub-tasks with exact file paths, including **YARD**, **documentation updates**, and **code review before PR**. Saved to `/tasks/tasks-[feature-name].md`.
 
-3. **Implementation**: Follow the task list, checking off items as you go.
+3. **Implementation**: Follow the task list with the test gate (write test → run → fail → implement → pass).
+
+4. **yard-documentation**: Add or update YARD on every new or changed public class/method (English).
+
+5. **Docs**: Update README, architecture diagrams, and any domain docs affected by the change.
+
+6. **rails-code-review**: Self-review the full diff, then open the PR (use security/architecture skills when needed).
 
 **Key rules:**
 - Do NOT implement until the PRD is approved
 - Each sub-task should take 2-5 minutes
 - Task 0.0 is always "Create feature branch"
+- Do not skip YARD, doc updates, or self-review — they are explicit task parents, not optional polish
 
 ---
 
 ## Code Review
+
+**Before opening a PR:** run **rails-code-review** on your own branch (same checklist as reviewing others). Task lists from **generate-tasks** end with this step.
 
 ```mermaid
 flowchart LR
@@ -118,7 +131,9 @@ flowchart TD
 
 **Generated output:** All documentation, YARD comments, Postman collections, and examples must be in **English** unless the user explicitly requests another language.
 
-1. **yard-documentation**: Use when writing or reviewing inline docs for Ruby classes and public methods. Apply YARD tags (`@param`, `@option`, `@return`, `@raise`, `@example`) on every public method; keep all text in English.
+**Post-implementation (not optional for features):** After implementation and green tests, **yard-documentation** runs on the touched public API; then update **README**, **diagrams** (e.g. Mermaid in `docs/`), and **related domain docs** so operators and future developers see the new behavior.
+
+1. **yard-documentation**: Use when writing or reviewing inline docs for Ruby classes and public methods. Apply YARD tags (`@param`, `@option`, `@return`, `@raise`, `@example`) on every public method; keep all text in English. **Required before PR** for new or changed public API.
 2. **api-postman-collection**: Use when creating or modifying API endpoints (Rails controllers, engine routes). Generate or update a Postman Collection JSON (v2.1) so the flow can be tested; store it in e.g. `docs/postman/` or `spec/fixtures/postman/`. Request names and descriptions in English.
 
 ---

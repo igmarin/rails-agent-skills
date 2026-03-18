@@ -11,6 +11,19 @@ Use this skill when documenting Ruby classes and public methods with YARD.
 
 **Core principle:** Every public class and public method has YARD documentation so the contract is clear and tooling can generate API docs. All documentation content (descriptions, examples in comments) must be written in **English**.
 
+## HARD-GATE: After implementation
+
+```
+YARD is not optional polish. After any feature or fix that adds or changes
+public Ruby API (classes, modules, public methods):
+
+1. Add or update YARD on those surfaces before the work is considered done.
+2. Do not skip YARD because "the PR is small" or "I'll do it later."
+
+Task lists from generate-tasks MUST include explicit YARD sub-tasks after
+implementation. If you only wrote specs + code, stop and document before PR.
+```
+
 ## Quick Reference
 
 | Scope | Rule |
@@ -108,9 +121,11 @@ def self.validate_shelters!(source_id, target_id)
 | Writing docs in a language other than English | Standard is English; use it unless the user explicitly asks otherwise |
 | No `@return` for methods that return values | Always document the return type and meaning |
 | No `@raise` when the method can raise | Callers need to know what exceptions to rescue |
+| Merging without YARD on new/changed public API | Post-implementation gate — document before PR |
 
 ## Red Flags
 
+- New or changed public methods merged without YARD (post-implementation gate violated)
 - Public method with no YARD block
 - Descriptions or examples in a language other than English without user request
 - Hash-parameter methods without `@option` for important keys
@@ -124,3 +139,4 @@ def self.validate_shelters!(source_id, target_id)
 | **ruby-api-client-integration** | When documenting API client layers (Auth, Client, Fetcher, Builder) |
 | **rails-engine-docs** | When documenting engine public API or extension points |
 | **rails-code-review** | When reviewing that public interfaces are documented |
+| **generate-tasks** | Generated task lists include YARD parents after implementation |

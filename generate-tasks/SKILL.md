@@ -4,7 +4,8 @@ description: >
   Use when the user asks to create tasks, generate a task list, break down a PRD
   into implementation steps, plan implementation, or create an implementation checklist.
   Generates step-by-step task lists in Markdown from a PRD or feature description
-  with checkboxes, relevant files, and test commands.
+  with checkboxes, relevant files, test commands, YARD, documentation updates,
+  and code-review gates after implementation.
 ---
 
 # Generating a Task List from Requirements
@@ -25,6 +26,7 @@ Create a step-by-step task list in Markdown that guides a developer through impl
 | 4 | Wait for "Go" (default) or generate all | User confirmation |
 | 5 | Generate sub-tasks with exact file paths | Detailed checklist |
 | 6 | Save to `/tasks/` | `tasks-[feature-name].md` |
+| 7 | Include completion phase | YARD, docs, self-review tasks |
 
 ## HARD-GATE
 
@@ -48,6 +50,24 @@ TESTS GATE IMPLEMENTATION:
 
   NEVER generate a task that writes implementation before its test.
   NEVER skip the "run and verify failure" step between test and implementation.
+
+POST-IMPLEMENTATION GATE (always include as explicit parent tasks after tests pass):
+
+  Every task list that adds or changes production Ruby/Rails code MUST end with:
+
+  1. YARD — Document every new or changed public class and public method
+     (skill: yard-documentation). Sub-tasks must name each file to document.
+
+  2. Documentation — Update README, architecture/diagrams (e.g. Mermaid, ADRs),
+     and any domain docs touched by the change. List concrete paths in
+     "Relevant Files" and as sub-tasks (create diagram updates if behavior
+     or data flow changed).
+
+  3. Code review — Self-review the full diff using rails-code-review (and
+     rails-security-review / rails-architecture-review when scope warrants).
+     Sub-tasks: run through review checklist, fix blocking issues, then open PR
+     (or hand off for human review). Do not treat "implementation done" as
+     complete without this step.
 ```
 
 ## When to Use
@@ -63,9 +83,9 @@ TESTS GATE IMPLEMENTATION:
 3. **Choose flow:**
    - **Default (with pause):** Generate only parent tasks (~5 high-level tasks). Present them and say: "I've generated the high-level tasks. Reply **Go** to generate sub-tasks, or tell me what to change."
    - **One shot:** If the user said "todo junto", "all at once", "sin pausa", "no pause", "generate everything", or similar, generate parent tasks and sub-tasks in a single pass and save the full file. Do not wait for "Go".
-4. **Parent tasks:** Always include **0.0 Create feature branch** as the first task unless the user asks otherwise. Aim for ~5 parent tasks (e.g. setup, backend, frontend, tests, docs/deploy).
-5. **Sub-tasks:** For each parent, break down into small, concrete steps. One sub-task = one clear action. Order so that dependencies are respected. Include exact file paths.
-6. **Relevant Files:** List files that will likely be created or modified (including tests). Refine this list when generating sub-tasks. Infer test command from the project when possible (e.g. Gemfile -> `bundle exec rspec`, package.json scripts -> `npm test` or `npx jest`).
+4. **Parent tasks:** Always include **0.0 Create feature branch** as the first task unless the user asks otherwise. After implementation parents, always add parents for **YARD**, **documentation** (README, diagrams, related docs), and **code review** (self-review + PR readiness). Typical order: setup → tests/specs → implementation → YARD → docs → review.
+5. **Sub-tasks:** For each parent, break down into small, concrete steps. One sub-task = one clear action. Order so that dependencies are respected. Include exact file paths. Documentation sub-tasks must name real paths (e.g. `docs/telematics.md`, `README.md`, `doc/architecture/*.md`) or state "add diagram under docs/..." when the repo layout is unknown.
+6. **Relevant Files:** List files that will likely be created or modified (including tests, README, diagrams, and internal docs). Refine this list when generating sub-tasks. Infer test command from the project when possible (e.g. Gemfile -> `bundle exec rspec`, package.json scripts -> `npm test` or `npx jest`).
 7. **Save:** Save as `tasks-[feature-name].md` in `/tasks/`. Use the same `[feature-name]` as the PRD if one was provided.
 8. **Verify:** Re-read the saved file and confirm the task count and structure match expectations.
 
@@ -88,6 +108,7 @@ Based on: `prd-[feature-name].md` *(only if PRD was the source)*
 
 - Tests live next to or mirror the code they cover.
 - Run tests: `bundle exec rspec` *(replace with project's test command)*
+- After green tests: add YARD on public Ruby API, update README/diagrams/docs as needed, then self code review before PR.
 
 ## Instructions for Completing Tasks
 
@@ -107,6 +128,16 @@ Check off each task when done: change `- [ ]` to `- [x]`. Update the file after 
   - [ ] 2.2 Run spec — verify it fails (feature does not exist yet)
   - [ ] 2.3 Implement [behavior] to pass spec (`app/path/to/file.rb`)
   - [ ] 2.4 Run spec — verify it passes
+- [ ] 3.0 YARD and public API documentation
+  - [ ] 3.1 Add YARD to new/changed public classes and methods (`app/path/to/file.rb`) — English only
+  - [ ] 3.2 Run `yard doc` or project doc task if applicable — fix warnings on touched files
+- [ ] 4.0 Update documentation artifacts
+  - [ ] 4.1 Update README or module README if behavior or setup changed (`README.md` or `docs/...`)
+  - [ ] 4.2 Update diagrams or architecture docs if flows or boundaries changed (`docs/...`, ADRs)
+- [ ] 5.0 Code review before merge
+  - [ ] 5.1 Self-review full diff (rails-code-review checklist); fix Critical/Suggestion items
+  - [ ] 5.2 Security/architecture pass if scope warrants (rails-security-review, rails-architecture-review)
+  - [ ] 5.3 Open PR or request review — attach summary of doc/YARD updates
 ```
 
 ## Interaction Model
@@ -134,10 +165,12 @@ Write for a **junior developer**: each sub-task should be a single, clear action
 
 - Sub-task contains "and" (likely two tasks combined)
 - No test files listed in relevant files
-- Parent tasks exceed 7 (scope too large — suggest splitting into phases)
+- Implementation/test parent tasks exceed ~7 (scope too large — suggest phased task files; YARD/docs/review parents are expected)
 - Sub-task says "update as needed" or "configure appropriately" (too vague)
 - Task list generated without reading the PRD first
 - Implementation started before task list was reviewed
+- Task list ends at "tests pass" with no YARD, docs, or code-review parents — incomplete; add completion parents
+- No README/diagram/doc paths in Relevant Files when integrators or operators need updates
 
 ## Integration
 
@@ -147,3 +180,8 @@ Write for a **junior developer**: each sub-task should be a single, clear action
 | **rails-stack-conventions** | When generating tasks for a Rails feature |
 | **rspec-best-practices** | When generating test-related tasks |
 | **refactor-safely** | When tasks involve refactoring existing code |
+| **yard-documentation** | After implementation — sub-tasks under the YARD parent |
+| **rails-code-review** | Final parent — self-review full diff before PR |
+| **rails-security-review** | When tasks touch auth, params, external IO, or sensitive data |
+| **rails-architecture-review** | When boundaries, domains, or structure shift |
+| **rails-engine-docs** | When the change affects a Rails engine's install or public API |
