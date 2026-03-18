@@ -13,6 +13,8 @@ When **writing or generating** code for this project, follow these conventions. 
 
 **Core principle:** Follow Rails conventions. When in doubt, check the official Rails guides.
 
+**Style:** If the project uses **RuboCop**, treat it as the source of truth for formatting and cops. For cross-cutting design principles (DRY, YAGNI, structured logging, rules by directory), use **rails-principles-and-boundaries**.
+
 ## HARD-GATE: Tests Gate Implementation
 
 ```
@@ -27,7 +29,7 @@ See rspec-best-practices for the full gate cycle.
 
 | Aspect | Convention |
 |--------|-----------|
-| Style | Ruby Style Guide, single quotes, `unless`/`||=`/`&.` |
+| Style | **RuboCop** project config when present; otherwise Ruby Style Guide, single quotes, `unless`/`||=`/`&.` |
 | Naming | `snake_case` files/methods, `CamelCase` classes |
 | Models | MVC, concerns, service objects for complex logic |
 | Queries | Eager loading (`includes`), avoid N+1 |
@@ -116,6 +118,7 @@ See rspec-best-practices for the full gate cycle.
 
 | Skill | When to chain |
 |-------|---------------|
+| **rails-principles-and-boundaries** | Before or alongside this skill for principles, logging, and path-specific boundaries |
 | **rails-code-review** | When reviewing existing code against these conventions |
 | **ruby-service-objects** | When extracting business logic into services |
 | **rspec-best-practices** | For testing conventions |

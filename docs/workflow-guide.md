@@ -50,6 +50,31 @@ flowchart LR
 - Task 0.0 is always "Create feature branch"
 - Do not skip YARD, doc updates, or self-review — they are explicit task parents, not optional polish
 
+### Optional: Jira tickets from the plan
+
+When the team tracks work in **Jira**, run **jira-ticket-planning** after **generate-tasks** (or from any approved initiative plan):
+
+```mermaid
+flowchart LR
+    D[generate-tasks] --> J[jira-ticket-planning]
+    J --> K[Draft markdown tickets]
+    J --> L[Create in Jira when approved]
+```
+
+- Use it for **draft-only** output (markdown tickets, classification, sprint buckets) or **create-in-Jira** after the user confirms project, issue types, and fields.
+- It does not replace the PRD/tasks artifacts; it **maps** planning output to board-ready tickets.
+
+---
+
+## Where principles apply in the flow
+
+**After** the test gate is satisfied for a given behavior, **implementation** should follow:
+
+1. **rails-principles-and-boundaries** — DRY/YAGNI/PORO/CoC/KISS; RuboCop as style SoT; structured logging; rules by path (`app/services`, workers, controllers, etc.).
+2. **rails-stack-conventions** — Stack-specific defaults (PostgreSQL, Hotwire, Tailwind).
+
+Use **rails-principles-and-boundaries** during **code review** and **refactors** as well, not only on greenfield features.
+
 ---
 
 ## Code Review

@@ -178,6 +178,7 @@ Write for a **junior developer**: each sub-task should be a single, clear action
 |-------|---------------|
 | **create-prd** | Generate PRD first, then derive tasks from it |
 | **rails-stack-conventions** | When generating tasks for a Rails feature |
+| **jira-ticket-planning** | When the user also wants Jira ticket drafts or board placement from the same initiative |
 | **rspec-best-practices** | When generating test-related tasks |
 | **refactor-safely** | When tasks involve refactoring existing code |
 | **yard-documentation** | After implementation — sub-tasks under the YARD parent |
