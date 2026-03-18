@@ -11,7 +11,7 @@ This skill library is built on three core principles that shape how every skill 
 The central methodology of this project. Tests are not a phase that happens "after" or "alongside" development — they are a **gate** that must be passed before any implementation code can be written.
 
 ```
-PRD → Tasks → [GATE] → Implementation
+PRD → Tasks → [GATE] → Implementation → YARD → Docs → Code review → PR
                  │
                  ├── 1. Test EXISTS (written and saved)
                  ├── 2. Test has been RUN
@@ -20,6 +20,10 @@ PRD → Tasks → [GATE] → Implementation
 
         Only after all 3 conditions are met
         can implementation code be written.
+
+After tests pass: document public Ruby API (YARD), update README/diagrams/
+related docs, then self-review (rails-code-review) before opening the PR.
+Task lists from generate-tasks include these steps explicitly.
 ```
 
 This applies to every skill that produces code: service objects, background jobs, API integrations, engine components, refactoring, and bug fixes. Every implementation skill in this library includes a **HARD-GATE: Tests Gate Implementation** section enforcing this discipline.
@@ -53,11 +57,17 @@ Skills are designed to be used in sequence, not in isolation. Each skill's **Int
 ```
 Planning (create-prd, generate-tasks)
     ↓
-Testing (rspec-best-practices — write and validate tests)
+Testing (rspec-best-practices — write and validate tests; GATE)
     ↓
 Implementation (ruby-service-objects, rails-*, etc.)
     ↓
-Review (rails-code-review, rails-security-review)
+YARD (yard-documentation on new/changed public API)
+    ↓
+Docs (README, diagrams, domain docs as the change requires)
+    ↓
+Review (rails-code-review self-review, then rails-security-review / rails-architecture-review as needed)
+    ↓
+PR
 ```
 
 See [docs/workflow-guide.md](docs/workflow-guide.md) for detailed workflow diagrams.
@@ -172,7 +182,9 @@ flowchart TD
     createPRD[create-prd] --> generateTasks[generate-tasks]
     generateTasks --> testGate["GATE: Write tests, run, verify failure"]
     testGate --> stackConventions[rails-stack-conventions]
-    stackConventions --> codeReview[rails-code-review]
+    stackConventions --> yardDoc[yard-documentation]
+    yardDoc --> docUpdates[README diagrams docs]
+    docUpdates --> codeReview[rails-code-review]
 
     codeReview --> archReview[rails-architecture-review]
     codeReview --> secReview[rails-security-review]
@@ -183,7 +195,7 @@ flowchart TD
 
     serviceObjects --> apiClient[ruby-api-client-integration]
     serviceObjects --> strategyFactory[strategy-factory-null-calculator]
-    serviceObjects --> yardDoc[yard-documentation]
+    serviceObjects --> yardDoc
     apiClient --> yardDoc
     engineAuthor --> postman[api-postman-collection]
     engineDocs[rails-engine-docs] --> postman
@@ -221,7 +233,7 @@ Tests are a **gate** between planning and implementation. See [docs/workflow-gui
 
 | Workflow | Skill Chain |
 |----------|-------------|
-| **New feature** | create-prd -> generate-tasks -> **[write tests, verify failure]** -> implement -> rails-code-review |
+| **New feature** | create-prd -> generate-tasks -> **[write tests, verify failure]** -> implement -> yard-documentation -> README/diagrams/docs -> rails-code-review (self) -> PR |
 | **Code review** | rails-code-review + rails-security-review + rails-architecture-review |
 | **New engine** | rails-engine-author -> **[write specs, verify failure]** -> implement -> rails-engine-docs |
 | **Refactoring** | refactor-safely -> **[characterization tests]** -> refactor -> verify tests pass |

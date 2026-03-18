@@ -13,6 +13,21 @@ When **reviewing** Rails code, analyze it against the following areas. When **wr
 
 **Core principle:** Review early, review often. Verify before implementing feedback.
 
+## HARD-GATE: After implementation (before PR)
+
+```
+Code review is part of delivery, not only "when someone comments on GitHub."
+
+After implementation + green tests + YARD + doc updates (per generate-tasks):
+
+1. Run a self-review on the full branch diff using the Review Order below.
+2. Fix Critical items; address Suggestion items or ticket follow-ups explicitly.
+3. Only then open the PR or hand off for human review.
+
+Skipping self-review treats the plan as unfinished. generate-tasks must end
+with a "Code review before merge" parent task.
+```
+
 ## Quick Reference
 
 | Area | Key Checks |
@@ -116,3 +131,5 @@ WHEN receiving code review feedback:
 | **rails-migration-safety** | When reviewing migrations on large tables |
 | **rspec-best-practices** | When reviewing test quality |
 | **refactor-safely** | When review suggests refactoring |
+| **generate-tasks** | Task lists end with self-review / PR-readiness steps |
+| **yard-documentation** | Confirm new public API is documented before approving |

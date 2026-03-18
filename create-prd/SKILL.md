@@ -49,7 +49,7 @@ DO NOT start generating tasks without user confirmation.
 3. **Generate PRD:** Use the structure below. Derive `[feature-name]` from the feature (lowercase, hyphenated slug, e.g. `user-onboarding`, `export-csv`).
 4. **Save:** Save as `prd-[feature-name].md` in the `/tasks` directory (create the directory if needed).
 5. **Verify:** Re-read the saved file and confirm it matches the agreed scope.
-6. **Do NOT** start implementing the PRD. Offer to generate tasks if the user wants an implementation checklist.
+6. **Do NOT** start implementing the PRD. Offer to generate tasks if the user wants an implementation checklist. When suggesting **generate-tasks**, note that the resulting checklist will include YARD, README/diagram/doc updates, and a code-review-before-PR phase unless the user opts out.
 
 ## Clarifying Questions (Only When Needed)
 
@@ -125,6 +125,6 @@ Write for a **junior developer**: explicit, unambiguous, minimal jargon. Each re
 
 | Skill | When to chain |
 |-------|---------------|
-| **generate-tasks** | After PRD is approved — break down into implementation tasks |
+| **generate-tasks** | After PRD is approved — implementation + tests + YARD + docs + review tasks |
 | **rails-architecture-review** | When PRD reveals architectural concerns |
 | **rails-stack-conventions** | When PRD is for a Rails feature |

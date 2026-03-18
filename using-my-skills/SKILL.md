@@ -15,7 +15,7 @@ This skill library provides specialized knowledge for Ruby on Rails development.
 ```
 THIS IS NON-NEGOTIABLE AND APPLIES TO EVERY SKILL THAT PRODUCES CODE.
 
-THE WORKFLOW IS: PRD → TASKS → TESTS → IMPLEMENTATION
+THE WORKFLOW IS: PRD → TASKS → TESTS → IMPLEMENTATION → YARD → DOCS → CODE REVIEW → PR
 
 Tests are a GATE. Implementation code CANNOT be written until:
 1. The test for that behavior EXISTS
@@ -33,6 +33,12 @@ ONLY THEN can implementation code be written.
 4. **Run the test again** — confirm it passes and no other tests break
 5. **Refactor** if needed — tests must stay green
 6. **Move to the next behavior** — repeat from step 1
+
+**After all targeted tests pass for the feature:**
+
+7. **YARD** — Document new/changed public Ruby API (yard-documentation).
+8. **Docs** — Update README, diagrams, and related docs touched by the change.
+9. **Code review** — Self-review with rails-code-review (and security/architecture skills if needed), then PR.
 
 **This applies when using:** ruby-service-objects, ruby-api-client-integration, strategy-factory-null-calculator, rails-background-jobs, rails-stack-conventions, rails-engine-author, refactor-safely, and any other skill that results in writing Ruby/Rails code.
 
@@ -118,7 +124,7 @@ When multiple skills could apply:
 ## Typical Workflows
 
 **New feature:**
-create-prd -> generate-tasks -> **[GATE: write tests, run, verify failure]** -> implement to pass tests -> rails-code-review
+create-prd -> generate-tasks -> **[GATE: write tests, run, verify failure]** -> implement to pass tests -> yard-documentation -> update README/diagrams/docs -> rails-code-review (self) -> PR
 
 **Code review:**
 rails-code-review + rails-security-review + rails-architecture-review
