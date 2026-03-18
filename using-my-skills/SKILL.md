@@ -40,7 +40,7 @@ ONLY THEN can implementation code be written.
 8. **Docs** — Update README, diagrams, and related docs touched by the change.
 9. **Code review** — Self-review with rails-code-review (and security/architecture skills if needed), then PR.
 
-**This applies when using:** ruby-service-objects, ruby-api-client-integration, strategy-factory-null-calculator, rails-background-jobs, rails-stack-conventions, rails-engine-author, refactor-safely, and any other skill that results in writing Ruby/Rails code.
+**This applies when using:** ruby-service-objects, ruby-api-client-integration, strategy-factory-null-calculator, rails-background-jobs, rails-principles-and-boundaries, rails-stack-conventions, rails-engine-author, refactor-safely, and any other skill that results in writing Ruby/Rails code.
 
 **Wrote implementation code before the test?** Delete it. Start over. No exceptions.
 
@@ -54,6 +54,7 @@ ONLY THEN can implementation code be written.
 |-------|-------------|
 | **create-prd** | User asks to plan a feature, write requirements, or create a PRD |
 | **generate-tasks** | User asks for implementation steps, task breakdown, or checklist |
+| **jira-ticket-planning** | User wants Jira-ready tickets, sprint placement, or issues created from a plan |
 
 ### Rails Code Quality
 
@@ -63,7 +64,8 @@ ONLY THEN can implementation code be written.
 | **rails-architecture-review** | Reviewing app structure, boundaries, fat models/controllers |
 | **rails-security-review** | Checking auth, params, redirects, XSS, CSRF, SQLi |
 | **rails-migration-safety** | Planning or reviewing database migrations |
-| **rails-stack-conventions** | Writing new Rails code (style, naming, patterns) |
+| **rails-stack-conventions** | Writing new Rails code for PostgreSQL + Hotwire + Tailwind stack |
+| **rails-principles-and-boundaries** | DRY/YAGNI/PORO/CoC/KISS, RuboCop as style SoT, logging, rules by path |
 | **rails-background-jobs** | Adding or reviewing background jobs |
 
 ### Ruby Patterns
@@ -107,7 +109,7 @@ ONLY THEN can implementation code be written.
 When multiple skills could apply:
 
 1. **TDD always** — rspec-best-practices TDD discipline applies whenever code is produced
-2. **Planning skills first** (create-prd, generate-tasks) — determine WHAT to build
+2. **Planning skills first** (create-prd, generate-tasks; **jira-ticket-planning** when the team tracks work in Jira) — determine WHAT to build (and optionally how it is ticketed)
 3. **Process skills second** (refactor-safely) — determine HOW to approach
 4. **Domain skills third** (rails-*, ruby-*) — guide specific implementation
 
@@ -124,7 +126,7 @@ When multiple skills could apply:
 ## Typical Workflows
 
 **New feature:**
-create-prd -> generate-tasks -> **[GATE: write tests, run, verify failure]** -> implement to pass tests -> yard-documentation -> update README/diagrams/docs -> rails-code-review (self) -> PR
+create-prd -> generate-tasks -> (optional jira-ticket-planning) -> **[GATE: write tests, run, verify failure]** -> rails-principles-and-boundaries + rails-stack-conventions -> implement to pass tests -> yard-documentation -> update README/diagrams/docs -> rails-code-review (self) -> PR
 
 **Code review:**
 rails-code-review + rails-security-review + rails-architecture-review

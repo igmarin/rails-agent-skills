@@ -1,0 +1,101 @@
+---
+name: rails-principles-and-boundaries
+description: >
+  Applies DRY, YAGNI, PORO, Convention over Configuration, and KISS to Rails code;
+  defers style to RuboCop. Covers structured logging, comment discipline, and
+  path-specific rules (models, workers, services, controllers, repositories, serializers,
+  RSpec, raw SQL). Use when designing or reviewing Rails structure, avoiding over-engineering,
+  or aligning code with team boundaries by directory.
+---
+
+# Rails Principles and Boundaries
+
+Use this skill when **writing or reviewing** Rails application code where **design principles** and **per-area rules** matter more than stack-specific UI choices (see **rails-stack-conventions** for Hotwire + Tailwind).
+
+**Style source of truth:** All style and formatting rules live in **RuboCop** (project config). This skill adds **non-style behavior** and **architecture guidance** only.
+
+## Quick Reference
+
+| Topic | Rule |
+|-------|------|
+| Style/format | RuboCop — do not contradict project cops here |
+| Principles | DRY, YAGNI, PORO where it helps, CoC, KISS |
+| Comments | Explain **why**, not **what**; use tagged notes with context |
+| Logging | First arg string, second arg hash; no string interpolation; `event:` when useful for dashboards |
+| Deep stacks | Chain **rails-stack-conventions** → domain skills (services, jobs, RSpec) |
+
+## Design Principles
+
+| Principle | Apply as |
+|-----------|----------|
+| **DRY** | Extract when duplication carries real maintenance cost; avoid premature abstraction |
+| **YAGNI** | Build for current requirements; defer generalization until a second real use case |
+| **PORO** | Use plain Ruby objects when they clarify responsibility; do not wrap everything in a "pattern" |
+| **Convention over Configuration** | Prefer Rails defaults and file placement; document only intentional deviations |
+| **KISS** | Simplest design that meets acceptance criteria and test gate |
+
+## Comments
+
+- Comment the **why**, not the **what** (the code shows what).
+- Use tags with **enough context** that a future reader can act: `TODO:`, `FIXME:`, `HACK:`, `NOTE:`, `OPTIMIZE:`.
+
+## Structured logging
+
+- **First argument:** static string (message key or human-readable template without interpolated values).
+- **Second argument:** hash with structured fields (`user_id:`, `order_id:`, etc.).
+- **Do not** build the primary message with string interpolation; put dynamic data in the hash.
+- Include **`event:`** (or equivalent) for error or ops dashboards when the team uses tagged events.
+
+## Apply by area (path patterns)
+
+Rules below apply **when those paths exist** in the project. If a path is absent, skip that row.
+
+| Area | Path pattern | Guidance |
+|------|--------------|----------|
+| **ActiveRecord performance** | `app/models/**/*.rb` | Eager load in loops; push work into SQL where appropriate; prefer `pluck`, `exists?`, `find_each` over loading full records unnecessarily |
+| **Background jobs** | `app/workers/**/*.rb`, `app/jobs/**/*.rb` | Clear worker/job structure, queue selection, idempotency, structured error logging (see **rails-background-jobs** for Active Job / Solid Queue / Sidekiq depth) |
+| **Error handling** | `app/services/**/*.rb`, `app/lib/**/*.rb`, `app/exceptions/**/*.rb` | Domain exceptions with prefixed codes where the team uses them; `rescue_from` or base handlers for API layers as conventions dictate |
+| **Logging / tracing** | `app/services/**/*.rb`, `app/workers/**/*.rb`, `app/jobs/**/*.rb`, `app/controllers/**/*.rb`, `app/repositories/**/*.rb` | Structured logging; add APM trace spans and tags (e.g. Datadog) for key operations when the stack includes them |
+| **Controllers** | `app/controllers/**/*_controller.rb` | Strong params; thin actions delegating to services; watch IDOR and PII exposure (see **rails-security-review**) |
+| **Repositories** | `app/repositories/**/*.rb` | Avoid new repository objects unless raw SQL, caching, a clear domain boundary, or external service isolation justifies it; document **why** in code |
+| **RSpec** | `spec/**/*_spec.rb` | FactoryBot; prefer request specs over controller specs; use `env:` metadata (or project equivalent) for ENV changes; **prefer `let` over `let!`** unless the example requires eager setup; avoid `before` for data when `let` or inline factories are clearer |
+| **Serializers** | `app/serializers/**/*.rb` | If using ActiveModel::Serializer (or similar): explicit `key:` mapping; avoid N+1; pass preloaded associations via options when applicable |
+| **Service objects** | `app/services/**/*.rb` | Single responsibility; class methods for stateless entry points, instance API when dependencies are injected; public methods first; bang (`!`) / predicate (`?`) naming as appropriate (see **ruby-service-objects**) |
+| **SQL security** | Raw SQL anywhere | No string interpolation of user input; use `sanitize_sql_array` / bound parameters; whitelist dynamic ORDER BY; document **why** raw SQL is needed |
+
+## RSpec and `shared_let`
+
+- **Only use `shared_let` if the project already defines or depends on it** (e.g. gem in `Gemfile`, helper in `spec/support`). Search the codebase before recommending it.
+- If **`shared_let` is not present**, follow **rspec-best-practices** with **`let` as the default**; use **`let!` only when lazy evaluation would break the example** (e.g. callbacks, DB constraints that must exist before the action). Explicit setup is fine when clearer. Do **not** require adding `shared_let` unless the user asks to introduce it.
+
+## HARD-GATE: Tests Gate Implementation
+
+When this skill guides **new behavior**, the test gate still applies:
+
+```
+PRD → TASKS → TEST (write, run, fail) → IMPLEMENTATION → …
+```
+
+No implementation code before a failing test. See **rspec-best-practices** and **using-my-skills**.
+
+## Common Mistakes
+
+| Mistake | Reality |
+|---------|---------|
+| Duplicate RuboCop rules in prose | RuboCop is authoritative for style; this skill is for behavior and boundaries |
+| `shared_let` in every project | Use only when the repo already supports it |
+| Defaulting to `let!` everywhere | Prefer lazy `let`; reserve `let!` for cases that need eager setup |
+| New `app/repositories` for every query | ActiveRecord is the default data boundary unless there's a documented reason |
+| Interpolated log messages | Loses structure; use hash payload |
+| Comments restating method names | Adds noise; comment intent and tradeoffs |
+
+## Integration
+
+| Skill | When to chain |
+|-------|---------------|
+| **rails-stack-conventions** | Stack-specific: PostgreSQL, Hotwire, Tailwind |
+| **ruby-service-objects** | Implementing or refining service objects |
+| **rails-background-jobs** | Workers, queues, retries, idempotency |
+| **rspec-best-practices** | Spec style, TDD gate, request vs controller specs |
+| **rails-security-review** | Controllers, params, IDOR, PII |
+| **rails-code-review** | Full PR pass before merge |

@@ -10,7 +10,7 @@ This skill library is built on three core principles that shape how every skill 
 
 The central methodology of this project. Tests are not a phase that happens "after" or "alongside" development — they are a **gate** that must be passed before any implementation code can be written.
 
-```
+```text
 PRD → Tasks → [GATE] → Implementation → YARD → Docs → Code review → PR
                  │
                  ├── 1. Test EXISTS (written and saved)
@@ -29,6 +29,7 @@ Task lists from generate-tasks include these steps explicitly.
 This applies to every skill that produces code: service objects, background jobs, API integrations, engine components, refactoring, and bug fixes. Every implementation skill in this library includes a **HARD-GATE: Tests Gate Implementation** section enforcing this discipline.
 
 Why this matters:
+
 - A test that passes immediately proves nothing — you don't know if it tests the right thing
 - A test you never saw fail could be testing existing behavior, not the new feature
 - Implementation code written before the test is biased by what you built, not what's required
@@ -54,12 +55,12 @@ HARD-GATEs use explicit blocking language ("DO NOT", "CANNOT", "ONLY THEN") beca
 
 Skills are designed to be used in sequence, not in isolation. Each skill's **Integration** table points to the next skill in the chain. The typical flow is:
 
-```
-Planning (create-prd, generate-tasks)
+```text
+Planning (create-prd, generate-tasks; optional jira-ticket-planning for Jira drafts/sprints)
     ↓
 Testing (rspec-best-practices — write and validate tests; GATE)
     ↓
-Implementation (ruby-service-objects, rails-*, etc.)
+Implementation (rails-principles-and-boundaries + rails-stack-conventions, then ruby-service-objects, rails-*, etc.)
     ↓
 YARD (yard-documentation on new/changed public API)
     ↓
@@ -71,6 +72,8 @@ PR
 ```
 
 See [docs/workflow-guide.md](docs/workflow-guide.md) for detailed workflow diagrams.
+
+**Note:** `jira-ticket-planning` is an **optional** step. The assistant should **not** push for Jira ticket generation unless the user asks explicitly (e.g. "turn this into Jira tickets") or the context clearly indicates work should be mapped to a Jira board/sprint.
 
 ## Platforms
 
@@ -121,6 +124,7 @@ ln -s /path/to/rails-agent-skills ~/.codex/skills/rails-agent-skills
 |-------|-------------|
 | [create-prd](create-prd/) | Generate Product Requirements Documents from feature descriptions |
 | [generate-tasks](generate-tasks/) | Break down PRDs into step-by-step implementation task lists |
+| [jira-ticket-planning](jira-ticket-planning/) | Draft or create Jira tickets from plans; sprint placement and classification |
 
 ### Rails Code Quality
 
@@ -131,6 +135,7 @@ ln -s /path/to/rails-agent-skills ~/.codex/skills/rails-agent-skills
 | [rails-security-review](rails-security-review/) | Audit for auth, XSS, CSRF, SQLi, and other vulnerabilities |
 | [rails-migration-safety](rails-migration-safety/) | Plan production-safe database migrations |
 | [rails-stack-conventions](rails-stack-conventions/) | Apply Rails + PostgreSQL + Hotwire + Tailwind conventions |
+| [rails-principles-and-boundaries](rails-principles-and-boundaries/) | DRY/YAGNI/PORO/CoC/KISS; RuboCop as style SoT; logging and rules by path |
 | [rails-background-jobs](rails-background-jobs/) | Design idempotent background jobs with Active Job / Solid Queue |
 | [api-postman-collection](api-postman-collection/) | Generate or update Postman Collection (JSON v2.1) when creating or modifying API endpoints |
 
@@ -180,8 +185,10 @@ ln -s /path/to/rails-agent-skills ~/.codex/skills/rails-agent-skills
 ```mermaid
 flowchart TD
     createPRD[create-prd] --> generateTasks[generate-tasks]
+    generateTasks --> jiraPlanning[jira-ticket-planning]
     generateTasks --> testGate["GATE: Write tests, run, verify failure"]
-    testGate --> stackConventions[rails-stack-conventions]
+    testGate --> railsPrinciples[rails-principles-and-boundaries]
+    railsPrinciples --> stackConventions[rails-stack-conventions]
     stackConventions --> yardDoc[yard-documentation]
     yardDoc --> docUpdates[README diagrams docs]
     docUpdates --> codeReview[rails-code-review]
@@ -233,7 +240,8 @@ Tests are a **gate** between planning and implementation. See [docs/workflow-gui
 
 | Workflow | Skill Chain |
 |----------|-------------|
-| **New feature** | create-prd -> generate-tasks -> **[write tests, verify failure]** -> implement -> yard-documentation -> README/diagrams/docs -> rails-code-review (self) -> PR |
+| **New feature** | create-prd -> generate-tasks -> (optional **jira-ticket-planning**) -> **[write tests, verify failure]** -> **rails-principles-and-boundaries** + rails-stack-conventions -> implement -> yard-documentation -> README/diagrams/docs -> rails-code-review (self) -> PR |
+| **Jira tickets from plan** | jira-ticket-planning (after PRD/tasks or any initiative plan; drafts or create in Jira when approved) |
 | **Code review** | rails-code-review + rails-security-review + rails-architecture-review |
 | **New engine** | rails-engine-author -> **[write specs, verify failure]** -> implement -> rails-engine-docs |
 | **Refactoring** | refactor-safely -> **[characterization tests]** -> refactor -> verify tests pass |
@@ -244,3 +252,7 @@ Tests are a **gate** between planning and implementation. See [docs/workflow-gui
 ## Creating New Skills
 
 See [docs/skill-template.md](docs/skill-template.md) for the template and conventions.
+
+## Acknowledgments
+
+Huge thanks to **[Mumo Carlos (@mumoc)](https://github.com/mumoc)**. His mentorship has shaped my growth as a developer and influenced many of the habits and practices reflected in this library — not only the **jira-ticket-planning** workflow he shared, but the broader discipline around quality, clarity, and thoughtful use of tools. This repo and the learning behind it would not be what they are without him.

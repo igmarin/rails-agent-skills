@@ -163,6 +163,8 @@ Follow exactly. Do not adapt away discipline.
 
 Adapt principles to context.
 - rails-stack-conventions
+- rails-principles-and-boundaries
+- jira-ticket-planning
 - ruby-service-objects
 - rails-background-jobs
 
