@@ -1,6 +1,10 @@
 # Rails Agent Skills
 
-A curated library of AI agent skills for **Ruby on Rails** development. These skills provide specialized knowledge, conventions, and workflow patterns that AI coding assistants use to deliver higher-quality code.
+**Rails Agent Skills** is a curated library of AI agent skills for **Ruby on Rails** development. Skills encode specialized knowledge, conventions, and workflow patterns so assistants deliver higher-quality code.
+
+- **Repository / install path:** `rails-agent-skills` (see [Quick Start](#quick-start) and [docs/implementation-guide.md](docs/implementation-guide.md))
+- **Bootstrap discovery skill:** [`rails-agent-skills`](rails-agent-skills/) (session hook loads `rails-agent-skills/SKILL.md` where applicable)
+- **Workflows:** [docs/workflow-guide.md](docs/workflow-guide.md) — **Skill structure:** [docs/architecture.md](docs/architecture.md)
 
 ## Methodology
 
@@ -49,7 +53,7 @@ Each skill follows a consistent structure inspired by [superpowers](https://gith
 
 HARD-GATEs use explicit blocking language ("DO NOT", "CANNOT", "ONLY THEN") because AI agents are susceptible to rationalization — vague guidelines get optimized away under pressure.
 
-**Generated output:** All generated artifacts (documentation, YARD comments, Postman collections, examples) must be in **English** unless the user explicitly requests another language. This is reflected in the skill template and in yard-documentation and api-postman-collection.
+**Generated output:** All generated artifacts (documentation, YARD comments, Postman collections, examples) must be in **English** unless the user explicitly requests another language. This is reflected in the skill template and in `yard-documentation` and `api-postman-collection`.
 
 ### 3. Workflow Chaining
 
@@ -58,7 +62,7 @@ Skills are designed to be used in sequence, not in isolation. Each skill's **Int
 ```text
 Planning (create-prd, generate-tasks; optional jira-ticket-planning for Jira drafts/sprints)
     ↓
-Testing (rspec-best-practices — write and validate tests; GATE)
+Testing (`rspec-best-practices` — write and validate tests; **tests gate**)
     ↓
 Implementation (rails-principles-and-boundaries + rails-stack-conventions, then ruby-service-objects, rails-*, etc.)
     ↓
@@ -75,6 +79,21 @@ See [docs/workflow-guide.md](docs/workflow-guide.md) for detailed workflow diagr
 
 **Note:** `jira-ticket-planning` is an **optional** step. The assistant should **not** push for Jira ticket generation unless the user asks explicitly (e.g. "turn this into Jira tickets") or the context clearly indicates work should be mapped to a Jira board/sprint.
 
+### 4. Rails-First Pattern Reuse
+
+This library intentionally reuses proven patterns from broader agent-skill libraries, but translates them into a **Rails-first** workflow instead of copying generic frontend-oriented skills one-to-one.
+
+| Reused pattern | Rails-first destination in this repo |
+|----------------|--------------------------------------|
+| PRD interview + scope control | `create-prd` |
+| Planning from requirements | `generate-tasks` |
+| TDD loop and smallest safe slice | `rspec-best-practices` + `rails-tdd-slices` |
+| Bug investigation to reproducible test | `rails-bug-triage` |
+| Domain language and context design | `ddd-ubiquitous-language` + `ddd-boundaries-review` + `ddd-rails-modeling` |
+| Skill authoring conventions | `docs/skill-template.md` |
+
+The rule of thumb is: **reuse patterns, not names**. If a broader skill maps cleanly to Rails/RSpec/YARD workflows, absorb the pattern into the existing chain. Create a new skill only when there is a real Rails-specific workflow gap.
+
 ## Platforms
 
 Works with **Cursor**, **Codex**, and **Claude Code**.
@@ -82,7 +101,7 @@ Works with **Cursor**, **Codex**, and **Claude Code**.
 | Platform | Installation |
 |----------|-------------|
 | **Cursor** | Symlink or clone to `~/.cursor/skills/` |
-| **Codex** | See [`.codex/INSTALL.md`](.codex/INSTALL.md) |
+| **Codex** | [`.codex/INSTALL.md`](.codex/INSTALL.md) and [docs/implementation-guide.md](docs/implementation-guide.md) |
 | **Claude Code** | Install as plugin via `.claude-plugin/` |
 
 See [docs/implementation-guide.md](docs/implementation-guide.md) for detailed setup instructions.
@@ -135,9 +154,17 @@ ln -s /path/to/rails-agent-skills ~/.codex/skills/rails-agent-skills
 | [rails-security-review](rails-security-review/) | Audit for auth, XSS, CSRF, SQLi, and other vulnerabilities |
 | [rails-migration-safety](rails-migration-safety/) | Plan production-safe database migrations |
 | [rails-stack-conventions](rails-stack-conventions/) | Apply Rails + PostgreSQL + Hotwire + Tailwind conventions |
-| [rails-principles-and-boundaries](rails-principles-and-boundaries/) | DRY/YAGNI/PORO/CoC/KISS; RuboCop as style SoT; logging and rules by path |
+| [rails-principles-and-boundaries](rails-principles-and-boundaries/) | DRY/YAGNI/PORO/CoC/KISS; project linter as style SoT; logging and rules by path |
 | [rails-background-jobs](rails-background-jobs/) | Design idempotent background jobs with Active Job / Solid Queue |
 | [api-postman-collection](api-postman-collection/) | Generate or update Postman Collection (JSON v2.1) when creating or modifying API endpoints |
+
+### DDD & Domain Modeling
+
+| Skill | Description |
+|-------|-------------|
+| [ddd-ubiquitous-language](ddd-ubiquitous-language/) | Build a shared domain glossary, resolve synonyms, and clarify business terminology |
+| [ddd-boundaries-review](ddd-boundaries-review/) | Review bounded contexts, ownership, and language leakage in Rails codebases |
+| [ddd-rails-modeling](ddd-rails-modeling/) | Map DDD concepts to Rails models, services, value objects, and boundaries without over-engineering |
 
 ### Ruby Patterns
 
@@ -153,6 +180,8 @@ ln -s /path/to/rails-agent-skills ~/.codex/skills/rails-agent-skills
 | Skill | Description |
 |-------|-------------|
 | [rspec-best-practices](rspec-best-practices/) | Write maintainable, deterministic RSpec tests with TDD discipline |
+| [rails-tdd-slices](rails-tdd-slices/) | Pick the best first failing spec for a Rails change before implementation |
+| [rails-bug-triage](rails-bug-triage/) | Turn a Rails bug report into a reproducible failing spec and fix plan |
 | [rspec-service-testing](rspec-service-testing/) | Test service objects with instance_double, hash factories, shared_examples |
 
 ### Rails Engines
@@ -178,13 +207,20 @@ ln -s /path/to/rails-agent-skills ~/.codex/skills/rails-agent-skills
 
 | Skill | Description |
 |-------|-------------|
-| [using-my-skills](using-my-skills/) | Discover and invoke the right skill for the current task |
+| [rails-agent-skills](rails-agent-skills/) | Discover and invoke the right skill for the current Rails task |
+| [docs/skill-template.md](docs/skill-template.md) | Authoring template and checklist for expanding the library |
 
 ## Skill Relationships
 
 ```mermaid
 flowchart TD
     createPRD[create-prd] --> generateTasks[generate-tasks]
+    createPRD --> dddLanguage[ddd-ubiquitous-language]
+    dddLanguage --> dddBoundaries[ddd-boundaries-review]
+    dddBoundaries --> dddModeling[ddd-rails-modeling]
+    dddBoundaries --> archReview
+    dddModeling --> generateTasks
+    dddModeling --> railsPrinciples
     generateTasks --> jiraPlanning[jira-ticket-planning]
     generateTasks --> testGate["GATE: Write tests, run, verify failure"]
     testGate --> railsPrinciples[rails-principles-and-boundaries]
@@ -207,7 +243,10 @@ flowchart TD
     engineAuthor --> postman[api-postman-collection]
     engineDocs[rails-engine-docs] --> postman
 
-    rspecBest[rspec-best-practices] --> testGate
+    rspecBest[rspec-best-practices] --> tddSlices[rails-tdd-slices]
+    tddSlices --> testGate
+    bugTriage[rails-bug-triage] --> tddSlices
+    bugTriage --> testGate
     rspecService[rspec-service-testing] --> testGate
 
     engineAuthor[rails-engine-author] --> engineTestGate["GATE: Write engine specs, verify failure"]
@@ -240,18 +279,27 @@ Tests are a **gate** between planning and implementation. See [docs/workflow-gui
 
 | Workflow | Skill Chain |
 |----------|-------------|
-| **New feature** | create-prd -> generate-tasks -> (optional **jira-ticket-planning**) -> **[write tests, verify failure]** -> **rails-principles-and-boundaries** + rails-stack-conventions -> implement -> yard-documentation -> README/diagrams/docs -> rails-code-review (self) -> PR |
+| **New feature** | create-prd -> generate-tasks -> (optional **jira-ticket-planning**) -> rails-tdd-slices -> **[write tests, verify failure]** -> **rails-principles-and-boundaries** + rails-stack-conventions -> implement -> yard-documentation -> README/diagrams/docs -> rails-code-review (self) -> PR |
+| **DDD-first feature design** | create-prd -> ddd-ubiquitous-language -> ddd-boundaries-review -> ddd-rails-modeling -> generate-tasks -> rails-tdd-slices -> implement |
 | **Jira tickets from plan** | jira-ticket-planning (after PRD/tasks or any initiative plan; drafts or create in Jira when approved) |
 | **Code review** | rails-code-review + rails-security-review + rails-architecture-review |
+| **Bug triage** | rails-bug-triage -> rails-tdd-slices -> **[write failing spec, verify failure]** -> implement -> review |
 | **New engine** | rails-engine-author -> **[write specs, verify failure]** -> implement -> rails-engine-docs |
 | **Refactoring** | refactor-safely -> **[characterization tests]** -> refactor -> verify tests pass |
-| **New service** | **[write .call spec, verify failure]** -> ruby-service-objects -> verify passes |
-| **API integration** | **[write layer specs, verify failure]** -> ruby-api-client-integration -> verify passes |
-| **Bug fix** | **[write test reproducing bug, verify failure]** -> fix -> verify passes |
+| **New service** | rails-tdd-slices -> **[write .call spec, verify failure]** -> ruby-service-objects -> verify passes |
+| **API integration** | rails-tdd-slices -> **[write layer specs, verify failure]** -> ruby-api-client-integration -> verify passes |
+| **Bug fix** | `rails-bug-triage` -> `rails-tdd-slices` -> **[write test reproducing bug, verify failure]** -> fix -> verify passes -> review |
 
 ## Creating New Skills
 
 See [docs/skill-template.md](docs/skill-template.md) for the template and conventions.
+
+Prefer extending an existing skill when the new behavior is just a tighter Rails adaptation of a pattern the library already covers. Create a new skill when the workflow has:
+
+- a distinct trigger
+- a different decision tree
+- a different HARD-GATE or verification loop
+- clear integration points that would otherwise bloat an existing skill
 
 ## Acknowledgments
 

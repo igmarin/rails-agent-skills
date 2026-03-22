@@ -6,7 +6,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 PLUGIN_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
-using_skills_content=$(cat "${PLUGIN_ROOT}/using-my-skills/SKILL.md" 2>&1 || echo "Error reading using-my-skills skill")
+bootstrap_skill_content=$(cat "${PLUGIN_ROOT}/rails-agent-skills/SKILL.md" 2>&1 || echo "Error reading rails-agent-skills skill")
 
 escape_for_json() {
     local s="$1"
@@ -18,8 +18,8 @@ escape_for_json() {
     printf '%s' "$s"
 }
 
-using_skills_escaped=$(escape_for_json "$using_skills_content")
-session_context="<IMPORTANT>\nYou have access to Rails development skills.\n\n**Below is the skill discovery guide - read it to understand available skills:**\n\n${using_skills_escaped}\n</IMPORTANT>"
+bootstrap_skill_escaped=$(escape_for_json "$bootstrap_skill_content")
+session_context="<IMPORTANT>\nYou have access to Rails development skills.\n\n**Below is the skill discovery guide - read it to understand available skills:**\n\n${bootstrap_skill_escaped}\n</IMPORTANT>"
 
 if [ -n "${CLAUDE_PLUGIN_ROOT:-}" ]; then
   cat <<EOF

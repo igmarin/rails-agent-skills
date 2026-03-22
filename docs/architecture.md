@@ -1,11 +1,15 @@
-# Skill Architecture
+# Skill Architecture — Rails Agent Skills
 
-This document describes the conventions and structure that all skills in this library follow.
+Conventions and structure for every `SKILL.md` in this library.
+
+- **Overview and catalog:** [README](../README.md)
+- **Install and hooks:** [implementation-guide.md](implementation-guide.md)
+- **Workflow chains:** [workflow-guide.md](workflow-guide.md)
 
 ## Directory Structure
 
-```
-my-cursor-skills/
+```text
+rails-agent-skills/
 ├── .claude-plugin/          # Claude Code plugin metadata
 │   ├── plugin.json
 │   └── marketplace.json
@@ -21,7 +25,7 @@ my-cursor-skills/
 │   ├── architecture.md
 │   ├── workflow-guide.md
 │   └── skill-template.md
-├── using-my-skills/         # Bootstrap skill (loaded at session start)
+├── rails-agent-skills/      # Bootstrap skill (loaded at session start)
 │   └── SKILL.md
 ├── <skill-name>/            # One directory per skill
 │   ├── SKILL.md             # Main skill file (required)
@@ -46,6 +50,7 @@ description: >
 ```
 
 **Rules:**
+
 - `name`: kebab-case, matches directory name
 - `description`: starts with "Use when...", third person
 - Include concrete trigger words (error symptoms, tools, scenarios)
@@ -137,6 +142,7 @@ Table of related skills and when to chain them:
 5. Do NOT summarize the workflow (the model will skip reading the body)
 
 **Good:**
+
 ```yaml
 description: >
   Use when reviewing Rails pull requests, checking controller conventions,
@@ -144,6 +150,7 @@ description: >
 ```
 
 **Bad:**
+
 ```yaml
 description: >
   This skill reviews code by checking routing, then controllers, then models,
@@ -155,26 +162,31 @@ description: >
 ### Rigid Skills
 
 Follow exactly. Do not adapt away discipline.
-- rspec-best-practices (TDD hard-gate)
-- refactor-safely (characterization tests hard-gate)
-- rails-migration-safety (phased rollout hard-gate)
+
+- `rspec-best-practices` (tests gate / TDD discipline)
+- `refactor-safely` (characterization tests hard-gate)
+- `rails-migration-safety` (phased rollout hard-gate)
 
 ### Flexible Skills
 
 Adapt principles to context.
-- rails-stack-conventions
-- rails-principles-and-boundaries
-- jira-ticket-planning
-- ruby-service-objects
-- rails-background-jobs
+
+- `rails-stack-conventions`
+- `rails-principles-and-boundaries`
+- `jira-ticket-planning`
+- `ruby-service-objects`
+- `rails-background-jobs`
+- `ddd-rails-modeling`
 
 ### Review Skills
 
 Produce findings with severity levels.
-- rails-code-review
-- rails-architecture-review
-- rails-security-review
-- rails-engine-reviewer
+
+- `rails-code-review`
+- `rails-architecture-review`
+- `rails-security-review`
+- `rails-engine-reviewer`
+- `ddd-boundaries-review`
 
 ## Platform Compatibility
 
@@ -183,7 +195,7 @@ All skills use standard Markdown and YAML frontmatter, which is compatible acros
 | Platform | How skills are loaded |
 |----------|----------------------|
 | **Cursor** | Read from `~/.cursor/skills/` directories |
-| **Codex** | Read from `~/.agents/skills/` directories |
+| **Codex** | Read from `~/.codex/skills/` directories |
 | **Claude Code** | Loaded via `.claude-plugin/plugin.json` |
 
 Platform-specific features (hooks, commands, agents) are handled by the infrastructure files, not the skills themselves.

@@ -1,6 +1,10 @@
-# Implementation Guide
+# Implementation Guide — Rails Agent Skills
 
-Step-by-step instructions for installing and configuring my-cursor-skills on each supported platform.
+Step-by-step install and verification for the **`rails-agent-skills`** repository on each supported platform.
+
+- **What this library is:** [README](../README.md)
+- **How to chain skills:** [workflow-guide.md](workflow-guide.md)
+- **Skill file conventions:** [architecture.md](architecture.md)
 
 ## Cursor
 
@@ -9,66 +13,62 @@ Cursor loads skills from `~/.cursor/skills/` (or `~/.cursor/skills-cursor/`). Ea
 ### Option A: Symlink (recommended for development)
 
 ```bash
-ln -s /path/to/my-cursor-skills ~/.cursor/skills-cursor/my-cursor-skills
+ln -s /path/to/rails-agent-skills ~/.cursor/skills-cursor/rails-agent-skills
 ```
 
 ### Option B: Clone directly
 
 ```bash
-git clone <your-repo-url> ~/.cursor/skills-cursor/my-cursor-skills
+git clone <your-repo-url> ~/.cursor/skills-cursor/rails-agent-skills
 ```
 
-### Verification
+### Cursor Verification
 
 1. Open Cursor
 2. Skills should appear in the skills panel
 3. Test by asking: "Review this Rails controller" — the agent should invoke `rails-code-review`
 
-### Updating
+### Cursor Updating
 
 If using a symlink, pull the latest from the repo:
 
 ```bash
-cd /path/to/my-cursor-skills && git pull
+cd /path/to/rails-agent-skills && git pull
 ```
 
 ---
 
 ## Codex (OpenAI)
 
-Codex discovers skills from `~/.agents/skills/`. Each subdirectory with a `SKILL.md` file is loaded.
+Codex discovers skills from `~/.codex/skills/`. Each subdirectory with a `SKILL.md` file is loaded.
 
 ### Installation
 
 ```bash
 # 1. Clone the repository
-git clone <your-repo-url> ~/.codex/my-cursor-skills
+mkdir -p ~/.codex/skills
+git clone <your-repo-url> ~/.codex/skills/rails-agent-skills
 
-# 2. Create the skills symlink
-mkdir -p ~/.agents/skills
-ln -s ~/.codex/my-cursor-skills ~/.agents/skills/my-cursor-skills
-
-# 3. Restart Codex
+# 2. Restart Codex
 ```
 
 ### Windows (PowerShell)
 
 ```powershell
-git clone <your-repo-url> "$env:USERPROFILE\.codex\my-cursor-skills"
-New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.agents\skills"
-cmd /c mklink /J "$env:USERPROFILE\.agents\skills\my-cursor-skills" "$env:USERPROFILE\.codex\my-cursor-skills"
+New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.codex\skills"
+git clone <your-repo-url> "$env:USERPROFILE\.codex\skills\rails-agent-skills"
 ```
 
-### Verification
+### Codex Verification
 
 ```bash
-ls -la ~/.agents/skills/my-cursor-skills
+ls -la ~/.codex/skills/rails-agent-skills
 ```
 
-### Updating
+### Codex Updating
 
 ```bash
-cd ~/.codex/my-cursor-skills && git pull
+cd ~/.codex/skills/rails-agent-skills && git pull
 ```
 
 ---
@@ -77,36 +77,36 @@ cd ~/.codex/my-cursor-skills && git pull
 
 Claude Code uses a plugin system. Skills are loaded from plugin directories.
 
-### Installation
+### Claude Code Installation
 
 ```bash
 # From Claude Code CLI:
-/add-plugin /path/to/my-cursor-skills
+/add-plugin /path/to/rails-agent-skills
 ```
 
 Or manually reference the plugin in your Claude Code configuration.
 
-### How It Works
+### Claude Code How It Works
 
 - `.claude-plugin/plugin.json` declares the plugin metadata
 - Skill directories with `SKILL.md` files are discovered
 - The `hooks/session-start` script injects skill awareness at session start
 
-### Verification
+### Claude Code Verification
 
-Start a new Claude Code session. The session-start hook should load the `using-my-skills` skill automatically.
+Start a new Claude Code session. The session-start hook should load the `rails-agent-skills` bootstrap skill automatically.
 
 ---
 
 ## Session Start Hook
 
-All platforms support a session-start hook that automatically injects the `using-my-skills` bootstrap skill at the beginning of each session. This helps the AI agent discover available skills without manual intervention.
+All platforms support a session-start hook that automatically injects the `rails-agent-skills` bootstrap skill at the beginning of each session. This helps the AI agent discover available skills without manual intervention.
 
 The hook is defined in `hooks/hooks.json` and executed by `hooks/session-start`.
 
-### How It Works
+### Session Hook Mechanics
 
-1. When a session starts, the hook reads `using-my-skills/SKILL.md`
+1. When a session starts, the hook reads `rails-agent-skills/SKILL.md`
 2. The content is injected as additional context
 3. The AI agent now knows which skills are available and when to invoke them
 
@@ -125,5 +125,5 @@ The hook is defined in `hooks/hooks.json` and executed by `hooks/session-start`.
 |-------|---------|
 | Skills not discovered | Check symlink path and restart the platform |
 | Hook not firing | Verify `hooks/session-start` is executable (`chmod +x`) |
-| Skills not invoked | Check that `using-my-skills` is loaded at session start |
+| Skills not invoked | Check that `rails-agent-skills` is loaded at session start |
 | Wrong platform behavior | Verify the correct plugin config for your platform |

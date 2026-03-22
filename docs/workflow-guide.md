@@ -1,22 +1,23 @@
-# Workflow Guide
+# Workflow Guide — Rails Agent Skills
 
-How to use skills in typical Rails development workflows.
+Companion to the [README](../README.md): **how to chain skills** in typical Rails workflows. For install paths and hooks, see [implementation-guide.md](implementation-guide.md). For `SKILL.md` structure and frontmatter rules, see [architecture.md](architecture.md).
 
 ## Cross-Cutting Rule: Tests Gate Implementation
 
 **Tests are a gate between planning and code.** Once a PRD and tasks exist, the test for each behavior must be written, run, and validated as failing BEFORE any implementation code is written.
 
-```
-PRD → Tasks → [GATE: Write test → Run test → Verify it fails] → Implementation → Verify passes
+```text
+PRD → Tasks → Choose first slice → [GATE: Write test → Run test → Verify it fails] → Implementation → Verify passes
   → YARD (public API) → Update README / diagrams / domain docs → Self code review → PR
 ```
 
 The gate is non-negotiable. Implementation code cannot exist before its test has been:
+
 1. Written and saved
 2. Executed
 3. Confirmed failing because the feature does not exist yet
 
-See **rspec-best-practices** for the full gate cycle.
+See **`rspec-best-practices`** for the full gate cycle (red → green → refactor).
 
 ## Planning a New Feature
 
@@ -25,30 +26,64 @@ flowchart LR
     A[Feature idea] --> B[create-prd]
     B --> C[User reviews PRD]
     C --> D[generate-tasks]
-    D --> E[User reviews tasks]
-    E --> F[Implementation with TDD gate]
-    F --> G[yard-documentation]
-    G --> H[README diagrams docs]
-    H --> I[rails-code-review then PR]
+    D --> E[rails-tdd-slices]
+    E --> F[User reviews tasks]
+    F --> G[Implementation with tests gate]
+    G --> H[yard-documentation]
+    H --> I[README diagrams docs]
+    I --> J[rails-code-review then PR]
 ```
 
 1. **create-prd**: Describe the feature. The skill generates a PRD with goals, user stories, functional requirements, and success metrics. Saved to `/tasks/prd-[feature-name].md`.
 
-2. **generate-tasks**: Point to the PRD. The skill breaks it into parent tasks and sub-tasks with exact file paths, including **YARD**, **documentation updates**, and **code review before PR**. Saved to `/tasks/tasks-[feature-name].md`.
+2. **generate-tasks**: Point to the PRD. The skill breaks it into parent tasks and sub-tasks with exact file paths, including **YARD**, **documentation updates**, and **code review before PR**. It can also produce a phased plan when the user wants strategy first. Saved to `/tasks/tasks-[feature-name].md`.
 
-3. **Implementation**: Follow the task list with the test gate (write test → run → fail → implement → pass).
+3. **rails-tdd-slices**: Choose the highest-value first failing spec before implementation starts.
 
-4. **yard-documentation**: Add or update YARD on every new or changed public class/method (English).
+4. **Implementation**: Follow the task list with the **tests gate** (write test → run → fail → implement → pass).
 
-5. **Docs**: Update README, architecture diagrams, and any domain docs affected by the change.
+5. **yard-documentation**: Add or update YARD on every new or changed public class/method (English).
 
-6. **rails-code-review**: Self-review the full diff, then open the PR (use security/architecture skills when needed).
+6. **Docs**: Update README, architecture diagrams, and any domain docs affected by the change.
+
+7. **rails-code-review**: Self-review the full diff, then open the PR (use security/architecture skills when needed).
 
 **Key rules:**
+
 - Do NOT implement until the PRD is approved
 - Each sub-task should take 2-5 minutes
 - Task 0.0 is always "Create feature branch"
 - Do not skip YARD, doc updates, or self-review — they are explicit task parents, not optional polish
+
+## DDD-First Feature Design
+
+Use this workflow when the hard part is the **domain itself**: unclear business language, conflicting meanings, fuzzy ownership, or uncertainty about whether something belongs in a model, value object, or service.
+
+```mermaid
+flowchart LR
+    A[Feature or domain problem] --> B[create-prd]
+    B --> C[ddd-ubiquitous-language]
+    C --> D[ddd-boundaries-review]
+    D --> E[ddd-rails-modeling]
+    E --> F[generate-tasks]
+    F --> G[rails-tdd-slices]
+    G --> H[Implementation with tests gate]
+```
+
+1. **create-prd**: Capture the feature outcome, goals, non-goals, and business rules first.
+2. **ddd-ubiquitous-language**: Build the glossary, choose canonical terms, and surface overloaded words.
+3. **ddd-boundaries-review**: Check whether the feature crosses bounded contexts, leaks language, or hides ownership problems.
+4. **ddd-rails-modeling**: Decide the Rails-first tactical design: model, value object, service, repository, event, or simpler alternative.
+5. **generate-tasks**: Turn the design into an implementation plan or detailed checklist.
+6. **rails-tdd-slices**: Choose the best first failing spec before code is written.
+7. **Implementation**: Follow the normal **tests gate**, then YARD, docs, and review.
+
+**Key rules:**
+
+- Start with language and invariants, not patterns
+- Do not introduce repositories or domain events unless the boundary pressure is real
+- Prefer the smallest credible boundary improvement over a DDD rewrite
+- Chain back to `rails-architecture-review` or `refactor-safely` when the domain problem lives in existing code structure
 
 ### Optional: Jira tickets from the plan
 
@@ -68,12 +103,14 @@ flowchart LR
 
 ## Where principles apply in the flow
 
-**After** the test gate is satisfied for a given behavior, **implementation** should follow:
+**After** the **tests gate** is satisfied for a given behavior, **implementation** should follow:
 
-1. **rails-principles-and-boundaries** — DRY/YAGNI/PORO/CoC/KISS; RuboCop as style SoT; structured logging; rules by path (`app/services`, workers, controllers, etc.).
+1. **rails-principles-and-boundaries** — DRY/YAGNI/PORO/CoC/KISS; project linter as style SoT; structured logging; rules by path (`app/services`, workers, controllers, etc.).
 2. **rails-stack-conventions** — Stack-specific defaults (PostgreSQL, Hotwire, Tailwind).
 
 Use **rails-principles-and-boundaries** during **code review** and **refactors** as well, not only on greenfield features.
+
+When the main issue is domain language or ownership, run `ddd-ubiquitous-language` and `ddd-boundaries-review` before deciding on Rails tactical modeling.
 
 ---
 
@@ -100,6 +137,7 @@ flowchart LR
 3. **rails-architecture-review**: Structural review of boundaries, responsibilities, and abstraction quality.
 
 **Key rules:**
+
 - Use severity levels: Critical / Suggestion / Nice to have
 - When receiving feedback: verify before implementing, no performative agreement
 - Push back with technical reasoning when feedback is incorrect
@@ -119,14 +157,32 @@ flowchart LR
     G --> B
 ```
 
-1. **rspec-best-practices**: Covers the full TDD cycle, spec type selection, factory design, and common smells.
+1. **rails-tdd-slices**: Use first when the right starting spec is not obvious. It helps pick the best initial failing spec for request, model, service, job, engine, or bug-fix work.
 
-2. **rspec-service-testing**: Specific patterns for service object tests — instance_double, hash factories, shared_examples.
+2. **rspec-best-practices**: Covers the full TDD cycle, spec type selection, factory design, and common smells.
+
+3. **rspec-service-testing**: Specific patterns for service object tests — instance_double, hash factories, shared_examples.
 
 **Key rules:**
+
 - No production code without a failing test first
 - If code exists before the test, delete it and start over
 - Run tests after EVERY step
+
+### Bug Triage Before Fixing
+
+```mermaid
+flowchart LR
+    A[Bug report] --> B[rails-bug-triage]
+    B --> C[rails-tdd-slices]
+    C --> D["Write failing reproduction spec"]
+    D --> E["Implement smallest safe fix"]
+    E --> F["Review and regression checks"]
+```
+
+1. **rails-bug-triage**: Clarify expected vs actual behavior, narrow the affected layer, and identify the highest-value reproduction path.
+2. **rails-tdd-slices**: Decide the strongest first failing spec for the bug.
+3. **rspec-best-practices**: Run the red-green-refactor loop after the reproduction spec is chosen.
 
 ---
 
@@ -179,6 +235,7 @@ flowchart LR
 4. **rails-engine-testing**: Verify behavior is preserved.
 
 **Key rules:**
+
 - Do NOT extract and change behavior in the same step
 - Add characterization tests before any extraction
 - Use adapters for host dependencies
@@ -193,6 +250,37 @@ flowchart LR
 For inline documentation standards, use **yard-documentation**. For external API integrations, add **ruby-api-client-integration** (Auth/Client/Fetcher/Builder layers).
 
 For variant-based calculators, add **strategy-factory-null-calculator** (Factory + Strategy + Null Object).
+
+---
+
+## External API Integration
+
+```mermaid
+flowchart LR
+    A[Integration need] --> B[create-prd]
+    B --> C[generate-tasks]
+    C --> D[rails-tdd-slices]
+    D --> E["Write failing layer specs"]
+    E --> F[ruby-api-client-integration]
+    F --> G[yard-documentation]
+    G --> H[README diagrams docs]
+    H --> I[rails-code-review]
+```
+
+1. **create-prd**: Capture the business need, external dependency, side effects, and success criteria.
+2. **generate-tasks**: Break the integration into layers and explicit verification steps.
+3. **rails-tdd-slices**: Decide the strongest first failing spec, usually at the auth, client, fetcher, builder, or mapping boundary.
+4. **ruby-api-client-integration**: Implement the layered Rails-first client structure with retries, pagination, token handling, and domain mapping where needed.
+5. **yard-documentation**: Document public Ruby API exposed by the integration layer.
+6. **Docs**: Update README and any operator or integration docs affected by setup, credentials flow, or usage.
+7. **rails-code-review**: Review reliability, layering, and failure handling before PR.
+
+**Key rules:**
+
+- Start with a failing spec for the riskiest layer, not with ad-hoc request code
+- Keep auth, transport, fetching, and mapping responsibilities explicit
+- Prefer domain mapping over leaking raw external payloads deep into the app
+- Document setup and operational expectations when the integration changes developer or operator workflow
 
 ---
 
@@ -212,6 +300,7 @@ flowchart LR
 3. **rails-code-review**: Review the refactored code.
 
 **Key rules:**
+
 - Separate behavior changes from structural changes
 - Verify tests pass after EVERY refactoring step
 - Evidence before claims — run the test suite, don't assume

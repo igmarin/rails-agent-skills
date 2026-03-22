@@ -115,6 +115,7 @@ end
 Write findings first.
 
 For each finding include:
+
 - Severity
 - Affected files or area
 - Why the structure is risky
@@ -126,6 +127,8 @@ Then list open assumptions and recommended next refactor steps.
 
 | Skill | When to chain |
 |-------|---------------|
+| **ddd-boundaries-review** | When the architecture issue is really about bounded contexts, ownership, or language leakage |
+| **ddd-rails-modeling** | When the review identifies unclear domain modeling choices inside a context |
 | **rails-code-review** | For detailed code-level review after architecture review |
 | **refactor-safely** | When architecture review identifies extraction candidates |
 | **ruby-service-objects** | When recommending service extraction |

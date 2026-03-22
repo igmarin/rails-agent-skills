@@ -39,7 +39,7 @@ Before recommending style fixes or contradicting formatting rules:
 | **YAGNI** | Build for current requirements; defer generalization until a second real use case |
 | **PORO** | Use plain Ruby objects when they clarify responsibility; do not wrap everything in a "pattern" |
 | **Convention over Configuration** | Prefer Rails defaults and file placement; document only intentional deviations |
-| **KISS** | Simplest design that meets acceptance criteria and test gate |
+| **KISS** | Simplest design that meets acceptance criteria and **tests gate** |
 
 ## Comments
 
@@ -77,13 +77,13 @@ Rules below apply **when those paths exist** in the project. If a path is absent
 
 ## HARD-GATE: Tests Gate Implementation
 
-When this skill guides **new behavior**, the test gate still applies:
+When this skill guides **new behavior**, the **tests gate** still applies:
 
 ```text
 PRD → TASKS → TEST (write, run, fail) → IMPLEMENTATION → …
 ```
 
-No implementation code before a failing test. See **rspec-best-practices** and **using-my-skills**.
+No implementation code before a failing test. See **rspec-best-practices** and **rails-agent-skills**.
 
 ## Common Mistakes
 
@@ -102,8 +102,9 @@ No implementation code before a failing test. See **rspec-best-practices** and *
 | Skill | When to chain |
 |-------|---------------|
 | **rails-stack-conventions** | Stack-specific: PostgreSQL, Hotwire, Tailwind |
+| **ddd-rails-modeling** | When domain concepts and invariants need clearer Rails-first modeling choices |
 | **ruby-service-objects** | Implementing or refining service objects |
 | **rails-background-jobs** | Workers, queues, retries, idempotency |
-| **rspec-best-practices** | Spec style, TDD gate, request vs controller specs |
+| **rspec-best-practices** | Spec style, **tests gate** (red/green/refactor), request vs controller specs |
 | **rails-security-review** | Controllers, params, IDOR, PII |
 | **rails-code-review** | Full PR pass before merge |

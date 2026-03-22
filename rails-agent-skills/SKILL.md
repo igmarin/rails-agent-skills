@@ -1,18 +1,18 @@
 ---
-name: using-my-skills
+name: rails-agent-skills
 description: >
   Use when starting any conversation involving Rails development. Establishes how to find
   and use available skills, requiring skill invocation before responding when a skill
   might apply.
 ---
 
-# Using My Skills
+# Rails Agent Skills
 
 This skill library provides specialized knowledge for Ruby on Rails development. When a skill might apply to the current task, invoke it before responding.
 
 ## CROSS-CUTTING MANDATE: Tests Gate Implementation
 
-```
+```text
 THIS IS NON-NEGOTIABLE AND APPLIES TO EVERY SKILL THAT PRODUCES CODE.
 
 THE WORKFLOW IS: PRD → TASKS → TESTS → IMPLEMENTATION → YARD → DOCS → CODE REVIEW → PR
@@ -36,9 +36,9 @@ ONLY THEN can implementation code be written.
 
 **After all targeted tests pass for the feature:**
 
-7. **YARD** — Document new/changed public Ruby API (yard-documentation).
-8. **Docs** — Update README, diagrams, and related docs touched by the change.
-9. **Code review** — Self-review with rails-code-review (and security/architecture skills if needed), then PR.
+1. **YARD** — Document new/changed public Ruby API (yard-documentation).
+2. **Docs** — Update README, diagrams, and related docs touched by the change.
+3. **Code review** — Self-review with rails-code-review (and security/architecture skills if needed), then PR.
 
 **This applies when using:** ruby-service-objects, ruby-api-client-integration, strategy-factory-null-calculator, rails-background-jobs, rails-principles-and-boundaries, rails-stack-conventions, rails-engine-author, refactor-safely, and any other skill that results in writing Ruby/Rails code.
 
@@ -51,7 +51,7 @@ ONLY THEN can implementation code be written.
 ### Planning & Tasks
 
 | Skill | Use when... |
-|-------|-------------|
+| ----- | ----------- |
 | **create-prd** | User asks to plan a feature, write requirements, or create a PRD |
 | **generate-tasks** | User asks for implementation steps, task breakdown, or checklist |
 | **jira-ticket-planning** | User wants Jira-ready tickets, sprint placement, or issues created from a plan |
@@ -59,19 +59,27 @@ ONLY THEN can implementation code be written.
 ### Rails Code Quality
 
 | Skill | Use when... |
-|-------|-------------|
+| ----- | ----------- |
 | **rails-code-review** | Reviewing Rails PRs, controllers, models, migrations, queries |
 | **rails-architecture-review** | Reviewing app structure, boundaries, fat models/controllers |
 | **rails-security-review** | Checking auth, params, redirects, XSS, CSRF, SQLi |
 | **rails-migration-safety** | Planning or reviewing database migrations |
 | **rails-stack-conventions** | Writing new Rails code for PostgreSQL + Hotwire + Tailwind stack |
-| **rails-principles-and-boundaries** | DRY/YAGNI/PORO/CoC/KISS, RuboCop as style SoT, logging, rules by path |
+| **rails-principles-and-boundaries** | DRY/YAGNI/PORO/CoC/KISS, project linter as style SoT, logging, rules by path |
 | **rails-background-jobs** | Adding or reviewing background jobs |
+
+### DDD & Domain Modeling
+
+| Skill | Use when... |
+| ----- | ----------- |
+| **ddd-ubiquitous-language** | Clarifying domain terms, synonyms, and business glossary before modeling or refactoring |
+| **ddd-boundaries-review** | Reviewing bounded contexts, ownership, and language leakage in Rails codebases |
+| **ddd-rails-modeling** | Choosing Rails-first DDD modeling for entities, value objects, services, repositories, and events |
 
 ### Ruby Patterns
 
 | Skill | Use when... |
-|-------|-------------|
+| ----- | ----------- |
 | **ruby-service-objects** | Creating service classes with .call pattern |
 | **ruby-api-client-integration** | Integrating external APIs (Auth/Client/Fetcher/Builder) |
 | **strategy-factory-null-calculator** | Building variant-based calculators |
@@ -80,14 +88,16 @@ ONLY THEN can implementation code be written.
 ### Testing
 
 | Skill | Use when... |
-|-------|-------------|
+| ----- | ----------- |
 | **rspec-best-practices** | Writing, reviewing, or cleaning up RSpec tests — AND the TDD discipline that applies to ALL implementation |
+| **rails-tdd-slices** | Choosing the best first failing spec or vertical slice for a Rails change |
+| **rails-bug-triage** | Turning a Rails bug report into reproduction, failing spec, and fix plan |
 | **rspec-service-testing** | Testing service objects (spec/services/) |
 
 ### Rails Engines
 
 | Skill | Use when... |
-|-------|-------------|
+| ----- | ----------- |
 | **rails-engine-author** | Creating or scaffolding a Rails engine |
 | **rails-engine-testing** | Setting up dummy app and engine specs |
 | **rails-engine-reviewer** | Reviewing an existing engine |
@@ -101,17 +111,18 @@ ONLY THEN can implementation code be written.
 ### Refactoring
 
 | Skill | Use when... |
-|-------|-------------|
+| ----- | ----------- |
 | **refactor-safely** | Restructuring code while preserving behavior |
 
 ## Skill Priority
 
 When multiple skills could apply:
 
-1. **TDD always** — rspec-best-practices TDD discipline applies whenever code is produced
+1. **TDD always** — rspec-best-practices TDD discipline applies whenever code is produced; use rails-tdd-slices when the first spec is not obvious
 2. **Planning skills first** (create-prd, generate-tasks; **jira-ticket-planning** when the team tracks work in Jira) — determine WHAT to build (and optionally how it is ticketed)
-3. **Process skills second** (refactor-safely) — determine HOW to approach
-4. **Domain skills third** (rails-*, ruby-*) — guide specific implementation
+3. **Domain discovery skills next** (`ddd-ubiquitous-language`, `ddd-boundaries-review`, `ddd-rails-modeling`) — clarify business language and tactical design when the domain is the hard part
+4. **Process skills second** (refactor-safely) — determine HOW to approach
+5. **Domain skills third** (rails-*, ruby-*) — guide specific implementation
 
 ## How to Use
 
@@ -126,7 +137,10 @@ When multiple skills could apply:
 ## Typical Workflows
 
 **New feature:**
-create-prd -> generate-tasks -> (optional jira-ticket-planning) -> **[GATE: write tests, run, verify failure]** -> rails-principles-and-boundaries + rails-stack-conventions -> implement to pass tests -> yard-documentation -> update README/diagrams/docs -> rails-code-review (self) -> PR
+create-prd -> generate-tasks -> (optional jira-ticket-planning) -> rails-tdd-slices -> **[GATE: write tests, run, verify failure]** -> rails-principles-and-boundaries + rails-stack-conventions -> implement to pass tests -> yard-documentation -> update README/diagrams/docs -> rails-code-review (self) -> PR
+
+**DDD-first feature design:**
+create-prd -> ddd-ubiquitous-language -> ddd-boundaries-review -> ddd-rails-modeling -> generate-tasks -> rails-tdd-slices -> implement
 
 **Code review:**
 rails-code-review + rails-security-review + rails-architecture-review
@@ -138,7 +152,10 @@ rails-engine-author -> **[GATE: write engine specs, run, verify failure]** -> im
 refactor-safely -> **[GATE: write characterization tests, run, verify they pass on current code]** -> refactor -> verify tests still pass
 
 **New service object:**
-rspec-service-testing -> **[GATE: write .call spec, run, verify failure]** -> ruby-service-objects -> verify spec passes
+rails-tdd-slices -> rspec-service-testing -> **[GATE: write .call spec, run, verify failure]** -> ruby-service-objects -> verify spec passes
+
+**External API integration:**
+rails-tdd-slices -> **[GATE: write layer specs, run, verify failure]** -> ruby-api-client-integration -> verify integration behavior -> yard-documentation -> docs
 
 **Bug fix:**
-**[GATE: write test reproducing the bug, run, verify it fails]** -> fix the bug -> verify test passes
+rails-bug-triage -> rails-tdd-slices -> **[GATE: write test reproducing the bug, run, verify it fails]** -> fix the bug -> verify test passes
