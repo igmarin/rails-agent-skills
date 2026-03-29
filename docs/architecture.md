@@ -172,7 +172,7 @@ Follow exactly. Do not adapt away discipline.
 Adapt principles to context.
 
 - `rails-stack-conventions`
-- `rails-principles-and-boundaries`
+- `rails-code-conventions`
 - `jira-ticket-planning`
 - `ruby-service-objects`
 - `rails-background-jobs`

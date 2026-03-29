@@ -1,16 +1,18 @@
 ---
-name: rails-principles-and-boundaries
+name: rails-code-conventions
 description: >
-  Applies DRY, YAGNI, PORO, Convention over Configuration, and KISS to Rails code;
-  defers style to the project's linter(s). Covers structured logging, comment discipline, and
-  path-specific rules (models, workers, services, controllers, repositories, serializers,
-  RSpec, raw SQL). Use when designing or reviewing Rails structure, avoiding over-engineering,
-  or aligning code with team boundaries by directory.
+  Your daily checklist for writing clean Rails code — design principles (DRY, YAGNI, PORO,
+  CoC, KISS), per-path rules (models, services, workers, controllers, repositories, serializers,
+  RSpec, raw SQL), structured logging, and comment discipline. Defers style/formatting to the
+  project's linter(s). Use when writing new Rails code, reviewing existing code for quality,
+  avoiding over-engineering, or ensuring team conventions are followed by directory area.
 ---
 
-# Rails Principles and Boundaries
+# Rails Code Conventions
 
-Use this skill when **writing or reviewing** Rails application code where **design principles** and **per-area rules** matter more than stack-specific UI choices (see **rails-stack-conventions** for Hotwire + Tailwind).
+**Purpose:** Your daily checklist for writing clean Rails code — design principles, per-path rules, logging, and comment discipline. When you are writing or reviewing any Rails code and need to know "how should this be structured?", this skill applies.
+
+Use this skill when **writing or reviewing** Rails application code where **design principles** and **per-area rules** matter more than stack-specific UI choices (see **rails-stack-conventions** for Hotwire + Tailwind specifics).
 
 **Style source of truth:** Style and formatting follow whatever **linter(s)** the project configures (see **Linter — initial analysis** below). This skill adds **non-style behavior** and **architecture guidance** only.
 
@@ -46,12 +48,40 @@ Before recommending style fixes or contradicting formatting rules:
 - Comment the **why**, not the **what** (the code shows what).
 - Use tags with **enough context** that a future reader can act: `TODO:`, `FIXME:`, `HACK:`, `NOTE:`, `OPTIMIZE:`.
 
-## Structured logging
+```ruby
+# BAD — restates the method name, adds zero value
+# Finds the user by email
+def find_by_email(email)
+  User.find_by(email: email)
+end
+
+# GOOD — explains intent and tradeoff
+# Uses find_by (not find_by!) so callers can handle nil explicitly;
+# downstream auth layer is responsible for raising on missing user.
+def find_by_email(email)
+  User.find_by(email: email)
+end
+```
+
+## Structured Logging
 
 - **First argument:** static string (message key or human-readable template without interpolated values).
 - **Second argument:** hash with structured fields (`user_id:`, `order_id:`, etc.).
 - **Do not** build the primary message with string interpolation; put dynamic data in the hash.
 - Include **`event:`** (or equivalent) for error or ops dashboards when the team uses tagged events.
+
+```ruby
+# BAD — interpolation loses structure; cannot filter by user_id in log aggregators
+Rails.logger.info("Processing order #{order.id} for user #{user.id}")
+
+# GOOD — static message, structured data, filterable fields
+Rails.logger.info("order.processing_started", {
+  event: "order.processing_started",
+  order_id: order.id,
+  user_id: user.id,
+  amount_cents: order.total_cents
+})
+```
 
 ## Apply by area (path patterns)
 
@@ -94,8 +124,8 @@ No implementation code before a failing test. See **rspec-best-practices** and *
 | `let_it_be` in every project | Use only when `test-prof` is already a dependency |
 | Defaulting to `let!` everywhere | Prefer lazy `let`; reserve `let!` for cases that need eager setup |
 | New `app/repositories` for every query | ActiveRecord is the default data boundary unless there's a documented reason |
-| Interpolated log messages | Loses structure; use hash payload |
-| Comments restating method names | Adds noise; comment intent and tradeoffs |
+| Interpolated log messages | Loses structure; use hash payload — see logging example above |
+| Comments restating method names | Adds noise; comment intent and tradeoffs — see comment example above |
 
 ## Integration
 
