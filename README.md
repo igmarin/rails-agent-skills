@@ -135,7 +135,7 @@ ln -s /path/to/rails-agent-skills ~/.codex/skills/rails-agent-skills
 git clone git@github.com:igmarin/rails-agent-skills.git ~/skills/rails-agent-skills
 
 # 2. Install as a plugin (registers the path globally — no copy, no reinstall needed)
-/plugin install ~/skills/rails-agent-skills
+/add-plugin ~/skills/rails-agent-skills
 ```
 
 **Updating:** just pull and open a new session — no reinstall required.

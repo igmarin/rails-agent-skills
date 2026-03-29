@@ -80,16 +80,16 @@ Claude Code uses a plugin system. Skills are loaded from plugin directories and 
 ### Claude Code Installation
 
 ```bash
-# From the Claude Code CLI (modern command):
-/plugin install /path/to/rails-agent-skills
+# Install from a local path (registers globally — no copy, no reinstall needed):
+/add-plugin ~/skills/rails-agent-skills
 ```
 
-> **Note:** `/add-plugin` is the legacy command. Use `/plugin install` instead.
+> **Note:** `/plugin install <name>` is for marketplace plugins only. For local paths, use `/add-plugin`.
 
 ### Testing locally without installing
 
 ```bash
-claude --plugin-dir /path/to/rails-agent-skills
+claude --plugin-dir ~/skills/rails-agent-skills
 ```
 
 This loads the plugin for that session only, without permanently installing it. Useful for testing changes.
