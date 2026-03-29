@@ -1,10 +1,13 @@
 ---
 name: rails-stack-conventions
 description: >
-  Use when writing or generating code for a Rails project with PostgreSQL, Hotwire
-  (Turbo + Stimulus), and Tailwind CSS. Covers Ruby style, naming, MVC structure,
-  ActiveRecord patterns, error handling, performance, security defaults, and testing
-  conventions.
+  Use when writing or generating new Rails code for a project that uses PostgreSQL,
+  Hotwire (Turbo + Stimulus), and Tailwind CSS. Covers Ruby naming conventions,
+  MVC structure, ActiveRecord query patterns, Turbo Frames and Streams, Stimulus
+  controller conventions, Tailwind component patterns, error handling defaults,
+  performance practices, and security defaults. Do NOT use for design principles
+  or per-path architecture rules — use rails-code-conventions for those.
+  Also applies when setting up new controllers, views, or models in this stack.
 ---
 
 # Rails Stack Conventions

@@ -29,16 +29,19 @@ ONLY THEN can implementation code be written.
 
 1. **Write the test** for the behavior described in the PRD/task
 2. **Run the test** — confirm it fails because the feature does not exist yet
-3. **Only now:** write the simplest implementation code to make the test pass
-4. **Run the test again** — confirm it passes and no other tests break
-5. **Refactor** if needed — tests must stay green
-6. **Move to the next behavior** — repeat from step 1
+3. **CHECKPOINT — Test Feedback:** Present the failing test. Confirm: right behavior? right boundary? edge cases covered? Only proceed once approved.
+4. **CHECKPOINT — Implementation Proposal:** Propose the approach in plain language (classes, methods, structure). Wait for confirmation before writing code.
+5. **Only now:** write the simplest implementation code to make the test pass
+6. **Run the test again** — confirm it passes and no other tests break
+7. **Refactor** if needed — tests must stay green
+8. **Move to the next behavior** — repeat from step 1
 
 **After all targeted tests pass for the feature:**
 
-1. **YARD** — Document new/changed public Ruby API (yard-documentation).
-2. **Docs** — Update README, diagrams, and related docs touched by the change.
-3. **Code review** — Self-review with rails-code-review (and security/architecture skills if needed), then PR.
+1. **GATE — Linters + Full Suite:** Run linters and the full test suite. Fix all failures before continuing.
+2. **YARD** — Document new/changed public Ruby API (yard-documentation).
+3. **Docs** — Update README, diagrams, and related docs touched by the change.
+4. **Code review** — Self-review with rails-code-review, then PR. Use rails-review-response when feedback is received.
 
 **This applies when using:** ruby-service-objects, ruby-api-client-integration, strategy-factory-null-calculator, rails-background-jobs, rails-code-conventions, rails-stack-conventions, rails-engine-author, refactor-safely, and any other skill that results in writing Ruby/Rails code.
 
@@ -60,13 +63,15 @@ ONLY THEN can implementation code be written.
 
 | Skill | Use when... |
 | ----- | ----------- |
-| **rails-code-review** | Reviewing Rails PRs, controllers, models, migrations, queries |
+| **rails-code-review** | Reviewing Rails PRs, controllers, models, migrations, queries — giving a review |
+| **rails-review-response** | Received code review feedback and need to evaluate, respond, or implement it |
 | **rails-architecture-review** | Reviewing app structure, boundaries, fat models/controllers |
 | **rails-security-review** | Checking auth, params, redirects, XSS, CSRF, SQLi |
 | **rails-migration-safety** | Planning or reviewing database migrations |
 | **rails-stack-conventions** | Writing new Rails code for PostgreSQL + Hotwire + Tailwind stack |
-| **rails-code-conventions** | DRY/YAGNI/PORO/CoC/KISS, project linter as style SoT, logging, rules by path |
+| **rails-code-conventions** | Daily coding checklist: DRY/YAGNI/PORO/CoC/KISS, linter as style SoT, logging, rules by path |
 | **rails-background-jobs** | Adding or reviewing background jobs |
+| **rails-graphql-best-practices** | Building or reviewing GraphQL APIs with graphql-ruby (schema, N+1, auth, mutations, testing) |
 
 ### DDD & Domain Modeling
 
@@ -106,7 +111,7 @@ ONLY THEN can implementation code be written.
 | **rails-engine-installers** | Creating install generators |
 | **rails-engine-extraction** | Extracting code from host app to engine |
 | **rails-engine-compatibility** | Ensuring cross-version compatibility |
-| **api-postman-collection** | Creating or modifying API endpoints (generate/update Postman collection) |
+| **api-postman-collection** | Creating or modifying REST API endpoints — generate/update Postman collection (not for GraphQL) |
 
 ### Refactoring
 
@@ -119,8 +124,8 @@ ONLY THEN can implementation code be written.
 When multiple skills could apply:
 
 1. **TDD always** — rspec-best-practices TDD discipline applies whenever code is produced; use rails-tdd-slices when the first spec is not obvious
-2. **Planning skills first** (create-prd, generate-tasks; **jira-ticket-planning** when the team tracks work in Jira) — determine WHAT to build (and optionally how it is ticketed)
-3. **Domain discovery skills next** (`ddd-ubiquitous-language`, `ddd-boundaries-review`, `ddd-rails-modeling`) — clarify business language and tactical design when the domain is the hard part
+2. **Planning skills first** (create-prd, generate-tasks; **jira-ticket-planning** when the team tracks work in Jira) — determine WHAT to build
+3. **Domain discovery skills next** (`ddd-ubiquitous-language`, `ddd-boundaries-review`, `ddd-rails-modeling`) — clarify business language when the domain is the hard part
 4. **Process skills second** (refactor-safely) — determine HOW to approach
 5. **Domain skills third** (rails-*, ruby-*) — guide specific implementation
 
@@ -136,26 +141,32 @@ When multiple skills could apply:
 
 ## Typical Workflows
 
+**TDD Feature Loop** *(primary daily workflow)*:
+rails-tdd-slices → **[Test Feedback checkpoint]** → **[Implementation Proposal checkpoint]** → implement → **[Linters + Suite gate]** → yard-documentation → rails-code-review → rails-review-response (on feedback) → PR
+
 **New feature:**
-create-prd -> generate-tasks -> (optional jira-ticket-planning) -> rails-tdd-slices -> **[GATE: write tests, run, verify failure]** -> rails-code-conventions + rails-stack-conventions -> implement to pass tests -> yard-documentation -> update README/diagrams/docs -> rails-code-review (self) -> PR
+create-prd → generate-tasks → (optional jira-ticket-planning) → *TDD Feature Loop*
 
 **DDD-first feature design:**
-create-prd -> ddd-ubiquitous-language -> ddd-boundaries-review -> ddd-rails-modeling -> generate-tasks -> rails-tdd-slices -> implement
+create-prd → ddd-ubiquitous-language → ddd-boundaries-review → ddd-rails-modeling → generate-tasks → *TDD Feature Loop*
 
-**Code review:**
-rails-code-review + rails-security-review + rails-architecture-review
-
-**New engine:**
-rails-engine-author -> **[GATE: write engine specs, run, verify failure]** -> implement engine -> rails-engine-docs
-
-**Refactoring:**
-refactor-safely -> **[GATE: write characterization tests, run, verify they pass on current code]** -> refactor -> verify tests still pass
-
-**New service object:**
-rails-tdd-slices -> rspec-service-testing -> **[GATE: write .call spec, run, verify failure]** -> ruby-service-objects -> verify spec passes
-
-**External API integration:**
-rails-tdd-slices -> **[GATE: write layer specs, run, verify failure]** -> ruby-api-client-integration -> verify integration behavior -> yard-documentation -> docs
+**Code review + response:**
+rails-code-review → rails-review-response (on feedback) → re-review if Critical items addressed
 
 **Bug fix:**
-rails-bug-triage -> rails-tdd-slices -> **[GATE: write test reproducing the bug, run, verify it fails]** -> fix the bug -> verify test passes
+rails-bug-triage → rails-tdd-slices → **[GATE: write reproduction spec, run, verify failure]** → fix → verify passes
+
+**GraphQL feature:**
+ddd-ubiquitous-language → rails-graphql-best-practices → *TDD Feature Loop* → rails-security-review
+
+**New engine:**
+rails-engine-author → **[GATE: write engine specs, run, verify failure]** → implement → rails-engine-docs
+
+**Refactoring:**
+refactor-safely → **[GATE: characterization tests, run, verify they pass on current code]** → refactor → verify tests still pass
+
+**New service object:**
+rails-tdd-slices → rspec-service-testing → **[GATE: write .call spec, run, verify failure]** → ruby-service-objects → verify spec passes
+
+**External API integration:**
+rails-tdd-slices → **[GATE: write layer specs, run, verify failure]** → ruby-api-client-integration → verify → yard-documentation → docs

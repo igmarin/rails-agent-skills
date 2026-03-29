@@ -59,6 +59,17 @@ DO NOT [forbidden action that must never be skipped].
 ALWAYS [required action that must always happen].
 \```
 
+## Checkpoints
+
+<!-- Only include if the skill introduces a pause-and-confirm step (not a hard blocker).
+     Checkpoints differ from HARD-GATEs: they pause for collaboration, not to enforce a rule. -->
+
+### [Checkpoint Name]
+
+1. Present: [what to show the user]
+2. Ask: [specific questions to confirm before proceeding]
+3. Confirm: [what approval looks like — only proceed once confirmed]
+
 ## When to Use
 
 - Trigger condition 1
@@ -143,6 +154,7 @@ ALWAYS [required action that must always happen].
 3. Red Flags (always include)
 4. Integration (always include)
 5. HARD-GATE (only when the skill has non-negotiable rules)
+6. Checkpoints (only when the skill needs a pause-and-confirm step)
 
 ### Progressive Disclosure
 

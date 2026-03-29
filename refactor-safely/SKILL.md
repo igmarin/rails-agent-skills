@@ -1,10 +1,14 @@
 ---
 name: refactor-safely
 description: >
-  Use when restructuring code, renaming abstractions, extracting services or modules,
-  reducing duplication, or making internal changes while preserving behavior. Covers
-  characterization tests, safe extraction sequences, compatibility shims, and
-  verification-before-completion discipline for Ruby and Rails codebases.
+  Use when the goal is to change code structure without changing behavior — this
+  includes extracting a service object from a fat controller or model, splitting
+  a large class, renaming abstractions, reducing duplication, or reorganizing
+  modules. Covers characterization tests (write tests that document current behavior
+  before touching the code), safe extraction in small steps, and verification after
+  every step. Do NOT use for bug fixes or new features — those follow the TDD gate
+  in rspec-best-practices. Do NOT mix structural changes with behavior changes in
+  the same step.
 ---
 
 # Refactor Safely
