@@ -182,11 +182,44 @@ Adapt principles to context.
 
 Produce findings with severity levels.
 
-- `rails-code-review`
+- `rails-code-review` — giving a review
+- `rails-review-response` — receiving and responding to feedback (split from `rails-code-review`)
 - `rails-architecture-review`
 - `rails-security-review`
 - `rails-engine-reviewer`
 - `ddd-boundaries-review`
+
+## Workflow Checkpoints
+
+Beyond HARD-GATEs (which block entirely), some skills use **checkpoints** — explicit pause-and-confirm steps that require user approval before continuing. Checkpoints differ from gates in that they pause for collaboration, not to enforce a rule.
+
+### Test Feedback Checkpoint
+
+Defined in: `rails-tdd-slices` (step after writing the first failing spec).
+
+Purpose: Present the failing test(s) to the user before implementation begins. Confirm:
+- Is the right behavior being tested?
+- Is the boundary correct (request vs service vs model)?
+- Are edge cases represented?
+
+Only proceed to the Implementation Proposal once the test design is approved.
+
+### Implementation Proposal Checkpoint
+
+Defined in: `rspec-best-practices` (step in the gate cycle between test validation and implementation).
+
+Purpose: Before writing implementation code, propose the approach in plain language:
+- Which classes and methods will be created or changed?
+- Rough structure and dependencies
+- Any risks or flags
+
+Wait for confirmation before writing code. This prevents surprise implementations that require full rewrites.
+
+### Linters + Full Test Suite Gate
+
+Defined in: `docs/workflow-guide.md` (TDD Feature Loop), `rails-code-review`.
+
+Purpose: Run linters (`bundle exec rubocop` or project equivalent) and the full test suite before proceeding to YARD documentation or PR. Fix all failures before continuing.
 
 ## Platform Compatibility
 

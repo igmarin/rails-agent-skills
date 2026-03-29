@@ -7,7 +7,11 @@ Companion to the [README](../README.md): **how to chain skills** in typical Rail
 **Tests are a gate between planning and code.** Once a PRD and tasks exist, the test for each behavior must be written, run, and validated as failing BEFORE any implementation code is written.
 
 ```text
-PRD → Tasks → Choose first slice → [GATE: Write test → Run test → Verify it fails] → Implementation → Verify passes
+PRD → Tasks → Choose first slice → [GATE: Write test → Run test → Verify it fails]
+  → [CHECKPOINT: Test Design Review]
+  → [CHECKPOINT: Implementation Proposal]
+  → Implementation → Verify passes
+  → [GATE: Linters + Full Test Suite]
   → YARD (public API) → Update README / diagrams / domain docs → Self code review → PR
 ```
 
@@ -19,6 +23,58 @@ The gate is non-negotiable. Implementation code cannot exist before its test has
 
 See **`rspec-best-practices`** for the full gate cycle (red → green → refactor).
 
+---
+
+## Primary Workflow: TDD Feature Loop
+
+This is the most-used daily workflow. It covers everything from a task to a merged PR.
+
+```mermaid
+flowchart TD
+    A[Task / behavior to implement] --> B[rails-tdd-slices\nChoose first slice]
+    B --> C[rspec-best-practices\nWrite failing test]
+    C --> D{Test Feedback\nCheckpoint}
+    D -->|Approved| E[Implementation Proposal\nCheckpoint]
+    D -->|Revise test| C
+    E -->|Approved| F[Implement minimal code]
+    E -->|Revise proposal| E
+    F --> G[Run test — must pass]
+    G --> H[Refactor — tests stay green]
+    H --> I{More behaviors?}
+    I -->|Yes| C
+    I -->|No| J["GATE: Linters + Full Suite"]
+    J --> K[yard-documentation]
+    K --> L[rails-code-review\nSelf-review]
+    L --> M{Findings?}
+    M -->|Critical or significant| N[rails-review-response\nAddress feedback]
+    N --> O[Re-implement]
+    O --> P[rails-code-review\nRe-review]
+    P --> M
+    M -->|None or cosmetic| Q[Open PR]
+    K2[api-postman-collection\nif endpoints changed] --> Q
+```
+
+**Step by step:**
+
+1. **rails-tdd-slices** — Choose the highest-value first failing spec (request, service, model, job).
+2. **rspec-best-practices** — Write the failing test and run it.
+3. **Test Feedback Checkpoint** — Present the test. Confirm: right behavior? right boundary? edge cases? Only proceed when approved.
+4. **Implementation Proposal Checkpoint** — Propose the implementation in plain language (classes, methods, structure). Wait for confirmation before writing code.
+5. **Implement** — Write the minimum code to pass the test. Run. Refactor. Repeat for each behavior.
+6. **GATE: Linters + Full Test Suite** — Run linters (`bundle exec rubocop` or equivalent) and the full suite. Fix all failures before proceeding.
+7. **yard-documentation** — Document new or changed public API.
+8. **rails-code-review** — Self-review the full branch diff.
+9. **rails-review-response** — When feedback is received: evaluate, push back if wrong, implement one item at a time.
+10. **Re-review** — After Critical or significant findings are addressed, re-review before merging.
+11. **api-postman-collection** — If the change adds or modifies API endpoints, update the collection.
+
+**Key rules:**
+- Test Feedback and Implementation Proposal checkpoints are not optional — they prevent wasted implementation cycles
+- Linters + suite gate runs before YARD, not after
+- Re-review is mandatory when any Critical finding was addressed
+
+---
+
 ## Planning a New Feature
 
 ```mermaid
@@ -27,11 +83,10 @@ flowchart LR
     B --> C[User reviews PRD]
     C --> D[generate-tasks]
     D --> E[rails-tdd-slices]
-    E --> F[User reviews tasks]
-    F --> G[Implementation with tests gate]
-    G --> H[yard-documentation]
-    H --> I[README diagrams docs]
-    I --> J[rails-code-review then PR]
+    E --> F[TDD Feature Loop]
+    F --> G[yard-documentation]
+    G --> H[README diagrams docs]
+    H --> I[rails-code-review then PR]
 ```
 
 1. **create-prd**: Describe the feature. The skill generates a PRD with goals, user stories, functional requirements, and success metrics. Saved to `/tasks/prd-[feature-name].md`.
@@ -40,7 +95,7 @@ flowchart LR
 
 3. **rails-tdd-slices**: Choose the highest-value first failing spec before implementation starts.
 
-4. **Implementation**: Follow the task list with the **tests gate** (write test → run → fail → implement → pass).
+4. **TDD Feature Loop**: Follow the primary workflow above for each behavior in the task list.
 
 5. **yard-documentation**: Add or update YARD on every new or changed public class/method (English).
 
@@ -67,7 +122,7 @@ flowchart LR
     D --> E[ddd-rails-modeling]
     E --> F[generate-tasks]
     F --> G[rails-tdd-slices]
-    G --> H[Implementation with tests gate]
+    G --> H[TDD Feature Loop]
 ```
 
 1. **create-prd**: Capture the feature outcome, goals, non-goals, and business rules first.
@@ -76,7 +131,7 @@ flowchart LR
 4. **ddd-rails-modeling**: Decide the Rails-first tactical design: model, value object, service, repository, event, or simpler alternative.
 5. **generate-tasks**: Turn the design into an implementation plan or detailed checklist.
 6. **rails-tdd-slices**: Choose the best first failing spec before code is written.
-7. **Implementation**: Follow the normal **tests gate**, then YARD, docs, and review.
+7. **TDD Feature Loop**: Follow the primary workflow for each behavior.
 
 **Key rules:**
 
@@ -114,13 +169,13 @@ When the main issue is domain language or ownership, run `ddd-ubiquitous-languag
 
 ---
 
-## Code Review
+## Code Review and Feedback Loop
 
 **Before opening a PR:** run **rails-code-review** on your own branch (same checklist as reviewing others). Task lists from **generate-tasks** end with this step.
 
 ```mermaid
 flowchart LR
-    A[PR ready] --> B[rails-code-review]
+    A[PR ready] --> B[rails-code-review\nSelf-review]
     B --> C{Security concerns?}
     C -->|Yes| D[rails-security-review]
     C -->|No| E{Architecture issues?}
@@ -128,19 +183,54 @@ flowchart LR
     E -->|No| G[Approve / Request changes]
     D --> G
     F --> G
+    G -->|Feedback received| H[rails-review-response\nEvaluate + respond]
+    H --> I[Implement accepted items]
+    I --> J{Critical items\naddressed?}
+    J -->|Yes| B
+    J -->|No| K[Merge]
 ```
 
 1. **rails-code-review**: Systematic review across routing, controllers, models, queries, migrations, security, caching, and testing.
-
 2. **rails-security-review**: Deep dive on auth, params, redirects, output encoding, and secrets.
-
 3. **rails-architecture-review**: Structural review of boundaries, responsibilities, and abstraction quality.
+4. **rails-review-response**: When review feedback is received — evaluate, push back if wrong, implement one item at a time.
 
 **Key rules:**
 
 - Use severity levels: Critical / Suggestion / Nice to have
-- When receiving feedback: verify before implementing, no performative agreement
-- Push back with technical reasoning when feedback is incorrect
+- When receiving feedback: use **rails-review-response** — verify before implementing, no performative agreement
+- Re-review is mandatory after any Critical finding is addressed
+
+---
+
+## Bug Fix
+
+Bug triage and bug fix are two distinct phases:
+
+- **Bug triage** (`rails-bug-triage`) = diagnosing and reproducing the bug, producing a failing spec
+- **Bug fix** = implementing the minimal safe change to make that spec pass — this follows the standard TDD gate, not a separate skill
+
+```mermaid
+flowchart LR
+    A[Bug report] --> B[rails-bug-triage\nReproduce + localize]
+    B --> C[rails-tdd-slices\nChoose reproduction spec]
+    C --> D["Write failing reproduction spec"]
+    D --> E["GATE: Linters + Suite pass with new failing spec"]
+    E --> F["Implement smallest safe fix"]
+    F --> G["Verify spec passes + no regressions"]
+    G --> H[rails-code-review\nReview fix]
+```
+
+1. **rails-bug-triage**: Clarify expected vs actual behavior, narrow the affected layer, identify the highest-value reproduction path.
+2. **rails-tdd-slices**: Decide the strongest first failing spec for the bug.
+3. **Write failing reproduction spec**: The spec must fail for the bug reason, not a setup error.
+4. **Implement**: Smallest safe fix. No scope creep, no premature abstraction.
+5. **rails-code-review**: Review and merge.
+
+**Key rules:**
+- Bug triage produces a failing spec — the fix is the TDD loop applied to that spec
+- No fix without a failing spec first
+- Minimum safe change only — do not refactor while fixing
 
 ---
 
@@ -149,17 +239,18 @@ flowchart LR
 ```mermaid
 flowchart LR
     A[Requirement] --> B["RED: Write failing test"]
-    B --> C["Verify fails correctly"]
-    C --> D["GREEN: Minimal code"]
-    D --> E["Verify passes"]
-    E --> F["REFACTOR: Clean up"]
-    F --> G["Verify still passes"]
-    G --> B
+    B --> C["Checkpoint: Test Design Review"]
+    C --> D["Checkpoint: Implementation Proposal"]
+    D --> E["GREEN: Minimal code"]
+    E --> F["Verify passes"]
+    F --> G["REFACTOR: Clean up"]
+    G --> H["Verify still passes"]
+    H --> B
 ```
 
 1. **rails-tdd-slices**: Use first when the right starting spec is not obvious. It helps pick the best initial failing spec for request, model, service, job, engine, or bug-fix work.
 
-2. **rspec-best-practices**: Covers the full TDD cycle, spec type selection, factory design, and common smells.
+2. **rspec-best-practices**: Covers the full TDD cycle, spec type selection, factory design, and common smells. Includes the Test Feedback and Implementation Proposal checkpoints.
 
 3. **rspec-service-testing**: Specific patterns for service object tests — instance_double, hash factories, shared_examples.
 
@@ -167,22 +258,121 @@ flowchart LR
 
 - No production code without a failing test first
 - If code exists before the test, delete it and start over
+- Test Feedback checkpoint: present the test before implementing — confirm behavior, boundary, edge cases
+- Implementation Proposal checkpoint: propose the approach before writing code — confirm structure
 - Run tests after EVERY step
 
-### Bug Triage Before Fixing
+---
+
+## Performance Optimization
+
+Use when slow queries, N+1s, or response time regressions are identified.
 
 ```mermaid
 flowchart LR
-    A[Bug report] --> B[rails-bug-triage]
-    B --> C[rails-tdd-slices]
-    C --> D["Write failing reproduction spec"]
-    D --> E["Implement smallest safe fix"]
-    E --> F["Review and regression checks"]
+    A[Perf issue identified] --> B[rails-code-conventions\nActiveRecord performance rules]
+    B --> C[rspec-best-practices\nAdd regression spec with query count]
+    C --> D["GATE: failing regression spec"]
+    D --> E[Optimize]
+    E --> F["Verify spec passes + EXPLAIN output improved"]
+    F --> G[rails-code-review]
 ```
 
-1. **rails-bug-triage**: Clarify expected vs actual behavior, narrow the affected layer, and identify the highest-value reproduction path.
-2. **rails-tdd-slices**: Decide the strongest first failing spec for the bug.
-3. **rspec-best-practices**: Run the red-green-refactor loop after the reproduction spec is chosen.
+1. **rails-code-conventions**: Apply the ActiveRecord performance section (`app/models/**/*.rb`) — eager loading, `exists?`, `pluck`, `find_each`.
+2. **rspec-best-practices**: Add a regression spec with a query count assertion (`make_database_queries(count: N)`) before optimizing.
+3. **Optimize**: Apply the fix — `includes`, `preload`, `eager_load`, index, or query rewrite.
+4. **rails-code-review**: Review before merging.
+
+**Key rules:**
+- Write the regression spec first — it proves the optimization worked and prevents future regressions
+- Use `EXPLAIN ANALYZE` to confirm query plan improvement, not just timing
+- Treat GraphQL N+1 as Critical (see **rails-graphql-best-practices**)
+
+---
+
+## Database Migration Safety
+
+Use when adding, modifying, or removing columns, indexes, or tables — especially on large tables.
+
+```mermaid
+flowchart LR
+    A[Migration needed] --> B[rails-migration-safety\nStrategy: reversible, zero-downtime, data safety]
+    B --> C[rails-tdd-slices\nSpec for migration side effects]
+    C --> D["GATE: test migration up + down"]
+    D --> E[Implement migration]
+    E --> F["Verify up + down + data integrity"]
+    F --> G[rails-code-review]
+```
+
+1. **rails-migration-safety**: Plan the strategy — is it reversible? Does it need a phased rollout? Are there zero-downtime constraints?
+2. **rails-tdd-slices**: Choose a spec for the migration side effects (e.g. column default, data backfill result, index existence).
+3. **Implement**: Write the migration following the agreed strategy.
+4. **Verify**: Test `up`, `down`, and any data integrity checks.
+5. **rails-code-review**: Review before merging.
+
+**Key rules:**
+- Never combine schema changes and data backfills in the same migration
+- Always test `down` — reversibility is not optional
+- On large tables: separate migration for `algorithm: :concurrent` indexes
+
+---
+
+## Security Review
+
+Use when security-sensitive changes are made, or as a standalone audit of any endpoint or auth flow.
+
+```mermaid
+flowchart LR
+    A[Security-sensitive change] --> B[rails-security-review\nAuth, params, IDOR, PII, SQL injection]
+    B --> C{Findings?}
+    C -->|Critical| D[Fix immediately]
+    C -->|Suggestion| E[Fix in this PR or ticket]
+    D --> F[rails-code-review\nVerify fixes]
+    E --> F
+    F --> G[PR]
+```
+
+1. **rails-security-review**: Full audit of auth, strong params, IDOR, PII exposure, SQL injection, CSRF, XSS, and secrets handling.
+2. Categorize: Critical (fix before merge) vs Suggestion (fix or ticket).
+3. **rails-code-review**: Verify fixes are correct and complete.
+
+**Key rules:**
+- Security review is a standalone trigger — not only when code review happens to find something
+- Critical security findings block merge
+- Never store secrets in code, logs, or version control
+
+---
+
+## GraphQL Feature
+
+Use when adding or modifying GraphQL queries, mutations, types, or resolvers.
+
+```mermaid
+flowchart LR
+    A[GraphQL feature] --> B[create-prd]
+    B --> C[ddd-ubiquitous-language\nType / field naming]
+    C --> D[rails-graphql-best-practices\nSchema design]
+    D --> E[rails-tdd-slices\nChoose first spec]
+    E --> F[TDD Feature Loop]
+    F --> G[rails-migration-safety\nif DB changes needed]
+    G --> H[rails-code-conventions]
+    H --> I[rails-security-review\nintrospection, auth, depth limits]
+    I --> J["GATE: Linters + Suite"]
+    J --> K[yard-documentation]
+    K --> L[rails-code-review → PR]
+```
+
+1. **ddd-ubiquitous-language**: Type and field names must match domain language.
+2. **rails-graphql-best-practices**: Schema design — types, mutations, N+1 prevention, authorization, error shape.
+3. **rails-tdd-slices**: Choose first spec (mutation spec, query spec, or resolver unit).
+4. **TDD Feature Loop**: Standard implementation cycle.
+5. **rails-security-review**: Introspection disabled, field-level auth, query depth/complexity limits.
+
+**Key rules:**
+- Every resolver that calls an association must use a dataloader
+- Mutations always return `{ result, errors }` — never raise
+- Disable introspection in production
+- Use Insomnia or GraphQL Playground for API testing — not Postman REST collections
 
 ---
 
@@ -215,7 +405,7 @@ flowchart TD
 **Post-implementation (not optional for features):** After implementation and green tests, **yard-documentation** runs on the touched public API; then update **README**, **diagrams** (e.g. Mermaid in `docs/`), and **related domain docs** so operators and future developers see the new behavior.
 
 1. **yard-documentation**: Use when writing or reviewing inline docs for Ruby classes and public methods. Apply YARD tags (`@param`, `@option`, `@return`, `@raise`, `@example`) on every public method; keep all text in English. **Required before PR** for new or changed public API.
-2. **api-postman-collection**: Use when creating or modifying API endpoints (Rails controllers, engine routes). Generate or update a Postman Collection JSON (v2.1) so the flow can be tested; store it in e.g. `docs/postman/` or `spec/fixtures/postman/`. Request names and descriptions in English.
+2. **api-postman-collection**: Use when creating or modifying REST API endpoints (Rails controllers, engine routes). Generate or update a Postman Collection JSON (v2.1) so the flow can be tested; store it in e.g. `docs/postman/` or `spec/fixtures/postman/`. Request names and descriptions in English. **Note:** For GraphQL endpoints, prefer Insomnia or GraphQL Playground — Postman REST collections do not map cleanly to GraphQL queries and mutations.
 
 ---
 

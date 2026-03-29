@@ -17,6 +17,25 @@ Tests are a GATE. Implementation code CANNOT be written until:
 
 Wrote implementation code before the test? Delete it. Start over. No exceptions.
 
+## Primary Workflow: TDD Feature Loop
+
+For Claude Code, **workflow chaining is the primary mechanism**. Skills are building blocks — workflows are the story. The most common daily workflow:
+
+```text
+rails-tdd-slices → write failing test
+  → [CHECKPOINT: Test Feedback — confirm behavior, boundary, edge cases]
+  → [CHECKPOINT: Implementation Proposal — confirm approach before coding]
+  → implement (minimal code to pass test) → refactor
+  → [GATE: Linters + Full Test Suite]
+  → yard-documentation
+  → rails-code-review (self-review)
+  → rails-review-response (when feedback is received)
+  → re-review if Critical findings were addressed
+  → PR
+```
+
+See [docs/workflow-guide.md](docs/workflow-guide.md) for all workflow diagrams.
+
 ## Available Skills
 
 Skills are located in subdirectories of this plugin. Read the relevant `SKILL.md` before responding to any task that matches.
@@ -31,13 +50,15 @@ Skills are located in subdirectories of this plugin. Read the relevant `SKILL.md
 ### Rails Code Quality
 | Skill | Use when... |
 |-------|-------------|
-| `rails-code-review` | Reviewing Rails PRs, controllers, models, migrations |
+| `rails-code-review` | Reviewing Rails PRs, controllers, models, migrations — giving a review |
+| `rails-review-response` | Received review feedback and need to evaluate, respond, or implement it |
 | `rails-architecture-review` | Reviewing app structure, boundaries, fat models/controllers |
 | `rails-security-review` | Checking auth, params, XSS, CSRF, SQLi |
 | `rails-migration-safety` | Planning or reviewing database migrations |
 | `rails-stack-conventions` | Writing new Rails code for PostgreSQL + Hotwire + Tailwind stack |
-| `rails-code-conventions` | DRY/YAGNI/PORO/CoC/KISS, linter as style SoT |
+| `rails-code-conventions` | Daily coding checklist: DRY/YAGNI/PORO/CoC/KISS, linter as style SoT, per-path rules |
 | `rails-background-jobs` | Adding or reviewing background jobs |
+| `rails-graphql-best-practices` | Building or reviewing GraphQL APIs with graphql-ruby |
 
 ### DDD & Domain Modeling
 | Skill | Use when... |
@@ -73,7 +94,7 @@ Skills are located in subdirectories of this plugin. Read the relevant `SKILL.md
 | `rails-engine-installers` | Creating install generators |
 | `rails-engine-extraction` | Extracting code from host app to engine |
 | `rails-engine-compatibility` | Ensuring cross-version compatibility |
-| `api-postman-collection` | Creating or updating Postman collections for API endpoints |
+| `api-postman-collection` | Creating or updating Postman collections for REST API endpoints (not GraphQL) |
 
 ### Refactoring
 | Skill | Use when... |
@@ -90,17 +111,23 @@ Skills are located in subdirectories of this plugin. Read the relevant `SKILL.md
 
 ## Typical Workflows
 
+**TDD Feature Loop** *(primary)*:
+`rails-tdd-slices` → **[Test Feedback checkpoint]** → **[Implementation Proposal checkpoint]** → implement → **[Linters + Suite gate]** → `yard-documentation` → `rails-code-review` → `rails-review-response` (on feedback) → PR
+
 **New feature:**
-`create-prd` → `generate-tasks` → `rails-tdd-slices` → **[GATE: tests]** → implement → `yard-documentation` → `rails-code-review` → PR
+`create-prd` → `generate-tasks` → *TDD Feature Loop*
 
 **DDD-first:**
-`create-prd` → `ddd-ubiquitous-language` → `ddd-boundaries-review` → `ddd-rails-modeling` → `generate-tasks` → `rails-tdd-slices` → implement
+`create-prd` → `ddd-ubiquitous-language` → `ddd-boundaries-review` → `ddd-rails-modeling` → `generate-tasks` → *TDD Feature Loop*
 
-**Code review:**
-`rails-code-review` + `rails-security-review` + `rails-architecture-review`
+**Code review + response:**
+`rails-code-review` → `rails-review-response` (on feedback) → re-review if Critical items addressed
 
 **Bug fix:**
-`rails-bug-triage` → `rails-tdd-slices` → **[GATE: failing test]** → fix → verify test passes
+`rails-bug-triage` → `rails-tdd-slices` → **[GATE: failing reproduction spec]** → fix → verify test passes
+
+**GraphQL feature:**
+`ddd-ubiquitous-language` → `rails-graphql-best-practices` → *TDD Feature Loop* → `rails-security-review`
 
 **New engine:**
 `rails-engine-author` → **[GATE: engine specs]** → implement → `rails-engine-docs`

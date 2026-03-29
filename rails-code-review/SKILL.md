@@ -4,21 +4,22 @@ description: >
   Use when reviewing Rails pull requests, checking controller or model conventions,
   validating migration safety, auditing query performance, or when the user asks
   for a Rails code review. Covers routing, ActiveRecord, security, caching, jobs,
-  and Rails Way compliance. Also applies when receiving review feedback on Rails code.
+  and Rails Way compliance. When you receive review feedback on your own code,
+  use rails-review-response instead.
 ---
 
 # Rails Code Review (The Rails Way)
 
 When **reviewing** Rails code, analyze it against the following areas. When **writing** new code, follow **rails-code-conventions** (principles, logging, path rules) and **rails-stack-conventions** (stack-specific UI and Rails patterns).
 
-**Core principle:** Review early, review often. Verify before implementing feedback.
+**Core principle:** Review early, review often. Self-review before PR. Re-review after significant changes.
 
 ## HARD-GATE: After implementation (before PR)
 
 ```
 Code review is part of delivery, not only "when someone comments on GitHub."
 
-After implementation + green tests + YARD + doc updates (per generate-tasks):
+After implementation + green tests + linters pass + YARD + doc updates:
 
 1. Run a self-review on the full branch diff using the Review Order below.
 2. Fix Critical items; address Suggestion items or ticket follow-ups explicitly.
@@ -69,33 +70,24 @@ Use these levels when reporting findings:
 | **Suggestion** | Convention violation or performance concern | Fix in this PR or create follow-up |
 | **Nice to have** | Style improvement, minor optimization | Optional |
 
-## HARD-GATE: Receiving Review Feedback
+## Re-Review Loop
+
+When critical or significant findings were addressed, re-review before merging:
 
 ```
-WHEN receiving code review feedback:
-
-1. READ: Complete feedback without reacting
-2. UNDERSTAND: Restate the technical requirement
-3. VERIFY: Check against codebase reality
-4. EVALUATE: Technically sound for THIS codebase?
-5. RESPOND: Technical acknowledgment or reasoned pushback
-6. IMPLEMENT: One item at a time, test each
+Review → Categorize findings (Critical / Suggestion / Nice to have)
+       → Developer addresses findings
+       → Critical findings fixed? → Re-review the diff
+       → Suggestion items resolved or ticketed?
+       → All green → Approve PR
 ```
 
-**Forbidden responses:**
-- "You're absolutely right!" (performative)
-- "Great point!" / "Excellent feedback!" (performative)
-- "Let me implement that now" (before verification)
+**Re-review triggers:**
+- Any Critical finding was present → mandatory re-review after fixes
+- More than 3 Suggestion items addressed → re-review recommended
+- Logic or architecture changed during feedback → re-review required
 
-**Instead:** Restate the technical requirement, ask clarifying questions, push back with technical reasoning if wrong, or just start working.
-
-**Implementation order for multi-item feedback:**
-1. Clarify anything unclear FIRST
-2. Blocking issues (breaks, security)
-3. Simple fixes (typos, imports)
-4. Complex fixes (refactoring, logic)
-5. Test each fix individually
-6. Verify no regressions
+**Skip re-review only when:** All findings were Nice to have or single-line fixes with zero logic change.
 
 ## Common Mistakes
 
@@ -106,8 +98,7 @@ WHEN receiving code review feedback:
 | Using `permit!` for convenience | Privilege escalation risk — always whitelist attributes |
 | Adding index in same migration as column | On large tables, separate migration with `algorithm: :concurrent` |
 | Callback for business logic | Callbacks are for persistence-level concerns, not orchestration |
-| Blind implementation of review feedback | Verify against codebase first — reviewer may lack context |
-| Performative agreement with reviewer | Technical acknowledgment or just fix it — actions over words |
+| Approving after Critical fix without re-reviewing | A fix can introduce new issues — re-review is mandatory after Criticals |
 
 ## Red Flags
 
@@ -117,13 +108,14 @@ WHEN receiving code review feedback:
 - Query without eager loading inside a loop
 - Migration combining schema change and data backfill
 - `html_safe` or `raw` on user-provided content
-- Implementing review feedback without verifying it first
+- Approving a PR after Critical findings without re-reviewing
 - Using "should", "probably" when claiming something passes
 
 ## Integration
 
 | Skill | When to chain |
 |-------|---------------|
+| **rails-review-response** | When the developer receives feedback and must decide what to implement |
 | **api-postman-collection** | When reviewing API or endpoint changes (ensure Postman collection is updated) |
 | **rails-stack-conventions** | When writing new code (not reviewing) |
 | **rails-architecture-review** | When review reveals structural problems |

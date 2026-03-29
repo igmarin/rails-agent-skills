@@ -25,10 +25,23 @@ Use this skill when you add or change an API endpoint so that a Postman-compatib
 ## HARD-GATE: Generate on Endpoint Change
 
 ```
-When you create or modify an API endpoint (new or changed route and controller action),
+When you create or modify a REST API endpoint (new or changed route and controller action),
 you MUST also create or update the corresponding Postman Collection JSON file so the
 flow can be tested. Do not leave the collection missing or outdated.
+
+EXCEPTION: GraphQL endpoints do NOT use Postman collections.
+For GraphQL, use Insomnia or GraphQL Playground instead — see note below.
 ```
+
+## GraphQL Endpoints
+
+Do **not** use this skill for GraphQL endpoints. Postman REST collections do not map cleanly to GraphQL queries and mutations. For GraphQL:
+
+- Use **Insomnia** (preferred) or **GraphQL Playground** for manual testing
+- Import the schema directly via introspection or SDL file
+- Store an Insomnia workspace export in `docs/insomnia/` if the team needs a shared config
+
+See **rails-graphql-best-practices** for the full GraphQL conventions.
 
 ## Language
 
