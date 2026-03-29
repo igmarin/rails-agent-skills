@@ -36,7 +36,7 @@ Skills are located in subdirectories of this plugin. Read the relevant `SKILL.md
 | `rails-security-review` | Checking auth, params, XSS, CSRF, SQLi |
 | `rails-migration-safety` | Planning or reviewing database migrations |
 | `rails-stack-conventions` | Writing new Rails code for PostgreSQL + Hotwire + Tailwind stack |
-| `rails-principles-and-boundaries` | DRY/YAGNI/PORO/CoC/KISS, linter as style SoT |
+| `rails-code-conventions` | DRY/YAGNI/PORO/CoC/KISS, linter as style SoT |
 | `rails-background-jobs` | Adding or reviewing background jobs |
 
 ### DDD & Domain Modeling

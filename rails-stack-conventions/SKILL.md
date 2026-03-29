@@ -13,7 +13,7 @@ When **writing or generating** code for this project, follow these conventions. 
 
 **Core principle:** Follow Rails conventions. When in doubt, check the official Rails guides.
 
-**Style:** If the project uses **RuboCop**, treat it as the source of truth for formatting and cops. For cross-cutting design principles (DRY, YAGNI, structured logging, rules by directory), use **rails-principles-and-boundaries**.
+**Style:** If the project uses **RuboCop**, treat it as the source of truth for formatting and cops. For cross-cutting design principles (DRY, YAGNI, structured logging, rules by directory), use **rails-code-conventions**.
 
 ## HARD-GATE: Tests Gate Implementation
 
@@ -118,7 +118,7 @@ See rspec-best-practices for the full gate cycle.
 
 | Skill | When to chain |
 |-------|---------------|
-| **rails-principles-and-boundaries** | Before or alongside this skill for principles, logging, and path-specific boundaries |
+| **rails-code-conventions** | Before or alongside this skill for principles, logging, and path-specific boundaries |
 | **rails-code-review** | When reviewing existing code against these conventions |
 | **ruby-service-objects** | When extracting business logic into services |
 | **rspec-best-practices** | For testing conventions |

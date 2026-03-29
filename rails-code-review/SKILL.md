@@ -9,7 +9,7 @@ description: >
 
 # Rails Code Review (The Rails Way)
 
-When **reviewing** Rails code, analyze it against the following areas. When **writing** new code, follow **rails-principles-and-boundaries** (principles, logging, path rules) and **rails-stack-conventions** (stack-specific UI and Rails patterns).
+When **reviewing** Rails code, analyze it against the following areas. When **writing** new code, follow **rails-code-conventions** (principles, logging, path rules) and **rails-stack-conventions** (stack-specific UI and Rails patterns).
 
 **Core principle:** Review early, review often. Verify before implementing feedback.
 

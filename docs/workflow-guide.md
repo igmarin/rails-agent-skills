@@ -105,10 +105,10 @@ flowchart LR
 
 **After** the **tests gate** is satisfied for a given behavior, **implementation** should follow:
 
-1. **rails-principles-and-boundaries** — DRY/YAGNI/PORO/CoC/KISS; project linter as style SoT; structured logging; rules by path (`app/services`, workers, controllers, etc.).
+1. **rails-code-conventions** — DRY/YAGNI/PORO/CoC/KISS; project linter as style SoT; structured logging; rules by path (`app/services`, workers, controllers, etc.).
 2. **rails-stack-conventions** — Stack-specific defaults (PostgreSQL, Hotwire, Tailwind).
 
-Use **rails-principles-and-boundaries** during **code review** and **refactors** as well, not only on greenfield features.
+Use **rails-code-conventions** during **code review** and **refactors** as well, not only on greenfield features.
 
 When the main issue is domain language or ownership, run `ddd-ubiquitous-language` and `ddd-boundaries-review` before deciding on Rails tactical modeling.
 

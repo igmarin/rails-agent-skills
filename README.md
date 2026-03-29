@@ -64,7 +64,7 @@ Planning (create-prd, generate-tasks; optional jira-ticket-planning for Jira dra
     ↓
 Testing (`rspec-best-practices` — write and validate tests; **tests gate**)
     ↓
-Implementation (rails-principles-and-boundaries + rails-stack-conventions, then ruby-service-objects, rails-*, etc.)
+Implementation (rails-code-conventions + rails-stack-conventions, then ruby-service-objects, rails-*, etc.)
     ↓
 YARD (yard-documentation on new/changed public API)
     ↓
@@ -163,7 +163,7 @@ Open a new session — skills are available in every project automatically.
 | [rails-security-review](rails-security-review/) | Audit for auth, XSS, CSRF, SQLi, and other vulnerabilities |
 | [rails-migration-safety](rails-migration-safety/) | Plan production-safe database migrations |
 | [rails-stack-conventions](rails-stack-conventions/) | Apply Rails + PostgreSQL + Hotwire + Tailwind conventions |
-| [rails-principles-and-boundaries](rails-principles-and-boundaries/) | DRY/YAGNI/PORO/CoC/KISS; project linter as style SoT; logging and rules by path |
+| [rails-code-conventions](rails-code-conventions/) | DRY/YAGNI/PORO/CoC/KISS; project linter as style SoT; logging and rules by path |
 | [rails-background-jobs](rails-background-jobs/) | Design idempotent background jobs with Active Job / Solid Queue |
 | [api-postman-collection](api-postman-collection/) | Generate or update Postman Collection (JSON v2.1) when creating or modifying API endpoints |
 
@@ -232,7 +232,7 @@ flowchart TD
     dddModeling --> railsPrinciples
     generateTasks --> jiraPlanning[jira-ticket-planning]
     generateTasks --> testGate["GATE: Write tests, run, verify failure"]
-    testGate --> railsPrinciples[rails-principles-and-boundaries]
+    testGate --> railsPrinciples[rails-code-conventions]
     railsPrinciples --> stackConventions[rails-stack-conventions]
     stackConventions --> yardDoc[yard-documentation]
     yardDoc --> docUpdates[README diagrams docs]
@@ -288,7 +288,7 @@ Tests are a **gate** between planning and implementation. See [docs/workflow-gui
 
 | Workflow | Skill Chain |
 |----------|-------------|
-| **New feature** | create-prd -> generate-tasks -> (optional **jira-ticket-planning**) -> rails-tdd-slices -> **[write tests, verify failure]** -> **rails-principles-and-boundaries** + rails-stack-conventions -> implement -> yard-documentation -> README/diagrams/docs -> rails-code-review (self) -> PR |
+| **New feature** | create-prd -> generate-tasks -> (optional **jira-ticket-planning**) -> rails-tdd-slices -> **[write tests, verify failure]** -> **rails-code-conventions** + rails-stack-conventions -> implement -> yard-documentation -> README/diagrams/docs -> rails-code-review (self) -> PR |
 | **DDD-first feature design** | create-prd -> ddd-ubiquitous-language -> ddd-boundaries-review -> ddd-rails-modeling -> generate-tasks -> rails-tdd-slices -> implement |
 | **Jira tickets from plan** | jira-ticket-planning (after PRD/tasks or any initiative plan; drafts or create in Jira when approved) |
 | **Code review** | rails-code-review + rails-security-review + rails-architecture-review |
