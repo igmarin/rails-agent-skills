@@ -57,25 +57,27 @@ HARD-GATEs use explicit blocking language ("DO NOT", "CANNOT", "ONLY THEN") beca
 
 ### 3. Workflow Chaining
 
-Skills are designed to be used in sequence, not in isolation. Each skill's **Integration** table points to the next skill in the chain. The typical flow is:
+Skills are designed to be used in sequence, not in isolation. Each skill's **Integration** table points to the next skill in the chain. The primary daily workflow is:
 
 ```text
-Planning (create-prd, generate-tasks; optional jira-ticket-planning for Jira drafts/sprints)
+rails-tdd-slices → rspec-best-practices (write failing test)
     ↓
-Testing (`rspec-best-practices` — write and validate tests; **tests gate**)
+[CHECKPOINT: Test Design Review — confirm boundary, behavior, edge cases]
     ↓
-Implementation (rails-code-conventions + rails-stack-conventions, then ruby-service-objects, rails-*, etc.)
+[CHECKPOINT: Implementation Proposal — confirm approach before coding]
     ↓
-YARD (yard-documentation on new/changed public API)
+Implement (minimal code to pass test) → Refactor
     ↓
-Docs (README, diagrams, domain docs as the change requires)
+[GATE: Linters + Full Test Suite]
     ↓
-Review (rails-code-review self-review, then rails-security-review / rails-architecture-review as needed)
+yard-documentation → Update docs
+    ↓
+rails-code-review (self-review) → rails-review-response (on feedback)
     ↓
 PR
 ```
 
-See [docs/workflow-guide.md](docs/workflow-guide.md) for detailed workflow diagrams.
+See [docs/workflow-guide.md](docs/workflow-guide.md) for the full TDD Feature Loop and all workflow diagrams.
 
 **Note:** `jira-ticket-planning` is an **optional** step. The assistant should **not** push for Jira ticket generation unless the user asks explicitly (e.g. "turn this into Jira tickets") or the context clearly indicates work should be mapped to a Jira board/sprint.
 
@@ -158,14 +160,16 @@ Open a new session — skills are available in every project automatically.
 
 | Skill | Description |
 |-------|-------------|
-| [rails-code-review](rails-code-review/) | Review Rails code following The Rails Way conventions |
+| [rails-code-review](rails-code-review/) | Review Rails code following The Rails Way conventions — giving a review |
+| [rails-review-response](rails-review-response/) | Respond to review feedback — evaluate, push back, implement safely, trigger re-review |
 | [rails-architecture-review](rails-architecture-review/) | Review application structure, boundaries, and responsibilities |
 | [rails-security-review](rails-security-review/) | Audit for auth, XSS, CSRF, SQLi, and other vulnerabilities |
 | [rails-migration-safety](rails-migration-safety/) | Plan production-safe database migrations |
 | [rails-stack-conventions](rails-stack-conventions/) | Apply Rails + PostgreSQL + Hotwire + Tailwind conventions |
-| [rails-code-conventions](rails-code-conventions/) | DRY/YAGNI/PORO/CoC/KISS; project linter as style SoT; logging and rules by path |
+| [rails-code-conventions](rails-code-conventions/) | Daily coding checklist: DRY/YAGNI/PORO/CoC/KISS; linter as style SoT; structured logging; per-path rules |
 | [rails-background-jobs](rails-background-jobs/) | Design idempotent background jobs with Active Job / Solid Queue |
-| [api-postman-collection](api-postman-collection/) | Generate or update Postman Collection (JSON v2.1) when creating or modifying API endpoints |
+| [rails-graphql-best-practices](rails-graphql-best-practices/) | GraphQL schema design, N+1 prevention, authorization, error handling, and testing with graphql-ruby |
+| [api-postman-collection](api-postman-collection/) | Generate or update Postman Collection (JSON v2.1) for REST endpoints; use Insomnia for GraphQL |
 
 ### DDD & Domain Modeling
 
@@ -284,20 +288,23 @@ See [docs/architecture.md](docs/architecture.md) for the full conventions spec.
 
 ## Typical Workflows
 
-Tests are a **gate** between planning and implementation. See [docs/workflow-guide.md](docs/workflow-guide.md).
+Tests are a **gate** between planning and implementation. See [docs/workflow-guide.md](docs/workflow-guide.md) for full diagrams.
 
 | Workflow | Skill Chain |
 |----------|-------------|
-| **New feature** | create-prd -> generate-tasks -> (optional **jira-ticket-planning**) -> rails-tdd-slices -> **[write tests, verify failure]** -> **rails-code-conventions** + rails-stack-conventions -> implement -> yard-documentation -> README/diagrams/docs -> rails-code-review (self) -> PR |
-| **DDD-first feature design** | create-prd -> ddd-ubiquitous-language -> ddd-boundaries-review -> ddd-rails-modeling -> generate-tasks -> rails-tdd-slices -> implement |
-| **Jira tickets from plan** | jira-ticket-planning (after PRD/tasks or any initiative plan; drafts or create in Jira when approved) |
-| **Code review** | rails-code-review + rails-security-review + rails-architecture-review |
-| **Bug triage** | rails-bug-triage -> rails-tdd-slices -> **[write failing spec, verify failure]** -> implement -> review |
-| **New engine** | rails-engine-author -> **[write specs, verify failure]** -> implement -> rails-engine-docs |
-| **Refactoring** | refactor-safely -> **[characterization tests]** -> refactor -> verify tests pass |
-| **New service** | rails-tdd-slices -> **[write .call spec, verify failure]** -> ruby-service-objects -> verify passes |
-| **API integration** | rails-tdd-slices -> **[write layer specs, verify failure]** -> ruby-api-client-integration -> verify passes |
-| **Bug fix** | `rails-bug-triage` -> `rails-tdd-slices` -> **[write test reproducing bug, verify failure]** -> fix -> verify passes -> review |
+| **TDD Feature Loop** *(primary daily workflow)* | rails-tdd-slices → **[Test Feedback checkpoint]** → **[Implementation Proposal checkpoint]** → implement → **[Linters + Suite gate]** → yard-documentation → rails-code-review → rails-review-response (on feedback) → PR |
+| **New feature** | create-prd → generate-tasks → (optional **jira-ticket-planning**) → *TDD Feature Loop* |
+| **DDD-first feature** | create-prd → ddd-ubiquitous-language → ddd-boundaries-review → ddd-rails-modeling → generate-tasks → *TDD Feature Loop* |
+| **Bug fix** | rails-bug-triage → rails-tdd-slices → **[write reproduction spec, verify failure]** → fix → verify passes → rails-code-review |
+| **Code review + response** | rails-code-review → rails-review-response (on feedback) → re-review if Critical items addressed |
+| **Security audit** | rails-security-review → rails-code-review (verify fixes) → PR |
+| **Performance optimization** | rails-code-conventions (ActiveRecord rules) → **[regression spec]** → optimize → rails-code-review |
+| **Migration** | rails-migration-safety → **[test up + down]** → implement → rails-code-review |
+| **GraphQL feature** | ddd-ubiquitous-language → rails-graphql-best-practices → *TDD Feature Loop* → rails-security-review |
+| **New engine** | rails-engine-author → **[write specs, verify failure]** → implement → rails-engine-docs |
+| **Refactoring** | refactor-safely → **[characterization tests]** → refactor → verify tests pass |
+| **New service** | rails-tdd-slices → **[write .call spec, verify failure]** → ruby-service-objects → verify passes |
+| **API integration** | rails-tdd-slices → **[write layer specs, verify failure]** → ruby-api-client-integration → verify passes |
 
 ## Creating New Skills
 

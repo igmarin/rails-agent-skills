@@ -55,11 +55,17 @@ Write code before the test? Delete it. Start over.
 1. **Write test:** One minimal test showing what the behavior should do
 2. **Run test:** Execute it — this is mandatory, not optional
 3. **Validate failure:** Confirm it fails because the feature is missing (not a typo or import error)
-4. **GATE PASSED** — you may now write implementation code
-5. **Write minimal code:** Simplest implementation to make the test pass
-6. **Run test again:** Confirm it passes and no other tests break
-7. **Refactor:** Clean up (remove duplication, improve names, extract helpers) — tests must stay green
-8. **Next behavior:** Return to step 1
+4. **CHECKPOINT — Test Design Review:** Present the failing test. Confirm the boundary, the behavior, and edge case coverage before writing any implementation. See `rails-tdd-slices` for the checkpoint format.
+5. **GATE PASSED** — you may now write implementation code
+6. **CHECKPOINT — Implementation Proposal:** Before writing code, propose the approach in plain language:
+   - Which classes / methods will be created or changed?
+   - Rough structure (e.g. "a service object that calls X, then Y, then returns Z")
+   - Any dependencies or risks to flag
+   - Wait for confirmation before writing implementation code
+7. **Write minimal code:** Simplest implementation to make the test pass
+8. **Run test again:** Confirm it passes and no other tests break
+9. **Refactor:** Clean up (remove duplication, improve names, extract helpers) — tests must stay green
+10. **Next behavior:** Return to step 1
 
 ## TDD Slice Selection
 

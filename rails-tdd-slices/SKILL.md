@@ -83,6 +83,19 @@ Use conventional spec paths when recommending the first slice:
 # Behavior: POST /orders validates params and returns 201 with JSON payload
 # First slice: request spec
 # Suggested path: spec/requests/orders/create_spec.rb
+
+RSpec.describe "POST /orders", type: :request do
+  let(:user) { create(:user) }
+  let(:valid_params) { { order: { product_id: create(:product).id, quantity: 1 } } }
+
+  before { sign_in user }
+
+  it "creates an order and returns 201" do
+    post orders_path, params: valid_params, as: :json
+    expect(response).to have_http_status(:created)
+    expect(response.parsed_body["id"]).to be_present
+  end
+end
 ```
 
 ### Good: New Orchestration Service
@@ -91,6 +104,18 @@ Use conventional spec paths when recommending the first slice:
 # Behavior: Orders::CreateOrder validates inventory, persists, and enqueues follow-up work
 # First slice: service spec
 # Suggested path: spec/services/orders/create_order_spec.rb
+
+RSpec.describe Orders::CreateOrder do
+  subject(:result) { described_class.call(user: user, product: product, quantity: 1) }
+
+  let(:user)    { create(:user) }
+  let(:product) { create(:product, stock: 5) }
+
+  it "returns a successful result with the new order" do
+    expect(result).to be_success
+    expect(result.order).to be_persisted
+  end
+end
 ```
 
 ### Bad: Starting Too Low
@@ -100,6 +125,26 @@ Use conventional spec paths when recommending the first slice:
 # Start with a PORO helper spec because it is easier to write,
 # even though the real risk is the request contract or workflow wiring.
 ```
+
+## Test Feedback Checkpoint
+
+After writing and running the first failing spec, **pause before implementation** and present the test for review:
+
+```
+CHECKPOINT: Test Design Review
+
+1. Present: Show the failing spec(s) written
+2. Ask:
+   - Does this test cover the right behavior?
+   - Is the boundary correct (request vs service vs model)?
+   - Are the most important edge cases represented?
+   - Is the failure reason correct (feature missing, not setup error)?
+3. Confirm: Only proceed to implementation once test design is approved.
+```
+
+**Why this matters:** Implementing against a poorly designed test wastes the TDD cycle. A 2-minute review of the test now prevents a full rewrite later.
+
+**Hand off:** After test design is confirmed → `rspec-best-practices` for the full TDD gate cycle.
 
 ## Output Style
 
