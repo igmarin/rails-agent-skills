@@ -195,7 +195,8 @@ Before finalizing a skill, verify:
 ### Adding to the Library
 
 1. Create the directory and SKILL.md
-2. Add the skill to the catalog table in README.md
-3. Add the skill to the `rails-agent-skills/SKILL.md` discovery table
-4. Update the mermaid relationship diagram if the skill connects to existing skills
-5. Add the skill to any related skills' Integration tables
+2. Add the skill to the catalog table in `README.md`
+3. Update the Mermaid relationship diagram in `README.md` if the skill connects to existing skills
+4. Add the skill to the `rails-agent-skills/SKILL.md` discovery table
+5. Add the skill to `CLAUDE.md` skill catalog (this is the first file Claude reads)
+6. Add the skill to any related skills' Integration tables

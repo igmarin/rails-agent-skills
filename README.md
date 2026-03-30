@@ -234,14 +234,25 @@ flowchart TD
     dddBoundaries --> dddModeling[ddd-rails-modeling]
     dddBoundaries --> archReview
     dddModeling --> generateTasks
-    dddModeling --> railsPrinciples
+    dddModeling --> railsConventions
+
     generateTasks --> jiraPlanning[jira-ticket-planning]
-    generateTasks --> testGate["GATE: Write tests, run, verify failure"]
-    testGate --> railsPrinciples[rails-code-conventions]
-    railsPrinciples --> stackConventions[rails-stack-conventions]
-    stackConventions --> yardDoc[yard-documentation]
+    generateTasks --> tddSlices[rails-tdd-slices]
+
+    tddSlices --> rspecBest[rspec-best-practices]
+    rspecBest --> testFeedback["CHECKPOINT: Test Feedback"]
+    testFeedback --> implProposal["CHECKPOINT: Implementation Proposal"]
+    implProposal --> implement["Implement"]
+    implement --> lintersGate["GATE: Linters + Full Suite"]
+
+    lintersGate --> railsConventions[rails-code-conventions]
+    railsConventions --> stackConventions[rails-stack-conventions]
+    lintersGate --> yardDoc[yard-documentation]
     yardDoc --> docUpdates[README diagrams docs]
     docUpdates --> codeReview[rails-code-review]
+
+    codeReview --> reviewResponse[rails-review-response]
+    reviewResponse --> codeReview
 
     codeReview --> archReview[rails-architecture-review]
     codeReview --> secReview[rails-security-review]
@@ -254,18 +265,20 @@ flowchart TD
     serviceObjects --> strategyFactory[strategy-factory-null-calculator]
     serviceObjects --> yardDoc
     apiClient --> yardDoc
+
+    graphql[rails-graphql-best-practices] --> tddSlices
+    graphql --> secReview
+    graphql --> yardDoc
+
     engineAuthor --> postman[api-postman-collection]
     engineDocs[rails-engine-docs] --> postman
 
-    rspecBest[rspec-best-practices] --> tddSlices[rails-tdd-slices]
-    tddSlices --> testGate
     bugTriage[rails-bug-triage] --> tddSlices
-    bugTriage --> testGate
-    rspecService[rspec-service-testing] --> testGate
+    rspecService[rspec-service-testing] --> rspecBest
 
     engineAuthor[rails-engine-author] --> engineTestGate["GATE: Write engine specs, verify failure"]
     engineTestGate --> engineTesting[rails-engine-testing]
-    engineAuthor --> engineDocs[rails-engine-docs]
+    engineAuthor --> engineDocs
     engineAuthor --> engineInstallers[rails-engine-installers]
     engineTesting --> engineReviewer[rails-engine-reviewer]
     engineReviewer --> engineRelease[rails-engine-release]
