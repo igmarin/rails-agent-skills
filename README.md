@@ -99,15 +99,17 @@ The rule of thumb is: **reuse patterns, not names**. If a broader skill maps cle
 
 ## Platforms
 
-Works with **Cursor**, **Codex**, and **Claude Code**.
+Works with **Claude Code**, **Cursor**, **Windsurf**, **Codex**, and **VS Code** (with AI extensions).
 
-| Platform | Installation |
-|----------|-------------|
-| **Cursor** | Symlink or clone to `~/.cursor/skills/` |
-| **Codex** | [`.codex/INSTALL.md`](.codex/INSTALL.md) and [docs/implementation-guide.md](docs/implementation-guide.md) |
-| **Claude Code** | Shell function with `--plugin-dir` in `~/.zshrc` / `~/.bashrc` |
+| Platform | Setup | Docs |
+|----------|-------|------|
+| **Claude Code** | Shell function with `--plugin-dir` in `~/.zshrc` / `~/.bashrc` | [Setup Guide](docs/implementation-guide.md) |
+| **Cursor** | Symlink to `~/.cursor/skills/` | [Setup Guide](docs/implementation-guide.md) |
+| **Windsurf** | Symlink to `~/.windsurf/skills/` | [Setup Guide](docs/implementation-guide.md) |
+| **Codex** | Clone or symlink | [`.codex/INSTALL.md`](.codex/INSTALL.md) |
+| **VS Code** | Install AI extension (Cline, Continue, Aider) | [VS Code Setup](docs/vs-code-setup.md) |
 
-See [docs/implementation-guide.md](docs/implementation-guide.md) for detailed setup instructions.
+For detailed platform-specific setup, see [docs/implementation-guide.md](docs/implementation-guide.md) and [docs/vs-code-setup.md](docs/vs-code-setup.md).
 
 ## Quick Start
 

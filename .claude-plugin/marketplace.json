@@ -1,15 +1,31 @@
 {
-  "name": "ruby-on-rails-igmarin-skills-dev",
-  "description": "Development marketplace for Rails skills library",
+  "$schema": "https://json.schemastore.org/claude-plugin-marketplace.json",
+  "name": "rails-agent-skills-marketplace",
+  "displayName": "Rails Agent Skills",
+  "description": "Curated library of AI agent skills for Ruby on Rails development. Includes code review, architecture, security, testing (RSpec), engines, service objects, DDD patterns, and workflow automation.",
   "owner": {
-    "name": "igmarin"
+    "name": "igmarin",
+    "url": "https://github.com/igmarin"
   },
   "plugins": [
     {
-      "name": "my-cursor-skills",
-      "description": "Ruby on Rails skills library: code review, architecture, security, engines, service objects, RSpec testing, and development workflow patterns",
+      "name": "rails-agent-skills",
+      "displayName": "Rails Agent Skills",
+      "description": "Curated library of AI agent skills for Ruby on Rails development. Includes code review, architecture, security, testing (RSpec), engines, service objects, DDD patterns, and workflow automation.",
       "version": "1.0.0",
-      "source": "./"
+      "source": "./",
+      "keywords": [
+        "rails",
+        "ruby",
+        "skills",
+        "rspec",
+        "code-review",
+        "architecture",
+        "security",
+        "engines",
+        "ddd",
+        "testing"
+      ]
     }
   ]
 }

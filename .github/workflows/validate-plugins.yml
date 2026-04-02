@@ -1,0 +1,198 @@
+name: Validate Plugin Manifests
+
+on:
+  push:
+    paths:
+      - '.claude-plugin/**/*.json'
+      - '.cursor-plugin/**/*.json'
+      - '.windsurf-plugin/**/*.json'
+      - '.codex/**/*.json'
+      - '.github/workflows/validate-plugins.yml'
+  pull_request:
+    paths:
+      - '.claude-plugin/**/*.json'
+      - '.cursor-plugin/**/*.json'
+      - '.windsurf-plugin/**/*.json'
+      - '.codex/**/*.json'
+
+jobs:
+  validate-schemas:
+    name: Validate Plugin Schemas
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install validation tools
+        run: |
+          npm install -g ajv-cli jsonschema
+
+      - name: Validate Claude Code plugin.json
+        run: |
+          echo "Validating .claude-plugin/plugin.json..."
+          jq '.' .claude-plugin/plugin.json > /dev/null
+          echo "✓ Valid JSON"
+
+          # Check required fields
+          jq -e '.name' .claude-plugin/plugin.json > /dev/null && echo "✓ name field present" || (echo "✗ missing name field" && exit 1)
+          jq -e '.displayName' .claude-plugin/plugin.json > /dev/null && echo "✓ displayName field present" || (echo "✗ missing displayName field" && exit 1)
+          jq -e '.version' .claude-plugin/plugin.json > /dev/null && echo "✓ version field present" || (echo "✗ missing version field" && exit 1)
+          jq -e '.author.name' .claude-plugin/plugin.json > /dev/null && echo "✓ author.name field present" || (echo "✗ missing author.name field" && exit 1)
+
+      - name: Validate Claude Code marketplace.json
+        run: |
+          echo "Validating .claude-plugin/marketplace.json..."
+          jq '.' .claude-plugin/marketplace.json > /dev/null
+          echo "✓ Valid JSON"
+
+          # Check required fields
+          jq -e '.name' .claude-plugin/marketplace.json > /dev/null && echo "✓ name field present" || (echo "✗ missing name field" && exit 1)
+          jq -e '.plugins | length > 0' .claude-plugin/marketplace.json > /dev/null && echo "✓ plugins array present" || (echo "✗ missing plugins array" && exit 1)
+          jq -e '.owner.name' .claude-plugin/marketplace.json > /dev/null && echo "✓ owner.name field present" || (echo "✗ missing owner.name field" && exit 1)
+
+      - name: Validate Cursor plugin.json
+        run: |
+          echo "Validating .cursor-plugin/plugin.json..."
+          jq '.' .cursor-plugin/plugin.json > /dev/null
+          echo "✓ Valid JSON"
+
+          # Check required fields
+          jq -e '.name' .cursor-plugin/plugin.json > /dev/null && echo "✓ name field present" || (echo "✗ missing name field" && exit 1)
+          jq -e '.displayName' .cursor-plugin/plugin.json > /dev/null && echo "✓ displayName field present" || (echo "✗ missing displayName field" && exit 1)
+
+      - name: Validate Windsurf plugin.json
+        run: |
+          echo "Validating .windsurf-plugin/plugin.json..."
+          jq '.' .windsurf-plugin/plugin.json > /dev/null
+          echo "✓ Valid JSON"
+
+          # Check required fields
+          jq -e '.name' .windsurf-plugin/plugin.json > /dev/null && echo "✓ name field present" || (echo "✗ missing name field" && exit 1)
+          jq -e '.displayName' .windsurf-plugin/plugin.json > /dev/null && echo "✓ displayName field present" || (echo "✗ missing displayName field" && exit 1)
+
+      - name: Check consistency across platforms
+        run: |
+          echo "Checking consistency across all platform configs..."
+
+          # Extract name from all configs
+          CLAUDE_NAME=$(jq -r '.name' .claude-plugin/plugin.json)
+          CURSOR_NAME=$(jq -r '.name' .cursor-plugin/plugin.json)
+          WINDSURF_NAME=$(jq -r '.name' .windsurf-plugin/plugin.json)
+
+          echo "Claude Code name: $CLAUDE_NAME"
+          echo "Cursor name: $CURSOR_NAME"
+          echo "Windsurf name: $WINDSURF_NAME"
+
+          if [ "$CLAUDE_NAME" != "$CURSOR_NAME" ]; then
+            echo "✗ Name mismatch between Claude and Cursor"
+            exit 1
+          fi
+
+          if [ "$CLAUDE_NAME" != "$WINDSURF_NAME" ]; then
+            echo "✗ Name mismatch between Claude and Windsurf"
+            exit 1
+          fi
+
+          echo "✓ All names are consistent"
+
+          # Check versions match
+          CLAUDE_VERSION=$(jq -r '.version' .claude-plugin/plugin.json)
+          CURSOR_VERSION=$(jq -r '.version' .cursor-plugin/plugin.json)
+          WINDSURF_VERSION=$(jq -r '.version' .windsurf-plugin/plugin.json)
+
+          echo "Claude Code version: $CLAUDE_VERSION"
+          echo "Cursor version: $CURSOR_VERSION"
+          echo "Windsurf version: $WINDSURF_VERSION"
+
+          if [ "$CLAUDE_VERSION" != "$CURSOR_VERSION" ]; then
+            echo "✗ Version mismatch between Claude and Cursor"
+            exit 1
+          fi
+
+          if [ "$CLAUDE_VERSION" != "$WINDSURF_VERSION" ]; then
+            echo "✗ Version mismatch between Claude and Windsurf"
+            exit 1
+          fi
+
+          echo "✓ All versions are consistent"
+
+      - name: Validate SKILL.md frontmatter
+        run: |
+          echo "Validating SKILL.md frontmatter..."
+
+          # Find all SKILL.md files
+          skill_count=0
+          for skill_file in $(find . -name "SKILL.md" -not -path "./.git/*"); do
+            skill_count=$((skill_count + 1))
+            echo "Checking $skill_file..."
+
+            # Check if file starts with YAML frontmatter
+            if ! head -n 5 "$skill_file" | grep -q "^---$"; then
+              echo "✗ $skill_file missing YAML frontmatter"
+              exit 1
+            fi
+
+            echo "✓ $skill_file has valid frontmatter"
+          done
+
+          echo "Validated $skill_count skill files"
+
+      - name: Report validation results
+        if: success()
+        run: |
+          echo "✅ All plugin manifests are valid!"
+          echo ""
+          echo "Summary:"
+          echo "- Claude Code plugin.json: ✓"
+          echo "- Claude Code marketplace.json: ✓"
+          echo "- Cursor plugin.json: ✓"
+          echo "- Windsurf plugin.json: ✓"
+          echo "- Cross-platform consistency: ✓"
+          echo "- SKILL.md frontmatter: ✓"
+
+  lint-json:
+    name: Lint JSON Files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install prettier
+        run: npm install -g prettier
+
+      - name: Check JSON formatting
+        run: |
+          echo "Checking JSON formatting..."
+          files=".claude-plugin/plugin.json .claude-plugin/marketplace.json .cursor-plugin/plugin.json .windsurf-plugin/plugin.json"
+
+          for file in $files; do
+            if prettier --check "$file" 2>/dev/null; then
+              echo "✓ $file is properly formatted"
+            else
+              echo "✗ $file needs formatting"
+              echo "Run: prettier --write \"$file\""
+              exit 1
+            fi
+          done
+
+      - name: Check for trailing commas and syntax
+        run: |
+          echo "Checking JSON syntax..."
+          for file in .claude-plugin/plugin.json .claude-plugin/marketplace.json .cursor-plugin/plugin.json .windsurf-plugin/plugin.json; do
+            if jq empty "$file" 2>/dev/null; then
+              echo "✓ $file: valid JSON"
+            else
+              echo "✗ $file: invalid JSON"
+              exit 1
+            fi
+          done
