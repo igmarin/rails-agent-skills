@@ -1,0 +1,6 @@
+# frozen_string_literal: true
+
+source "https://rubygems.org"
+
+gem "minitest"
+# Add any other development-only gems here if needed, e.g., for linters

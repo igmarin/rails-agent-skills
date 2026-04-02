@@ -123,74 +123,11 @@ Here is the recommended, step-by-step workflow for building a new feature from s
 
 *For more detailed diagrams of these flows, see the **[Workflow Guide](docs/workflow-guide.md)**.*
 
-## Platforms
+## Platforms & Quick Start
 
-Works with **Gemini CLI**, **Claude Code**, **Cursor**, **Windsurf**, **Codex**, and **VS Code** (with AI extensions).
+To integrate these skills with your preferred AI development environment (such as Gemini CLI, Cursor, Windsurf, Claude Code, Codex, or RubyMine), please refer to the comprehensive **[IDE Integration Guide](docs/ide-integration-guide.md)**.
 
-| Platform | Setup | Docs |
-|----------|-------|------|
-| **Gemini CLI** | Global config symlink | [Setup Guide](docs/implementation-guide.md) |
-| **Claude Code** | Shell function with `--plugin-dir` in `~/.zshrc` / `~/.bashrc` | [Setup Guide](docs/implementation-guide.md) |
-| **Cursor** | Symlink to `~/.cursor/skills/` | [Setup Guide](docs/implementation-guide.md) |
-| **Windsurf** | Symlink to `~/.windsurf/skills/` | [Setup Guide](docs/implementation-guide.md) |
-| **Codex** | Clone or symlink | [`.codex/INSTALL.md`](.codex/INSTALL.md) |
-| **VS Code** | Install AI extension (Cline, Continue, Aider) | [VS Code Setup](docs/vs-code-setup.md) |
-
-For detailed platform-specific setup, see [docs/implementation-guide.md](docs/implementation-guide.md) and [docs/vs-code-setup.md](docs/vs-code-setup.md).
-
-## Quick Start
-
-### Gemini CLI
-
-```bash
-# 1. Clone the repo (once per machine)
-git clone git@github.com:igmarin/rails-agent-skills.git ~/skills/rails-agent-skills
-
-# 2. Symlink GEMINI.md to the Gemini CLI global config directory
-ln -s ~/skills/rails-agent-skills/GEMINI.md ~/.gemini/GEMINI.md
-```
-
-### Cursor
-
-```bash
-# Option A: Symlink (if you already have the repo cloned)
-ln -s /path/to/rails-agent-skills ~/.cursor/skills-cursor/rails-agent-skills
-
-# Option B: Clone directly
-git clone git@github.com:igmarin/rails-agent-skills.git ~/.cursor/skills-cursor/rails-agent-skills
-```
-
-### Codex
-
-```bash
-# Option A: Clone directly into Codex skills
-git clone git@github.com:igmarin/rails-agent-skills.git ~/.codex/skills/rails-agent-skills
-
-# Option B: Symlink (if you already have the repo cloned)
-ln -s /path/to/rails-agent-skills ~/.codex/skills/rails-agent-skills
-```
-
-### Claude Code
-
-```bash
-# 1. Clone the repo (once per machine)
-git clone git@github.com:igmarin/rails-agent-skills.git ~/skills/rails-agent-skills
-
-# 2. Add a shell function to your ~/.zshrc (or ~/.bashrc)
-echo '
-claude() {
-  command claude --plugin-dir ~/skills/rails-agent-skills "$@"
-}' >> ~/.zshrc
-
-# 3. Reload your shell
-source ~/.zshrc
-```
-
-Skills are now available automatically in every project, including `claude resume <id>` and any other subcommand.
-
-**Updating:** `git pull` inside `~/skills/rails-agent-skills` — no restart needed, the function always loads the latest version.
-
-**New machine:** repeat the three steps above.
+This guide provides detailed, step-by-step instructions for both the symlink-based and the recommended Model Context Protocol (MCP) server approaches for each platform.
 
 ## Skills Catalog
 
