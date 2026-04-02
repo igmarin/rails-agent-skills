@@ -1,14 +1,16 @@
 ---
 name: rails-agent-skills
 description: >
-  Use when starting any conversation involving Rails development. Establishes how to find
-  and use available skills, requiring skill invocation before responding when a skill
-  might apply.
+  Use to discover and orchestrate specialized Rails development skills.
+  Applies when initiating any Rails-related task, seeking workflow guidance,
+  or identifying the most relevant skill for a given objective.
 ---
 
-# Rails Agent Skills
+# Rails Agent Skills: Orchestration and Discovery
 
-This skill library provides specialized knowledge for Ruby on Rails development. When a skill might apply to the current task, invoke it before responding.
+**Core principle:** This skill serves as the central hub for discovering, understanding, and orchestrating specialized Ruby on Rails development skills. It guides agents to select the most appropriate skill for a given task and ensures adherence to core development mandates.
+
+When a skill might apply to the current task, invoke it before responding. If a task requires coding, always adhere to the Tests Gate Implementation mandate.
 
 ## CROSS-CUTTING MANDATE: Tests Gate Implementation
 
@@ -55,15 +57,15 @@ ONLY THEN can implementation code be written.
 
 | Skill | Use when... |
 | ----- | ----------- |
-| **create-prd** | User asks to plan a feature, write requirements, or create a PRD |
-| **generate-tasks** | User asks for implementation steps, task breakdown, or checklist |
-| **jira-ticket-planning** | User wants Jira-ready tickets, sprint placement, or issues created from a plan |
+| **create-prd** | Planning a new feature, defining requirements, or creating a Product Requirements Document (PRD). |
+| **generate-tasks** | Breaking down a PRD or feature into actionable implementation steps, tasks, or a checklist. |
+| **jira-ticket-planning** | Drafting or creating Jira tickets from a plan, including sprint placement and issue classification. |
 
 ### Rails Code Quality
 
 | Skill | Use when... |
 | ----- | ----------- |
-| **rails-code-review** | Reviewing Rails PRs, controllers, models, migrations, queries — giving a review |
+| **rails-code-review** | Conducting a code review of Rails pull requests, controllers, models, migrations, or queries. |
 | **rails-review-response** | Received code review feedback and need to evaluate, respond, or implement it |
 | **rails-architecture-review** | Reviewing app structure, boundaries, fat models/controllers |
 | **rails-security-review** | Checking auth, params, redirects, XSS, CSRF, SQLi |
