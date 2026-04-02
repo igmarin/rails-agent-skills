@@ -1,12 +1,9 @@
 ---
 name: rails-graphql-best-practices
 description: >
-  Use when building or reviewing GraphQL APIs in a Ruby on Rails application using
-  the graphql-ruby gem. Covers schema design, type and mutation conventions, N+1
-  prevention with dataloader or graphql-batch, field-level authorization, query
-  depth and complexity limits, error handling patterns, testing resolvers and
-  mutations with RSpec, and documentation via schema descriptions and YARD.
-  Also applies when adding new queries, mutations, or types to an existing schema.
+  Use when building or reviewing GraphQL APIs in Rails with the graphql-ruby gem.
+  Covers schema design, N+1 prevention with dataloaders, field-level auth, query
+  limits, error handling, and testing resolvers/mutations with RSpec.
 ---
 
 # Rails GraphQL Best Practices
@@ -280,7 +277,7 @@ end
 **API Documentation tooling for GraphQL:**
 - Prefer **Insomnia** or **GraphQL Playground** over Postman for GraphQL endpoints
 - Postman REST collections do not map cleanly to GraphQL queries/mutations
-- See `api-postman-collection` for notes on this distinction
+- See `api-rest-collection` for notes on this distinction
 
 ## Common Mistakes
 
@@ -315,4 +312,4 @@ end
 | **rails-code-conventions** | Per-area rules for resolver classes, models, services |
 | **rails-security-review** | Auth, introspection disable, query depth/complexity limits |
 | **yard-documentation** | Document resolver Ruby classes |
-| **api-postman-collection** | Note: prefer Insomnia or GraphQL Playground for GraphQL endpoints |
+| **api-rest-collection** | Note: prefer Insomnia or GraphQL Playground for GraphQL endpoints |

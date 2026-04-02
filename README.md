@@ -9,7 +9,7 @@
 
 ## Methodology
 
-This skill library is built on three core principles that shape how every skill operates.
+This skill library is built on core principles that shape how every skill operates. For detailed guidance on skill design, read the official [Skill Design Principles](docs/skill-design-principles.md).
 
 ### 1. Tests Gate Implementation
 
@@ -39,24 +39,9 @@ Why this matters:
 - A test you never saw fail could be testing existing behavior, not the new feature
 - Implementation code written before the test is biased by what you built, not what's required
 
-### 2. Structured Skill Design
+**Generated output:** All generated artifacts (documentation, YARD comments, Postman collections, examples) must be in **English** unless the user explicitly requests another language. This is reflected in the skill template and in `yard-documentation` and `api-rest-collection`.
 
-Each skill follows a consistent structure inspired by [superpowers](https://github.com/obra/superpowers) best practices:
-
-| Section | Purpose |
-|---------|---------|
-| **YAML Frontmatter** | Discovery triggers ("Use when...") — helps AI agents find the right skill |
-| **Quick Reference** | Scannable table for fast lookup |
-| **HARD-GATE** | Non-negotiable rules that cannot be skipped |
-| **Common Mistakes** | "Mistake vs Reality" table that prevents rationalizations |
-| **Red Flags** | Signals that the skill is being violated |
-| **Integration** | Related skills and when to chain them |
-
-HARD-GATEs use explicit blocking language ("DO NOT", "CANNOT", "ONLY THEN") because AI agents are susceptible to rationalization — vague guidelines get optimized away under pressure.
-
-**Generated output:** All generated artifacts (documentation, YARD comments, Postman collections, examples) must be in **English** unless the user explicitly requests another language. This is reflected in the skill template and in `yard-documentation` and `api-postman-collection`.
-
-### 3. Workflow Chaining
+### 2. Workflow Chaining
 
 Skills are designed to be used in sequence, not in isolation. Each skill's **Integration** table points to the next skill in the chain. The primary daily workflow is:
 
@@ -80,9 +65,9 @@ PR
 
 See [docs/workflow-guide.md](docs/workflow-guide.md) for the full TDD Feature Loop and all workflow diagrams.
 
-**Note:** `jira-ticket-planning` is an **optional** step. The assistant should **not** push for Jira ticket generation unless the user asks explicitly (e.g. "turn this into Jira tickets") or the context clearly indicates work should be mapped to a Jira board/sprint.
+**Note:** `ticket-planning` is an **optional** step. The assistant should **not** push for Jira ticket generation unless the user asks explicitly (e.g. "turn this into Jira tickets") or the context clearly indicates work should be mapped to a Jira board/sprint.
 
-### 4. Rails-First Pattern Reuse
+### 3. Rails-First Pattern Reuse
 
 This library intentionally reuses proven patterns from broader agent-skill libraries, but translates them into a **Rails-first** workflow instead of copying generic frontend-oriented skills one-to-one.
 
@@ -96,6 +81,47 @@ This library intentionally reuses proven patterns from broader agent-skill libra
 | Skill authoring conventions | `docs/skill-template.md` |
 
 The rule of thumb is: **reuse patterns, not names**. If a broader skill maps cleanly to Rails/RSpec/YARD workflows, absorb the pattern into the existing chain. Create a new skill only when there is a real Rails-specific workflow gap.
+
+## How to Build a Feature (Your Daily Workflow)
+
+*For a practical guide on how to talk to the AI and effectively invoke these workflows, please see our **[How to Invoke a Workflow Guide](docs/workflow-guide.md#how-to-invoke-a-workflow-a-practical-guide)**.*
+
+Here is the recommended, step-by-step workflow for building a new feature from scratch using this skill library. This ensures every feature is well-planned, robustly tested, and adheres to project quality standards.
+
+**Goal:** Build a new feature, e.g., "Feature A"
+
+**Step 1: Planning & Task Breakdown**
+*   **Action:** Define the feature's requirements.
+    *   **Use Skill:** [`create-prd`](create-prd/)
+*   **Then:** Break the PRD into a detailed, TDD-ready checklist.
+    *   **Use Skill:** [`generate-tasks`](generate-tasks/)
+
+**Step 2: Start the TDD Cycle**
+*   **Action:** Pick the first, highest-value "slice" of behavior from your task list.
+*   **Action:** Get guidance on choosing the right *type* of test to write first (e.g., a request spec).
+    *   **Use Skill:** [`rails-tdd-slices`](rails-tdd-slices/)
+*   **Action:** Write the first failing test. **Crucially, run it and watch it fail.**
+    *   **Use Skill:** [`rspec-best-practices`](rspec-best-practices/)
+
+**Step 3: Implementation**
+*   **Action:** Write the minimum amount of application code required to make your failing test pass.
+    *   **Use Skills:** [`ruby-service-objects`](ruby-service-objects/) for business logic, [`rails-code-conventions`](rails-code-conventions/) for general code quality.
+
+**Step 4: Verification**
+*   **Action:** Run the test again and watch it pass.
+*   **Action:** Run linters and the full test suite to ensure no regressions. Refactor your new code if needed.
+
+**Step 5: Documentation & Self-Review**
+*   **Action:** Add inline documentation to any new public classes or methods.
+    *   **Use Skill:** [`yard-documentation`](yard-documentation/)
+*   **Action:** Perform a self-review of your changes.
+    *   **Use Skill:** [`rails-code-review`](rails-code-review/)
+
+**Step 6: Responding to Peer Review**
+*   **Action:** When you receive feedback from teammates, evaluate and implement their suggestions systematically.
+    *   **Use Skill:** [`rails-review-response`](rails-review-response/)
+
+*For more detailed diagrams of these flows, see the **[Workflow Guide](docs/workflow-guide.md)**.*
 
 ## Platforms
 
@@ -174,7 +200,7 @@ Skills are now available automatically in every project, including `claude resum
 |-------|-------------|
 | [create-prd](create-prd/) | Generate Product Requirements Documents from feature descriptions |
 | [generate-tasks](generate-tasks/) | Break down PRDs into step-by-step implementation task lists |
-| [jira-ticket-planning](jira-ticket-planning/) | Draft or create Jira tickets from plans; sprint placement and classification |
+| [ticket-planning](ticket-planning/) | Draft or create Jira tickets from plans; sprint placement and classification |
 
 ### Rails Code Quality
 
@@ -189,7 +215,7 @@ Skills are now available automatically in every project, including `claude resum
 | [rails-code-conventions](rails-code-conventions/) | Daily coding checklist: DRY/YAGNI/PORO/CoC/KISS; linter as style SoT; structured logging; per-path rules |
 | [rails-background-jobs](rails-background-jobs/) | Design idempotent background jobs with Active Job / Solid Queue |
 | [rails-graphql-best-practices](rails-graphql-best-practices/) | GraphQL schema design, N+1 prevention, authorization, error handling, and testing with graphql-ruby |
-| [api-postman-collection](api-postman-collection/) | Generate or update Postman Collection (JSON v2.1) for REST endpoints; use Insomnia for GraphQL |
+| [api-rest-collection](api-rest-collection/) | Generate or update Postman Collection (JSON v2.1) for REST endpoints; use Insomnia for GraphQL |
 
 ### DDD & Domain Modeling
 
@@ -255,7 +281,7 @@ flowchart TD
     dddModeling --> generateTasks
     dddModeling --> railsConventions
 
-    generateTasks --> jiraPlanning[jira-ticket-planning]
+    generateTasks --> jiraPlanning[ticket-planning]
     generateTasks --> tddSlices[rails-tdd-slices]
 
     tddSlices --> rspecBest[rspec-best-practices]
@@ -289,7 +315,7 @@ flowchart TD
     graphql --> secReview
     graphql --> yardDoc
 
-    engineAuthor --> postman[api-postman-collection]
+    engineAuthor --> postman[api-rest-collection]
     engineDocs[rails-engine-docs] --> postman
 
     bugTriage[rails-bug-triage] --> tddSlices
@@ -307,17 +333,7 @@ flowchart TD
 
 ## How Skills Work
 
-Each skill is a `SKILL.md` file in its own directory. Skills follow a consistent structure:
-
-1. **YAML Frontmatter** — `name` and `description` (triggers for skill discovery)
-2. **Quick Reference** — Scannable table at the top
-3. **Core Rules / Process** — The main instructions
-4. **HARD-GATE** — Non-negotiable blockers (where applicable)
-5. **Common Mistakes** — "Mistake vs Reality" table
-6. **Red Flags** — Signals something is going wrong
-7. **Integration** — Related skills and when to chain them
-
-See [docs/architecture.md](docs/architecture.md) for the full conventions spec.
+Each skill is a `SKILL.md` file in its own directory. For detailed conventions and structure, refer to the [Skill Design Principles](docs/skill-design-principles.md).
 
 ## Typical Workflows
 
@@ -326,7 +342,7 @@ Tests are a **gate** between planning and implementation. See [docs/workflow-gui
 | Workflow | Skill Chain |
 |----------|-------------|
 | **TDD Feature Loop** *(primary daily workflow)* | rails-tdd-slices → **[Test Feedback checkpoint]** → **[Implementation Proposal checkpoint]** → implement → **[Linters + Suite gate]** → yard-documentation → rails-code-review → rails-review-response (on feedback) → PR |
-| **New feature** | create-prd → generate-tasks → (optional **jira-ticket-planning**) → *TDD Feature Loop* |
+| **New feature** | create-prd → generate-tasks → (optional **ticket-planning**) → *TDD Feature Loop* |
 | **DDD-first feature** | create-prd → ddd-ubiquitous-language → ddd-boundaries-review → ddd-rails-modeling → generate-tasks → *TDD Feature Loop* |
 | **Bug fix** | rails-bug-triage → rails-tdd-slices → **[write reproduction spec, verify failure]** → fix → verify passes → rails-code-review |
 | **Code review + response** | rails-code-review → rails-review-response (on feedback) → re-review if Critical items addressed |
@@ -341,15 +357,8 @@ Tests are a **gate** between planning and implementation. See [docs/workflow-gui
 
 ## Creating New Skills
 
-See [docs/skill-template.md](docs/skill-template.md) for the template and conventions.
-
-Prefer extending an existing skill when the new behavior is just a tighter Rails adaptation of a pattern the library already covers. Create a new skill when the workflow has:
-
-- a distinct trigger
-- a different decision tree
-- a different HARD-GATE or verification loop
-- clear integration points that would otherwise bloat an existing skill
+For guidance on skill authoring, refer to the [Skill Design Principles](docs/skill-design-principles.md) and the [Skill Template](docs/skill-template.md).
 
 ## Acknowledgments
 
-Huge thanks to **[Mumo Carlos (@mumoc)](https://github.com/mumoc)**. His mentorship has shaped my growth as a developer and influenced many of the habits and practices reflected in this library — not only the **jira-ticket-planning** workflow he shared, but the broader discipline around quality, clarity, and thoughtful use of tools. This repo and the learning behind it would not be what they are without him.
+Huge thanks to **[Mumo Carlos (@mumoc)](https://github.com/mumoc)**. His mentorship has shaped my growth as a developer and influenced many of the habits and practices reflected in this library — not only the **ticket-planning** workflow he shared, but the broader discipline around quality, clarity, and thoughtful use of tools. This repo and the learning behind it would not be what they are without him.

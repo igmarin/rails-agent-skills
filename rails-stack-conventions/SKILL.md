@@ -1,13 +1,10 @@
 ---
 name: rails-stack-conventions
 description: >
-  Use when writing or generating new Rails code for a project that uses PostgreSQL,
-  Hotwire (Turbo + Stimulus), and Tailwind CSS. Covers Ruby naming conventions,
-  MVC structure, ActiveRecord query patterns, Turbo Frames and Streams, Stimulus
-  controller conventions, Tailwind component patterns, error handling defaults,
-  performance practices, and security defaults. Do NOT use for design principles
-  or per-path architecture rules — use rails-code-conventions for those.
-  Also applies when setting up new controllers, views, or models in this stack.
+  Use when writing new Rails code for a project using PostgreSQL, Hotwire, and
+  Tailwind CSS. Covers MVC structure, query patterns, Turbo Frames/Streams,
+  Stimulus controllers, and Tailwind components. For design principles, use
+  rails-code-conventions.
 ---
 
 # Rails Stack Conventions
@@ -16,7 +13,7 @@ When **writing or generating** code for this project, follow these conventions. 
 
 **Core principle:** Follow Rails conventions. When in doubt, check the official Rails guides.
 
-**Style:** If the project uses **RuboCop**, treat it as the source of truth for formatting and cops. For cross-cutting design principles (DRY, YAGNI, structured logging, rules by directory), use **rails-code-conventions**.
+**Style:** If the project uses a **linter**, treat it as the source of truth for formatting and cops. For cross-cutting design principles (DRY, YAGNI, structured logging, rules by directory), use **rails-code-conventions**.
 
 ## HARD-GATE: Tests Gate Implementation
 

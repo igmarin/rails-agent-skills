@@ -114,6 +114,24 @@ Prefer the highest-value spec that proves the behavior end-to-end enough to matt
 - Prefer **expect** syntax for assertions.
 - Keep test code concise; avoid unnecessary complexity or duplication.
 
+**Bad: Vague test description:**
+
+```ruby
+# Not clear what's being tested, why, or under what conditions
+it "should work correctly" do
+  # ...
+end
+```
+
+**Good: Clear, behavior-driven test description:**
+
+```ruby
+# Explicitly states the behavior and the conditions under which it occurs
+it "creates an order with pending status when valid parameters are provided" do
+  # ...
+end
+```
+
 ## Structure
 
 - **describe** for the class, module, or behavior; **context** for scenarios (e.g. "when valid", "when user is missing").
@@ -124,7 +142,7 @@ Prefer the highest-value spec that proves the behavior end-to-end enough to matt
 
 - Use **let** and **let!** for test data; keep setup minimal and necessary.
 - Prefer **factories** (e.g. FactoryBot) over fixtures.
-- Prefer `let` over `let!` when the value isn't needed for setup (aligns with RuboCop-RSpec style).
+- Prefer `let` over `let!` when the value isn't needed for setup (improves test performance and clarity).
 - Use `let_it_be` only if the project already includes `test-prof`; otherwise do not introduce it implicitly.
 
 ## Independence and Isolation

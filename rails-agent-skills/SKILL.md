@@ -1,9 +1,9 @@
 ---
 name: rails-agent-skills
 description: >
-  Use to discover and orchestrate specialized Rails development skills.
-  Applies when initiating any Rails-related task, seeking workflow guidance,
-  or identifying the most relevant skill for a given objective.
+  This skill is the starting point for all Rails tasks. It identifies the
+  correct, more specialized skill to use for a given task, like code reviews,
+  TDD, or documentation, and enforces the 'Tests Gate Implementation' mandate.
 ---
 
 # Rails Agent Skills: Orchestration and Discovery
@@ -59,38 +59,38 @@ ONLY THEN can implementation code be written.
 | ----- | ----------- |
 | **create-prd** | Planning a new feature, defining requirements, or creating a Product Requirements Document (PRD). |
 | **generate-tasks** | Breaking down a PRD or feature into actionable implementation steps, tasks, or a checklist. |
-| **jira-ticket-planning** | Drafting or creating Jira tickets from a plan, including sprint placement and issue classification. |
+| **ticket-planning** | Drafting or creating Jira tickets from a plan, including sprint placement and issue classification. |
 
 ### Rails Code Quality
 
 | Skill | Use when... |
 | ----- | ----------- |
 | **rails-code-review** | Conducting a code review of Rails pull requests, controllers, models, migrations, or queries. |
-| **rails-review-response** | Received code review feedback and need to evaluate, respond, or implement it |
-| **rails-architecture-review** | Reviewing app structure, boundaries, fat models/controllers |
-| **rails-security-review** | Checking auth, params, redirects, XSS, CSRF, SQLi |
-| **rails-migration-safety** | Planning or reviewing database migrations |
-| **rails-stack-conventions** | Writing new Rails code for PostgreSQL + Hotwire + Tailwind stack |
-| **rails-code-conventions** | Daily coding checklist: DRY/YAGNI/PORO/CoC/KISS, linter as style SoT, logging, rules by path |
+| **rails-review-response** | Evaluating, responding to, or implementing feedback received from a code review. |
+| **rails-architecture-review** | Reviewing the application\'s structure, domain boundaries, or addressing issues like \'fat models\' or \'fat controllers\'. |
+| **rails-security-review** | Auditing for common Rails vulnerabilities (e.g., authentication flaws, XSS, CSRF, SQL injection). |
+| **rails-migration-safety** | Planning or reviewing database migrations to ensure safety in production environments. |
+| **rails-stack-conventions** | Writing new Rails code specifically for a PostgreSQL, Hotwire, and Tailwind CSS stack, adhering to established conventions. |
+| **rails-code-conventions** | Applying daily coding checklist items such as DRY/YAGNI/PORO/CoC/KISS principles, using linters as style guides, structured logging, and path-specific rules. |
 | **rails-background-jobs** | Adding or reviewing background jobs |
-| **rails-graphql-best-practices** | Building or reviewing GraphQL APIs with graphql-ruby (schema, N+1, auth, mutations, testing) |
+| **rails-graphql-best-practices** | Building or reviewing GraphQL APIs with \`graphql-ruby\`, covering schema design, N+1 prevention, authorization, error handling, and testing. |
 
 ### DDD & Domain Modeling
 
 | Skill | Use when... |
 | ----- | ----------- |
-| **ddd-ubiquitous-language** | Clarifying domain terms, synonyms, and business glossary before modeling or refactoring |
-| **ddd-boundaries-review** | Reviewing bounded contexts, ownership, and language leakage in Rails codebases |
-| **ddd-rails-modeling** | Choosing Rails-first DDD modeling for entities, value objects, services, repositories, and events |
+| **ddd-ubiquitous-language** | Clarifying domain terms, resolving synonyms, or building a shared business glossary before modeling or refactoring. |
+| **ddd-boundaries-review** | Reviewing bounded contexts, ownership, and identifying language leakage within a Rails codebase. |
+| **ddd-rails-modeling** | Mapping Domain-Driven Design (DDD) concepts (entities, value objects, services, repositories, events) to Rails without over-engineering. |
 
 ### Ruby Patterns
 
 | Skill | Use when... |
 | ----- | ----------- |
-| **ruby-service-objects** | Creating service classes with .call pattern |
-| **ruby-api-client-integration** | Integrating external APIs (Auth/Client/Fetcher/Builder) |
+| **ruby-service-objects** | Creating service classes following the \`.call\` pattern, standardized responses, and transaction management. |
+| **ruby-api-client-integration** | Integrating external APIs using the layered Auth/Client/Fetcher/Builder pattern. |
 | **strategy-factory-null-calculator** | Building variant-based calculators |
-| **yard-documentation** | Writing or reviewing YARD docs for Ruby classes and public methods |
+| **yard-documentation** | Writing or reviewing YARD documentation for Ruby classes and public methods. |
 
 ### Testing
 
@@ -113,7 +113,7 @@ ONLY THEN can implementation code be written.
 | **rails-engine-installers** | Creating install generators |
 | **rails-engine-extraction** | Extracting code from host app to engine |
 | **rails-engine-compatibility** | Ensuring cross-version compatibility |
-| **api-postman-collection** | Creating or modifying REST API endpoints — generate/update Postman collection (not for GraphQL) |
+| **api-rest-collection** | Creating or modifying REST API endpoints — generate/update Postman collection (not for GraphQL) |
 
 ### Refactoring
 
@@ -126,7 +126,7 @@ ONLY THEN can implementation code be written.
 When multiple skills could apply:
 
 1. **TDD always** — rspec-best-practices TDD discipline applies whenever code is produced; use rails-tdd-slices when the first spec is not obvious
-2. **Planning skills first** (create-prd, generate-tasks; **jira-ticket-planning** when the team tracks work in Jira) — determine WHAT to build
+2. **Planning skills first** (create-prd, generate-tasks; **ticket-planning** when the team tracks work in Jira) — determine WHAT to build
 3. **Domain discovery skills next** (`ddd-ubiquitous-language`, `ddd-boundaries-review`, `ddd-rails-modeling`) — clarify business language when the domain is the hard part
 4. **Process skills second** (refactor-safely) — determine HOW to approach
 5. **Domain skills third** (rails-*, ruby-*) — guide specific implementation
@@ -147,7 +147,7 @@ When multiple skills could apply:
 rails-tdd-slices → **[Test Feedback checkpoint]** → **[Implementation Proposal checkpoint]** → implement → **[Linters + Suite gate]** → yard-documentation → rails-code-review → rails-review-response (on feedback) → PR
 
 **New feature:**
-create-prd → generate-tasks → (optional jira-ticket-planning) → *TDD Feature Loop*
+create-prd → generate-tasks → (optional ticket-planning) → *TDD Feature Loop*
 
 **DDD-first feature design:**
 create-prd → ddd-ubiquitous-language → ddd-boundaries-review → ddd-rails-modeling → generate-tasks → *TDD Feature Loop*

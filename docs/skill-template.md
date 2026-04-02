@@ -2,6 +2,8 @@
 
 Use this template when creating a new skill for the library.
 
+**For detailed guidance on skill design, read the official [Skill Design Principles](skill-design-principles.md).**
+
 Prefer improving an existing skill before creating a new one. Create a new skill only when the workflow has a distinct trigger, a different decision tree, or a HARD-GATE that would bloat another skill.
 
 ## Before You Write
@@ -32,8 +34,8 @@ rails-agent-skills/
 ---
 name: your-skill-name
 description: >
-  Use when [concrete trigger conditions that help AI agents discover this skill].
-  Covers [key topics, tools, patterns]. Also applies when [alternative triggers].
+  [Concise paragraph (1-3 sentences). First sentence states primary purpose.
+  Focus on trigger words and outcomes for LLM discovery].
 ---
 
 # Your Skill Title
@@ -120,77 +122,27 @@ ALWAYS [required action that must always happen].
 
 ## Conventions
 
-### Naming
+Refer to the [Skill Design Principles](skill-design-principles.md) for all naming, description, content, and formatting conventions.
 
-- Directory name: `kebab-case` (e.g., `rails-code-review`)
-- `name` in frontmatter: matches directory name exactly
-- Skill title in H1: human-readable (e.g., "Rails Code Review")
 
-### Description (CSO - Claude Search Optimization)
 
-- Start with "Use when..."
-- Include concrete trigger words (error names, tool names, patterns)
-- State both **what** the skill covers and **when** it applies
-- Do NOT summarize the workflow
-- Max 1024 characters total for frontmatter
 
-### Content
-
-- Write in English
-- **Generated output** (documentation, YARD comments, Postman collections, examples) must be in **English** unless the user explicitly requests another language
-- Use numbered steps for processes
-- Use tables for structured comparisons
-- Use code blocks for examples
-- Use `HARD-GATE` or `EXTREMELY-IMPORTANT` for non-negotiable rules
-- Include both "good" and "bad" examples where helpful
-- Keep `SKILL.md` focused; move detailed examples, edge cases, or large references into `reference.md` / `examples.md`
-- Prefer Rails-real terminology and file paths over generic abstractions
-- If style/tooling matters, tell the agent to detect and run the project's linter/test command instead of assuming one tool
 
 ### Sections Priority
 
-1. Quick Reference (always include)
-2. Common Mistakes (always include)
-3. Red Flags (always include)
-4. Integration (always include)
-5. HARD-GATE (only when the skill has non-negotiable rules)
-6. Checkpoints (only when the skill needs a pause-and-confirm step)
+Refer to the [Skill Design Principles](skill-design-principles.md) for required sections and their priority.
 
 ### Progressive Disclosure
 
-- Put only the minimum durable instructions in `SKILL.md`
-- Put longer examples, deeper rationale, or exhaustive matrices in `reference.md`
-- Put output samples or before/after examples in `examples.md`
-- Link directly to those files from `SKILL.md`; avoid deep nesting
+Refer to the [Skill Design Principles](skill-design-principles.md) for guidance on progressive disclosure.
 
 ### Create vs Extend
 
-Create a **new skill** when:
-
-- the trigger language is distinct
-- the workflow has a unique decision tree
-- the verification loop differs from existing skills
-- the skill will be reused independently in many tasks
-
-Extend an **existing skill** when:
-
-- the new guidance is just another branch of an existing workflow
-- the same trigger already applies
-- the same HARD-GATE and integration chain still fit
-- a new file would fragment discovery instead of improving it
+Refer to the [Skill Design Principles](skill-design-principles.md) for guidance on when to create a new skill versus extending an existing one.
 
 ### Quality Checklist
 
-Before finalizing a skill, verify:
-
-- [ ] The description is specific and includes trigger terms
-- [ ] The skill states both WHAT it covers and WHEN to use it
-- [ ] The main workflow is concise and actionable
-- [ ] The skill uses Rails/Ruby file paths or terms when relevant
-- [ ] The verification step is explicit
-- [ ] Related skills are named in `Integration`
-- [ ] `HARD-GATE` exists if the workflow has non-negotiable blockers
-- [ ] Large examples were moved out of `SKILL.md` when they add noise
+Refer to the [Skill Design Principles](skill-design-principles.md) for the comprehensive quality checklist.
 
 ### Adding to the Library
 

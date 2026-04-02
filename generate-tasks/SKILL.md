@@ -1,11 +1,10 @@
 ---
 name: generate-tasks
 description: >
-  Use when the user asks to create tasks, generate a task list, break down a PRD
-  into implementation steps, plan implementation, or create an implementation checklist.
-  Generates phased plans or step-by-step task lists in Markdown from a PRD or
-  feature description with checkboxes, relevant files, test commands, YARD,
-  documentation updates, and code-review gates after implementation.
+  Generates phased plans or step-by-step task lists in Markdown from a PRD
+  or feature description. Tasks include checkboxes, relevant file paths,
+  test commands, YARD documentation, and code-review gates for
+  Rails-oriented workflows.
 ---
 
 # Generating a Task List from Requirements
@@ -136,7 +135,7 @@ Based on: `prd-[feature-name].md` *(only if PRD was the source)*
 ### Notes
 
 - Tests live next to or mirror the code they cover.
-- Run tests: `bundle exec rspec` *(replace with project's test command)*
+- Run tests: `[project\'s test command]` *(replace with project's test command)*
 - After green tests: add YARD on public Ruby API, update README/diagrams/docs as needed, then self code review before PR.
 
 ## Instructions for Completing Tasks
@@ -246,7 +245,7 @@ Write for a **junior developer**: each sub-task should be a single, clear action
 | **create-prd** | Generate PRD first, then derive tasks from it |
 | **rails-tdd-slices** | When planning the best first failing spec or vertical slice for a Rails change |
 | **rails-stack-conventions** | When generating tasks for a Rails feature |
-| **jira-ticket-planning** | When the user also wants Jira ticket drafts or board placement from the same initiative |
+| **ticket-planning** | When the user also wants Jira ticket drafts or board placement from the same initiative |
 | **rspec-best-practices** | When generating test-related tasks |
 | **rails-bug-triage** | When the request starts from a bug report and needs reproduction plus sequencing |
 | **refactor-safely** | When tasks involve refactoring existing code |

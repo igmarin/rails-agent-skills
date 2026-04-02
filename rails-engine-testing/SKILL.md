@@ -1,10 +1,9 @@
 ---
 name: rails-engine-testing
 description: >
-  Use when setting up a dummy app, adding engine request specs, routing specs,
-  generator specs, reload-safety tests, host integration coverage, or improving
-  confidence in a Rails engine. Trigger words: dummy app, request spec, routing spec,
-  generator spec, config spec, reload-safety, integration test.
+  Use when creating or improving RSpec test coverage for Rails engines.
+  Covers dummy app setup, request, routing, generator, and configuration
+  specs for proving engine behavior within a host application.
 ---
 # Rails Engine Testing
 
@@ -24,7 +23,7 @@ Prefer integration confidence over isolated test quantity. The main goal is to p
 
 ## HARD-GATE
 
-**EVERY engine MUST have a dummy app for testing.**
+**EVERY engine MUST have a dummy app for testing.** This ensures the engine behaves correctly within a host application environment, proving its boot and mount process.
 
 ## Testing Order
 

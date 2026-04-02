@@ -45,7 +45,7 @@ Skills are located in subdirectories of this plugin. Read the relevant `SKILL.md
 |-------|-------------|
 | `create-prd` | User asks to plan a feature or write requirements |
 | `generate-tasks` | User asks for implementation steps or task breakdown |
-| `jira-ticket-planning` | User wants Jira-ready tickets from a plan |
+| `ticket-planning` | User wants Jira-ready tickets from a plan |
 
 ### Rails Code Quality
 | Skill | Use when... |
@@ -94,7 +94,7 @@ Skills are located in subdirectories of this plugin. Read the relevant `SKILL.md
 | `rails-engine-installers` | Creating install generators |
 | `rails-engine-extraction` | Extracting code from host app to engine |
 | `rails-engine-compatibility` | Ensuring cross-version compatibility |
-| `api-postman-collection` | Creating or updating Postman collections for REST API endpoints (not GraphQL) |
+| `api-rest-collection` | Creating or updating Postman collections for REST API endpoints (not GraphQL) |
 
 ### Refactoring
 | Skill | Use when... |
@@ -104,7 +104,7 @@ Skills are located in subdirectories of this plugin. Read the relevant `SKILL.md
 ## Skill Priority
 
 1. **TDD always** — `rspec-best-practices` applies whenever code is produced
-2. **Planning first** — `create-prd`, `generate-tasks` (optionally `jira-ticket-planning`)
+2. **Planning first** — `create-prd`, `generate-tasks` (optionally `ticket-planning`)
 3. **Domain discovery next** — `ddd-*` skills when domain is the hard part
 4. **Process skills** — `refactor-safely`
 5. **Domain skills** — `rails-*`, `ruby-*` for specific implementation

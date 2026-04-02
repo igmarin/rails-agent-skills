@@ -1,10 +1,10 @@
 ---
 name: create-prd
 description: >
-  Use when the user asks to create a PRD, define product requirements, plan a feature,
-  write a requirements document, or mentions PRD. Generates a clear, actionable Product
-  Requirements Document in Markdown from a feature description. Covers goals, user stories,
-  functional requirements, non-goals, and discovery prompts for Rails-oriented workflows.
+  Generates a clear, actionable Product Requirements Document (PRD) in Markdown
+  from a feature description. Use when a user asks to plan a feature, define
+  requirements, or create a PRD. Covers goals, user stories, requirements,
+  and non-goals for Rails-oriented workflows.
 ---
 
 # Generating a Product Requirements Document (PRD)
@@ -24,7 +24,7 @@ Create a clear, actionable PRD in Markdown that a junior developer can use to un
 | 3 | Identify likely implementation surface (when useful) | Rails-aware scope |
 | 4 | Generate PRD | `prd-[feature-name].md` |
 | 5 | Save to `/tasks/` | File on disk |
-| 6 | Suggest next step | Link to **generate-tasks** / optional **jira-ticket-planning** |
+| 6 | Suggest next step | Link to **generate-tasks** / optional **ticket-planning** |
 
 ## HARD-GATE
 
@@ -38,7 +38,7 @@ DO NOT start generating tasks without user confirmation.
 
 - User asks for a PRD, requirements doc, or to "plan a feature".
 - User describes a feature and you need to capture it in a structured way before implementation.
-- **Next step:** After saving the PRD, suggest `generate-tasks` for implementation planning and `jira-ticket-planning` only when the user also wants tickets or sprint placement.
+- **Next step:** After saving the PRD, suggest `generate-tasks` for implementation planning and `ticket-planning` only when the user also wants tickets or sprint placement.
 
 ## Process
 
@@ -135,7 +135,7 @@ Write for a **junior developer**: explicit, unambiguous, minimal jargon. Each re
 | Skill | When to chain |
 |-------|---------------|
 | **generate-tasks** | After PRD is approved — implementation + tests + YARD + docs + review tasks |
-| **jira-ticket-planning** | When the plan also needs Jira-ready tickets, classification, or sprint placement |
+| **ticket-planning** | When the plan also needs Jira-ready tickets, classification, or sprint placement |
 | **rails-architecture-review** | When PRD reveals architectural concerns |
 | **rails-engine-author** | When the PRD is clearly for a mountable engine or host-app integration |
 | **rails-stack-conventions** | When PRD is for a Rails feature |

@@ -124,4 +124,4 @@ When asked to write docs:
 | rails-engine-author | Host-app contract, structure, extension points to document |
 | rails-engine-installers | Install generators, setup steps to document |
 | rails-engine-release | Changelog, upgrade notes, version documentation |
-| api-postman-collection | When documenting or adding API endpoints (keep Postman collection in sync) |
+| api-rest-collection | When documenting or adding API endpoints (keep Postman collection in sync) |

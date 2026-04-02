@@ -1,10 +1,10 @@
 ---
 name: ruby-api-client-integration
 description: >
-  Use when integrating with external APIs, creating HTTP clients, building data pipelines
-  from external services, or adding new API consumers. Covers the layered Auth, Client,
-  Fetcher, Builder, and Domain Entity pattern with token caching, retry logic, pagination,
-  and FactoryBot hash factories for test data.
+  Use when integrating with external APIs in Ruby, creating HTTP clients,
+  or building data pipelines. Covers the layered Auth, Client, Fetcher,
+  Builder, and Domain Entity pattern with token caching, retry logic, and
+  FactoryBot hash factories for test data.
 ---
 
 # Ruby API Client Integration
