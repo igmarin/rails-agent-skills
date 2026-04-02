@@ -1,11 +1,10 @@
 ---
 name: rails-code-review
 description: >
-  Use when reviewing Rails pull requests, checking controller or model conventions,
-  validating migration safety, auditing query performance, or when the user asks
-  for a Rails code review. Covers routing, ActiveRecord, security, caching, jobs,
-  and Rails Way compliance. When you receive review feedback on your own code,
-  use rails-review-response instead.
+  Reviews Rails pull requests, focusing on controller/model conventions,
+  migration safety, query performance, and Rails Way compliance. Covers
+  routing, ActiveRecord, security, caching, and background jobs. Use when
+  reviewing existing Rails code for quality.
 ---
 
 # Rails Code Review (The Rails Way)
@@ -39,7 +38,7 @@ with a "Code review before merge" parent task.
 | Queries | N+1 prevention, `exists?` over `present?`, `find_each` for batches |
 | Migrations | Reversible, indexed, foreign keys, concurrent indexes |
 | Security | Strong params, parameterized queries, no `html_safe` abuse |
-| Caching | Fragment caching, Russian doll, ETags |
+| Caching | Fragment caching, nested caching, ETags |
 | Jobs | Idempotent, retriable, appropriate backend |
 
 ## Review Order
@@ -56,7 +55,7 @@ with a "Code review before merge" parent task.
 10. **I18n** — User-facing strings via I18n, lazy lookup in views, locale from user preferences or headers.
 11. **Sessions & Cookies** — No complex objects in session, signed/encrypted cookies, flash for temporary messages.
 12. **Security** — Strong params, parameterized queries, no unnecessary `raw`/`html_safe`, `protect_from_forgery`, CSP headers, masked sensitive data in logs.
-13. **Caching & Performance** — Fragment caching, Russian doll, `Rails.cache`, ETags, `EXPLAIN` for slow queries.
+13. **Caching & Performance** — Fragment caching, nested caching, `Rails.cache`, ETags, `EXPLAIN` for slow queries.
 14. **Background Jobs** — Active Job, idempotent and retriable, appropriate backend.
 15. **Testing (RSpec)** — BDD, descriptive blocks, `let`/`let!`, FactoryBot, shared examples, mocked external services.
 
@@ -116,7 +115,7 @@ Review → Categorize findings (Critical / Suggestion / Nice to have)
 | Skill | When to chain |
 |-------|---------------|
 | **rails-review-response** | When the developer receives feedback and must decide what to implement |
-| **api-postman-collection** | When reviewing API or endpoint changes (ensure Postman collection is updated) |
+| **api-rest-collection** | When reviewing API or endpoint changes (ensure Postman collection is updated) |
 | **rails-stack-conventions** | When writing new code (not reviewing) |
 | **rails-architecture-review** | When review reveals structural problems |
 | **rails-security-review** | When review reveals security concerns |

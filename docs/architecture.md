@@ -173,7 +173,7 @@ Adapt principles to context.
 
 - `rails-stack-conventions`
 - `rails-code-conventions`
-- `jira-ticket-planning`
+- `ticket-planning`
 - `ruby-service-objects`
 - `rails-background-jobs`
 - `ddd-rails-modeling`

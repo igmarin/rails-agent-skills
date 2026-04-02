@@ -1,10 +1,9 @@
 ---
 name: ruby-service-objects
 description: >
-  Use when creating new service classes, adding business logic classes, or refactoring
-  code into service objects. Covers the .call pattern, module namespacing, YARD documentation,
-  frozen_string_literal, standardized responses, orchestrator delegation, transaction
-  wrapping, and error handling conventions for Ruby on Rails.
+  Use when creating or refactoring Ruby service classes in Rails. Covers the
+  .call pattern, module namespacing, YARD documentation, standardized responses,
+  orchestrator delegation, transaction wrapping, and error handling conventions.
 ---
 
 # Ruby Service Objects
@@ -244,6 +243,86 @@ end
 - [ ] Graceful handling for non-critical failures
 - [ ] SQL sanitization for dynamic queries
 - [ ] `README.md` documenting the module
+
+## Examples
+
+**Bad: Business logic in controller:**
+
+```ruby
+# app/controllers/orders_controller.rb
+class OrdersController < ApplicationController
+  def create
+    @order = Order.new(order_params)
+    @order.status = 'pending'
+    @order.total_amount = calculate_total(@order.line_items)
+    if @order.save
+      send_order_confirmation_email(@order)
+      redirect_to @order, notice: 'Order was successfully created.'
+    else
+      render :new, status: :unprocessable_entity
+    end
+  end
+
+  private
+
+  def calculate_total(items)
+    # Complex pricing logic here...
+  end
+
+  def send_order_confirmation_email(order)
+    # Email sending logic here...
+  end
+end
+```
+
+**Good: Business logic extracted to service object:**
+
+```ruby
+# app/controllers/orders_controller.rb
+class OrdersController < ApplicationController
+  def create
+    result = Orders::CreateOrder.call(order_params.to_h.symbolize_keys)
+    if result[:success]
+      @order = result[:response][:order]
+      redirect_to @order, notice: 'Order was successfully created.'
+    else
+      @order = Order.new(order_params) # Re-initialize for form display
+      flash.now[:alert] = result[:response][:error][:message]
+      render :new, status: :unprocessable_entity
+    end
+  end
+end
+
+# app/services/orders/create_order.rb
+module Orders
+  class CreateOrder < RubyServiceObjects::BaseService # Assuming BaseService exists
+    def initialize(params)
+      @params = params
+    end
+
+    def call
+      # Complex business logic, transactions, and side effects here
+      # ...
+      order = Order.new(@params)
+      order.status = 'pending'
+      order.total_amount = calculate_total(order.line_items)
+
+      if order.save
+        OrderMailer.confirmation(order).deliver_later
+        success(order: order)
+      else
+        failure(order.errors.full_messages.to_sentence)
+      end
+    end
+
+    private
+
+    def calculate_total(items)
+      # ... complex pricing logic ...
+    end
+  end
+end
+```
 
 ## Common Mistakes
 
