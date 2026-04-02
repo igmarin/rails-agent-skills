@@ -99,10 +99,11 @@ The rule of thumb is: **reuse patterns, not names**. If a broader skill maps cle
 
 ## Platforms
 
-Works with **Claude Code**, **Cursor**, **Windsurf**, **Codex**, and **VS Code** (with AI extensions).
+Works with **Gemini CLI**, **Claude Code**, **Cursor**, **Windsurf**, **Codex**, and **VS Code** (with AI extensions).
 
 | Platform | Setup | Docs |
 |----------|-------|------|
+| **Gemini CLI** | Global config symlink | [Setup Guide](docs/implementation-guide.md) |
 | **Claude Code** | Global marketplace config | [Setup Guide](docs/implementation-guide.md) |
 | **Cursor** | Symlink to `~/.cursor/skills/` | [Setup Guide](docs/implementation-guide.md) |
 | **Windsurf** | Symlink to `~/.windsurf/skills/` | [Setup Guide](docs/implementation-guide.md) |
@@ -112,6 +113,16 @@ Works with **Claude Code**, **Cursor**, **Windsurf**, **Codex**, and **VS Code**
 For detailed platform-specific setup, see [docs/implementation-guide.md](docs/implementation-guide.md) and [docs/vs-code-setup.md](docs/vs-code-setup.md).
 
 ## Quick Start
+
+### Gemini CLI
+
+```bash
+# 1. Clone the repo (once per machine)
+git clone git@github.com:igmarin/rails-agent-skills.git ~/skills/rails-agent-skills
+
+# 2. Symlink GEMINI.md to the Gemini CLI global config directory
+ln -s ~/skills/rails-agent-skills/GEMINI.md ~/.gemini/GEMINI.md
+```
 
 ### Cursor
 
