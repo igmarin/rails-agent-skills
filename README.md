@@ -125,7 +125,7 @@ Here is the recommended, step-by-step workflow for building a new feature from s
 
 ## Platforms & Quick Start
 
-To integrate these skills with your preferred AI development environment (such as Gemini CLI, Cursor, Windsurf, Claude Code, Codex, or RubyMine), please refer to the comprehensive **[IDE Integration Guide](docs/ide-integration-guide.md)**.
+To integrate these skills with your preferred AI development environment (such as Gemini CLI, Cursor, Windsurf, Claude Code, Codex, or RubyMine), please refer to the **[Implementation Guide](docs/implementation-guide.md)**.
 
 This guide provides detailed, step-by-step instructions for both the symlink-based and the recommended Model Context Protocol (MCP) server approaches for each platform.
 
