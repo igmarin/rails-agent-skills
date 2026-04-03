@@ -2,8 +2,6 @@
 
 This plugin provides a library of specialized Rails development skills. When a task arrives, check if any skill applies and read it before responding.
 
-Skills are located in `~/skills/rails-agent-skills/<skill-name>/SKILL.md`. Read the relevant file with that path before responding to any matching task.
-
 ## CROSS-CUTTING MANDATE: Tests Gate Implementation
 
 ```text

@@ -96,11 +96,15 @@ Many CLIs can load skills from a designated directory.
         ln -s ~/skills/rails-agent-skills/GEMINI.md ~/.gemini/GEMINI.md
         ```
         (Requires starting a new session to pick up changes.)
-    *   **Claude Code:** Symlink `CLAUDE.md` to the global config directory. The CLAUDE.md references `~/skills/rails-agent-skills/` explicitly, so Claude knows where to find skill files in any project:
+    *   **Claude Code:** Two symlinks are required — one for global instructions, one for the `/skills` command:
         ```bash
-        ln -s ~/skills/rails-agent-skills/CLAUDE.md ~/.claude/CLAUDE.md
+        # 1. Global instructions (makes CLAUDE.md available in every session)
+        ln -sf ~/skills/rails-agent-skills/CLAUDE.md ~/.claude/CLAUDE.md
+
+        # 2. Skills directory (makes skills appear in /skills)
+        ln -sf ~/skills/rails-agent-skills ~/.claude/skills
         ```
-        Open a new session — skills are available automatically in every project.
+        Open a new session and run `/skills` — all skills will appear.
     *   **Codex:** Clone or symlink directly into its skills directory:
         ```bash
         ln -s ~/skills/rails-agent-skills ~/.codex/skills/rails-agent-skills
