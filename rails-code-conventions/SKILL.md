@@ -1,11 +1,10 @@
 ---
 name: rails-code-conventions
 description: >
-  Your daily checklist for writing clean Rails code — design principles (DRY, YAGNI, PORO,
-  CoC, KISS), per-path rules (models, services, workers, controllers, repositories, serializers,
-  RSpec, raw SQL), structured logging, and comment discipline. Defers style/formatting to the
-  project's linter(s). Use when writing new Rails code, reviewing existing code for quality,
-  avoiding over-engineering, or ensuring team conventions are followed by directory area.
+  A daily checklist for writing clean Rails code, covering design principles
+  (DRY, YAGNI, PORO, CoC, KISS), per-path rules (models, services, workers,
+  controllers), structured logging, and comment discipline. Defers style
+  and formatting to the project's configured linter(s).
 ---
 
 # Rails Code Conventions

@@ -1,10 +1,9 @@
 ---
 name: rails-background-jobs
 description: >
-  Use when adding, configuring, or reviewing background jobs in Rails. Covers Active Job,
-  Solid Queue (Rails 8 default), Sidekiq, recurring jobs, idempotency, retry strategies,
-  discard_on, queue selection, and Mission Control Jobs. Applies to both Rails 7 and
-  Rails 8 patterns.
+  Use when adding or reviewing background jobs in Rails. Covers Active Job,
+  Solid Queue (Rails 8+), Sidekiq, recurring jobs, idempotency, retry/discard
+  strategies, and queue selection.
 ---
 
 # Rails Background Jobs
@@ -59,6 +58,35 @@ an idempotency check before the side effect.
 4. **Keep jobs small:** One responsibility. Call services or POROs for complex logic.
 
 ## Examples
+
+**Bad: Passing ActiveRecord object (can be stale/missing):**
+
+```ruby
+# In controller:
+SomeJob.perform_later(@order) # @order is an ActiveRecord object
+
+# In job:
+class SomeJob < ApplicationJob
+  def perform(order) # If @order is stale or deleted, this will fail
+    order.process!
+  end
+end
+```
+
+**Good: Passing only the ID (always reliable):**
+
+```ruby
+# In controller:
+SomeJob.perform_later(@order.id) # Only pass the ID
+
+# In job:
+class SomeJob < ApplicationJob
+  def perform(order_id)
+    order = Order.find(order_id) # Always re-load fresh data inside the job
+    order.process!
+  end
+end
+```
 
 **Job with idempotency and retry:**
 
@@ -117,5 +145,6 @@ production:
 |-------|---------------|
 | **rails-migration-safety** | Solid Queue uses DB tables; add migrations safely |
 | **rails-security-review** | Jobs receive serialized input; validate like any entry point |
+| **rspec-best-practices** | TDD gate: write and validate job spec before implementation |
 | **ruby-service-objects** | Keep `perform` thin; call service objects for business logic |
 | **rspec-best-practices** | Use `perform_enqueued_jobs` to test; test idempotency |

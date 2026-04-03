@@ -1,10 +1,9 @@
 ---
 name: strategy-factory-null-calculator
 description: >
-  Use when building variant-based calculators (by program type, tenant, plan), when you
-  need a single entry point that picks the right implementation, or when adding a no-op
-  fallback (Null Object). Covers Strategy, Factory, and Null Object patterns with
-  SERVICE_MAP routing, BaseService template methods, and RSpec testing per variant.
+  Use when building variant-based calculators with a single entry point that
+  picks the right implementation (Strategy + Factory), or when adding a no-op
+  fallback (Null Object). Covers SERVICE_MAP routing and RSpec testing.
 ---
 
 # Strategy + Factory + Null Object Calculator Pattern

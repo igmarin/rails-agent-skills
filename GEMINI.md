@@ -1,8 +1,6 @@
-# Rails Agent Skills — Claude Code Context
+# Rails Agent Skills — Gemini CLI Context
 
 This plugin provides a library of specialized Rails development skills. When a task arrives, check if any skill applies and read it before responding.
-
-Skills are located in `~/skills/rails-agent-skills/<skill-name>/SKILL.md`. Read the relevant file with that path before responding to any matching task.
 
 ## CROSS-CUTTING MANDATE: Tests Gate Implementation
 
@@ -21,7 +19,7 @@ Wrote implementation code before the test? Delete it. Start over. No exceptions.
 
 ## Primary Workflow: TDD Feature Loop
 
-For Claude Code, **workflow chaining is the primary mechanism**. Skills are building blocks — workflows are the story. The most common daily workflow:
+For Gemini CLI, **workflow chaining is the primary mechanism**. Skills are building blocks — workflows are the story. The most common daily workflow:
 
 ```text
 rails-tdd-slices → write failing test

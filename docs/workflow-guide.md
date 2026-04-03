@@ -4,6 +4,47 @@ Companion to the [README](../README.md): **how to chain skills** in typical Rail
 
 ---
 
+## How to Invoke a Workflow: A Practical Guide
+
+The key to using this skill library effectively is to guide the AI by **stating your goal** and then **explicitly referencing the workflow or skill** you want it to follow. This tells the AI *what* to do and *how* to do it according to the expert rules we've defined.
+
+### The Golden Rule: State the Goal, and Name the Workflow
+
+The most effective way to invoke a workflow is to follow this general formula:
+
+**`"[Your Goal]"`** + **`"following the [Skill Name / Workflow Name] process."`**
+
+By doing this, you turn a simple request into a robust, professional workflow, ensuring any AI—smart or not—is constrained to follow our best practices.
+
+### Example 1: A Safe Database Migration
+
+*   **A Naive Request (What to Avoid):**
+    > *"Hey, create a migration adding a new column `status` to the `orders` table with a default value of `'pending'` and `null: false`."*
+    >
+    > **Risk:** This could generate a single, dangerous migration that locks your production `orders` table.
+
+*   **An Expert Request (What to Do):**
+    > *"I need to add a `status` column to the `orders` table with a default of `'pending'`. **Please follow the `rails-migration-safety` skill to do this.**"*
+    >
+    > **Expected Result:** The AI should respond by outlining a safe, multi-step migration process (add nullable column, backfill data in a separate task, then add the constraint in a final migration).
+
+### Example 2: Generalizing the Pattern
+
+This formula works for any task:
+
+*   **For a new feature:**
+    > *"Let's start building the 'user profile page' **following our TDD workflow**."*
+
+*   **For a bug fix:**
+    > *"I've got a bug report about avatars. Let's use the **`rails-bug-triage` skill** to create a failing test for it."*
+
+*   **For a refactor:**
+    > *"This controller is getting too big. I want to extract a service object **using the `refactor-safely` skill**."*
+
+You, the human, are the project lead. Your job is to set the direction and point the AI to the right set of internal "company policies" (our skills).
+
+---
+
 ## How to Invoke a Skill or Workflow (Claude Code)
 
 Skills and workflows are not slash commands or buttons — you invoke them through natural conversation. Claude reads `CLAUDE.md` at the start of each session and knows which skills exist and when to apply them. The key is to **describe what you want to do**, and Claude will load the right skill.
@@ -40,7 +81,7 @@ Skills and workflows are not slash commands or buttons — you invoke them throu
 ```
 "Create a PRD for [feature]"           → create-prd
 "Break this PRD into tasks"            → generate-tasks
-"Turn these tasks into Jira tickets"   → jira-ticket-planning
+"Turn these tasks into Jira tickets"   → ticket-planning
 ```
 
 ### What the checkpoints look like in practice
@@ -131,7 +172,7 @@ flowchart TD
     O --> P[rails-code-review\nRe-review]
     P --> M
     M -->|None or cosmetic| Q[Open PR]
-    K2[api-postman-collection\nif endpoints changed] --> Q
+    K2[api-rest-collection\nif endpoints changed] --> Q
 ```
 
 **Step by step:**
@@ -141,12 +182,12 @@ flowchart TD
 3. **Test Feedback Checkpoint** — Present the test. Confirm: right behavior? right boundary? edge cases? Only proceed when approved.
 4. **Implementation Proposal Checkpoint** — Propose the implementation in plain language (classes, methods, structure). Wait for confirmation before writing code.
 5. **Implement** — Write the minimum code to pass the test. Run. Refactor. Repeat for each behavior.
-6. **GATE: Linters + Full Test Suite** — Run linters (`bundle exec rubocop` or equivalent) and the full suite. Fix all failures before proceeding.
+6. **GATE: Linters + Full Test Suite** — Run linters (`bundle exec [linter]` or equivalent) and the full suite. Fix all failures before proceeding.
 7. **yard-documentation** — Document new or changed public API.
 8. **rails-code-review** — Self-review the full branch diff.
 9. **rails-review-response** — When feedback is received: evaluate, push back if wrong, implement one item at a time.
 10. **Re-review** — After Critical or significant findings are addressed, re-review before merging.
-11. **api-postman-collection** — If the change adds or modifies API endpoints, update the collection.
+11. **api-rest-collection** — If the change adds or modifies API endpoints, update the collection.
 
 **Key rules:**
 - Test Feedback and Implementation Proposal checkpoints are not optional — they prevent wasted implementation cycles
@@ -222,11 +263,11 @@ flowchart LR
 
 ### Optional: Jira tickets from the plan
 
-When the team tracks work in **Jira**, run **jira-ticket-planning** after **generate-tasks** (or from any approved initiative plan):
+When the team tracks work in **Jira**, run **ticket-planning** after **generate-tasks** (or from any approved initiative plan):
 
 ```mermaid
 flowchart LR
-    D[generate-tasks] --> J[jira-ticket-planning]
+    D[generate-tasks] --> J[ticket-planning]
     J --> K[Draft markdown tickets]
     J --> L[Create in Jira when approved]
 ```
@@ -472,7 +513,7 @@ flowchart TD
 2. **rails-engine-testing**: Create dummy app, add request/routing/generator specs.
 3. **rails-engine-docs**: Write README with installation, mounting, configuration, usage (all in English).
 4. **rails-engine-installers**: Create idempotent install generators.
-5. When the engine exposes HTTP endpoints, use **api-postman-collection** to generate or update a Postman Collection (JSON v2.1) for testing.
+5. When the engine exposes HTTP endpoints, use **api-rest-collection** to generate or update a Postman Collection (JSON v2.1) for testing.
 6. **rails-engine-reviewer**: Review the complete engine for quality.
 7. **rails-engine-release**: Prepare versioned release with changelog.
 
@@ -485,7 +526,7 @@ flowchart TD
 **Post-implementation (not optional for features):** After implementation and green tests, **yard-documentation** runs on the touched public API; then update **README**, **diagrams** (e.g. Mermaid in `docs/`), and **related domain docs** so operators and future developers see the new behavior.
 
 1. **yard-documentation**: Use when writing or reviewing inline docs for Ruby classes and public methods. Apply YARD tags (`@param`, `@option`, `@return`, `@raise`, `@example`) on every public method; keep all text in English. **Required before PR** for new or changed public API.
-2. **api-postman-collection**: Use when creating or modifying REST API endpoints (Rails controllers, engine routes). Generate or update a Postman Collection JSON (v2.1) so the flow can be tested; store it in e.g. `docs/postman/` or `spec/fixtures/postman/`. Request names and descriptions in English. **Note:** For GraphQL endpoints, prefer Insomnia or GraphQL Playground — Postman REST collections do not map cleanly to GraphQL queries and mutations.
+2. **api-rest-collection**: Use when creating or modifying REST API endpoints (Rails controllers, engine routes). Generate or update a Postman Collection JSON (v2.1) so the flow can be tested; store it in e.g. `docs/postman/` or `spec/fixtures/postman/`. Request names and descriptions in English. **Note:** For GraphQL endpoints, prefer Insomnia or GraphQL Playground — Postman REST collections do not map cleanly to GraphQL queries and mutations.
 
 ---
 

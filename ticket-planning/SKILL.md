@@ -1,26 +1,26 @@
 ---
-name: jira-ticket-planning
+name: ticket-planning
 description: >
-  Drafts, classifies, and optionally creates Jira tickets from an initiative plan.
-  Use when the user provides a plan and wants Jira-ready tickets, wants help shaping
+  Drafts, classifies, and optionally creates tickets from an initiative plan.
+  Use when the user provides a plan and wants ticket drafts, wants help shaping
   a plan into tickets, wants sprint-placement guidance, or wants tickets created in
-  Jira after the plan is approved.
+  an issue tracker after the plan is approved.
 ---
 
-# Jira Ticket Planning
+# Ticket Planning
 
 Use this skill for initiative-to-ticket workflows:
 
 - the user already has a plan and wants ticket drafts
 - the user wants help turning an emerging plan into tickets
 - the user wants sprint-placement guidance for those tickets
-- the assistant should create the approved tickets in Jira (when the user has Jira access/tools configured)
+- the assistant should create the approved tickets in the issue tracker (when the user has access/tools configured)
 
-This skill covers **planning and execution flow**, not Jira product documentation.
+This skill covers **planning and execution flow**, not specific project management tool documentation.
 
 ## Overview
 
-Normalize inputs, classify each work item, apply title conventions, draft tickets in a standard structure, reduce redundancy, then either return markdown drafts or create issues in Jira after explicit approval.
+Normalize inputs, classify each work item, apply title conventions, draft tickets in a standard structure, reduce redundancy, then either return markdown drafts or create issues in the issue tracker after explicit approval.
 
 ## Workflow
 
@@ -30,7 +30,7 @@ Extract planning inputs:
 
 - initiative/theme
 - project/board
-- whether the request is **draft-only** or **create-in-Jira**
+- whether the request is **draft-only** or **create-in-tracker**
 - default sprint or backlog bucket
 - constraints on issue types, prefixes, epic, labels, components, status, or sprint
 
@@ -53,7 +53,7 @@ Assign these planning attributes to each ticket:
 
 Use the classification to decide sequence and sprint placement. Backend/API enablers usually come before dependent web/mobile tickets.
 
-### 3. Apply Jira title conventions
+### 3. Apply title conventions
 
 Use these prefixes:
 
@@ -61,7 +61,7 @@ Use these prefixes:
 - `FE |` for web / frontend
 - `Mobile |` for mobile
 
-When writing the Jira title, leave a space after the `|`.
+When writing the ticket title, leave a space after the `|`.
 
 Do **not** add those prefixes to tickets that are not owned by those areas unless the user explicitly wants that.
 
@@ -89,19 +89,19 @@ Prefer:
 - **Dependencies** — sequencing
 - **Technical Notes** — fields, systems, identifiers, integration constraints, implementation boundaries
 
-### 6. Decide whether to stop at drafts or create in Jira
+### 6. Decide whether to stop at drafts or create in the issue tracker
 
 **Drafts only:**
 
 - return markdown tickets
 - keep titles, issue types, and dependencies explicit
 
-**Create in Jira:**
+**Create in issue tracker:**
 
-- verify the target Jira project/board details first
+- verify the target project/board details first
 - confirm required fields: project, issue type, sprint, status behavior, epic, labels, components
 - create issues **only after** the plan is considered approved enough
-- use whatever Jira integration the user has (API, MCP, UI); do not assume credentials in the repo
+- use whatever integration the user has (API, MCP, UI); do not assume credentials in the repo
 
 ## Sprint Placement Heuristics
 
@@ -114,11 +114,11 @@ Defaults unless the user overrides:
 
 For boards with a named future sprint such as **Ready to Refine**, treat it as a **planning bucket**, not an execution guarantee.
 
-## Jira Creation Guidance
+## Ticket Creation Guidance
 
-When creating tickets in Jira:
+When creating tickets in an issue tracker:
 
-- create them in the Jira project that backs the board
+- create them in the project that backs the board
 - do not assume status can be set on create; many workflows use the project's default initial status
 - if sprint assignment is required, inspect create metadata and use the sprint field shape expected by that project
 - validate **one** issue first if sprint field or workflow behavior is uncertain
@@ -142,11 +142,11 @@ After creation, report:
 
 Typical prompts:
 
-- "Turn this plan into Jira tickets"
+- "Turn this plan into tickets"
 - "Help me plan the tickets for this initiative"
 - "Draft backend, web, and mobile tickets from this plan"
 - "Which sprint should these tickets go into?"
-- "Create these tickets in Jira once the plan looks right"
+- "Create these tickets in our issue tracker once the plan looks right"
 
 ## Integration
 

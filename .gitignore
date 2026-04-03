@@ -1,5 +1,5 @@
-
 .DS_Store
-
 # Claude Code internal state (worktrees, plans, session data)
 .claude/
+tmp/
+.Gemfile.lock

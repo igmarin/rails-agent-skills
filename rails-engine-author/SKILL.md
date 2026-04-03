@@ -1,10 +1,9 @@
 ---
 name: rails-engine-author
 description: >
-  Use when creating, scaffolding, or refactoring a Rails engine. Trigger words:
-  mountable engine, Railtie, engine.rb, isolate_namespace, engine file layout,
-  host-app contract, gemified Rails component, engine structure, engine generators,
-  dummy app.
+  Use when creating, scaffolding, or refactoring a Rails engine. Covers engine
+  types (Plain, Railtie, Engine, Mountable), namespace isolation, host-app
+  contract definition, and recommended file structure.
 ---
 # Rails Engine Author
 
@@ -199,4 +198,4 @@ For a reusable starter layout and file stubs, read [reference.md](reference.md).
 | rails-engine-reviewer | Findings-first audits, structural review |
 | rails-engine-docs | README, installation guide, host-app contract documentation |
 | rails-engine-installers | Generator-heavy setup, install scripts, copy migrations |
-| api-postman-collection | When the engine exposes HTTP endpoints (generate/update Postman collection) |
+| api-rest-collection | When the engine exposes HTTP endpoints (generate/update Postman collection) |
