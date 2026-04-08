@@ -8,19 +8,19 @@ description: >
 ---
 # REST API Collection
 
-Use this skill when you add or change a REST API endpoint so that a compatible collection file is generated or updated for testing in a modern API client.
-
-**Core principle:** Every API surface (Rails app or engine) has a single API collection file that stays in sync with its endpoints. All names, descriptions, and variable labels in the collection must be in **English**.
+**Core principle:** Every API surface (Rails app or engine) has a single API collection file that stays in sync with its endpoints.
 
 ## Quick Reference
 
 | Aspect | Rule |
 |--------|------|
 | When | Create or update collection when creating or modifying any REST API endpoint (route + controller action) |
-| Format | Postman Collection JSON v2.1 (`schema` or `info.schema` references v2.1) is a good default standard. |
-| Location | One file per app or engine, e.g. `docs/api-collections/<app-or-engine-name>.json` or `spec/fixtures/api-collections/` |
-| Language | All request names, descriptions, and variable names in the collection in **English** |
+| Format | Postman Collection JSON v2.1 (`schema` or `info.schema` references v2.1) is a good default standard |
+| Location | One file per app or engine — `docs/api-collections/<app-or-engine-name>.json` or `spec/fixtures/api-collections/`; if a collection folder already exists, update the existing file |
+| Language | All request names, descriptions, and variable names must be in **English** |
+| Variables | Use `{{base_url}}` (or equivalent) for the base URL so the collection works across environments |
 | Per request | method, URL (with variables for base URL), headers (Content-Type, Authorization if needed), body example when applicable |
+| Validation | See validation steps in the HARD-GATE section below |
 
 ## HARD-GATE: Generate on Endpoint Change
 
@@ -29,73 +29,38 @@ When you create or modify a REST API endpoint (new or changed route and controll
 you MUST also create or update the corresponding API collection file so the
 flow can be tested. Do not leave the collection missing or outdated.
 
-EXCEPTION: GraphQL endpoints do NOT use REST collections.
-For GraphQL, use a dedicated GraphQL client — see note below.
+EXCEPTION: GraphQL endpoints — use rails-graphql-best-practices instead.
 ```
 
-## GraphQL Endpoints
+After generating or updating the collection, validate the output:
+- Confirm the JSON is syntactically valid.
+- Verify the collection can be imported into a compatible API client (e.g. Postman) without errors.
+- Confirm all new or changed endpoints are represented and that `{{base_url}}` (or equivalent) is used consistently.
 
-Do **not** use this skill for GraphQL endpoints. REST collections do not map cleanly to GraphQL queries and mutations. For GraphQL:
+## Collection Structure
 
-- Use **Insomnia** (preferred) or **GraphQL Playground** for manual testing
-- Import the schema directly via introspection or SDL file
-- Store an Insomnia workspace export in `docs/insomnia/` if the team needs a shared config
-
-See **rails-graphql-best-practices** for the full GraphQL conventions.
-
-## Language
-
-All generated content in the collection must be in **English**: request names, folder names, descriptions, and variable display names. Do not use another language unless the user explicitly requests it.
-
-## Collection Structure (Postman v2.1 Example)
-
-- **Root:** `info` (name, description, schema `https://schema.getpostman.com/json/collection/v2.1.0/collection.json`), `item` array.
-- **Each request (item):** `name` (English), optional `request` with `method`, `url` (string or object with `raw`/`host`/`path`/`variable`), `header` array, `body` when applicable (e.g. raw JSON for POST/PUT).
-- Use **variables** for base URL (e.g. `{{base_url}}`) so the collection works across environments.
-
-## Where to Put the File
-
-- Prefer a single collection per application or engine.
-- Suggested paths: `docs/api-collections/<name>.json` or `spec/fixtures/api-collections/<name>.json`.
-- If the repo already has a collection folder, use that location and update the existing file.
-
-## Example Snippet (structure only)
+Minimum per request — `method`, `url` with `{{base_url}}`, headers, body for POST/PUT:
 
 ```json
 {
-  "info": {
-    "name": "My Engine API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-  },
-  "item": [
-    {
-      "name": "Create resource",
-      "request": {
-        "method": "POST",
-        "header": [{ "key": "Content-Type", "value": "application/json" }],
-        "url": "{{base_url}}/resources",
-        "body": { "mode": "raw", "raw": "{\"name\": \"Example\"}" }
-      }
-    }
-  ],
-  "variable": [{ "key": "base_url", "value": "http://localhost:3000" }]
+  "name": "Create order",
+  "request": {
+    "method": "POST",
+    "header": [{ "key": "Content-Type", "value": "application/json" }],
+    "url": "{{base_url}}/orders",
+    "body": { "mode": "raw", "raw": "{\"product_id\": 1}" }
+  }
 }
 ```
+
+See [EXAMPLES.md](./EXAMPLES.md) for a multi-endpoint collection with auth token variables.
 
 ## Common Mistakes
 
 | Mistake | Reality |
 |---------|---------|
-| Adding an endpoint but not touching the collection | Collection must be updated so the new flow is testable in an API client |
-| Using a language other than English for names/descriptions | Standard is English unless the user requests otherwise |
-| Hardcoding full URLs instead of variables | Use `{{base_url}}` (or similar) so the collection works in dev/staging/prod |
 | Missing Content-Type or body for POST/PUT | Include headers and example body so the request works out of the box |
-
-## Red Flags
-
-- New or changed endpoint with no corresponding API collection update
-- Collection file path not documented or inconsistent across the project
-- Request names or descriptions in a language other than English without user request
+| Skipping validation after generation | Always verify the JSON is well-formed and imports correctly before committing (see HARD-GATE) |
 
 ## Integration
 

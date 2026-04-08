@@ -10,8 +10,6 @@ description: >
 
 Use this skill when **designing, implementing, or reviewing GraphQL APIs** in a Rails application with the `graphql-ruby` gem.
 
-**Core principle:** GraphQL shifts validation and security responsibility to the resolver layer. Every field, type, and mutation needs explicit attention to authorization, N+1 risk, and error shape.
-
 ## Quick Reference
 
 | Topic | Rule |
@@ -49,40 +47,13 @@ DO NOT rely solely on type-level authorization — see Authorization section.
 
 ### Type Conventions
 
-- Name types in **PascalCase** matching the domain language (e.g. `OrderType`, not `ApiOrderType`)
-- Match type field names to domain terms — do not leak internal model names
-- Use **connection types** (Relay-style) for all paginated collections
-
-```ruby
-# BAD — raw array, no cursor-based pagination
-field :orders, [Types::OrderType], null: false
-
-# GOOD — connection type enables cursor pagination
-field :orders, Types::OrderType.connection_type, null: false
-```
+- Match type names and field names to domain language — do not leak internal model names
+- Use connection types for all paginated collections: `field :orders, Types::OrderType.connection_type, null: false`
 
 ### Resolver Structure
 
 - Prefer **dedicated resolver classes** over inline field blocks for non-trivial logic
-- Keep `QueryType` and `MutationType` as entry points only — delegate to resolver objects
-
-```ruby
-# BAD — business logic inline in the type
-field :summary, String, null: false do
-  def resolve
-    object.line_items.sum(&:total)  # N+1 risk, logic buried in type
-  end
-end
-
-# GOOD — resolver object handles logic and receives preloaded data
-field :summary, resolver: Resolvers::Orders::SummaryResolver
-```
-
-### Interface and Union Types
-
-- Use **Interface** when multiple types share fields and behavior
-- Use **Union** when a field can return one of several unrelated types
-- Prefer neither unless there is real polymorphism
+- Keep `QueryType` and `MutationType` as entry points only — delegate to resolver objects: `field :summary, resolver: Resolvers::Orders::SummaryResolver`
 
 ## N+1 Prevention
 
@@ -96,12 +67,10 @@ field :summary, resolver: Resolvers::Orders::SummaryResolver
 Use `dataloader` (built into graphql-ruby 1.12+) or `graphql-batch`:
 
 ```ruby
-# BAD — N+1: one query per order
-def resolve
-  object.user  # called for every order in the list
-end
+# BAD — one query per record
+def resolve = object.user
 
-# GOOD — batch loads all users in one query
+# GOOD — single batched query
 def resolve
   dataloader.with(Sources::RecordById, User).load(object.user_id)
 end
@@ -155,36 +124,20 @@ class AppSchema < GraphQL::Schema
 end
 ```
 
-Default to conservative limits and increase only when there is a documented reason.
-
 ## Error Handling
 
 Mutations must return a structured response — never raise unhandled exceptions:
 
 ```ruby
-class Types::Mutations::CreateOrderPayload < Types::BaseObject
-  field :order, Types::OrderType, null: true
-  field :errors, [String], null: false
-end
-
 class Mutations::CreateOrder < Mutations::BaseMutation
   argument :product_id, ID, required: true
-  argument :quantity, Integer, required: true
 
-  type Types::Mutations::CreateOrderPayload
+  field :order, Types::OrderType, null: true
+  field :errors, [String], null: false
 
-  def resolve(product_id:, quantity:)
-    result = Orders::CreateOrder.call(
-      user: context[:current_user],
-      product_id: product_id,
-      quantity: quantity
-    )
-
-    if result.success?
-      { order: result.order, errors: [] }
-    else
-      { order: nil, errors: result.errors }
-    end
+  def resolve(product_id:)
+    result = Orders::CreateOrder.call(user: context[:current_user], product_id: product_id)
+    result.success? ? { order: result.order, errors: [] } : { order: nil, errors: result.errors }
   rescue ActiveRecord::RecordInvalid => e
     { order: nil, errors: e.record.errors.full_messages }
   end
@@ -200,50 +153,9 @@ end
 
 ## Testing
 
-```ruby
-# spec/graphql/mutations/create_order_spec.rb
-RSpec.describe "Mutations::CreateOrder", type: :request do
-  let(:user)    { create(:user) }
-  let(:product) { create(:product, stock: 5) }
-  let(:query) do
-    <<~GQL
-      mutation CreateOrder($productId: ID!, $quantity: Int!) {
-        createOrder(input: { productId: $productId, quantity: $quantity }) {
-          order { id }
-          errors
-        }
-      }
-    GQL
-  end
+Always test: happy path, unauthenticated, unauthorized, validation errors returning the errors array (not exceptions), N+1 via query count matchers, and depth/complexity limits.
 
-  subject(:result) do
-    AppSchema.execute(query, variables: { productId: product.id, quantity: 1 },
-                              context: { current_user: user })
-  end
-
-  it "creates an order" do
-    expect(result.dig("data", "createOrder", "errors")).to be_empty
-    expect(result.dig("data", "createOrder", "order", "id")).to be_present
-  end
-end
-```
-
-### What to Always Test
-
-- **Happy path** — successful query/mutation
-- **Authorization** — unauthenticated (no context user), unauthorized (wrong role)
-- **Validation errors** — mutation returns errors array, not exception
-- **N+1** — query count matchers for resolvers with associations
-- **Depth/complexity limits** — exceeding limits returns an error, not data
-
-### Spec Paths
-
-| Test type | Suggested path |
-|-----------|----------------|
-| Query resolvers | `spec/graphql/queries/..._spec.rb` |
-| Mutations | `spec/graphql/mutations/..._spec.rb` |
-| Types | `spec/graphql/types/..._spec.rb` (only if type has custom logic) |
-| Resolver objects | `spec/graphql/resolvers/..._spec.rb` |
+See [TESTING.md](./TESTING.md) for a complete spec template, spec paths, and the full test checklist.
 
 ## Documentation
 
@@ -261,17 +173,6 @@ end
 
 Prefer **Insomnia** or **GraphQL Playground** over Postman for GraphQL endpoints — see `api-rest-collection`.
 
-## Common Mistakes
-
-| Mistake | Correct approach |
-|---------|-----------------|
-| Type-level auth is enough | Add field-level guards on sensitive fields — types are reused |
-| Raw arrays for list fields | Use connection types for any collection that could paginate |
-| Resolvers call associations directly | Every association load needs a dataloader source |
-| Mutations raise on validation errors | Return `{ result, errors }` — never raise from user input |
-| Missing `description` on fields | Schema is self-documenting — fill every description |
-| No authorization tests | Always test unauthenticated and unauthorized cases |
-
 ## Integration
 
 | Skill | When to chain |
@@ -279,6 +180,4 @@ Prefer **Insomnia** or **GraphQL Playground** over Postman for GraphQL endpoints
 | **ddd-ubiquitous-language** | Type and field naming must match business language |
 | **rails-tdd-slices** | Choose first failing spec (mutation vs query vs resolver unit) |
 | **rspec-best-practices** | Full TDD cycle for resolvers and mutations |
-| **rails-migration-safety** | When GraphQL schema changes require DB migrations |
 | **rails-security-review** | Auth, introspection disable, query depth/complexity limits |
-| **yard-documentation** | Document resolver Ruby classes |

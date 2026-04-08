@@ -9,8 +9,6 @@ description: >
 
 # DDD Rails Modeling
 
-Use this skill when the domain concepts are clear enough that the next question is how to model them in Rails.
-
 **Core principle:** Model real domain pressure, not textbook DDD vocabulary.
 
 ## HARD-GATE
@@ -122,12 +120,8 @@ end
 | Treating aggregates as folder names only | Aggregates exist to protect invariants, not to look architectural |
 | Adding domain events for one local callback | Events justify their cost only when multiple downstream consumers exist |
 | Pattern choice justified only with "DDD says so" | The reason must be an invariant, ownership boundary, or clear coordination need |
-
-## Red Flags
-
-- The same invariant enforced from several unrelated entry points
-- New abstractions increase indirection without clarifying ownership
-- Primitive obsession persists while modeling is focused only on folder names
+| Same invariant enforced from multiple unrelated entry points | Single aggregate root guards state transitions — one entry point per invariant |
+| New abstractions that increase indirection without clarifying ownership | If the boundary is unclear after modeling, the abstraction is premature |
 
 ## Integration
 
