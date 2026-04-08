@@ -4,7 +4,8 @@ description: >
   Reviews Rails pull requests, focusing on controller/model conventions,
   migration safety, query performance, and Rails Way compliance. Covers
   routing, ActiveRecord, security, caching, and background jobs. Use when
-  reviewing existing Rails code for quality.
+  reviewing existing Rails code for quality, conducting a PR review, or
+  doing a code review on Ruby on Rails (RoR) code.
 ---
 
 # Rails Code Review (The Rails Way)
@@ -16,16 +17,11 @@ When **reviewing** Rails code, analyze it against the following areas. When **wr
 ## HARD-GATE: After implementation (before PR)
 
 ```
-Code review is part of delivery, not only "when someone comments on GitHub."
-
-After implementation + green tests + linters pass + YARD + doc updates:
-
-1. Run a self-review on the full branch diff using the Review Order below.
-2. Fix Critical items; address Suggestion items or ticket follow-ups explicitly.
-3. Only then open the PR or hand off for human review.
-
-Skipping self-review treats the plan as unfinished. generate-tasks must end
-with a "Code review before merge" parent task.
+After green tests + linters pass + YARD + doc updates:
+1. Self-review the full branch diff using the Review Order below.
+2. Fix Critical items; resolve or ticket Suggestion items.
+3. Only then open the PR.
+generate-tasks must include a "Code review before merge" task.
 ```
 
 ## Quick Reference
@@ -43,21 +39,21 @@ with a "Code review before merge" parent task.
 
 ## Review Order
 
-1. **Configuration & Environments** — Encrypted credentials, Zeitwerk autoloading, per-environment logging.
-2. **Routing** — RESTful `resources`/`resource`, max one level nesting (prefer shallow), named routes, constraints.
-3. **Controllers** — Action order (index, show, new, edit, create, update, destroy), strong params with `permit`, `before_action` with `only:`/`except:`, skinny controllers, `respond_to` for formats.
-4. **Action View** — Partials and layouts, no logic in views (use helpers/presenters), `content_for`/`yield`, Rails helpers over raw HTML.
-5. **ActiveRecord Models** — Structure order: extends, includes, constants, attributes, enums, associations, delegations, validations, scopes, callbacks, class methods, instance methods. Use `inverse_of`, explicit enum values, `validates` (not `validates_presence_of`), scopes for reusable queries, limit callbacks.
-6. **Associations** — `dependent:` for orphaned records, `through:` for many-to-many, STI only when justified.
-7. **Queries** — `includes`/`preload`/`eager_load` for N+1, `exists?` over `present?`, `pluck` for arrays, `find_each` for large sets, `insert_all` for bulk, `load_async` (Rails 7+), transactions for atomicity.
-8. **Migrations** — Reversible (`change`), indexes on WHERE/JOIN columns, `add_reference` with `foreign_key: true`.
-9. **Validations** — Built-in validators, conditional (`if:`/`unless:`), custom validators for complex rules.
-10. **I18n** — User-facing strings via I18n, lazy lookup in views, locale from user preferences or headers.
-11. **Sessions & Cookies** — No complex objects in session, signed/encrypted cookies, flash for temporary messages.
-12. **Security** — Strong params, parameterized queries, no unnecessary `raw`/`html_safe`, `protect_from_forgery`, CSP headers, masked sensitive data in logs.
-13. **Caching & Performance** — Fragment caching, nested caching, `Rails.cache`, ETags, `EXPLAIN` for slow queries.
-14. **Background Jobs** — Active Job, idempotent and retriable, appropriate backend.
-15. **Testing (RSpec)** — BDD, descriptive blocks, `let`/`let!`, FactoryBot, shared examples, mocked external services.
+Work through the diff in this sequence. See [REVIEW_CHECKLIST.md](./REVIEW_CHECKLIST.md) for the full per-area check criteria.
+
+Configuration → Routing → Controllers → Views → Models → Associations → Queries → Migrations → Validations → I18n → Sessions → Security → Caching → Jobs → Tests
+
+**Critical checks to spot immediately:**
+
+```ruby
+# N+1 — one query per record in a collection
+posts.each { |post| post.author.name }       # Bad
+posts.includes(:author).each { |post| post.author.name }  # Good
+
+# Privilege escalation via permit!
+params.require(:user).permit!                # Bad — never in production
+params.require(:user).permit(:name, :email)  # Good
+```
 
 ## Severity Levels
 
@@ -88,39 +84,27 @@ Review → Categorize findings (Critical / Suggestion / Nice to have)
 
 **Skip re-review only when:** All findings were Nice to have or single-line fixes with zero logic change.
 
-## Common Mistakes
+## Pitfalls
 
-| Mistake | Reality |
-|---------|---------|
-| "Skinny controller" means move everything to model | Move to services, not models — avoid fat models |
+| Pitfall | What to do |
+|---------|------------|
+| "Skinny controller" means move to model | Move to services — avoid fat models |
 | Skipping N+1 check because "it's just one query" | One query per record in a collection is N+1 |
-| Using `permit!` for convenience | Privilege escalation risk — always whitelist attributes |
-| Adding index in same migration as column | On large tables, separate migration with `algorithm: :concurrent` |
-| Callback for business logic | Callbacks are for persistence-level concerns, not orchestration |
-| Approving after Critical fix without re-reviewing | A fix can introduce new issues — re-review is mandatory after Criticals |
-
-## Red Flags
-
-- Controller action longer than ~15 lines of logic
-- Model with more than 3 callbacks
-- `permit!` anywhere in production code
-- Query without eager loading inside a loop
-- Migration combining schema change and data backfill
-- `html_safe` or `raw` on user-provided content
-- Approving a PR after Critical findings without re-reviewing
-- Using "should", "probably" when claiming something passes
+| `permit!` for convenience | Privilege escalation risk — always whitelist attributes |
+| Index added in same migration as column | On large tables, separate migration with `algorithm: :concurrent` |
+| Callbacks for business logic | Callbacks are for persistence-level concerns, not orchestration |
+| Approving after Critical fix without re-reviewing | A fix can introduce new issues — re-review is mandatory |
+| Controller action > ~15 lines | Extract to service — controllers orchestrate, not implement |
+| Model with > 3 callbacks | Extract to service or observer |
+| `html_safe`/`raw` on user-provided content | XSS risk — escape or sanitize first |
+| Migration combining schema change and data backfill | Split: schema migration first, then data migration |
 
 ## Integration
 
 | Skill | When to chain |
 |-------|---------------|
 | **rails-review-response** | When the developer receives feedback and must decide what to implement |
-| **api-rest-collection** | When reviewing API or endpoint changes (ensure Postman collection is updated) |
-| **rails-stack-conventions** | When writing new code (not reviewing) |
 | **rails-architecture-review** | When review reveals structural problems |
 | **rails-security-review** | When review reveals security concerns |
 | **rails-migration-safety** | When reviewing migrations on large tables |
-| **rspec-best-practices** | When reviewing test quality |
 | **refactor-safely** | When review suggests refactoring |
-| **generate-tasks** | Task lists end with self-review / PR-readiness steps |
-| **yard-documentation** | Confirm new public API is documented before approving |

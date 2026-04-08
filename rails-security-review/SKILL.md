@@ -1,7 +1,8 @@
 ---
 name: rails-security-review
 description: >
-  Use when reviewing Rails code for security risks, assessing authentication or
+  Performs security audits and vulnerability assessments on Ruby on Rails application
+  code. Use when reviewing Rails code for security risks, assessing authentication or
   authorization, auditing parameter handling, redirects, file uploads, secrets management,
   or checking for XSS, CSRF, SSRF, SQL injection, and other common vulnerabilities.
 ---
@@ -31,6 +32,7 @@ Use this skill when the task is to review or harden Rails code from a security p
 3. Check redirects, rendering, and output encoding.
 4. Check file handling, network calls, and background job inputs.
 5. Check secrets, logging, and operational exposure.
+6. **Verify each finding:** Confirm it is exploitable with a concrete attack scenario before reporting. Exclude false positives (e.g., `html_safe` on a developer-defined constant, not user input).
 
 ## Severity Levels
 
@@ -63,41 +65,38 @@ Use this skill when the task is to review or harden Rails code from a security p
 **High-severity (unscoped redirect):**
 
 ```ruby
-# Bad: user-controlled redirect
+# Bad: user-controlled redirect — open redirect / phishing risk
 redirect_to params[:return_to]
-```
 
-- **Severity:** High. **Attack path:** Attacker sets `return_to=https://evil.com` to redirect victims. **Mitigation:** Redirect only to relative paths or an allowlist.
+# Good: relative path only
+redirect_to root_path
+# Good: allowlist
+SAFE_PATHS = %w[/dashboard /settings].freeze
+redirect_to(SAFE_PATHS.include?(params[:return_to]) ? params[:return_to] : root_path)
+```
 
 **Medium-severity (mass assignment):**
 
 ```ruby
-# Bad: permit too much
+# Bad: privilege escalation risk
 params.require(:user).permit!
+
+# Good: explicit whitelist — never include role, admin, or privilege fields
+params.require(:user).permit(:name, :email)
 ```
 
-- **Severity:** Medium. **Risk:** `permit!` allows privilege escalation. **Mitigation:** Permit only safe attributes; never permit `role`, `admin`, or other privilege fields from request params.
+## Pitfalls
 
-## Common Mistakes
-
-| Mistake | Reality |
+| Pitfall | Reality |
 |---------|---------|
-| "Only internal users access this" | Internal tools get compromised. Apply same security standards. |
-| `permit!` "just for now" | It will ship. Whitelist attributes from day one. |
-| "Rails handles CSRF automatically" | Only if `protect_from_forgery` is active and tokens are verified. |
-| String interpolation in SQL | SQL injection. Always use parameterized queries. |
-| `html_safe` on user content | XSS. Only use on developer-controlled strings. |
-| Secrets in environment files committed to git | Use encrypted credentials. Rotate compromised secrets immediately. |
-
-## Red Flags
-
-- `permit!` anywhere in production code
-- String interpolation in `where()`, `find_by_sql()`, or `execute()`
-- `redirect_to params[:url]` without validation
-- `html_safe` or `raw` called on user-provided data
-- Secrets or API keys in committed files (`.env`, `secrets.yml`)
-- No authorization check before destructive actions
-- Background job inputs not validated (jobs are entry points too)
+| "Only internal users access this" | Internal tools get compromised — apply the same standards |
+| `permit!` "just for now" | It will ship. Whitelist from day one |
+| "Rails handles CSRF automatically" | Only if `protect_from_forgery` is active and tokens are verified |
+| String interpolation in SQL | SQL injection — always use parameterized queries |
+| `html_safe` on user content | XSS — only call on developer-controlled strings |
+| Secrets in committed files | Use encrypted credentials. Rotate immediately if exposed |
+| No authorization before destructive actions | Always check permissions, even for internal routes |
+| Background job inputs not validated | Jobs are entry points — validate inputs like a controller |
 
 ## Output Style
 
