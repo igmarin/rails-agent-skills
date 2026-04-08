@@ -37,14 +37,6 @@ VERIFY tests pass after EVERY step — not just at the end.
 
 If you haven't run the test suite after a refactoring step, you cannot claim it works.
 
-## Refactoring Order
-
-1. Define the behavior that must stay stable.
-2. Add or tighten characterization tests around that behavior.
-3. Choose the smallest safe slice.
-4. Rename, move, or extract in steps that keep the code runnable.
-5. Remove compatibility shims only after the new path is proven.
-
 ## Core Rules
 
 - Split behavior changes from structural refactors when practical.
@@ -98,10 +90,8 @@ AFTER each step:
 |---------|---------|
 | "Quick refactor, no tests needed" | No characterization tests = no safety net. Bugs will slip through. |
 | Mixing behavior change with structural change | Do one or the other. Mixed changes are impossible to review. |
-| "I'll verify at the end" | Verify after EVERY step. Bugs compound when you batch. |
 | Renaming 50 call sites in one commit | Do it in small batches with tests between each. |
 | Adding abstraction to satisfy a pattern | Abstractions must serve a real boundary, not a textbook. |
-| "Should work now" without running tests | Evidence before claims, always. |
 | Removing old code before new path is proven | Keep compatibility shims until callers are fully migrated. |
 
 ## Red Flags
