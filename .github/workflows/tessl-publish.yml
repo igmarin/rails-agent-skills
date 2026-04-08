@@ -12,4 +12,4 @@ jobs:
       - uses: tesslio/setup-tessl@v2
         with:
           token: ${{ secrets.TESSL_TOKEN }}
-      - run: tessl tile publish
+      - run: tessl tile publish --bump patch
