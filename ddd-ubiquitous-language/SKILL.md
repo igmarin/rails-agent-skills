@@ -2,9 +2,11 @@
 name: ddd-ubiquitous-language
 description: >
   Use when a Ruby on Rails feature, bug, or architecture discussion has fuzzy
-  business terminology and you need a Domain-Driven Design ubiquitous language.
-  Covers canonical terms, synonyms, overloaded words, naming conflicts, and
-  glossary output for Rails-first workflows.
+  business terminology and you need shared vocabulary. Identifies canonical terms,
+  resolves naming conflicts, maps synonyms to one concept, and generates a glossary
+  for Rails-first workflows. Trigger words: DDD, shared vocabulary, define terms,
+  bounded context naming, what should we call this, terminology alignment, DDD glossary,
+  naming inconsistency.
 ---
 
 # DDD Ubiquitous Language
@@ -40,7 +42,10 @@ ALWAYS flag overloaded or conflicting terms before recommending modeling changes
 
 ## Process
 
-1. **Collect terms:** Pull candidate nouns, roles, states, events, and actions from the request, PRD, tickets, existing docs, and code names.
+1. **Collect terms:** Pull candidate nouns, roles, states, events, and actions from the request, PRD, tickets, existing docs, and code names. In a Rails codebase, scan class and file names across layers:
+   ```bash
+   grep -rh "^class \|^module " app/models app/controllers app/services --include="*.rb" | sort
+   ```
 2. **Group synonyms:** Identify words that appear to mean the same thing and words that are overloaded across multiple meanings.
 3. **Choose canonical terms:** Prefer the clearest business term; keep aliases only as migration notes or search hints.
 4. **Define each term:** Write one short definition, expected invariants, and related concepts.
@@ -58,29 +63,24 @@ When using this skill, return:
 5. **Likely related context**
 6. **Open questions**
 
-## Good Output Shape
+## Example — Naming Inconsistency in a Rails App
 
-```markdown
+A Rails app has `Booking` (model), `ReservationsController`, and `HoldService` all referring to the same concept. The resulting glossary resolves it:
+
 | Canonical term | Aliases | Definition | Invariant | Context |
 |----------------|---------|------------|-----------|---------|
-| Reservation | Booking, Hold | A customer claim on an inventory slot | Must expire or be confirmed | Fleet Booking |
-```
+| Reservation | Booking, Hold | A customer claim on an inventory slot for a future date | Must expire or be confirmed within 24h | Fleet Booking |
+
+Once the glossary is agreed, rename code toward the canonical term incrementally — do not rename all 50 call sites in one PR.
 
 ## Common Mistakes
 
 | Mistake | Reality |
 |---------|---------|
 | Keeping every synonym alive forever | Pick one preferred business term or the codebase stays muddy |
-| Using technical class names as if they were domain truth | Domain language should come from the business, not from current code accidents |
-| Jumping to aggregates before agreeing on words | Bad language produces bad boundaries and bad models |
-| Treating all ambiguity as harmless | Overloaded terms usually hide design problems |
-
-## Red Flags
-
-- One term means different things in different screens or services
-- Class names and user-facing language disagree heavily
-- People say "basically the same thing" instead of naming the distinction
-- The proposed glossary uses mostly technical jargon instead of business language
+| Using technical class names as domain truth | Domain language comes from the business, not from current code accidents |
+| Jumping to aggregates before agreeing on words | Overloaded terms produce bad boundaries and bad models |
+| One term meaning different things in different screens | Flag it early — it usually signals multiple bounded contexts |
 
 ## Integration
 

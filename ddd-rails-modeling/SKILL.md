@@ -60,24 +60,12 @@ When using this skill, return for each domain concept:
 ```ruby
 # app/models/money.rb
 class Money
-  include Comparable
-
   attr_reader :amount_cents, :currency
 
   def initialize(amount_cents, currency = "USD")
     @amount_cents = Integer(amount_cents)
     @currency = currency.upcase.freeze
     freeze
-  end
-
-  def +(other)
-    raise ArgumentError, "Currency mismatch" unless currency == other.currency
-    Money.new(amount_cents + other.amount_cents, currency)
-  end
-
-  def <=>(other)
-    return nil unless currency == other.currency
-    amount_cents <=> other.amount_cents
   end
 
   def ==(other)
@@ -88,10 +76,6 @@ class Money
 
   def hash
     [amount_cents, currency].hash
-  end
-
-  def to_s
-    "#{currency} #{format('%.2f', amount_cents / 100.0)}"
   end
 end
 ```
@@ -108,25 +92,16 @@ module Orders
   class CreateOrder
     Result = Struct.new(:success?, :order, :errors, keyword_init: true)
 
-    def self.call(user:, product_id:, quantity:)
-      new(user: user, product_id: product_id, quantity: quantity).call
-    end
+    def self.call(**args) = new(**args).call
 
     def initialize(user:, product_id:, quantity:)
-      @user       = user
-      @product_id = product_id
-      @quantity   = quantity
+      @user, @product_id, @quantity = user, product_id, quantity
     end
 
     def call
-      product = Product.find(@product_id)
-      order   = @user.orders.build(product: product, quantity: @quantity)
-
-      if order.save
-        Result.new(success?: true, order: order, errors: [])
-      else
-        Result.new(success?: false, order: nil, errors: order.errors.full_messages)
-      end
+      order = @user.orders.build(product: Product.find(@product_id), quantity: @quantity)
+      order.save ? Result.new(success?: true, order: order, errors: [])
+                 : Result.new(success?: false, order: nil, errors: order.errors.full_messages)
     rescue ActiveRecord::RecordNotFound
       Result.new(success?: false, order: nil, errors: ["Product not found"])
     end
