@@ -1,9 +1,11 @@
 ---
 name: rails-background-jobs
 description: >
-  Use when adding or reviewing background jobs in Rails. Covers Active Job,
-  Solid Queue (Rails 8+), Sidekiq, recurring jobs, idempotency, retry/discard
-  strategies, and queue selection.
+  Use when adding or reviewing background jobs in Rails. Configures Active Job
+  workers, implements idempotency checks, sets up retry/discard strategies,
+  selects Solid Queue (Rails 8+) or Sidekiq based on scale, and defines recurring
+  jobs via recurring.yml or sidekiq-cron. Trigger words: background job, Active Job,
+  Solid Queue, Sidekiq, idempotency, retry, discard, recurring job, queue.
 ---
 
 # Rails Background Jobs
@@ -12,14 +14,19 @@ Use this skill when the task is to add, configure, or review background jobs in 
 
 **Core principle:** Design jobs for idempotency and safe retries. Prefer Active Job's unified API; choose backend based on Rails version and scale.
 
-## HARD-GATE: Tests Gate Implementation
+## HARD-GATE
 
 ```
 EVERY job MUST have its test written and validated BEFORE implementation.
   1. Write the job spec (idempotency, retry, error handling)
   2. Run the spec — verify it fails because the job does not exist yet
   3. ONLY THEN write the job class
-See rspec-best-practices for the full gate cycle.
+
+EVERY job that performs a side effect (charge, email, API call) MUST have
+an idempotency check BEFORE the side effect.
+
+After implementation: run full suite, confirm job appears in queue dashboard,
+verify idempotency by enqueueing twice and checking the second run is a no-op.
 ```
 
 ## Quick Reference
@@ -34,13 +41,6 @@ See rspec-best-practices for the full gate cycle.
 | Backend (Rails 7) | Sidekiq + Redis for high throughput |
 | Recurring | `config/recurring.yml` (Solid Queue) or cron/sidekiq-cron |
 
-## HARD-GATE
-
-```
-EVERY job that performs side effects (charge, email, API call) MUST have
-an idempotency check before the side effect.
-```
-
 ## Rails 8 vs Rails 7
 
 | Aspect | Rails 7 and earlier | Rails 8 |
@@ -50,42 +50,18 @@ an idempotency check before the side effect.
 | Recurring | External (cron, sidekiq-cron) | `config/recurring.yml` |
 | Dashboard | Third-party (Sidekiq Web) | **Mission Control Jobs** |
 
-## Core Rules
-
-1. **Pass serializable arguments:** Pass IDs, strings, numbers. Load records in `perform`.
-2. **Design for idempotency:** Check state before doing work; use unique constraints or "already processed" checks.
-3. **Use retries wisely:** `retry_on` for transient errors, `discard_on` for permanent failures.
-4. **Keep jobs small:** One responsibility. Call services or POROs for complex logic.
+See [BACKENDS.md](./BACKENDS.md) for install steps, configuration, and dashboard setup for both Solid Queue and Sidekiq.
 
 ## Examples
 
-**Bad: Passing ActiveRecord object (can be stale/missing):**
+**Pass IDs, not objects:**
 
 ```ruby
-# In controller:
-SomeJob.perform_later(@order) # @order is an ActiveRecord object
+# Bad — object may be stale or deleted by perform time
+SomeJob.perform_later(@order)
 
-# In job:
-class SomeJob < ApplicationJob
-  def perform(order) # If @order is stale or deleted, this will fail
-    order.process!
-  end
-end
-```
-
-**Good: Passing only the ID (always reliable):**
-
-```ruby
-# In controller:
-SomeJob.perform_later(@order.id) # Only pass the ID
-
-# In job:
-class SomeJob < ApplicationJob
-  def perform(order_id)
-    order = Order.find(order_id) # Always re-load fresh data inside the job
-    order.process!
-  end
-end
+# Good — reload fresh inside perform
+SomeJob.perform_later(@order.id)
 ```
 
 **Job with idempotency and retry:**
@@ -119,25 +95,17 @@ production:
     queue: low
 ```
 
-## Common Mistakes
+## Pitfalls
 
-| Mistake | Reality |
-|---------|---------|
-| Passing ActiveRecord objects as arguments | Object may be deleted or stale by perform time. Pass IDs. |
-| No idempotency check before side effects | Jobs run at-least-once. Double-charging, double-emailing. |
+| Problem | Correct approach |
+|---------|-----------------|
+| Passing ActiveRecord objects as arguments | Pass IDs — objects may be deleted or stale by perform time |
+| No idempotency check before side effects | Jobs run at-least-once; double-charging and double-emailing result |
 | `retry_on` without `attempts` limit | Infinite retries on persistent errors |
-| Using `:inline` or `:async` in production | No persistence, no retry, no monitoring |
-| Complex business logic in `perform` | Keep `perform` thin. Delegate to service objects. |
 | Missing `discard_on` for permanent errors | Job retries forever on `RecordNotFound` |
-
-## Red Flags
-
-- Job performs non-idempotent side effects without "already done?" check
-- Passing large or non-serializable objects as arguments
-- Relying on "run once" semantics (at-least-once delivery can run a job twice)
-- Using `:inline` or `:async` in production
-- Recurring job defined only in code without `recurring.yml` or equivalent
-- No error handling in `perform` — exceptions silently discarded or retried endlessly
+| Complex business logic in `perform` | Keep `perform` thin — delegate to service objects |
+| Using `:inline` or `:async` in production | No persistence, no retry, no monitoring |
+| Recurring job defined only in code | Use `recurring.yml` or equivalent for visibility and recoverability |
 
 ## Integration
 
@@ -145,6 +113,5 @@ production:
 |-------|---------------|
 | **rails-migration-safety** | Solid Queue uses DB tables; add migrations safely |
 | **rails-security-review** | Jobs receive serialized input; validate like any entry point |
-| **rspec-best-practices** | TDD gate: write and validate job spec before implementation |
+| **rspec-best-practices** | TDD gate: write job spec before implementation; use `perform_enqueued_jobs` |
 | **ruby-service-objects** | Keep `perform` thin; call service objects for business logic |
-| **rspec-best-practices** | Use `perform_enqueued_jobs` to test; test idempotency |
