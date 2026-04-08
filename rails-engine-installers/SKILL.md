@@ -39,30 +39,15 @@ WHEN building or reviewing an install generator:
 
 **DO NOT ship a generator without completing steps 3 and 4.**
 
-## Responsibilities
+## Constraints
 
-- Copy migrations into the host app (`db/migrate`)
-- Generate an initializer with configuration defaults
-- Add or document route mounting
-- Seed optional setup files or permissions
-- Expose a single install command for non-trivial setup
-
-## Rules
-
-- **Never** modify host files or state from initializers or `engine.rb` at load time.
-- **Never** inject routes, initializer blocks, or migrations without checking for existing content first.
-- Prefer generators over manual copy-paste instructions when setup is non-trivial.
-- If migrations are required, copy them — do not apply them automatically.
-- Document all steps that the generator cannot perform (manual rollback, required env vars).
-
-## Common Mistakes
-
-| Mistake | Correct approach |
-|---------|-----------------|
-| Overwriting host files without checking | Guard with `File.exist?` or Thor's `inject_into_file` with a marker check |
-| Injecting routes unconditionally | Check routes file for existing mount before inserting |
-| Hiding setup inside initializers | Use generator output; initializers should only configure, never set up |
-| No rollback documentation | List manual undo steps in comments or README |
+| Constraint | Do | Avoid |
+|---|---|---|
+| Boot-time mutation | Configure only in initializers | Modifying host files or state at load time from `engine.rb` or initializers |
+| Idempotency | Guard with `File.exist?` or Thor's `inject_into_file` with a marker | Overwriting or inserting routes, initializers, or migrations without checking |
+| Migrations | Copy to host `db/migrate`; host runs them | Applying migrations automatically |
+| Manual steps | Document rollback steps and required env vars | Leaving install gaps undocumented |
+| Docs accuracy | Match install docs to generator behavior | Docs that describe a different install path than the generator produces |
 
 ## Examples
 
@@ -114,13 +99,6 @@ RSpec.describe MyEngine::InstallGenerator, type: :generator do
 end
 ```
 
-## Red Flags
-
-- Generator overwrites host files without checking for existing content
-- Install flow modifies boot sequence or runs code at require time
-- Setup steps hidden inside initializers instead of explicit generator output
-- Install docs do not match generator behavior
-
 ## Generator Checklist
 
 - [ ] Files created in correct host paths
@@ -128,6 +106,7 @@ end
 - [ ] Sensible defaults that are easy to edit
 - [ ] Clear output telling the user what remains manual
 - [ ] Rollback steps documented
+- [ ] Install docs match what the generator actually produces
 
 ## Output Style
 
