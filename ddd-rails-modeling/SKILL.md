@@ -113,19 +113,6 @@ end
 - **Suggested home:** `app/services/orders/create_order.rb`
 - **Avoid:** Fat controller method or a callback chain on `Order`.
 
-### Anti-Pattern — Cargo-Cult DDD
-
-```ruby
-# BAD: adding repositories, command handlers, and domain events
-# when a normal model + service already expresses the use case cleanly.
-class OrderRepository
-  def find(id) = Order.find(id)       # No real abstraction added
-  def save(order) = order.save        # ActiveRecord already does this
-end
-```
-
-- **Problem:** Adds indirection without clarifying ownership or protecting a real boundary.
-
 ## Common Mistakes
 
 | Mistake | Reality |
