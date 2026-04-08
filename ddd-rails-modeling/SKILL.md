@@ -13,18 +13,6 @@ Use this skill when the domain concepts are clear enough that the next question 
 
 **Core principle:** Model real domain pressure, not textbook DDD vocabulary.
 
-## Quick Reference
-
-| Concept | Rails-first default |
-|---------|---------------------|
-| Entity | ActiveRecord model when persisted identity matters |
-| Value object | Plain Ruby object near the domain it supports |
-| Aggregate root | The main entry point that guards invariants |
-| Domain service | PORO for business behavior that does not belong to one entity |
-| Application service | Orchestrator in `app/services` coordinating a use case |
-| Repository | Use only for a real boundary beyond normal ActiveRecord usage |
-| Domain event | Explicit object only when multiple downstream consumers justify it |
-
 ## HARD-GATE
 
 ```text
@@ -33,100 +21,151 @@ DO NOT fight Rails defaults when a normal model or service expresses the domain 
 ALWAYS start from domain invariants, ownership, and lifecycle before choosing a pattern.
 ```
 
-## When to Use
-
-- A Rails feature has clear domain language but unclear modeling choices.
-- The user asks whether something should be a model, value object, service, repository, or event.
-- A bounded context is clear and needs tactical design in Rails.
-- **Next step:** Chain to `generate-tasks` for implementation planning, or to `rails-tdd-slices` once the first behavior to test is clear.
-
 ## Modeling Order
 
 1. **List domain concepts:** Entities, values, policies, workflows, and events from the ubiquitous language.
 2. **Identify invariants:** Decide which object or boundary must keep each rule true.
-3. **Choose the aggregate entry point:** Name the object that should guard state transitions and consistency.
+3. **Choose the aggregate entry point:** Name the object that guards state transitions and consistency.
 4. **Place behavior:** Keep behavior on the entity/aggregate when cohesive; extract a domain service only when behavior spans multiple concepts cleanly.
 5. **Pick Rails homes:** Choose the simplest location that matches the boundary and repo conventions.
 6. **Verify with tests:** Hand off to `rails-tdd-slices` and `rspec-best-practices` before implementation.
 
 ## Rails-First Mapping
 
-| Need | Prefer | Avoid by default |
-|------|--------|------------------|
-| Persisted concept with identity | ActiveRecord model | Extra wrapper object with no added meaning |
-| Small immutable calculation or policy value | PORO value object | Shoving all logic into helpers or primitives |
-| Use-case orchestration | Application service in `app/services` | Fat controller or callback chains |
-| Cross-entity business rule | Domain service | Picking an arbitrary model just to hold the code |
-| Complex query / persistence abstraction | Repository only if boundary is real | Creating repositories for every query |
-| Multi-consumer business signal | Explicit domain event | Callback-driven hidden side effects |
-
-## Suggested Rails Homes
-
-| Modeling choice | Typical home |
-|-----------------|--------------|
-| Aggregate / entity | `app/models/...` |
-| Application or domain service | `app/services/...` |
-| Value object | `app/models/...` or nearby PORO location used by the repo |
-| Policy / rule object | `app/services/...`, `app/policies/...`, or project convention |
-| Domain event object | `app/events/...` or project-specific namespace if the repo already uses events |
+| DDD concept | Rails-first default | Avoid by default | Typical home |
+|-------------|---------------------|------------------|--------------|
+| Entity | ActiveRecord model when persisted identity matters | Extra wrapper object with no added meaning | `app/models/` |
+| Value object | PORO — immutable, equality by value | Shoving logic into helpers or primitives | `app/models/` or near the domain |
+| Aggregate root | The model that guards invariants and is the single entry point | Splitting invariants across multiple models | `app/models/` |
+| Domain service | PORO for behavior spanning multiple entities | Arbitrary model chosen just to hold code | `app/services/` |
+| Application service | Orchestrator for one use case | Fat controller or callback chains | `app/services/` |
+| Repository | Only when a real persistence boundary exists beyond ActiveRecord | Repositories for every query | `app/repositories/` (rare) |
+| Domain event | Explicit object when multiple downstream consumers justify it | Callback-driven hidden side effects | `app/events/` or project namespace |
 
 ## Output Style
 
-When using this skill, return:
+When using this skill, return for each domain concept:
 
-1. **Domain concept**
-2. **Recommended modeling choice**
-3. **Suggested Rails home**
-4. **Invariant or ownership reason**
-5. **Patterns to avoid**
-6. **Next skill to chain**
+1. **Domain concept** — name from the ubiquitous language
+2. **Recommended modeling choice** — entity, value object, service, etc.
+3. **Suggested Rails home** — file path
+4. **Invariant or ownership reason** — why this boundary
+5. **Patterns to avoid** — what not to reach for
+6. **Next skill to chain** — `generate-tasks`, `rails-tdd-slices`, etc.
 
 ## Examples
 
-### Good: Value Object
+### Value Object — Money
 
 ```ruby
-# Money or ReservationWindow carries behavior and invariants
-# but does not need its own database identity.
+# app/models/money.rb
+class Money
+  include Comparable
+
+  attr_reader :amount_cents, :currency
+
+  def initialize(amount_cents, currency = "USD")
+    @amount_cents = Integer(amount_cents)
+    @currency = currency.upcase.freeze
+    freeze
+  end
+
+  def +(other)
+    raise ArgumentError, "Currency mismatch" unless currency == other.currency
+    Money.new(amount_cents + other.amount_cents, currency)
+  end
+
+  def <=>(other)
+    return nil unless currency == other.currency
+    amount_cents <=> other.amount_cents
+  end
+
+  def ==(other)
+    other.is_a?(Money) && amount_cents == other.amount_cents && currency == other.currency
+  end
+
+  alias eql? ==
+
+  def hash
+    [amount_cents, currency].hash
+  end
+
+  def to_s
+    "#{currency} #{format('%.2f', amount_cents / 100.0)}"
+  end
+end
 ```
 
-- **Modeling choice:** Value object
-- **Suggested home:** PORO near the domain it supports
+- **Modeling choice:** Value object — equality by value, immutable, no database identity needed.
+- **Suggested home:** `app/models/money.rb`
+- **Avoid:** Adding `belongs_to` or a database table — this is a calculation value, not an entity.
 
-### Good: Application Service
+### Application Service — CreateOrder
 
 ```ruby
-# Orders::CreateOrder coordinates inventory, pricing, persistence,
-# and follow-up side effects for one use case.
+# app/services/orders/create_order.rb
+module Orders
+  class CreateOrder
+    Result = Struct.new(:success?, :order, :errors, keyword_init: true)
+
+    def self.call(user:, product_id:, quantity:)
+      new(user: user, product_id: product_id, quantity: quantity).call
+    end
+
+    def initialize(user:, product_id:, quantity:)
+      @user       = user
+      @product_id = product_id
+      @quantity   = quantity
+    end
+
+    def call
+      product = Product.find(@product_id)
+      order   = @user.orders.build(product: product, quantity: @quantity)
+
+      if order.save
+        Result.new(success?: true, order: order, errors: [])
+      else
+        Result.new(success?: false, order: nil, errors: order.errors.full_messages)
+      end
+    rescue ActiveRecord::RecordNotFound
+      Result.new(success?: false, order: nil, errors: ["Product not found"])
+    end
+  end
+end
 ```
 
-- **Modeling choice:** Application service
+- **Modeling choice:** Application service — coordinates persistence and follows up side effects for one use case.
 - **Suggested home:** `app/services/orders/create_order.rb`
+- **Avoid:** Fat controller method or a callback chain on `Order`.
 
-### Bad: Cargo-Cult DDD
+### Anti-Pattern — Cargo-Cult DDD
 
 ```ruby
-# Bad move:
-# Add repositories, command handlers, and domain events
+# BAD: adding repositories, command handlers, and domain events
 # when a normal model + service already expresses the use case cleanly.
+class OrderRepository
+  def find(id) = Order.find(id)       # No real abstraction added
+  def save(order) = order.save        # ActiveRecord already does this
+end
 ```
+
+- **Problem:** Adds indirection without clarifying ownership or protecting a real boundary.
 
 ## Common Mistakes
 
 | Mistake | Reality |
 |---------|---------|
 | Turning every concept into a service | Many behaviors belong naturally on entities or value objects |
-| Creating repositories for all reads and writes | ActiveRecord already gives a strong default persistence boundary |
+| Creating repositories for all reads and writes | ActiveRecord already provides a strong default persistence boundary |
 | Treating aggregates as folder names only | Aggregates exist to protect invariants, not to look architectural |
-| Adding domain events for one local callback | Events should justify their coordination cost |
-| Forgetting Rails conventions entirely | DDD should sharpen Rails design, not replace it wholesale |
+| Adding domain events for one local callback | Events justify their cost only when multiple downstream consumers exist |
+| Pattern choice justified only with "DDD says so" | The reason must be an invariant, ownership boundary, or clear coordination need |
 
 ## Red Flags
 
-- Pattern choice is justified only with "DDD says so"
-- The same invariant is enforced from several unrelated entry points
+- The same invariant enforced from several unrelated entry points
 - New abstractions increase indirection without clarifying ownership
-- Primitive obsession still exists, but modeling is focused on folders instead of concepts
+- Primitive obsession persists while modeling is focused only on folder names
 
 ## Integration
 

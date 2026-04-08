@@ -3,95 +3,78 @@ name: rails-engine-installers
 description: >
   Use when creating install generators, copied migrations, or initializer
   installers for Rails engines. Covers idempotent setup tasks, host-app
-  onboarding, and route mount setup.
+  onboarding, and route mount setup. Trigger words: install generator,
+  mountable engine setup, gem installation, engine onboarding,
+  rails plugin installer, copy migrations, initializer generator,
+  route mount setup, engine configuration generator.
 ---
+
 # Rails Engine Installers
 
-Use this skill when the task is to design or review how a host app installs and configures a Rails engine.
+Use this skill when the task is to design or review how a host app installs and configures a Rails engine — generating initializers, copying migrations, mounting routes, or exposing a single install command.
 
-Good installation flows are explicit, repeatable, and safe to rerun.
+**Core principle:** Setup must be explicit, repeatable, and safe to rerun. Never modify the host app at boot time.
 
-## Quick Reference
+## Installer Components
 
-| Installer Component | Purpose |
-|--------------------|---------|
-| Generator | Creates initializer, route mount, or optional setup files; must be idempotent |
-| Migrations | Copies engine migrations into host `db/migrate`; host owns and runs them |
-| Initializer | Provides configuration defaults; generated once, editable by host |
-| Routes | Adds `mount Engine, at: '/path'`; document or generate, avoid duplicates |
+| Component | Purpose | Key constraint |
+|-----------|---------|----------------|
+| Generator | Creates initializer, route mount, or setup files | Must be idempotent — safe to rerun |
+| Migrations | Copies engine migrations into host `db/migrate` | Host owns and runs them; never apply automatically |
+| Initializer | Provides configuration defaults | Generated once, editable by host |
+| Routes | Adds `mount Engine, at: '/path'` | Check for existing mount before injecting |
 
-## Primary Goals
+## HARD-GATE: Validation Workflow
 
-- Make host setup obvious.
-- Keep setup idempotent.
-- Prefer generated files over hidden runtime mutation.
-- Keep operational steps documented and testable.
+```
+WHEN building or reviewing an install generator:
 
-## Typical Responsibilities
+1. GENERATE:  Run the generator against a clean host app
+2. VERIFY:    Check output files exist in the correct host paths
+3. RERUN:     Run the generator a second time
+4. CONFIRM:   No duplicate files, routes, or initializer blocks inserted
+5. DOCUMENT:  List what was generated vs. what the user must do manually
+6. TEST:      Cover both single-run and rerun behavior in generator specs
+```
 
-- copy migrations into the host app
-- create an initializer with configuration defaults
-- add or document route mounting
-- seed optional setup files or permissions
-- expose a single install command when it improves usability
+**DO NOT ship a generator without completing steps 3 and 4.**
 
-## Common Mistakes
+## Responsibilities
 
-| Mistake | Reality |
-|---------|---------|
-| Non-idempotent generators | Generators must be safe to run multiple times; check before injecting routes or files |
-| Mutating host in boot | Never modify host files or state from initializers or engine.rb at load time |
-| No rollback for install | Document manual rollback steps; generators cannot reliably undo all changes |
-
-## Red Flags
-
-- Generator that overwrites host files without checking for existing content
-- Install flow modifies boot sequence or runs code at require time
-- No idempotency check before injecting routes, initializer, or migrations
-- Setup steps hidden inside initializers instead of explicit generator output
+- Copy migrations into the host app (`db/migrate`)
+- Generate an initializer with configuration defaults
+- Add or document route mounting
+- Seed optional setup files or permissions
+- Expose a single install command for non-trivial setup
 
 ## Rules
 
-- Never make boot-time code silently modify the host app.
-- Prefer generators over manual copy-paste instructions when the setup is non-trivial.
-- Generators must be safe to run more than once.
-- If a route mount is required, either generate it carefully or document it explicitly.
-- If migrations are required, treat them as host-owned changes and copy them rather than applying them automatically.
+- **Never** modify host files or state from initializers or `engine.rb` at load time.
+- **Never** inject routes, initializer blocks, or migrations without checking for existing content first.
+- Prefer generators over manual copy-paste instructions when setup is non-trivial.
+- If migrations are required, copy them — do not apply them automatically.
+- Document all steps that the generator cannot perform (manual rollback, required env vars).
 
-## Generator Checklist
+## Common Mistakes
 
-- Files generated into the correct host paths
-- No duplicate inserts on rerun
-- Sensible defaults that are easy to edit
-- Clear output telling the user what remains manual
-- Tests that cover generated content and rerun behavior
-
-## Common Patterns
-
-- `install` generator for initializer plus route guidance
-- `install:migrations` or copied migrations for persistence changes
-- optional feature-specific generators for admin, jobs, or assets
-
-## Review Triggers
-
-Flag these problems:
-
-- setup steps hidden inside initializers
-- migrations implied but not installed
-- route modifications that are brittle or duplicated
-- generators that assume a specific host app layout without checks
-- install docs that do not match the generator behavior
+| Mistake | Correct approach |
+|---------|-----------------|
+| Overwriting host files without checking | Guard with `File.exist?` or Thor's `inject_into_file` with a marker check |
+| Injecting routes unconditionally | Check routes file for existing mount before inserting |
+| Hiding setup inside initializers | Use generator output; initializers should only configure, never set up |
+| No rollback documentation | List manual undo steps in comments or README |
 
 ## Examples
 
-**Idempotent install generator (only inject once):**
+**Idempotent install generator — only inject once:**
 
 ```ruby
 # lib/generators/my_engine/install/install_generator.rb
 module MyEngine
   class InstallGenerator < Rails::Generators::Base
-    def inject_initializer
-      return if initializer_already_present?
+    def create_initializer
+      return if File.exist?(File.join(destination_root, 'config/initializers/my_engine.rb'))
+
       create_file 'config/initializers/my_engine.rb', <<~RUBY
         MyEngine.configure do |config|
           config.user_class = "User"
@@ -99,36 +82,60 @@ module MyEngine
       RUBY
     end
 
-    def inject_routes
+    def mount_route
       route "mount MyEngine::Engine, at: '/admin'"
-    end
-
-    private
-
-    def initializer_already_present?
-      File.exist?(File.join(destination_root, 'config/initializers/my_engine.rb'))
     end
   end
 end
 ```
 
-**Generator test (idempotency):**
+**Generator test — covers single run and idempotent rerun:**
 
 ```ruby
-it 'does not duplicate route on second run' do
-  run_generator
-  run_generator
-  expect(File.read('config/routes.rb')).to have_content('mount MyEngine::Engine', 1)
+RSpec.describe MyEngine::InstallGenerator, type: :generator do
+  destination File.expand_path('../../tmp', __dir__)
+  before { prepare_destination }
+
+  it 'creates the initializer' do
+    run_generator
+    expect(file('config/initializers/my_engine.rb')).to exist
+  end
+
+  it 'does not duplicate the initializer on rerun' do
+    2.times { run_generator }
+    content = File.read(file('config/initializers/my_engine.rb'))
+    expect(content.scan('MyEngine.configure').size).to eq(1)
+  end
+
+  it 'does not duplicate the route mount on rerun' do
+    2.times { run_generator }
+    expect(File.read(file('config/routes.rb')).scan('mount MyEngine::Engine').size).to eq(1)
+  end
 end
 ```
 
+## Red Flags
+
+- Generator overwrites host files without checking for existing content
+- Install flow modifies boot sequence or runs code at require time
+- Setup steps hidden inside initializers instead of explicit generator output
+- Install docs do not match generator behavior
+
+## Generator Checklist
+
+- [ ] Files created in correct host paths
+- [ ] No duplicate inserts on rerun (validated manually and in specs)
+- [ ] Sensible defaults that are easy to edit
+- [ ] Clear output telling the user what remains manual
+- [ ] Rollback steps documented
+
 ## Output Style
 
-When asked to implement setup flow:
+When implementing an install flow:
 
-1. State what must be generated versus manually configured.
-2. Implement the install path with idempotency in mind.
-3. Add generator tests and concise user-facing instructions.
+1. Identify what must be generated vs. manually configured — state this explicitly.
+2. Implement with idempotency guards for every file, route, and migration copy.
+3. Add generator specs covering single-run and rerun behavior, then write concise user-facing setup instructions.
 
 ## Integration
 
