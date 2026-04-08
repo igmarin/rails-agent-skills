@@ -22,52 +22,31 @@ Keep this skill focused on structure and design. Use adjacent skills for install
 | Engine | Needs Rails autoload paths, initializers, migrations, assets, jobs, or host integration |
 | Mountable engine | Needs its own routes, controllers, views, assets, and namespace boundary |
 
-## Common Mistakes
+## Pitfalls
 
-| Mistake | Reality |
-|---------|---------|
-| Starting with mountable when plain gem suffices | Use the lightest option; mountable adds routes, controllers, views — only when you need them |
+| Pitfall | What to do |
+|---------|------------|
+| Starting with mountable when plain gem suffices | Use the lightest option — mountable adds routes, controllers, views only when needed |
 | Missing `isolate_namespace` | Mountable and public-facing engines must isolate to avoid constant collisions with host |
-| No host contract defined | Without a documented contract, integration becomes guesswork and breaks across host apps |
-
-## Red Flags
-
-- No namespace isolation for mountable or public engines
-- Engine depends on host internals (direct constants, private APIs)
-- No dummy app for integration verification
+| No host contract defined | Without a documented contract, integration becomes guesswork across host apps |
+| Engine depends on host internals | Reference host models through configurable class names or adapters |
+| No dummy app | Integration must be verified through a real mounted engine, not isolated classes |
 
 ## Workflow
 
-1. Identify the engine type before writing code.
-2. Define the host-app contract.
-3. Create the minimal engine structure.
-4. Implement features behind a namespace.
-5. Plan the minimum integration coverage the engine will need.
+1. Identify the engine type before writing code. Scaffold with the correct generator:
+   ```bash
+   rails plugin new my_engine --mountable   # mountable engine
+   rails plugin new my_engine --full        # full engine (non-isolated)
+   rails plugin new my_engine               # plain Railtie/gem
+   ```
+2. Define the host-app contract (what host must provide; what engine exposes).
+3. Create the minimal engine structure. **Checkpoint:** `bundle exec rake` inside the engine must pass.
+4. Implement features behind the namespace. **Checkpoint:** mount engine in dummy app routes and verify with `bundle exec rails routes`.
+5. Plan and write minimum integration coverage through the dummy app.
 6. Document the host-app contract clearly enough for follow-on work.
 
 If the user does not specify the engine type, infer it from the requested behavior and say which type you chose.
-
-## Choose The Right Abstraction
-
-Use the lightest option that fits:
-
-- Plain gem: no Rails hooks or app directories needed.
-- Railtie: needs Rails initialization hooks but not models/controllers/routes/views.
-- Engine: needs Rails autoload paths, initializers, migrations, assets, jobs, or host integration.
-- Mountable engine: needs its own routes, controllers, views, assets, and namespace boundary.
-
-Prefer a regular engine for shared framework behavior and a mountable engine for reusable product areas with UI.
-
-## Default Conventions
-
-- Namespace everything under the engine module.
-- Use `isolate_namespace` for mountable engines and public-facing engines.
-- Keep host-app integration explicit. Prefer generators, configuration, and documented setup over hidden magic.
-- Keep initializers idempotent and safe in development reloads.
-- Use `config.to_prepare` only for reload-sensitive integration code such as decorators.
-- Avoid monkey patches unless the engine's purpose is extension of an existing framework and the patch is explicit, minimal, and tested.
-- Put reusable domain logic in POROs/services instead of burying behavior in hooks.
-- Treat database migrations as host-owned operational changes. Provide install/copy generators instead of silently applying them.
 
 ## Recommended Structure
 
@@ -121,30 +100,24 @@ Do not scatter configuration across unrelated constants and initializers.
 
 ## Implementation Rules
 
-- Keep engine routes inside the engine unless there is a strong reason to inject host routes.
-- Reference host app models through configurable class names or adapters when coupling is unavoidable.
-- Avoid assuming a specific authentication library, job backend, or asset pipeline unless the engine is intentionally built for one stack.
-- Prefer engine-local controllers, helpers, and views over reaching into the host app.
-- Expose integration seams through services, adapters, notifications, or hooks instead of direct constants from the host app.
-- If the engine ships migrations, make them copyable and re-runnable without surprising side effects.
-- If the engine ships assets, keep them namespaced to avoid collisions.
-- If the engine exposes generators, make them idempotent.
+- Use `isolate_namespace` for mountable and public-facing engines.
+- Keep initializers idempotent and safe in development reloads; use `config.to_prepare` only for reload-sensitive code (e.g. decorators).
+- Treat migrations as host-owned — provide install/copy generators, never apply silently.
+- Reference host app models through configurable class names or adapters; do not hard-code host constants.
+- Expose integration seams through services, adapters, or hooks — not direct host constants.
+- Keep assets and generators namespaced and idempotent.
+- Put reusable domain logic in POROs/services, not hooks.
 
-Use `rails-engine-installers` for generator-heavy setup work, `rails-engine-testing` for dummy-app and regression coverage, and `rails-engine-reviewer` for findings-first audits.
+Use `rails-engine-installers` for generator-heavy setup, `rails-engine-testing` for dummy-app coverage, and `rails-engine-reviewer` for audits.
 
 ## Testing Expectations
 
-Always include tests that prove the engine works when mounted or loaded by a host app.
+Minimum coverage through the dummy app (not just isolated classes):
 
-Minimum coverage:
-
-- Unit tests for public POROs/services.
-- Engine integration tests through a dummy app.
-- Routing/request tests for mountable engine endpoints.
-- Configuration tests for supported host customization.
-- Generator tests for install/setup steps when generators exist.
-
-Use the dummy app to verify real integration, not just isolated classes.
+- Engine integration tests through the mounted dummy app.
+- Routing/request tests for all mountable engine endpoints.
+- Configuration tests for each supported host customization option.
+- Generator tests when install/setup generators exist.
 
 ## Examples
 

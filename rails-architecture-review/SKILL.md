@@ -3,8 +3,9 @@ name: rails-architecture-review
 description: >
   Use when reviewing Rails application structure, identifying fat models or controllers,
   auditing callbacks, concerns, service extraction, domain boundaries, or general Rails
-  architecture decisions. Covers controller orchestration, model responsibilities, and
-  abstraction quality.
+  architecture decisions. Recommends service object extractions, simplifies callback
+  chains, identifies abstraction quality issues, and produces severity-classified
+  findings with the smallest credible improvement for each.
 ---
 
 # Rails Architecture Review
@@ -32,15 +33,7 @@ Use this skill when the task is to review or improve the structure of a Rails ap
 4. Inspect controller size and orchestration.
 5. Check concerns, helpers, and presenters for mixed responsibilities.
 6. Check whether abstractions clarify the design or only move code around.
-
-## What Good Looks Like
-
-- Controllers coordinate request and response flow, not domain policy.
-- Models own persistence and cohesive domain rules, not unrelated orchestration.
-- Services, query objects, and policies exist where they create a real boundary.
-- Callbacks are small and unsurprising.
-- Concerns represent one coherent capability.
-- External integrations sit behind dedicated collaborators.
+7. **Verify each High-severity finding** by reading the actual code — confirm it is a real structural problem, not just a pattern match on file size or line count.
 
 ## Severity Levels
 
@@ -91,24 +84,18 @@ class OrdersController < ApplicationController
 end
 ```
 
-## Common Mistakes
+## Pitfalls
 
-| Mistake | Reality |
-|---------|---------|
-| "Fat model is fine, controllers should be skinny" | Both should be focused. Extract to services, not models. |
-| "One concern per model keeps it clean" | Concerns that combine unrelated behavior are worse than inline code. |
-| "Service objects for everything" | Trivial one-liner wrappers add indirection without value. |
-| Callbacks for business workflows | Callbacks should be persistence-level. Use explicit service calls. |
-| "It works, so the architecture is fine" | Working code with poor boundaries becomes unmaintainable. |
-
-## Red Flags
-
-- Model with 500+ lines and multiple concerns
-- Controller action with more than 15 lines of logic
-- Callback chain that triggers jobs, mailers, or external API calls
-- Concern used by only one class (just inline it)
-- Service object that only calls one ActiveRecord method
-- No clear separation between read and write paths
+| Pitfall | What to do |
+|---------|------------|
+| "Fat model is fine, controllers should be skinny" | Both should be focused — extract to services, not models |
+| "One concern per model keeps it clean" | Concerns combining unrelated behavior are worse than inline code |
+| "Service objects for everything" | Trivial one-liner wrappers add indirection without value |
+| Callbacks for business workflows | Callbacks are persistence-level — use explicit service calls |
+| Model with 500+ lines and multiple concerns | Extract domain logic to services or query objects |
+| Controller action > 15 lines | Extract to service — controller coordinates, not implements |
+| Callback chain triggering jobs, mailers, or external APIs | Move side effects into explicit service calls |
+| Concern used by only one class | Just inline it — a single-use concern adds no value |
 
 ## Output Style
 
