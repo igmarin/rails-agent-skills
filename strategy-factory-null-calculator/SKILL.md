@@ -3,42 +3,32 @@ name: strategy-factory-null-calculator
 description: >
   Use when building variant-based calculators with a single entry point that
   picks the right implementation (Strategy + Factory), or when adding a no-op
-  fallback (Null Object). Covers SERVICE_MAP routing and RSpec testing.
+  fallback (Null Object). Generates variant-based calculator classes, implements
+  SERVICE_MAP routing, and scaffolds RSpec tests per variant. Trigger words:
+  design pattern, Ruby, dispatch table, polymorphism, no-op default, variant
+  calculator, strategy pattern, factory pattern, null object pattern.
 ---
 
 # Strategy + Factory + Null Object Calculator Pattern
 
-Implements a **variant-based calculator** system with a single entry point, concrete strategies, and a no-op fallback (Null Object).
-
-**Core principle:** One API for the client: `Calculator::Factory.for(entity).calculate`. The factory picks the strategy; NullService handles unknown variants safely.
+One API for the client: `Calculator::Factory.for(entity).calculate`. The factory picks the strategy; NullService handles unknown variants safely.
 
 ## HARD-GATE: Tests Gate Implementation
 
-```
-EVERY component (Factory, BaseService, NullService, concrete services) MUST have
-its test written and validated BEFORE implementation.
-  1. Write the spec for the component (contexts per variant)
-  2. Run the spec — verify it fails because the component does not exist yet
-  3. ONLY THEN write the component implementation
-  4. Repeat for each component: Factory → BaseService → NullService → Concrete
-See rspec-best-practices for the full gate cycle.
-```
+For each component (Factory → BaseService → NullService → Concrete):
+1. Write the spec — contexts per variant, plus the NullService path
+2. Run it — verify it fails because the component does not exist yet
+3. Implement the component — minimum code to make the spec pass
+4. Run again — confirm green, then proceed to the next component
 
 ## Quick Reference
 
 | Component | Responsibility |
 |-----------|---------------|
-| **Factory** | Choose class from entity variant; return instance or NullService |
-| **BaseService** | Common `#calculate` flow, guards, call to `compute_result` |
-| **NullService** | Never compute; return nil safely |
-| **Concrete** | Variant condition in `should_calculate?` and logic in `compute_result` |
-
-## When to Use
-
-- The result depends on a **variant** of the context (program, tenant, plan type, etc.).
-- Logic per variant differs and you want it in separate classes.
-- You need a **safe fallback** when no supported variant exists (return `nil` or default without raising).
-- The client should use **one API**: `SomethingCalculator::Factory.for(entity).calculate`.
+| **Factory** | Dispatch to correct service class via SERVICE_MAP; fall back to NullService |
+| **BaseService** | Guard with `should_calculate?`; delegate to `compute_result` |
+| **NullService** | Always returns nil safely — never raises |
+| **Concrete** | Override `should_calculate?` (add variant check on top of `super`) and `compute_result` |
 
 ## File Structure
 
@@ -49,133 +39,69 @@ app/services/<calculator_name>/
 ├── null_service.rb
 ├── standard_service.rb
 ├── premium_service.rb
-└── README.md
 ```
 
-## 1. Module and Factory
+## 1. Factory
 
 ```ruby
 # frozen_string_literal: true
 
-module EligibilityDateCalculator
+module PricingCalculator
   class Factory
     SERVICE_MAP = {
-      'standard' => StandardEligibilityService,
-      'premium'  => PremiumEligibilityService
+      'standard' => StandardPricingService,
+      'premium'  => PremiumPricingService
     }.freeze
 
-    def self.for(animal)
-      shelter = animal.shelter
-      return NullService.new(animal) unless shelter&.participates_in_eligibility_program?
+    def self.for(order)
+      plan = order.plan
+      return NullService.new(order) unless plan&.active?
 
-      program_names = shelter.shelter_programs.pluck(:name)
-      service_class = SERVICE_MAP.find { |name, _| program_names.include?(name) }&.last || NullService
-      service_class.new(animal)
+      service_class = SERVICE_MAP[plan.name] || NullService
+      service_class.new(order)
     end
   end
 end
 ```
 
-Factory rules:
-- No qualifying context -> `NullService`
-- Variant not in `SERVICE_MAP` -> `NullService`
-- Multiple variants -> first match wins (define preference order in `SERVICE_MAP`)
+No qualifying context or unknown variant → `NullService`. For full BaseService and NullService implementations, see [IMPLEMENTATION.md](./IMPLEMENTATION.md).
 
-## 2. BaseService
+## 2. Usage
 
 ```ruby
-# frozen_string_literal: true
+price = PricingCalculator::Factory.for(order).calculate
+```
 
-module EligibilityDateCalculator
-  class BaseService
-    attr_reader :animal, :shelter
+## 3. Tests (RSpec)
 
-    def initialize(animal)
-      @animal = animal
-      @shelter = animal.shelter
+**Factory dispatch (all branches):**
+
+```ruby
+RSpec.describe PricingCalculator::Factory do
+  describe '.for' do
+    it 'returns NullService when plan is nil' do
+      order = create(:order, plan: nil)
+      expect(described_class.for(order)).to be_a(PricingCalculator::NullService)
     end
 
-    def calculate
-      return nil unless should_calculate?
-      intake_date = animal.intake_date
-      return nil if intake_date.blank?
-      compute_result(intake_date)
-    end
-
-    private
-
-    def should_calculate?
-      shelter&.participates_in_eligibility_program?
-    end
-
-    def compute_result(_intake_date)
-      nil
+    it 'returns StandardPricingService for standard plan' do
+      order = create(:order, plan: create(:plan, name: 'standard', active: true))
+      expect(described_class.for(order)).to be_a(PricingCalculator::StandardPricingService)
     end
   end
 end
 ```
 
-Subclasses override `should_calculate?` and `compute_result`.
+Cover inactive plan, each variant, and unknown variant. See [TESTING.md](./TESTING.md) for NullService and concrete service specs.
 
-## 3. NullService
+## Pitfalls
 
-```ruby
-# frozen_string_literal: true
-
-module EligibilityDateCalculator
-  class NullService < BaseService
-    private
-
-    def should_calculate?
-      false
-    end
-  end
-end
-```
-
-## 4. Concrete Services
-
-- Inherit from `BaseService`
-- `should_calculate?`: call `super` and add variant condition
-- `compute_result`: implement the formula
-
-## 5. Usage
-
-```ruby
-eligibility_date = EligibilityDateCalculator::Factory.for(animal).calculate
-```
-
-## 6. Tests (RSpec)
-
-- **Factory**: `.for` with contexts for each branch (nil shelter, no program, each variant, multiple variants)
-- **BaseService**: default `compute_result` returns nil
-- **NullService**: `#calculate` always nil
-- **Concrete services**: `should_calculate?` true only when variant applies; `compute_result` returns expected values
-
-Use FactoryBot for entity setup. Use `travel_to` for time-dependent calculations.
-
-## Common Mistakes
-
-| Mistake | Reality |
-|---------|---------|
-| No NullService — raising on unknown variant | Use NullService for safe no-op. Raising breaks the client. |
-| Factory logic scattered across callers | Centralize in Factory.for(entity). One entry point. |
-| BaseService without `should_calculate?` guard | Subclasses forget the guard. Put it in the base class. |
-| SERVICE_MAP with string keys that don't match DB values | Verify key names match exactly what's stored in the database |
-| No tests per variant | Each variant must have its own spec context |
-
-## Red Flags
-
-- Client code uses `case/when` instead of Factory (the whole point is to avoid conditionals)
-- NullService raises instead of returning nil
-- Concrete service overrides `#calculate` entirely (should only override `should_calculate?` and `compute_result`)
-- SERVICE_MAP is mutable (must be `.freeze`)
-- No test for the NullService path
+- **SERVICE_MAP key mismatch**: verify keys match exactly what is stored in the database — typos cause silent NullService fallbacks.
+- **Missing test for NullService path**: always add a spec context for unknown/nil variants or tests will never catch the fallback regression.
 
 ## Integration
 
 | Skill | When to chain |
 |-------|---------------|
-| **ruby-service-objects** | Base conventions (YARD, constants, `frozen_string_literal`, response style) |
-| **rspec-service-testing** | For testing Factory, BaseService, NullService, and concrete strategies |
-| **rspec-best-practices** | For general RSpec structure |
+| **rspec-service-testing** | For complete Factory, BaseService, NullService, and concrete strategy specs |
+| **ruby-service-objects** | For naming conventions, YARD docs, and `frozen_string_literal` baseline |
