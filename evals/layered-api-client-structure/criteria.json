@@ -1,0 +1,81 @@
+{
+  "context": "Tests whether the agent implements the full 5-layer Auth→Client→Fetcher→Builder→DomainEntity pattern with correct file placement, class structure, and constants as prescribed for Ruby API client integrations.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Auth file exists",
+      "max_score": 5,
+      "description": "app/services/weather_service/auth.rb exists and defines a class named Auth within a module namespace"
+    },
+    {
+      "name": "Client file exists",
+      "max_score": 5,
+      "description": "app/services/weather_service/client.rb exists and defines a class named Client within the same module namespace"
+    },
+    {
+      "name": "Fetcher file exists",
+      "max_score": 5,
+      "description": "app/services/weather_service/fetcher.rb exists and defines a class named Fetcher within the same module namespace"
+    },
+    {
+      "name": "Builder file exists",
+      "max_score": 5,
+      "description": "app/services/weather_service/builder.rb exists and defines a class named Builder within the same module namespace"
+    },
+    {
+      "name": "Domain entity file exists",
+      "max_score": 5,
+      "description": "A domain entity file (e.g. reading.rb) exists in app/services/weather_service/ and defines a class within the module namespace"
+    },
+    {
+      "name": "Auth self.default",
+      "max_score": 8,
+      "description": "Auth class defines a self.default class method that reads credentials from configuration (not hardcoded values)"
+    },
+    {
+      "name": "Auth token caching",
+      "max_score": 8,
+      "description": "Auth#token method caches the token in an instance variable (pattern: return @token if @token)"
+    },
+    {
+      "name": "Client::Error class",
+      "max_score": 8,
+      "description": "Client class defines a nested Error class inheriting from StandardError"
+    },
+    {
+      "name": "Client constants",
+      "max_score": 8,
+      "description": "Client class defines MISSING_CONFIGURATION_ERROR string constant, DEFAULT_TIMEOUT, and DEFAULT_RETRIES numeric constants"
+    },
+    {
+      "name": "Fetcher DI constructor",
+      "max_score": 8,
+      "description": "Fetcher initializer accepts client as positional argument and data_builder and default_query as keyword arguments"
+    },
+    {
+      "name": "Fetcher constants",
+      "max_score": 7,
+      "description": "Fetcher class defines MAX_RETRIES and RETRY_DELAY_IN_SECONDS constants"
+    },
+    {
+      "name": "Builder attribute filtering",
+      "max_score": 8,
+      "description": "Builder#build method uses slice (or select/filter) to restrict output fields to a whitelist — does NOT return all raw API fields"
+    },
+    {
+      "name": "Entity ATTRIBUTES constant",
+      "max_score": 8,
+      "description": "Domain entity defines an ATTRIBUTES frozen array constant listing the whitelisted field names"
+    },
+    {
+      "name": "Entity DEFAULT_QUERY constant",
+      "max_score": 7,
+      "description": "Domain entity defines a DEFAULT_QUERY string constant containing a SQL or query string"
+    },
+    {
+      "name": "README present",
+      "max_score": 5,
+      "description": "A README.md file is present in the module directory"
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "context": "Tests whether the agent implements correct error wrapping, credential safety, configuration validation, and HTTP resilience patterns in the Auth and Client layers of an API integration.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Auth includes HTTParty",
+      "max_score": 5,
+      "description": "Auth class includes HTTParty (or equivalent HTTP library include) rather than using Net::HTTP directly"
+    },
+    {
+      "name": "Auth credential validation",
+      "max_score": 10,
+      "description": "Auth initializer raises an error (any exception) when required credentials are blank/nil — does NOT silently accept missing credentials"
+    },
+    {
+      "name": "No hardcoded credentials",
+      "max_score": 10,
+      "description": "Auth class reads credentials from Rails configuration or environment variables — no literal credential strings appear in the source files"
+    },
+    {
+      "name": "Auth token caching",
+      "max_score": 8,
+      "description": "Auth#token (or equivalent method) caches the fetched token in an instance variable and returns the cached value on subsequent calls"
+    },
+    {
+      "name": "Client::Error class",
+      "max_score": 10,
+      "description": "Client defines a nested Error class inheriting from StandardError (not from RuntimeError or a generic base)"
+    },
+    {
+      "name": "HTTP error wrapping",
+      "max_score": 10,
+      "description": "Client's request method rescues HTTParty::Error (or equivalent HTTP library error) and re-raises as Client::Error"
+    },
+    {
+      "name": "JSON error wrapping",
+      "max_score": 10,
+      "description": "Client's request method rescues JSON::ParserError and re-raises as Client::Error"
+    },
+    {
+      "name": "Timeout configured",
+      "max_score": 8,
+      "description": "Client or Auth configures a timeout (DEFAULT_TIMEOUT constant or timeout option passed to HTTP calls) — not left at default/unlimited"
+    },
+    {
+      "name": "Missing config raises Client::Error",
+      "max_score": 10,
+      "description": "Client initializer raises Client::Error (using MISSING_CONFIGURATION_ERROR or similar message) when token or host is blank"
+    },
+    {
+      "name": "Retry constant",
+      "max_score": 9,
+      "description": "Client or Fetcher defines DEFAULT_RETRIES (or equivalent) as a numeric constant — retry count is not a magic number inline"
+    },
+    {
+      "name": "Spec covers error path",
+      "max_score": 10,
+      "description": "client_spec.rb contains at least one test case for error handling (network failure, JSON parse error, or missing configuration)"
+    }
+  ]
+}

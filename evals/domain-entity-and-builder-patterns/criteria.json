@@ -1,0 +1,66 @@
+{
+  "context": "Tests whether the agent correctly implements the Builder (with attribute whitelisting) and Domain Entity (with frozen ATTRIBUTES, SQL query constants, self.fetcher wiring, and sanitize_sql for search) layers, plus FactoryBot hash factories for API response test data.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Builder initializer attributes",
+      "max_score": 7,
+      "description": "Builder is initialized with an `attributes:` keyword argument stored as an instance variable"
+    },
+    {
+      "name": "Builder attribute filtering",
+      "max_score": 10,
+      "description": "Builder#build uses slice (or equivalent whitelist filter) to restrict output to only the specified attributes — does NOT return all fields from the raw response"
+    },
+    {
+      "name": "Builder response parsing",
+      "max_score": 7,
+      "description": "Builder#build accesses response structure keys (schema/columns and data array) to map rows rather than assuming a flat array"
+    },
+    {
+      "name": "Entity ATTRIBUTES constant",
+      "max_score": 8,
+      "description": "Animal class defines ATTRIBUTES as a frozen array (using .freeze) containing string field names"
+    },
+    {
+      "name": "Entity DEFAULT_QUERY constant",
+      "max_score": 7,
+      "description": "Animal class defines a DEFAULT_QUERY string constant containing a SQL SELECT statement"
+    },
+    {
+      "name": "Entity SEARCH_QUERY constant",
+      "max_score": 7,
+      "description": "Animal class defines a SEARCH_QUERY string constant with a parameterized SQL query (containing a placeholder such as ? or :param)"
+    },
+    {
+      "name": "Entity self.fetcher wiring",
+      "max_score": 9,
+      "description": "Animal defines a self.fetcher class method that instantiates Builder with ATTRIBUTES and Fetcher with the client and builder"
+    },
+    {
+      "name": "sanitize_sql usage",
+      "max_score": 10,
+      "description": "Animal's find/search method uses ActiveRecord::Base.sanitize_sql (or sanitize_sql_array) to construct parameterized queries — does NOT use string interpolation for user input"
+    },
+    {
+      "name": "FactoryBot hash factory",
+      "max_score": 10,
+      "description": "spec/factories/shelter_api/animal_response.rb defines a FactoryBot factory (not a model factory) that produces a hash matching the API response structure"
+    },
+    {
+      "name": "Factory in correct directory",
+      "max_score": 8,
+      "description": "The FactoryBot factory file is located under spec/factories/shelter_api/ (module-namespaced directory), not in spec/factories/ root"
+    },
+    {
+      "name": "ShelterApi module namespace",
+      "max_score": 8,
+      "description": "Both Builder and Animal classes are defined inside the ShelterApi module namespace (matching the existing client.rb and fetcher.rb)"
+    },
+    {
+      "name": "No raw interpolation in queries",
+      "max_score": 9,
+      "description": "Animal's search/find method does NOT use Ruby string interpolation (#{...}) to embed user-supplied values directly into SQL query strings"
+    }
+  ]
+}
