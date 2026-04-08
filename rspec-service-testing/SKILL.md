@@ -11,7 +11,19 @@ description: >
 
 Use this skill when writing tests for service classes under `spec/services/`.
 
-**Core principle:** Test the public contract (`.call`, `.find`, `.search`), not internal implementation. Use instance_double for isolation, create for integration.
+**Core principle:** Test the public contract (`.call`, `.find`, `.search`), not internal implementation. Use `instance_double` for isolation, `create` for integration.
+
+## Workflow: Write → Run → Verify → Fix
+
+```text
+1. WRITE:   Write the spec (happy path + error cases + edge cases)
+2. RUN:     bundle exec rspec spec/services/your_service_spec.rb
+3. VERIFY:  Confirm failures are for the right reason (not a typo or missing factory)
+4. FIX:     Implement or fix until the spec passes
+5. SUITE:   bundle exec rspec spec/services/ — verify no regressions
+```
+
+**DO NOT implement the service before step 1 is written and failing for the right reason.**
 
 ## Quick Reference
 
@@ -19,11 +31,11 @@ Use this skill when writing tests for service classes under `spec/services/`.
 |--------|------|
 | File location | `spec/services/module_name/service_spec.rb` |
 | Subject | `subject(:service_call) { described_class.call(params) }` |
-| Unit tests | `instance_double` for collaborators |
+| Unit isolation | `instance_double` for collaborators |
 | Integration | `create` for DB-backed tests |
-| Assertions | `aggregate_failures` for multi-assertion tests |
-| State | `change` matchers for before/after |
-| Time | `travel_to` for time-dependent behavior |
+| Multi-assertion | `aggregate_failures` |
+| State verification | `change` matchers |
+| Time-dependent | `travel_to` |
 | API responses | FactoryBot hash factories (`class: Hash`) |
 
 ## File Structure
@@ -40,31 +52,7 @@ spec/
         └── entity_response_factory.rb
 ```
 
-## Two Testing Styles
-
-### 1. Unit Tests (with `instance_double`)
-
-For testing services in isolation:
-
-```ruby
-let(:client) { instance_double(Api::Client) }
-let(:builder) { instance_double(Api::Builder) }
-
-before do
-  allow(client).to receive(:execute_query).and_return(response)
-end
-```
-
-### 2. Integration Tests (with `create`)
-
-For services that interact with the database:
-
-```ruby
-let(:source_shelter) { create(:shelter, :with_animals) }
-let(:target_shelter) { create(:shelter, :with_animals) }
-```
-
-## Template for `.call` Orchestrator Services
+## Spec Template
 
 ```ruby
 # frozen_string_literal: true
@@ -88,27 +76,46 @@ RSpec.describe ModuleName::MainService do
       end
     end
 
-    context 'when shelter is invalid' do
+    context 'when shelter is not found' do
       let(:params) { super().merge(shelter: { shelter_id: 999_999 }) }
 
       it 'returns error response' do
         expect(service_call[:success]).to be false
       end
     end
+
+    context 'when input is blank' do
+      let(:params) { { shelter: { shelter_id: nil }, items: [] } }
+
+      it 'returns error response with meaningful message' do
+        aggregate_failures do
+          expect(service_call[:success]).to be false
+          expect(service_call[:errors]).not_to be_empty
+        end
+      end
+    end
   end
 end
 ```
 
-## Conventions
+## Two Testing Styles
 
-- **`subject`** for the main action under test
-- **`let`** for test data, **`before`** only for stubbing
-- **`describe`** for method grouping, **`context`** for scenarios
-- **`aggregate_failures`** for multi-assertion tests
-- **`described_class`** for constants
-- **`change`** matchers for state verification
-- **`travel_to`** for time-dependent tests
-- **Ruby shorthand hash syntax** in `let` blocks
+### Unit Tests (with `instance_double`)
+
+```ruby
+let(:client) { instance_double(Api::Client) }
+
+before do
+  allow(client).to receive(:execute_query).and_return(api_response)
+end
+```
+
+### Integration Tests (with `create`)
+
+```ruby
+let(:source_shelter) { create(:shelter, :with_animals) }
+let(:target_shelter) { create(:shelter, :with_animals) }
+```
 
 ## FactoryBot Hash Factories for API Responses
 
@@ -128,25 +135,23 @@ FactoryBot.define do
 end
 ```
 
-## Testing Error Scenarios
+## Error Scenarios to Always Test
 
-Always test these:
 - Blank/nil inputs
 - Invalid references (record not found)
-- Failed HTTP requests / JSON parsing / network errors
+- Failed HTTP requests, JSON parsing errors, network errors
 - Partial failures (some items succeed, some fail)
-- Graceful error handling (non-critical operations)
+- Graceful handling of non-critical failures
 
-## Checklist for New Test Files
+## New Test File Checklist
 
 - [ ] `frozen_string_literal: true` pragma
 - [ ] `require 'spec_helper'`
-- [ ] `subject` defined for main action
+- [ ] `subject` defined for the main action
 - [ ] `instance_double` for unit / `create` for integration
-- [ ] Test `#initialize` with valid and invalid params
 - [ ] Happy path for each public method
-- [ ] Error/edge cases (blank input, invalid refs, failures)
-- [ ] Partial success scenarios
+- [ ] Error and edge cases (blank input, invalid refs, failures)
+- [ ] Partial success scenarios where relevant
 - [ ] `shared_examples` for repeated patterns
 - [ ] `aggregate_failures` for multi-assertion tests
 - [ ] `change` matchers for state verification
@@ -154,22 +159,14 @@ Always test these:
 
 ## Common Mistakes
 
-| Mistake | Reality |
-|---------|---------|
+| Mistake | Correct approach |
+|---------|-----------------|
 | Testing private methods directly | Test through the public interface (`.call`) |
-| Mock returning mock returning mock | Over-mocking. Test with real objects when possible. |
-| No error scenario tests | Happy path only = false confidence. Test failures. |
-| `let!` everywhere | Use `let` (lazy) unless value is needed for setup |
-| Huge factory setup | Keep factories minimal. Only attributes needed for the test. |
-| Not testing partial success | Real services have partial failures. Test them. |
-
-## Red Flags
-
-- Spec file with no error/edge case contexts
-- `allow(...).to receive(:anything)` — over-permissive stubbing
-- Tests that break when implementation changes but behavior stays correct
-- No shared_examples despite repeated patterns across specs
-- Missing FactoryBot hash factory for API response testing
+| Mock returning mock returning mock | Test with real objects when over-mocking; use `instance_double` for one level |
+| No error scenario tests | Happy path only = false confidence — always test failures |
+| `let!` everywhere | Use `let` (lazy) unless the value is needed unconditionally for setup |
+| Huge factory setup | Keep factories minimal — only attributes required for the test |
+| Spec breaks when implementation changes but behavior is unchanged | Tests that break on refactoring are testing internals, not contracts |
 
 ## Integration
 
