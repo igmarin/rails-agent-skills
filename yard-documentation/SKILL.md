@@ -2,7 +2,7 @@
 name: yard-documentation
 description: >
   Use when writing or reviewing inline documentation for Ruby code. Covers YARD tags
-  for classes and public methods (@param, @option, @return, @raise, @example). Trigger
+  for classes and public methods (param, option, return, raise, example tags). Trigger
   words: YARD, inline docs, method documentation, API docs, public interface, rdoc.
 ---
 # YARD Documentation
