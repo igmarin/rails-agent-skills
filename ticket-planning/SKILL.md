@@ -9,18 +9,9 @@ description: >
 
 # Ticket Planning
 
-Use this skill for initiative-to-ticket workflows:
+Normalize inputs, classify each work item, apply title conventions, draft tickets in a standard structure, then either return markdown drafts or create issues in the issue tracker after explicit approval.
 
-- the user already has a plan and wants ticket drafts
-- the user wants help turning an emerging plan into tickets
-- the user wants sprint-placement guidance for those tickets
-- the assistant should create the approved tickets in the issue tracker (when the user has access/tools configured)
-
-This skill covers **planning and execution flow**, not specific project management tool documentation.
-
-## Overview
-
-Normalize inputs, classify each work item, apply title conventions, draft tickets in a standard structure, reduce redundancy, then either return markdown drafts or create issues in the issue tracker after explicit approval.
+See [EXAMPLES.md](./EXAMPLES.md) for a complete plan → ticket draft example.
 
 ## Workflow
 
@@ -79,15 +70,7 @@ Write primarily for planning and execution clarity. Keep the main sections busin
 
 ### 5. Reduce redundancy
 
-Do not repeat the same business intent in every section.
-
-Prefer:
-
-- **Summary** — core outcome
-- **Background** — why it exists
-- **Acceptance Criteria** — observable completion
-- **Dependencies** — sequencing
-- **Technical Notes** — fields, systems, identifiers, integration constraints, implementation boundaries
+Do not repeat the same business intent in every section. Each section has one job — state the outcome, explain why, list observable criteria, note blockers, or describe implementation constraints. Do not restate the background in the summary or repeat the AC in technical notes.
 
 ### 6. Decide whether to stop at drafts or create in the issue tracker
 
@@ -127,7 +110,26 @@ When creating tickets in an issue tracker:
 
 ### Draft-only output
 
-Provide ticket markdown plus brief sequencing notes when helpful.
+Provide ticket markdown plus brief sequencing notes when helpful. Minimum inline shape:
+
+```
+BE | Add Google OAuth2 callback endpoint
+
+**Summary:** Implement the Rails OAuth2 callback action that exchanges the
+authorization code for a user token and creates or finds a User by email.
+
+**Background:** Users need Google login. Callback completes the flow after Google redirects.
+
+**Acceptance Criteria:**
+- POST /auth/google/callback exchanges code for token
+- Creates or finds User by email; returns session on success, error JSON on failure
+
+**Dependencies:** None. Unblocked.
+
+**Technical Notes:** Uses omniauth-google-oauth2. Callback path must match Google Cloud Console.
+```
+
+See [EXAMPLES.md](./EXAMPLES.md) for a full plan → ticket draft with classification applied.
 
 ### Creation output
 
@@ -137,16 +139,6 @@ After creation, report:
 - confirmed status
 - confirmed sprint/bucket
 - any assumptions used
-
-## Use This Skill When
-
-Typical prompts:
-
-- "Turn this plan into tickets"
-- "Help me plan the tickets for this initiative"
-- "Draft backend, web, and mobile tickets from this plan"
-- "Which sprint should these tickets go into?"
-- "Create these tickets in our issue tracker once the plan looks right"
 
 ## Integration
 

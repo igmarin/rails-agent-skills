@@ -39,44 +39,9 @@ Prioritize architectural risks over style comments. The main review targets are 
 | Missing dummy app coverage check | Dummy app must exist and be used; engines without it cannot prove host integration works |
 | Ignoring engine.rb | engine.rb often contains boot-time side effects; always inspect it |
 
-## Red Flags
+## Severity Tiers
 
-- engine.rb with side effects at load time (writes, mutations, eager loading of host code)
-- No namespace isolation; engine routes or models collide with host
-- Test suite passes only with a specific host app; no dummy app or generic integration coverage
-
-## What Good Looks Like
-
-- Clear namespace boundaries.
-- `isolate_namespace` used when the engine owns routes/controllers/views.
-- Small public API and explicit configuration surface.
-- Minimal assumptions about host authentication, user model, jobs, assets, and persistence.
-- Idempotent generators and documented setup.
-- Integration tests through a dummy app.
-
-## High-Severity Findings
-
-Flag these first:
-
-- Hidden dependency on a specific host model or constant.
-- Initializers that mutate global state unsafely or perform writes at boot.
-- Engine code reaching into host internals without an adapter or configuration seam.
-- Migrations or setup steps that are implicit, undocumented, or destructive.
-- Reload-unsafe decorators or patches outside `config.to_prepare`.
-
-## Medium-Severity Findings
-
-- Public API spread across many constants or modules.
-- Engine routes/controllers not properly namespaced.
-- Asset, helper, or route naming collisions.
-- Missing generator coverage or weak install story.
-- Dummy app present but not used for meaningful integration tests.
-
-## Low-Severity Findings
-
-- Inconsistent file layout.
-- Overly clever metaprogramming where plain objects would be clearer.
-- Readme/setup docs that drift from the code.
+See [FINDINGS.md](./FINDINGS.md) for the full High / Medium / Low severity lists and Common Fixes. Flag High findings first — they cause production failures. Low findings are style; do not surface them before architecture issues.
 
 ## Output Format
 
@@ -93,15 +58,6 @@ Then include:
 - recommended next changes
 
 If no meaningful findings exist, say so explicitly and mention any residual testing gaps.
-
-## Common Fixes To Suggest
-
-- Add a configuration object instead of hardcoded host constants.
-- Move host integration behind adapters or service interfaces.
-- Add `isolate_namespace`.
-- Move reload-sensitive hooks into `config.to_prepare`.
-- Add install generators for migrations or initializer setup.
-- Add dummy-app request/integration coverage.
 
 ## Examples
 

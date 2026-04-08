@@ -38,20 +38,6 @@ Use this skill when writing tests for service classes under `spec/services/`.
 | Time-dependent | `travel_to` |
 | API responses | FactoryBot hash factories (`class: Hash`) |
 
-## File Structure
-
-```
-spec/
-├── services/
-│   └── module_name/
-│       ├── main_service_spec.rb
-│       ├── validator_spec.rb
-│       └── response_builder_spec.rb
-└── factories/
-    └── module_name/
-        └── entity_response_factory.rb
-```
-
 ## Spec Template
 
 ```ruby
@@ -98,55 +84,25 @@ RSpec.describe ModuleName::MainService do
 end
 ```
 
-## Two Testing Styles
-
-### Unit Tests (with `instance_double`)
+Use `instance_double` for unit isolation:
 
 ```ruby
 let(:client) { instance_double(Api::Client) }
-
-before do
-  allow(client).to receive(:execute_query).and_return(api_response)
-end
+before { allow(client).to receive(:execute_query).and_return(api_response) }
 ```
 
-### Integration Tests (with `create`)
+Use `create` for integration tests:
 
 ```ruby
 let(:source_shelter) { create(:shelter, :with_animals) }
-let(:target_shelter) { create(:shelter, :with_animals) }
 ```
 
 ## FactoryBot Hash Factories for API Responses
 
-```ruby
-FactoryBot.define do
-  factory :api_entity_response, class: Hash do
-    transient do
-      field1 { FFaker::Name.first_name }
-      field2 { FFaker::Random.rand(1..1000) }
-    end
-
-    initialize_with do
-      columns = ModuleName::Entity::ATTRIBUTES.map { |attr| { 'name' => attr, 'type_text' => 'STRING' } }
-      { 'manifest' => { 'schema' => { 'columns' => columns } }, 'result' => { 'data_array' => [[field1, field2]] } }
-    end
-  end
-end
-```
-
-## Error Scenarios to Always Test
-
-- Blank/nil inputs
-- Invalid references (record not found)
-- Failed HTTP requests, JSON parsing errors, network errors
-- Partial failures (some items succeed, some fail)
-- Graceful handling of non-critical failures
+When testing API clients, use `class: Hash` with `initialize_with` to build hash-shaped response fixtures — see [PATTERNS.md](./PATTERNS.md) for the full pattern and factory placement.
 
 ## New Test File Checklist
 
-- [ ] `frozen_string_literal: true` pragma
-- [ ] `require 'spec_helper'`
 - [ ] `subject` defined for the main action
 - [ ] `instance_double` for unit / `create` for integration
 - [ ] Happy path for each public method
@@ -161,8 +117,6 @@ end
 
 | Mistake | Correct approach |
 |---------|-----------------|
-| Testing private methods directly | Test through the public interface (`.call`) |
-| Mock returning mock returning mock | Test with real objects when over-mocking; use `instance_double` for one level |
 | No error scenario tests | Happy path only = false confidence — always test failures |
 | `let!` everywhere | Use `let` (lazy) unless the value is needed unconditionally for setup |
 | Huge factory setup | Keep factories minimal — only attributes required for the test |

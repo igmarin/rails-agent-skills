@@ -1,9 +1,11 @@
 ---
 name: rails-engine-docs
 description: >
-  Use when writing or maintaining documentation for Rails engines. Trigger words:
-  engine README, installation guide, configuration docs, mount instructions,
-  migration notes, extension points, host integration examples, setup documentation.
+  Use when writing or maintaining documentation for Rails engines. Generates README
+  templates, writes installation and configuration guides, documents mount points,
+  extension APIs, and migration notes for host-app adoption. Trigger words: engine
+  README, installation guide, configuration docs, mount instructions, migration notes,
+  extension points, host integration examples, setup documentation.
 ---
 # Rails Engine Docs
 
@@ -11,43 +13,16 @@ Use this skill when the task is to write or improve documentation for a Rails en
 
 Engine docs should optimize for host-app adoption. Readers need to know what the engine does, how to install it, how to configure it, and where the boundaries are. All generated documentation (README, guides, examples) must be in **English** unless the user explicitly requests another language.
 
-## Quick Reference
-
-| Doc Section | Purpose |
-|-------------|---------|
-| Purpose | What the engine does and when to use it |
-| Installation | Gemfile, bundle install, install generator |
-| Mounting / initialization | Where and how to mount the engine (routes, initializer) |
-| Configuration | Options, defaults, required vs optional |
-| Usage examples | Copyable code showing typical workflows |
-| Migrations / operational steps | Install migrations, run generators, one-time setup |
-| Extension points | Adapters, callbacks, config blocks for customization |
-| Development and testing | How to run tests, contribute, or develop locally |
-
-## Common Mistakes
-
-| Mistake | Reality |
-|---------|---------|
-| No installation instructions | README must show the exact steps: add gem, bundle, run generator, mount |
-| Missing mount instructions | Host apps need to know where to mount; implied mounting leads to confusion |
-| No extension point docs | Configuration and adapters exist in code but readers cannot discover or use them |
-
-## Red Flags
-
-- README only says "add to Gemfile" with no further steps
-- No configuration docs despite config options in code
-- No migration notes when migrations or install generators exist
-
 ## Recommended README Shape
 
-1. Purpose
-2. Installation
-3. Mounting or initialization
-4. Configuration
-5. Usage examples
-6. Migrations or operational steps
-7. Extension points
-8. Development and testing
+1. Purpose — what the engine does and when to use it
+2. Installation — gem add, bundle, run install generator
+3. Mounting — explicit `mount MyEngine::Engine, at: '/path'` in routes
+4. Configuration — all options with defaults, required vs optional
+5. Usage examples — copyable code for typical workflows
+6. Migrations / operational steps — install generator, one-time setup
+7. Extension points — adapters, callbacks, config blocks
+8. Development and testing — how to run tests or contribute
 
 ## Documentation Rules
 
@@ -57,22 +32,9 @@ Engine docs should optimize for host-app adoption. Readers need to know what the
 - If the engine assumes any host model, job backend, or auth integration, say so explicitly.
 - Document upgrade-impacting changes when setup evolves.
 
-## Must-Have Topics
+## Documentation Gaps to Check
 
-- gem installation
-- mount route or initializer setup
-- configuration options with defaults
-- migration/install generator steps
-- supported Rails/Ruby versions if relevant
-- testing or local development instructions when contributors are expected
-
-## Common Documentation Gaps
-
-- README explains the engine but not how to install it
-- configuration options exist in code but not in docs
-- route mounting is implied rather than shown
-- migrations are required but not documented
-- examples rely on host app context the reader cannot infer
+See [CHECKLIST.md](./CHECKLIST.md) for the full gap checklist. Critical gaps: installation steps, all config options with defaults, explicit mount path, migration timing, host model/auth assumptions.
 
 ## Examples
 
@@ -116,6 +78,7 @@ When asked to write docs:
 2. Show one realistic configuration example.
 3. Document operational steps explicitly.
 4. Keep sections short and task-oriented.
+5. Verify the generated docs cover all gaps in the Documentation Gaps table before finalizing.
 
 ## Integration
 

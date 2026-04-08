@@ -31,28 +31,9 @@ See rspec-best-practices for the full gate cycle.
 | Errors | Rescue, log, return error hash — don't leak exceptions |
 | Transactions | Wrap multi-step DB operations |
 
-## Structure
-
-All service objects live under `app/services/` namespaced by module. Use `frozen_string_literal: true` in every file.
-
-```
-app/services/
-└── module_name/
-    ├── README.md
-    ├── main_service.rb
-    ├── validator.rb
-    ├── classifier.rb
-    ├── creator.rb
-    ├── response_builder.rb
-    ├── auth.rb
-    ├── client.rb
-    ├── fetcher.rb
-    └── builder.rb
-```
-
 ## Core Patterns
 
-### 1. The `.call` Pattern (Orchestrator)
+### 1. The `.call` Pattern
 
 ```ruby
 module AnimalTransfers
@@ -102,27 +83,7 @@ end
 }
 ```
 
-### 3. Orchestrator Pattern
-
-Main service coordinates sub-services, each with a single responsibility:
-
-```ruby
-def call
-  validate_shelters!
-  return empty_response if items.blank?
-
-  classification = Classifier.classify(items, context)
-  return all_failed_response(classification) if all_failed?(classification)
-
-  persistence = Creator.create(classification, context)
-  ResponseBuilder.success_response(classification, persistence)
-rescue StandardError => e
-  log_error('Processing Error', e, include_backtrace: true)
-  ResponseBuilder.error_response(e.message)
-end
-```
-
-### 4. Class-only Services (Static Methods)
+### 3. Class-only Services (Static Methods)
 
 When no instance state is needed:
 
@@ -136,88 +97,13 @@ class ShelterValidator
 end
 ```
 
-### 5. Response Builder Pattern
-
-```ruby
-class ResponseBuilder
-  def self.success_response(shelter_id, result)
-    { success: true, response: build_base_response(shelter_id, result[:items]) }
-  end
-
-  def self.error_response(shelter_id, message, failed_items)
-    { success: false, response: { shelter: { shelter_id: }, error: { message:, failed_items: } } }
-  end
-end
-```
-
-## Conventions
-
-### Module namespacing
-
-```ruby
-# frozen_string_literal: true
-
-module ModuleName
-  class ServiceName
-  end
-end
-```
+## Additional Patterns
 
 ### Constants for configuration
 
 ```ruby
 MISSING_CONFIGURATION_ERROR = 'Missing required configuration'
 DEFAULT_TIMEOUT = 30
-```
-
-### Factory methods with `self.default`
-
-```ruby
-def self.default
-  token = Auth.default.token
-  host = Rails.configuration.secrets[:service_host]
-  new(token:, host:)
-end
-```
-
-### YARD documentation
-
-```ruby
-# @param params [Hash] Transfer parameters
-# @option params [Hash] :source_shelter Shelter hash with :shelter_id
-# @return [Hash] Result hash with :success flag and :response data
-def self.call(params)
-```
-
-### Input validation
-
-```ruby
-def initialize(token:, host:, warehouse_id:)
-  raise Error, MISSING_CONFIGURATION_ERROR if [token, host, warehouse_id].any?(&:blank?)
-end
-```
-
-### Transaction wrapping
-
-```ruby
-def call
-  animal = ActiveRecord::Base.transaction do
-    animal = create_animal_from_holding_pen
-    HoldingPen::AnimalActivator.call(animal:, holding_pen:)
-    animal
-  end
-  Events::Animal.on_create(animal:)
-  animal
-end
-```
-
-### Error logging with context
-
-```ruby
-def log_error(context, error, include_backtrace: false)
-  Rails.logger.error("#{self.class.name} #{context}: #{error.class} - #{error.message}")
-  Rails.logger.error(error.backtrace.join("\n")) if include_backtrace
-end
 ```
 
 ### SQL sanitization
@@ -231,119 +117,23 @@ end
 
 ## Checklist for New Service Objects
 
-- [ ] `frozen_string_literal: true` pragma
-- [ ] Module namespace matching directory structure
-- [ ] `.call` class method as entry point
-- [ ] Constants for error messages and defaults
-- [ ] YARD docs on every public method
-- [ ] Input validation (raise early on invalid input)
-- [ ] Standardized `{ success:, response: }` return format
-- [ ] Error wrapping with `rescue` and `log_error`
-- [ ] Transaction wrapping for multi-step DB operations
+- [ ] Module namespace matches directory structure
+- [ ] Constants defined for error messages and defaults
 - [ ] Graceful handling for non-critical failures
-- [ ] SQL sanitization for dynamic queries
+- [ ] SQL sanitization for any dynamic queries
 - [ ] `README.md` documenting the module
 
-## Examples
+## Pitfalls
 
-**Bad: Business logic in controller:**
-
-```ruby
-# app/controllers/orders_controller.rb
-class OrdersController < ApplicationController
-  def create
-    @order = Order.new(order_params)
-    @order.status = 'pending'
-    @order.total_amount = calculate_total(@order.line_items)
-    if @order.save
-      send_order_confirmation_email(@order)
-      redirect_to @order, notice: 'Order was successfully created.'
-    else
-      render :new, status: :unprocessable_entity
-    end
-  end
-
-  private
-
-  def calculate_total(items)
-    # Complex pricing logic here...
-  end
-
-  def send_order_confirmation_email(order)
-    # Email sending logic here...
-  end
-end
-```
-
-**Good: Business logic extracted to service object:**
-
-```ruby
-# app/controllers/orders_controller.rb
-class OrdersController < ApplicationController
-  def create
-    result = Orders::CreateOrder.call(order_params.to_h.symbolize_keys)
-    if result[:success]
-      @order = result[:response][:order]
-      redirect_to @order, notice: 'Order was successfully created.'
-    else
-      @order = Order.new(order_params) # Re-initialize for form display
-      flash.now[:alert] = result[:response][:error][:message]
-      render :new, status: :unprocessable_entity
-    end
-  end
-end
-
-# app/services/orders/create_order.rb
-module Orders
-  class CreateOrder < RubyServiceObjects::BaseService # Assuming BaseService exists
-    def initialize(params)
-      @params = params
-    end
-
-    def call
-      # Complex business logic, transactions, and side effects here
-      # ...
-      order = Order.new(@params)
-      order.status = 'pending'
-      order.total_amount = calculate_total(order.line_items)
-
-      if order.save
-        OrderMailer.confirmation(order).deliver_later
-        success(order: order)
-      else
-        failure(order.errors.full_messages.to_sentence)
-      end
-    end
-
-    private
-
-    def calculate_total(items)
-      # ... complex pricing logic ...
-    end
-  end
-end
-```
-
-## Common Mistakes
-
-| Mistake | Reality |
-|---------|---------|
+| Problem | Correct approach |
+|---------|-----------------|
 | Returning raw exceptions instead of error hash | Callers should get `{ success: false, ... }`, not unhandled exceptions |
-| No `.call` entry point | Inconsistent API. Always use `.call` for the orchestrator pattern |
-| Business logic in the controller | Extract to service. Controller should only handle request/response |
-| Missing `frozen_string_literal` pragma | Inconsistent string behavior. Add to every file |
-| No YARD docs on public methods | Other developers can't understand the contract |
 | Skipping input validation | Bad input causes cryptic errors deep in the call chain |
 | Transaction wrapping everything | Only wrap multi-step DB operations that must be atomic |
-
-## Red Flags
-
-- Service object with no tests
-- `.call` method longer than 20 lines (needs sub-service extraction)
-- Service that directly renders HTTP responses (that's controller's job)
-- No error handling — exceptions bubble up to caller unhandled
-- Service that modifies unrelated models (unclear responsibility boundary)
-- Duplicated validation logic across services (extract to shared validator)
+| `.call` method longer than 20 lines | Extract to sub-services — orchestrator should coordinate, not implement |
+| Service renders HTTP responses | That's the controller's job — service returns data only |
+| Service modifies unrelated models | Unclear boundary — extract a new service with a single responsibility |
+| Duplicated validation across services | Extract to a shared validator object |
 
 ## Integration
 
