@@ -3,8 +3,9 @@ name: ddd-boundaries-review
 description: >
   Use when reviewing a Ruby on Rails app for Domain-Driven Design boundaries,
   bounded contexts, language leakage, cross-context orchestration, or unclear
-  ownership. Covers context mapping, leakage detection, and smallest credible
-  boundary improvements.
+  ownership. Identifies misplaced domain models, detects cross-context coupling,
+  names ownership conflicts, and recommends the smallest credible boundary
+  improvement. Covers context mapping and leakage detection.
 ---
 
 # DDD Boundaries Review
@@ -60,40 +61,76 @@ For each finding include:
 
 Then list open questions and recommended next skills.
 
-## Examples
+## Detecting Leakage
 
-### Good: Context Leakage Finding
+Use ripgrep to find cross-context references before reading code manually:
 
-```ruby
-# Fleet::Reservation confirms booking rules,
-# but Billing::InvoiceService reaches into reservation state transitions directly.
+```bash
+# Find references from one context into another
+rg 'Billing.*Fleet|Fleet.*Billing' app/
+
+# Find cross-namespace constant usage
+rg 'Billing::[A-Z]' app/services/fleet/
+rg 'Fleet::[A-Z]' app/services/billing/
+
+# Find callbacks that touch foreign concepts
+rg 'after_(create|update|save).*Job|after_(create|update|save).*Mailer' app/models/
 ```
 
-- **Finding:** Billing is orchestrating Fleet state changes. The boundary is unclear. Billing should react to a domain outcome from Fleet, not mutate Fleet internals directly.
+## Example: Leakage + Fix
 
-### Bad: Pattern-First Review
+**Before — Billing reaches into Fleet internals:**
 
 ```ruby
-# Bad review:
-# "Create five bounded contexts and event buses"
-# without naming the business capabilities or ownership conflicts first.
+# app/services/billing/invoice_service.rb
+class Billing::InvoiceService
+  def call(reservation_id)
+    reservation = Fleet::Reservation.find(reservation_id)
+    reservation.update!(status: :invoiced)  # Billing mutating Fleet state
+    create_invoice(reservation)
+  end
+end
 ```
 
-## Common Mistakes
+**After — Fleet emits an event; Billing reacts:**
 
-| Mistake | Reality |
-|---------|---------|
-| "Everything should become a bounded context" | Many apps only have a few real contexts; over-splitting creates ceremony |
+```ruby
+# Fleet publishes an outcome; Billing subscribes via a job or hook
+class Fleet::Reservation < ApplicationRecord
+  def complete!
+    update!(status: :completed)
+    ReservationCompletedJob.perform_later(id)  # Fire-and-forget event
+  end
+end
+
+# app/services/billing/invoice_service.rb — no Fleet constants
+class Billing::InvoiceService
+  def call(reservation_id:, amount_cents:)
+    create_invoice(reservation_id:, amount_cents:)
+  end
+end
+```
+
+**Finding format:**
+
+```
+Severity: High
+Contexts: Billing → Fleet
+Leaked term: reservation.update!(status: :invoiced)
+Risk: Billing owns Fleet state transitions. Changes to Fleet lifecycle break Billing silently.
+Smallest credible fix: Fleet emits ReservationCompleted event; Billing reacts without touching Fleet models.
+```
+
+## Pitfalls
+
+| Pitfall | What to do |
+|---------|------------|
+| "Everything should become a bounded context" | Many apps have a few real contexts — over-splitting creates ceremony |
 | Reviewing folders without reviewing language | Directory structure alone does not prove domain boundaries |
-| Solving context leakage with shared utility modules | Shared utils often hide ownership problems instead of fixing them |
+| Solving leakage with shared utility modules | Shared utils hide ownership problems instead of fixing them |
 | Recommending a rewrite first | Start with the smallest credible boundary improvement |
-
-## Red Flags
-
-- One model serves unrelated workflows with different language
-- Multiple services mutate the same concept with different rules
-- Cross-context constants, callbacks, or direct state changes are common
-- People describe ownership with "whoever needs it" instead of a named context
+| One model serving unrelated workflows | Different language in the same object = leaked context — separate them |
+| Ownership described as "whoever needs it" | A context with no named owner has no boundary — name it first |
 
 ## Integration
 

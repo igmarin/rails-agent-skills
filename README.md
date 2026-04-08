@@ -4,7 +4,9 @@
 
 ---
 
-## [tessl](https://tessl.io/registry/igmarin/rails-agent-skills)
+[![tessl](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.tessl.io%2Fv1%2Fbadges%2Figmarin%2Frails-agent-skills)](https://tessl.io/registry/igmarin/rails-agent-skills)
+
+---
 
 - **Repository / install path:** `rails-agent-skills` ([docs/implementation-guide.md](docs/implementation-guide.md))
 - **Bootstrap discovery skill:** `[rails-agent-skills](rails-agent-skills/)` (session hook loads `rails-agent-skills/SKILL.md` where applicable)

@@ -1,9 +1,10 @@
 ---
 name: rails-bug-triage
 description: >
-  Use when investigating a bug in a Ruby on Rails codebase and you need to turn
-  the report into a reproducible failing spec and fix plan. Covers reproduction,
-  scope narrowing, boundary selection, and TDD-first handoff.
+  Use when investigating a bug, error, or regression in a Ruby on Rails codebase.
+  Creates a failing RSpec reproduction test, isolates the broken code path, and
+  produces a minimal fix plan. Trigger words: debug, broken, error, regression,
+  stack trace, failing test, RSpec, bug report, Rails app.
 ---
 
 # Rails Bug Triage
@@ -11,30 +12,6 @@ description: >
 Use this skill when a bug report exists but the right reproduction path and fix sequence are not yet clear.
 
 **Core principle:** Do not guess at fixes. Reproduce the bug, choose the right failing spec, then plan the smallest safe repair.
-
-## Quick Reference
-
-| Step | Goal |
-|------|------|
-| Reproduce | Confirm the bug is real and current |
-| Localize | Find the layer where the failure is observed |
-| Choose spec | Pick the highest-value failing spec |
-| Plan fix | Define the smallest repair path |
-
-## HARD-GATE
-
-```text
-DO NOT propose a fix before the bug is reproduced or a failing spec is identified.
-DO NOT accept "it probably lives in X" as evidence.
-ALWAYS hand off to a failing spec before implementation begins.
-```
-
-## When to Use
-
-- The user reports a bug and wants help investigating it.
-- A failing behavior is described, but the responsible Rails layer is unknown.
-- You need to convert a bug report into a TDD-ready fix plan.
-- **Next step:** Chain to `rails-tdd-slices` to choose the first spec, then `rspec-best-practices` and the implementation skill for the affected area.
 
 ## Process
 
@@ -56,31 +33,58 @@ Return findings in this shape:
 5. **Smallest safe fix path**
 6. **Follow-up skills**
 
+**Example (wrong status code bug):**
+
+```
+1. Observed:  POST /orders returns 500 when product is out of stock
+2. Expected:  Returns 422 with { error: "Out of stock" }
+3. Boundary:  Request layer — visible in HTTP contract
+4. First spec: spec/requests/orders/create_spec.rb
+5. Fix path:  Orders::CreateOrder should return { success: false, error: "Out of stock" }
+              when inventory check fails; controller renders 422
+6. Next:      rails-tdd-slices → write request spec → rspec-best-practices → fix
+```
+
+**Skeleton failing spec:**
+
+```ruby
+# spec/requests/orders/create_spec.rb
+RSpec.describe "POST /orders", type: :request do
+  context "when product is out of stock" do
+    let(:product) { create(:product, stock: 0) }
+
+    it "returns 422 with an error message" do
+      post orders_path, params: { order: { product_id: product.id, quantity: 1 } }, as: :json
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response.parsed_body["error"]).to eq("Out of stock")
+    end
+  end
+end
+```
+
+Run it before implementing the fix: `bundle exec rspec spec/requests/orders/create_spec.rb`
+
 ## Boundary Guide
+
+See [BOUNDARY_GUIDE.md](./BOUNDARY_GUIDE.md) for the full bug-shape → spec-type mapping and layer diagnosis tips.
+
+Quick reference:
 
 | Bug shape | Likely first spec |
 |-----------|-------------------|
-| Wrong status code, params handling, JSON payload | Request spec |
-| Invalid state transition, validation, calculation | Model or service spec |
-| Async side effect missing or duplicated | Job spec |
-| Engine routing/install/generator regression | Engine spec |
-| Third-party mapping/parsing issue | Integration or client-layer spec |
+| HTTP symptoms (status, JSON, redirect) | Request spec |
+| Data symptoms (wrong value, validation) | Model or service spec |
+| Timing symptoms (missing job, email) | Job spec |
+| Engine routing/generator regression | Engine spec in dummy app |
 
-## Common Mistakes
+## Pitfalls
 
-| Mistake | Reality |
-|---------|---------|
-| Jumping straight to the suspected fix | Suspicion is not proof; reproduce first |
-| Using a unit spec when the bug is visible at request level | Start where the failure is actually observed |
-| Bundling reproduction, refactor, and new features together | Fix the bug in the smallest safe slice |
-| Treating flaky evidence as a green light to patch blindly | Stabilize reproduction before changing code |
-
-## Red Flags
-
-- No one can state exact expected vs actual behavior
-- The first spec does not reproduce the reported issue
-- The proposed fix touches unrelated layers immediately
-- The explanation relies on "probably", "maybe", or "should"
+| Pitfall | What to do |
+|---------|------------|
+| Unit spec when the bug is visible at request level | Start where the failure is actually observed |
+| Bundling reproduction, refactor, and new features | Fix the bug in the smallest safe slice only |
+| Flaky evidence treated as green light to patch | Stabilize reproduction before touching code |
+| The explanation relies on "probably" or "maybe" | Ambiguity means the reproduction step isn't done yet |
 
 ## Integration
 

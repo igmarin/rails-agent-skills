@@ -9,11 +9,7 @@ description: >
 
 # Generating a Product Requirements Document (PRD)
 
-## Goal
-
-Create a clear, actionable PRD in Markdown that a junior developer can use to understand and implement a feature. Focus on *what* and *why*, not *how*.
-
-**Core principle:** Design before implementation. No code until the PRD is approved.
+Focus on *what* and *why*, not *how*. No code until the PRD is approved.
 
 ## Quick Reference
 
@@ -25,20 +21,6 @@ Create a clear, actionable PRD in Markdown that a junior developer can use to un
 | 4 | Generate PRD | `prd-[feature-name].md` |
 | 5 | Save to `/tasks/` | File on disk |
 | 6 | Suggest next step | Link to **generate-tasks** / optional **ticket-planning** |
-
-## HARD-GATE
-
-```text
-DO NOT implement the PRD. Only produce the document.
-DO NOT skip clarifying questions when the prompt is ambiguous.
-DO NOT start generating tasks without user confirmation.
-```
-
-## When to Use
-
-- User asks for a PRD, requirements doc, or to "plan a feature".
-- User describes a feature and you need to capture it in a structured way before implementation.
-- **Next step:** After saving the PRD, suggest `generate-tasks` for implementation planning and `ticket-planning` only when the user also wants tickets or sprint placement.
 
 ## Process
 
@@ -53,39 +35,9 @@ DO NOT start generating tasks without user confirmation.
 6. **Verify:** Re-read the saved file and confirm it matches the agreed scope.
 7. **Do NOT** start implementing the PRD. Offer to generate tasks if the user wants an implementation checklist. When suggesting **generate-tasks**, note that the resulting checklist will include tests-first sequencing, YARD, README/diagram/doc updates, and a code-review-before-PR phase unless the user opts out.
 
-## Clarifying Questions (Only When Needed)
-
-Ask only when the answer is not reasonably inferable. Typical areas:
-
-- **Problem/Goal:** What problem does this solve for the user?
-- **Actor:** Who performs the action or experiences the outcome?
-- **Core actions:** What are the key actions the user should perform?
-- **Business rules:** What validations, policies, or domain rules must hold?
-- **Side effects:** Should this trigger emails, jobs, external API calls, audits, or notifications?
-- **Dependencies:** Does it depend on another system, migration, feature flag, or background job?
-- **Scope:** What should this feature *not* do?
-- **Success:** How do we know it's done or successful?
-
-### Question Format
-
-Use numbered questions with A/B/C/D options when possible:
-
-```text
-1. What is the primary goal of this feature?
-   A. Improve onboarding
-   B. Increase retention
-   C. Reduce support load
-   D. Other (describe)
-
-2. Who is the target user?
-   A. New users only
-   B. Existing users only
-   C. All users
-```
-
 ## PRD Structure
 
-Generate the document with these sections. Use concrete wording; avoid vague phrases.
+Write for a **junior developer**: explicit, unambiguous, minimal jargon. Generate with these sections:
 
 1. **Introduction/Overview** — One short paragraph: what the feature is and what problem it solves.
 2. **Goals** — Specific, measurable objectives (bullet list).
@@ -98,37 +50,15 @@ Generate the document with these sections. Use concrete wording; avoid vague phr
 9. **Success Metrics** — How success will be measured (even if qualitative).
 10. **Open Questions** — Anything still unclear or to be decided later.
 
-## Output
+## Pitfalls
 
-- **Format:** Markdown (`.md`)
-- **Location:** `/tasks/`
-- **Filename:** `prd-[feature-name].md`
-
-## Target Audience
-
-Write for a **junior developer**: explicit, unambiguous, minimal jargon. Each requirement should be implementable without guessing.
-
-## Common Mistakes
-
-| Mistake | Reality |
-|---------|---------|
-| Jumping straight to PRD without understanding the problem | Ask clarifying questions first — garbage in, garbage out |
-| PRD describes "how" instead of "what" | PRD is requirements, not implementation. Leave "how" for tasks |
-| Vague requirements ("make it fast", "good UX") | Every requirement must be testable and unambiguous |
-| Asking 10+ clarifying questions | Max 3-5 essential questions. Infer the rest |
-| Ignoring side effects or external dependencies | Capture jobs, mailers, APIs, audits, and flags early so tasks are scoped correctly |
-| Starting implementation after writing PRD | HARD-GATE: only produce the document. Suggest generate-tasks next |
+| Pitfall | What to do |
+|---------|------------|
+| PRD describes "how" instead of "what" | PRD is requirements, not implementation — leave "how" for tasks |
+| Vague requirements ("make it fast", "good UX") | Every requirement must use "must" and be testable |
 | Skipping Non-Goals section | Non-Goals prevent scope creep. Always include them |
-
-## Red Flags
-
-- PRD contains implementation details (specific code, database schema)
-- Requirements use words like "should", "might", "could" instead of "must"
-- No success metrics defined
-- Rails feature has no mention of side effects, boundaries, or likely system area touched
-- User stories are too generic ("As a user, I want a good experience")
-- PRD was generated without any clarifying questions on an ambiguous prompt
-- Implementation started before PRD was approved
+| Generic user stories | "As a user, I want a good experience" is not a user story |
+| PRD contains implementation details | No code, schema, or class names — requirements only |
 
 ## Integration
 
