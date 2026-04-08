@@ -3,24 +3,24 @@ name: rails-code-conventions
 description: >
   A daily checklist for writing clean Rails code, covering design principles
   (DRY, YAGNI, PORO, CoC, KISS), per-path rules (models, services, workers,
-  controllers), structured logging, and comment discipline. Defers style
-  and formatting to the project's configured linter(s).
+  controllers), structured logging, and comment discipline. Defers style and
+  formatting to the project's configured linter(s). Use when writing, reviewing,
+  or refactoring Ruby on Rails code, or when asked about Rails best practices,
+  clean code, or code quality. Trigger words: code review, refactor, RoR,
+  clean code, best practices, Ruby on Rails conventions.
 ---
 
 # Rails Code Conventions
 
-**Purpose:** Your daily checklist for writing clean Rails code — design principles, per-path rules, logging, and comment discipline. When you are writing or reviewing any Rails code and need to know "how should this be structured?", this skill applies.
-
-Use this skill when **writing or reviewing** Rails application code where **design principles** and **per-area rules** matter more than stack-specific UI choices (see **rails-stack-conventions** for Hotwire + Tailwind specifics).
-
-**Style source of truth:** Style and formatting follow whatever **linter(s)** the project configures (see **Linter — initial analysis** below). This skill adds **non-style behavior** and **architecture guidance** only.
+**Style source of truth:** Style and formatting defer to the project's configured linter(s). This skill adds **non-style behavior** and **architecture guidance** only. For Hotwire + Tailwind specifics, see **rails-stack-conventions**.
 
 ## Linter — initial analysis
 
-Before recommending style fixes or contradicting formatting rules:
+Detect → run → defer. Do not invent style rules.
 
-1. **Detect** which linter(s) the repo uses — e.g. RuboCop (`.rubocop.yml`, `rubocop` in `Gemfile`), Standard Ruby (`standardrb`, `standard` gem), frontend linters (`eslint.config.*`, `.eslintrc*`, `biome.json`, etc.), or scripts in `package.json` / `bin/` (`lint`, `rubocop`, `standardrb`).
-2. **Run** the command the project documents or that matches the config (e.g. `bundle exec rubocop`, `bundle exec standardrb`, `npm run lint`). Do **not** assume RuboCop if the project uses Standard or another stack.
+- Ruby: check for `.rubocop.yml` / `standard` gem → `bundle exec rubocop` or `bundle exec standardrb`
+- Frontend: check for `eslint.config.*`, `.eslintrc*`, `biome.json`, or `package.json` lint script → run accordingly
+- **If no config is found:** note this to the user — do not default to any tool.
 
 ## Quick Reference
 
@@ -88,7 +88,7 @@ Rules below apply **when those paths exist** in the project. If a path is absent
 
 | Area | Path pattern | Guidance |
 |------|--------------|----------|
-| **ActiveRecord performance** | `app/models/**/*.rb` | Eager load in loops; push work into SQL where appropriate; prefer `pluck`, `exists?`, `find_each` over loading full records unnecessarily |
+| **ActiveRecord performance** | `app/models/**/*.rb` | Eager load in loops; prefer `pluck`, `exists?`, `find_each` over loading full records. Verify N+1 fixes with the `bullet` gem or query logs after applying |
 | **Background jobs** | `app/workers/**/*.rb`, `app/jobs/**/*.rb` | Clear worker/job structure, queue selection, idempotency, structured error logging (see **rails-background-jobs** for Active Job / Solid Queue / Sidekiq depth) |
 | **Error handling** | `app/services/**/*.rb`, `app/lib/**/*.rb`, `app/exceptions/**/*.rb` | Domain exceptions with prefixed codes where the team uses them; `rescue_from` or base handlers for API layers as conventions dictate |
 | **Logging / tracing** | `app/services/**/*.rb`, `app/workers/**/*.rb`, `app/jobs/**/*.rb`, `app/controllers/**/*.rb`, `app/repositories/**/*.rb` | Structured logging; add APM trace spans and tags (e.g. Datadog) for key operations when the stack includes them |
@@ -118,13 +118,10 @@ No implementation code before a failing test. See **rspec-best-practices** and *
 
 | Mistake | Reality |
 |---------|---------|
-| Duplicate linter rules in prose | The project's configured linter(s) are authoritative for style; this skill is for behavior and boundaries |
-| Assuming RuboCop without checking | Detect and run the linter the repo actually uses |
+| Inventing style rules when a linter config exists | The project's configured linter is authoritative for style — do not add prose style rules |
+| Assuming RuboCop when no config is checked | Detect first; note the absence to the user if no config is found |
 | `let_it_be` in every project | Use only when `test-prof` is already a dependency |
-| Defaulting to `let!` everywhere | Prefer lazy `let`; reserve `let!` for cases that need eager setup |
 | New `app/repositories` for every query | ActiveRecord is the default data boundary unless there's a documented reason |
-| Interpolated log messages | Loses structure; use hash payload — see logging example above |
-| Comments restating method names | Adds noise; comment intent and tradeoffs — see comment example above |
 
 ## Integration
 

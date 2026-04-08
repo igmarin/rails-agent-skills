@@ -1,10 +1,11 @@
 ---
 name: rails-tdd-slices
 description: >
-  Use when choosing the best first failing spec or vertical slice for a Ruby on
-  Rails change. Covers request vs model vs service vs job vs engine spec
+  Use when choosing the best first failing RSpec spec or vertical slice for a
+  Ruby on Rails change. Covers request vs model vs service vs job vs engine spec
   selection, system spec escalation, smallest safe slice planning, and
-  Rails-first TDD sequencing.
+  Rails-first TDD sequencing. Trigger words: where to start testing, what test
+  to write first, RSpec, test-driven development, TDD, first failing test.
 ---
 
 # Rails TDD Slices
@@ -15,15 +16,16 @@ Use this skill when the hardest part of the task is deciding where TDD should st
 
 ## Quick Reference
 
-| Change type | Best first slice |
-|-------------|------------------|
-| Endpoint / controller flow | Request spec |
-| Domain rule on an existing object | Model spec |
-| Service orchestration | Service spec |
-| Background work | Job spec |
-| Critical end-to-end UI flow | System spec |
-| Engine routing / install / generator | Engine spec via `rails-engine-testing` |
-| Bug fix | Reproduction spec where the bug is observed |
+| Change type | First spec | Path | Why |
+|-------------|-----------|------|-----|
+| API contract, params, status code, JSON shape | Request spec | `spec/requests/` | Proves the real HTTP contract |
+| Domain rule on a cohesive record or value object | Model spec | `spec/models/` | Fast feedback on domain behavior |
+| Multi-step orchestration across collaborators | Service spec | `spec/services/` | Focuses on the workflow boundary |
+| Enqueue/run/retry/discard behavior | Job spec | `spec/jobs/` | Captures async semantics directly |
+| Critical Turbo/Stimulus or browser-visible flow | System spec | `spec/system/` | Use only when browser interaction is the real risk |
+| Engine routing, generators, host integration | Engine spec | `spec/requests/` or engine path | Normal app specs miss engine wiring — see `rails-engine-testing` |
+| Bug fix | Reproduction spec | Where the bug is observed | Proves the fix and prevents regression |
+| Unsure between layers | Higher boundary first | — | Easier to prove real behavior before drilling down |
 
 ## HARD-GATE
 
@@ -32,13 +34,6 @@ DO NOT choose the first spec based on convenience alone.
 DO NOT start with a lower-level unit if the real risk is request, job, engine, or persistence wiring.
 ALWAYS run the chosen spec and verify it fails for the right reason before implementation.
 ```
-
-## When to Use
-
-- The user asks where to start TDD for a Rails change.
-- A feature spans multiple layers and the first spec is not obvious.
-- A bug is reproducible but it is unclear whether to begin with request, service, model, or job coverage.
-- **Next step:** Chain to `rspec-best-practices` after choosing the slice, then to the implementation skill for the affected area.
 
 ## Process
 
@@ -49,31 +44,6 @@ ALWAYS run the chosen spec and verify it fails for the right reason before imple
 5. **Write one failing example:** Keep it minimal; one example is enough to open the gate.
 6. **Run and validate:** Confirm the failure is because the behavior is missing, not because the setup is broken.
 7. **Hand off:** Continue with `rspec-best-practices`, `rspec-service-testing`, `rails-engine-testing`, or the implementation skill that fits the slice.
-
-## Decision Heuristics
-
-| Situation | Prefer | Why |
-|-----------|--------|-----|
-| New API contract, params, status code, JSON shape | Request spec | Proves the real contract |
-| Pure rule on a cohesive record or value object | Model spec | Fast feedback on domain behavior |
-| Multi-step orchestration across collaborators | Service spec | Focuses on the workflow boundary |
-| Enqueue/run/retry/discard behavior | Job spec | Captures async semantics directly |
-| Critical Turbo/Stimulus or browser-visible flow | System spec | Use only when browser interaction is the real risk |
-| Engine routing, generators, host integration | Engine spec | Normal app specs miss engine wiring |
-| Unsure between two layers | Higher boundary first | Easier to prove real behavior before drilling down |
-
-## Rails Paths
-
-Use conventional spec paths when recommending the first slice:
-
-| First slice | Suggested path pattern |
-|-------------|------------------------|
-| Request spec | `spec/requests/..._spec.rb` |
-| Model spec | `spec/models/..._spec.rb` |
-| Service spec | `spec/services/..._spec.rb` |
-| Job spec | `spec/jobs/..._spec.rb` |
-| System spec | `spec/system/..._spec.rb` |
-| Engine spec | Engine request/routing/generator path used by `rails-engine-testing` |
 
 ## Examples
 
@@ -118,14 +88,6 @@ RSpec.describe Orders::CreateOrder do
 end
 ```
 
-### Bad: Starting Too Low
-
-```ruby
-# Bad first move:
-# Start with a PORO helper spec because it is easier to write,
-# even though the real risk is the request contract or workflow wiring.
-```
-
 ## Test Feedback Checkpoint
 
 After writing and running the first failing spec, **pause before implementation** and present the test for review:
@@ -146,36 +108,18 @@ CHECKPOINT: Test Design Review
 
 **Hand off:** After test design is confirmed → `rspec-best-practices` for the full TDD gate cycle.
 
-## Output Style
+## Pitfalls
 
-When using this skill, return:
-
-1. **Behavior to prove**
-2. **Chosen boundary**
-3. **First spec type**
-4. **Suggested spec path**
-5. **Why this is the highest-value starting slice**
-6. **Next skill to chain**
-
-## Common Mistakes
-
-| Mistake | Reality |
-|---------|---------|
-| Starting with a PORO spec because it is easy | Easy is not the same as high-signal |
-| Writing three spec types before running any | Pick one slice, run it, prove the failure |
-| Defaulting to request specs for every change | Some domain rules are better proven lower in the stack |
+| Pitfall | What to do |
+|---------|------------|
+| Starting with a PORO spec because it is easy | Easy ≠ high-signal — choose the boundary that proves the real behavior |
+| Writing three spec types before running any | Pick one slice, run it, prove the failure, then proceed |
+| Defaulting to request specs for everything | Some domain rules are better proven at the model or service layer |
 | Defaulting to model specs for controller behavior | Controllers and APIs need request-level proof |
-| Using controller specs as the default HTTP entry point | Prefer request specs unless the repo has a strong existing reason otherwise |
-| Jumping to system specs too early | Reserve system specs for critical browser flows where lower layers cannot prove the risk well |
-
-## Red Flags
-
-- "We'll add the request spec later"
-- The chosen spec cannot prove the user-visible behavior
-- The first spec requires excessive factories just to boot
-- The failure is caused by broken setup rather than missing behavior
-- The first recommendation is a controller spec without a repo-specific reason
-- A system spec is chosen even though a request or service spec would prove the behavior faster
+| Using controller specs as the default HTTP entry point | Prefer request specs unless the repo has an existing reason |
+| Jumping to system specs too early | Reserve for critical browser flows that lower layers cannot prove |
+| "We'll add the request spec later" | The spec is the gate — implement only after the first slice is failing for the right reason |
+| First spec requires excessive factory setup | Excessive setup = wrong boundary. Simplify or move the slice. |
 
 ## Integration
 

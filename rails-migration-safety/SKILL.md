@@ -116,6 +116,8 @@ For each risk include:
 - Safer rollout
 - Rollback or forward-fix note
 
+For complex type changes, multi-step unique constraints, foreign key validation deferral, safe column removal, and multi-database migrations see [PATTERNS.md](./PATTERNS.md).
+
 ## Integration
 
 | Skill | When to chain |
