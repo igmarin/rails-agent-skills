@@ -8,7 +8,32 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - uses: tesslio/setup-tessl@v2
         with:
           token: ${{ secrets.TESSL_TOKEN }}
-      - run: tessl skill review
+
+      - name: Find changed skills
+        id: changed
+        run: |
+          dirs=$(git diff --name-only origin/${{ github.base_ref }}...HEAD \
+            | grep 'SKILL\.md' \
+            | xargs -I{} dirname {} \
+            | sort -u)
+          echo "Found changed skill dirs: $dirs"
+          echo "dirs<<EOF" >> $GITHUB_OUTPUT
+          echo "$dirs" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Review changed skills
+        if: steps.changed.outputs.dirs != ''
+        run: |
+          while IFS= read -r dir; do
+            [ -z "$dir" ] && continue
+            echo "── Reviewing $dir ──"
+            cd "$dir"
+            tessl skill review
+            cd -
+          done <<< "${{ steps.changed.outputs.dirs }}"

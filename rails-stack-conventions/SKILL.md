@@ -11,16 +11,14 @@ description: >
 
 When **writing or generating** code for this project, follow these conventions. Stack: Ruby on Rails, PostgreSQL, Hotwire (Turbo + Stimulus), Tailwind CSS.
 
-**Core principle:** Follow Rails conventions. When in doubt, check the official Rails guides.
-
-**Style:** If the project uses a **linter**, treat it as the source of truth for formatting and cops. For cross-cutting design principles (DRY, YAGNI, structured logging, rules by directory), use **rails-code-conventions**.
+**Style:** If the project uses a linter, treat it as the source of truth for formatting. For cross-cutting design principles (DRY, YAGNI, structured logging, rules by directory), use **rails-code-conventions**.
 
 ## HARD-GATE: Tests Gate Implementation
 
 ```
 ALL new code MUST have its test written and validated BEFORE implementation.
-  1. Write the spec for the behavior
-  2. Run the spec — verify it fails because the feature does not exist yet
+  1. Write the spec: bundle exec rspec spec/[path]_spec.rb
+  2. Verify it FAILS — output must show the feature does not exist yet
   3. ONLY THEN write the implementation code
 See rspec-best-practices for the full gate cycle.
 ```
@@ -29,101 +27,97 @@ See rspec-best-practices for the full gate cycle.
 
 | Aspect | Convention |
 |--------|-----------|
-| Style | **RuboCop** project config when present; otherwise Ruby Style Guide, single quotes, `unless`/`||=`/`&.` |
-| Naming | `snake_case` files/methods, `CamelCase` classes |
-| Models | MVC, concerns, service objects for complex logic |
-| Queries | Eager loading (`includes`), avoid N+1 |
-| Frontend | Hotwire (Turbo + Stimulus), Tailwind CSS |
-| Testing | RSpec or Minitest, TDD/BDD, FactoryBot |
-| Security | Devise/Pundit, strong params, guard XSS/CSRF/SQLi |
+| Style | RuboCop project config when present; otherwise Ruby Style Guide, single quotes |
+| Models | MVC — service objects for complex logic, concerns for shared behavior |
+| Queries | Eager load with `includes`; never iterate over associations without preloading |
+| Frontend | Hotwire (Turbo + Stimulus); Tailwind CSS |
+| Testing | RSpec with FactoryBot; TDD |
+| Security | Strong params, guard XSS/CSRF/SQLi; Devise/Pundit for auth |
 
-## Code Style and Structure
+## Key Code Patterns
 
-- Concise, idiomatic Ruby; follow Rails conventions
-- OOP and functional patterns as appropriate; prefer modularization over duplication
-- Descriptive names: `user_signed_in?`, `calculate_total`
-- Structure: MVC, concerns, helpers per Rails conventions
+### Hotwire: Turbo Frames
 
-## Naming
+```erb
+<%# Wrap a section to be replaced without a full page reload %>
+<turbo-frame id="order-<%= @order.id %>">
+  <%= render "orders/details", order: @order %>
+</turbo-frame>
 
-- **snake_case:** files, methods, variables
-- **CamelCase:** classes, modules
-- Rails naming for models, controllers, views
+<%# Link that targets only this frame %>
+<%= link_to "Edit", edit_order_path(@order), data: { turbo_frame: "order-#{@order.id}" } %>
+```
 
-## Ruby and Rails
+### Hotwire: Turbo Streams (broadcast from controller)
 
-- Use Ruby 3.x features when helpful (pattern matching, endless methods)
-- Prefer Rails built-in helpers and APIs
-- Use ActiveRecord effectively; avoid N+1 (eager loading)
+```ruby
+respond_to do |format|
+  format.turbo_stream do
+    render turbo_stream: turbo_stream.replace(
+      "order_#{@order.id}",
+      partial: "orders/order",
+      locals: { order: @order }
+    )
+  end
+  format.html { redirect_to @order }
+end
+```
 
-## Syntax and Formatting
+### Avoiding N+1 — Eager Loading
 
-- Follow [Ruby Style Guide](https://rubystyle.guide/)
-- Use expressive Ruby: `unless`, `||=`, `&.`
-- **Single quotes** for strings unless interpolation is needed
+```ruby
+# BAD — triggers one query per order
+@orders = Order.where(user: current_user)
+@orders.each { |o| o.line_items.count }
 
-## Error Handling and Validation
+# GOOD — single JOIN via includes
+@orders = Order.includes(:line_items).where(user: current_user)
+```
 
-- Exceptions for exceptional cases, not control flow
-- Proper error logging and user-friendly messages
-- ActiveModel validations in models
-- Controllers: handle errors and set appropriate flash messages
+### Service Object (complex business logic out of the controller)
 
-## UI and Styling
+```ruby
+# Controller stays thin — delegate to service
+result = Orders::CreateOrder.call(user: current_user, params: order_params)
+if result[:success]
+  redirect_to result[:order], notice: "Order created"
+else
+  @order = Order.new(order_params)
+  render :new, status: :unprocessable_entity
+end
+```
 
-- **Hotwire:** Turbo and Stimulus for dynamic, SPA-like behavior
-- **Tailwind CSS** for responsive layout and styling
-- View helpers and partials to keep views DRY
-
-## Performance
-
-- Effective DB indexing; caching (fragment, Russian Doll) where useful
-- Eager loading; optimize with `includes`, `joins`, `select` as needed
-
-## Architecture
-
-- RESTful routes; concerns for shared behavior
-- **Service objects** for non-trivial business logic
-- **Background jobs** for long-running work
-
-## Testing
-
-- RSpec or Minitest; TDD/BDD style
-- FactoryBot (or equivalent) for test data
+See **ruby-service-objects** for the full `.call` pattern and response format.
 
 ## Security
 
-- Auth/authz (e.g. Devise, Pundit); strong parameters
-- Guard against XSS, CSRF, SQL injection
+- **Strong params** on every controller action that writes data
+- Guard against XSS (use `html_escape`, avoid `raw`), CSRF (Rails default on), SQLi (use AR query methods or `sanitize_sql` for raw SQL)
+- Auth: Devise for authentication, Pundit for authorization
 
 ## Common Mistakes
 
-| Mistake | Reality |
-|---------|---------|
-| Logic in views | Use helpers, presenters, or Stimulus controllers |
-| N+1 queries ignored in development | They compound in production. Always eager load. |
-| Raw SQL without parameterization | SQL injection risk. Use ActiveRecord query methods. |
-| Skipping FactoryBot for "quick" test | Fixtures are brittle. Factories are faster to maintain. |
-| Ignoring Ruby Style Guide | Consistent style reduces review friction. Follow the guide. |
+| Mistake | Correct approach |
+|---------|-----------------|
+| Business logic in views | Use helpers, presenters, or Stimulus controllers |
+| N+1 queries in loops | Eager load with `includes` before the loop |
+| Raw SQL without parameterization | Use AR query methods or `ActiveRecord::Base.sanitize_sql` |
+| Skipping FactoryBot for "quick" test | Fixtures are brittle — always use factories |
 
 ## Red Flags
 
-- Controller action with more than 15 lines of logic
-- Model with no validations
+- Controller action with more than 15 lines of business logic
+- Model with no validations on required fields
 - View with embedded Ruby conditionals spanning 10+ lines
 - No `includes` on associations used in loops
-- Hardcoded strings that should be in I18n
+- Hardcoded strings that belong in I18n
 
 ## Integration
 
 | Skill | When to chain |
 |-------|---------------|
-| **rails-code-conventions** | Before or alongside this skill for principles, logging, and path-specific boundaries |
+| **rails-code-conventions** | For design principles, structured logging, and path-specific rules |
 | **rails-code-review** | When reviewing existing code against these conventions |
-| **ruby-service-objects** | When extracting business logic into services |
-| **rspec-best-practices** | For testing conventions |
+| **ruby-service-objects** | When extracting business logic into service objects |
+| **rspec-best-practices** | For testing conventions and TDD cycle |
 | **rails-architecture-review** | For structural review beyond conventions |
-
-## Reference
-
-Follow the [official Rails guides](https://guides.rubyonrails.org/) for routing, controllers, models, views, and related topics.
