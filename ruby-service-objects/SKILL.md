@@ -135,11 +135,12 @@ Validators raise; the calling service rescues and converts to an error hash.
 
 ### 4. Orchestrator Delegation (≤20-line `call`)
 
-All sub-services return `{ success:, response: {} }`. The orchestrator checks each result and returns early on failure. Keep the orchestrator rescue minimal — sub-services handle their own detailed error logging:
+All sub-services return `{ success:, response: {} }`. The orchestrator propagates failures via early returns only — sub-services handle their own rescue and error logging, so the orchestrator needs no rescue block:
 
 ```ruby
 # Orchestrator call — delegates to sub-service classes, validates each result
 # RULE: ≤20 lines of code in call — if longer, extract another sub-service
+# Sub-services return { success: false, response: } on error; no rescue needed here.
 def call
   user_result = UserCreationService.call(@params)
   return user_result unless user_result[:success]
@@ -150,9 +151,6 @@ def call
   BillingService.call(workspace_result[:response])
   NotificationService.call(user_result[:response])
   { success: true, response: { user: user_result[:response] } }
-rescue StandardError => e
-  Rails.logger.error("Orchestrator failed: #{e.message}")
-  { success: false, response: { error: { message: ONBOARDING_FAILED } } }
 end
 ```
 

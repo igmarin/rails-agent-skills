@@ -78,7 +78,7 @@ When asked to write docs:
 2. Show one realistic configuration example.
 3. Document operational steps explicitly.
 4. Keep sections short and task-oriented.
-5. Verify the generated docs cover all gaps in the Documentation Gaps table before finalizing.
+5. Check each row in the Documentation Gaps checklist — if any is missing, fill it and re-check before finalizing.
 
 ## Integration
 

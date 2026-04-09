@@ -88,7 +88,7 @@ Rules below apply **when those paths exist** in the project. If a path is absent
 
 | Area | Path pattern | Guidance |
 |------|--------------|----------|
-| **ActiveRecord performance** | `app/models/**/*.rb` | Eager load in loops; prefer `pluck`, `exists?`, `find_each` over loading full records. Verify N+1 fixes with the `bullet` gem or query logs after applying |
+| **ActiveRecord performance** | `app/models/**/*.rb` | Eager load in loops; prefer `pluck`, `exists?`, `find_each` over loading full records. Fix N+1s: run `bullet` → fix eager loading → re-run until clean |
 | **Background jobs** | `app/workers/**/*.rb`, `app/jobs/**/*.rb` | Clear worker/job structure, queue selection, idempotency, structured error logging (see **rails-background-jobs** for Active Job / Solid Queue / Sidekiq depth) |
 | **Error handling** | `app/services/**/*.rb`, `app/lib/**/*.rb`, `app/exceptions/**/*.rb` | Domain exceptions with prefixed codes where the team uses them; `rescue_from` or base handlers for API layers as conventions dictate |
 | **Logging / tracing** | `app/services/**/*.rb`, `app/workers/**/*.rb`, `app/jobs/**/*.rb`, `app/controllers/**/*.rb`, `app/repositories/**/*.rb` | Structured logging; add APM trace spans and tags (e.g. Datadog) for key operations when the stack includes them |
