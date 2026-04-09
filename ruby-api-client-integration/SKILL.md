@@ -125,7 +125,7 @@ end
 | Builder leaks shape | `String(col['name'])`, `.slice(*@attributes)` always |
 | Weak tests | Hash factories; 4xx/5xx/bad JSON/timeout specs |
 | No `timeout:` on Client | Always set `timeout:` |
-| Untrusted API text | No `response.body` in errors/logs; no raw API → prompts, shell, SQL, RAG — **rails-security-review** |
+| Untrusted API text | Errors use only `response.code`/`e.class`; Builder always slices through `ATTRIBUTES` — see **rails-security-review** |
 
 ## Related skills
 

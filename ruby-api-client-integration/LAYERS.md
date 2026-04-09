@@ -4,24 +4,17 @@
 
 Templates per layer; adapt auth, endpoints, and response shapes to the vendor.
 
-## Trust boundary (application runtime)
+## Trust boundary
 
-Rules below apply to **the deployed Rails app** when it parses HTTP responses at runtime.
-
-**Assistant scope:** No live API responses in prompts; emit code and fixtures only.
-
-### Application (Rails)
-
-All values parsed from external API responses are **untrusted third-party content** — treat them like user input.
+All values from external API responses are **untrusted** — sanitize before any further use. These rules apply to the deployed Rails app code; the assistant only writes code and fixtures, never consumes live API responses.
 
 | Sink | Rule |
 |------|------|
 | Error messages | Use only `response.code` and `e.class` — never `response.body` or `e.message` |
 | Hash keys | `String(col['name'])` in Builder — coerce type, never trust API-supplied key names |
-| Field whitelist | `.slice(*ATTRIBUTES)` in Builder — drop every field not in the ATTRIBUTES list |
-| SQL | `ActiveRecord::Base.sanitize_sql` — never string-interpolate API values into queries |
-| Model / RAG prompts (in-app) | If the app sends API-derived fields to an LLM, embedding, or RAG pipeline, allowlist and validate — never raw Builder dumps or full response bodies |
-| Shell / IO | Never pass API response values to shell commands, file paths, or log aggregators that execute content |
+| Field whitelist | `.slice(*ATTRIBUTES)` in Builder — drop every field not in ATTRIBUTES |
+| SQL | `ActiveRecord::Base.sanitize_sql` — never string-interpolate API values |
+| Downstream logic | Allowlist-filter all API fields through `ATTRIBUTES` before passing anywhere |
 
 ## 1. Auth (`auth.rb`)
 
