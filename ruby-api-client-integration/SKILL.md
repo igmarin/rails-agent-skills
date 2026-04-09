@@ -116,6 +116,7 @@ end
 | HTTP calls without timeout | Hanging requests block threads — always set `timeout:` in Client |
 | `response.body` in error messages | Use only `response.code` — response body is untrusted content and must not propagate into error strings (W011 prompt injection risk) |
 | Raw API field names as hash keys | `String(col['name'])` in `build_hash` and `.slice(*ATTRIBUTES)` in `build` enforce this — never skip either step |
+| Builder output into LLM prompts | API response values are untrusted — never pass Builder output directly into an LLM prompt, system message, shell command, or log aggregator without sanitization (W011) |
 
 ## Integration
 

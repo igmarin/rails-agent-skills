@@ -2,6 +2,19 @@
 
 Full implementation templates for each layer. Adapt to the specific API's auth scheme, endpoint shape, and response format.
 
+## Trust boundary (W011)
+
+All values parsed from external API responses are **untrusted third-party content** — treat them like user input.
+
+| Sink | Rule |
+|------|------|
+| Error messages | Use only `response.code` and `e.class` — never `response.body` or `e.message` |
+| Hash keys | `String(col['name'])` in Builder — coerce type, never trust API-supplied key names |
+| Field whitelist | `.slice(*ATTRIBUTES)` in Builder — drop every field not in the ATTRIBUTES list |
+| SQL | `ActiveRecord::Base.sanitize_sql` — never string-interpolate API values into queries |
+| LLM prompts | **Never pass Builder output directly into an LLM prompt or system message** — sanitize or validate first |
+| Shell / IO | Never pass API response values to shell commands, file paths, or log aggregators that execute content |
+
 ## 1. Auth (`auth.rb`)
 
 Manages credentials and caches the bearer token for the session lifetime.
@@ -12,6 +25,8 @@ module ServiceName
     include HTTParty
 
     DEFAULT_TIMEOUT = 30
+
+    class Error < StandardError; end
 
     def self.default
       new(

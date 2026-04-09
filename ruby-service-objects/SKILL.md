@@ -33,32 +33,46 @@ See rspec-best-practices for the full gate cycle.
 
 ## Core Patterns
 
-### 1. The `.call` Pattern
+### 1. The `.call` Pattern (with delegation, transaction, YARD)
 
 ```ruby
 module AnimalTransfers
   class TransferService
-    attr_reader :source_shelter_id, :target_shelter_id
+    TRANSFER_FAILED = 'Transfer could not be completed'
 
+    # @param params [Hash] :source_shelter_id, :target_shelter_id, :tag_number
+    # @return [Hash] { success: Boolean, response: Hash }
     def self.call(params)
       new(params).call
     end
 
     def initialize(params)
-      @source_shelter_id = params.dig(:source_shelter, :shelter_id)
-      @target_shelter_id = params.dig(:target_shelter, :shelter_id)
+      @source_shelter_id = params[:source_shelter_id]
+      @target_shelter_id = params[:target_shelter_id]
+      @tag_number = params[:tag_number]
     end
 
     def call
-      validate_shelters!
-      result = process_data
-      build_success_response(result)
+      source = ShelterValidator.validate_source_shelter!(@source_shelter_id)
+      target = ShelterValidator.validate_target_shelter!(@target_shelter_id)
+      result = execute_transfer(source, target)
+      { success: true, response: { transfer: result } }
     rescue ActiveRecord::RecordInvalid => e
       log_error('Validation Error', e)
-      build_error_response(e.message, [])
+      { success: false, response: { error: { message: e.message } } }
     rescue StandardError => e
       log_error('Processing Error', e, include_backtrace: true)
-      build_error_response(e.message, [])
+      { success: false, response: { error: { message: TRANSFER_FAILED } } }
+    end
+
+    private
+
+    def execute_transfer(source, target)
+      ActiveRecord::Base.transaction do
+        source.decrement!(:animal_count)
+        target.increment!(:animal_count)
+        TransferLog.create!(source:, target:, tag_number: @tag_number)
+      end
     end
   end
 end
