@@ -37,34 +37,21 @@ NO implementation code may be written until:
   1. The test EXISTS
   2. The test has been RUN
   3. The test FAILS for the correct reason (feature missing, not typo)
-
-ONLY AFTER the test is validated can implementation begin.
 ```
 
 Write code before the test? Delete it. Start over.
-
-**No exceptions:**
-
-- Don't keep it as "reference"
-- Don't "adapt" it while writing tests
-- Don't write "just a little" implementation first
-- Delete means delete
 
 **The gate cycle for each behavior:**
 
 1. **Write test:** One minimal test showing what the behavior should do
 2. **Run test:** Execute it — this is mandatory, not optional
-3. **Validate failure:** Confirm it fails because the feature is missing (not a typo or import error)
-4. **CHECKPOINT — Test Design Review:** Present the failing test. Confirm the boundary, the behavior, and edge case coverage before writing any implementation. See `rails-tdd-slices` for the checkpoint format.
+3. **Validate failure:** Confirm it fails because the feature is missing
+4. **CHECKPOINT — Test Design Review:** Present the failing test. Confirm boundary, behavior, and edge cases before writing implementation. See `rails-tdd-slices` for checkpoint format.
 5. **GATE PASSED** — you may now write implementation code
-6. **CHECKPOINT — Implementation Proposal:** Before writing code, propose the approach in plain language:
-   - Which classes / methods will be created or changed?
-   - Rough structure (e.g. "a service object that calls X, then Y, then returns Z")
-   - Any dependencies or risks to flag
-   - Wait for confirmation before writing implementation code
+6. **CHECKPOINT — Implementation Proposal:** Before writing code, state which classes/methods will be created or changed and the rough structure. Wait for confirmation.
 7. **Write minimal code:** Simplest implementation to make the test pass
 8. **Run test again:** Confirm it passes and no other tests break
-9. **Refactor:** Clean up (remove duplication, improve names, extract helpers) — tests must stay green
+9. **Refactor:** Clean up — tests must stay green
 10. **Next behavior:** Return to step 1
 
 ## TDD Slice Selection
@@ -80,155 +67,34 @@ Choose the first failing spec at the boundary that gives the strongest signal wi
 | Rails engine route, install, or generator behavior | Engine request/routing/generator spec via `rails-engine-testing` |
 | Bug fix | Reproduction spec at the boundary where the bug is observed |
 
-Prefer the highest-value spec that proves the behavior end-to-end enough to matter. Only start lower in the stack when the boundary spec would be noisy, expensive, or unable to isolate the rule you need.
+## Structure and Style
 
-## Core Rules
+- **describe** for the class, module, or behavior; **context** for scenarios ("when valid", "when user is missing").
+- Mirror source paths under `spec/` (e.g. `app/models/user.rb` → `spec/models/user_spec.rb`).
+- Use **let** and **let!** for test data; prefer `let` when value isn't needed for setup.
+- Use **shared_examples** / **shared_context** for repeated behavior; extract helpers when it improves clarity.
+- Use `let_it_be` only when `test-prof` already exists in the project.
+- Use `travel_to` for time-dependent behavior.
 
-- Test observable behavior, not private method structure.
-- Use the highest-value spec type for the behavior under test.
-- Prefer request specs over controller specs for Rails endpoints.
-- Keep factories minimal and explicit.
-- Stub external boundaries, not internal code paths, unless isolation is the goal.
-- Avoid time, randomness, and global state leaks between examples.
+**Monolith vs engine:** When the project is a Rails engine, use `rails-engine-testing` for dummy-app setup and engine request/routing/generator specs; keep using this skill for general RSpec style.
 
-## Spec Selection
+For executable spec examples (request, model, shared_examples), see [EXAMPLES.md](./EXAMPLES.md).
 
-- **model or unit specs** for cohesive domain objects
-- **request specs** for controller and API behavior
-- **service specs** for orchestrators and business workflows
-- **system specs** only for critical end-to-end UI flows
-- **job specs** for enqueue and execution behavior
-- **feature-specific integration specs** when wiring matters more than isolation
+## Pitfalls
 
-**Monolith vs engine:** For a normal Rails app, this skill applies as-is. When the project is a **Rails engine**, use **rails-engine-testing** for dummy-app setup, engine request/routing/generator specs, and host integration; keep using this skill for general RSpec style and structure.
-
-## Coverage
-
-- Cover typical cases and edge cases: invalid inputs, errors, boundary conditions.
-- Consider all relevant scenarios for each method or behavior.
-- Add one failing example first; expand coverage only after the main behavior is proven.
-
-## Readability and Clarity
-
-- Use clear, descriptive names for `describe`, `context`, and `it` blocks.
-- Prefer **expect** syntax for assertions.
-- Keep test code concise; avoid unnecessary complexity or duplication.
-
-**Bad: Vague test description:**
-
-```ruby
-# Not clear what's being tested, why, or under what conditions
-it "should work correctly" do
-  # ...
-end
-```
-
-**Good: Clear, behavior-driven test description:**
-
-```ruby
-# Explicitly states the behavior and the conditions under which it occurs
-it "creates an order with pending status when valid parameters are provided" do
-  # ...
-end
-```
-
-## Structure
-
-- **describe** for the class, module, or behavior; **context** for scenarios (e.g. "when valid", "when user is missing").
-- Use **subject** for the object under test when it reduces repetition.
-- Mirror source paths under `spec/` (e.g. `app/models/user.rb` -> `spec/models/user_spec.rb`).
-
-## Test Data
-
-- Use **let** and **let!** for test data; keep setup minimal and necessary.
-- Prefer **factories** (e.g. FactoryBot) over fixtures.
-- Prefer `let` over `let!` when the value isn't needed for setup (improves test performance and clarity).
-- Use `let_it_be` only if the project already includes `test-prof`; otherwise do not introduce it implicitly.
-
-## Independence and Isolation
-
-- Each example should be independent; avoid shared mutable state between tests.
-- Use **mocks** for external services (APIs, etc.) and **stubs** for predefined return values.
-- Isolate the unit under test, but avoid over-mocking; prefer testing real behavior when practical.
-
-## Avoid Repetition
-
-- Use **shared_examples** / **shared_context** for behavior repeated across contexts.
-- Extract repeated setup or expectations into helpers or custom matchers when it improves clarity.
-
-## Rails-First TDD Loop
-
-For Rails work, the default decision order is:
-
-1. Pick the user-visible boundary (`request`, `job`, engine route, or service entry point).
-2. Write the smallest failing example that proves the behavior.
-3. Run only that spec first and confirm the failure reason.
-4. Implement the minimum code to satisfy it.
-5. Re-run the targeted spec, then broaden to adjacent coverage if needed.
-
-Do not start with a low-level PORO spec if the real risk lives in request wiring, background execution, engine integration, or persistence behavior.
-
-## Verification Checklist
-
-Before marking test work complete:
-
-- [ ] Every new function/method has a test
-- [ ] Watched each test fail before implementing
-- [ ] Each test failed for expected reason (feature missing, not typo)
-- [ ] Wrote minimal code to pass each test
-- [ ] All tests pass
-- [ ] Output pristine (no errors, warnings)
-- [ ] Tests use real code (mocks only if unavoidable)
-- [ ] Edge cases and errors covered
-
-Can't check all boxes? You skipped TDD. Start over.
-
-## Common Mistakes
-
-| Mistake | Reality |
-|---------|---------|
+| Pitfall | What to do |
+|---------|------------|
 | "Too simple to test" | Simple code breaks. Test takes 30 seconds. |
 | "I'll test after" | Tests passing immediately prove nothing. |
-| "Already manually tested" | Ad-hoc is not systematic. No record, can't re-run. |
-| "Keep as reference, write tests first" | You'll adapt it. That's testing after. Delete means delete. |
+| "Keep as reference, write tests first" | You'll adapt it. Delete means delete. |
 | Starting with the lowest layer by habit | Begin at the boundary that proves the behavior users care about |
 | Testing mock behavior instead of real behavior | Mock returns what you told it to. Test the real thing. |
 | Brittle assertions on internal calls | Assert outcomes, not implementation details. |
 | Excessive `let!` and nested contexts | Prefer `let` when value isn't needed for setup. Keep nesting shallow. |
 | Recommending `let_it_be` in every repo | Only use it when `test-prof` already exists in the project |
 | Factories creating large graphs by default | Minimal factories — only what the test needs. |
-| Time-sensitive tests without clock control | Use `travel_to` for time-dependent behavior. |
-| "TDD is dogmatic, being pragmatic means adapting" | TDD IS pragmatic. Finds bugs before commit, enables refactoring. |
-
-## Red Flags
-
-- Code written before the test
-- Test passes immediately (you're testing existing behavior, not new behavior)
-- Can't explain why the test failed
-- First spec lives deep in a PORO while the real risk is request/job/engine wiring
-- `let!` used everywhere instead of `let`
-- Factories creating 10+ associated records
-- Tests that break when implementation changes but behavior stays correct
-- "I'll add tests later" (later never comes)
-- Test name contains "and" (testing two behaviors in one example)
-- Rationalizing "just this once" for skipping TDD
-
-## Review Checklist
-
-- Is the spec type appropriate for the risk?
-- Would the test still pass if the implementation changed but behavior stayed correct?
-- Are setup and assertions easy to read?
-- Is the factory data minimal?
-- Is flakiness risk controlled?
-
-## Output Style
-
-When asked to improve tests:
-
-1. Identify the most important missing behavioral coverage.
-2. Reduce brittleness before adding more assertions.
-3. Prefer simpler setup over clever RSpec abstractions.
-4. If the suite is missing a clear first slice, recommend the highest-value failing spec to add first.
+| Code written before the test | Can't explain why it failed? Reproduction step isn't done yet. |
+| Test name contains "and" | One behavior per example. Split it. |
 
 ## Integration
 

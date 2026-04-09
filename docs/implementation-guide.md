@@ -135,7 +135,7 @@ The MCP Server is the recommended method for RubyMine. The symlink approach is n
 
 ## Session Start Hook
 
-The session-start hook automatically injects the `rails-agent-skills` bootstrap skill at the beginning of each session. Defined in `hooks/hooks.json`, executed by `hooks/session-start`.
+The session-start hook automatically injects the `rails-skills-orchestrator` bootstrap skill at the beginning of each session. Defined in `hooks/hooks.json`, executed by `hooks/session-start`.
 
 For Claude Code, `~/.claude/CLAUDE.md` (symlinked from this repo) is the primary mechanism. The session-start hook is retained for completeness and future marketplace support, but is not required for local installs.
 

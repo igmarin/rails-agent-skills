@@ -25,7 +25,7 @@ rails-agent-skills/
 │   ├── architecture.md
 │   ├── workflow-guide.md
 │   └── skill-template.md
-├── rails-agent-skills/      # Bootstrap skill (loaded at session start)
+├── rails-skills-orchestrator/ # Bootstrap skill (loaded at session start)
 │   └── SKILL.md
 ├── <skill-name>/            # One directory per skill
 │   ├── SKILL.md             # Main skill file (required)

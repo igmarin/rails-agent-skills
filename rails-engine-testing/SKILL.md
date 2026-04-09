@@ -23,7 +23,15 @@ Prefer integration confidence over isolated test quantity. The main goal is to p
 
 ## HARD-GATE
 
-**EVERY engine MUST have a dummy app for testing.** This ensures the engine behaves correctly within a host application environment, proving its boot and mount process.
+**EVERY engine MUST have a dummy app for testing.**
+
+Generate one if it doesn't exist:
+
+```bash
+cd my_engine && bundle exec rails plugin new . --dummy-path=spec/dummy --skip-git
+```
+
+This ensures the engine behaves correctly within a host application environment, proving its boot and mount process.
 
 ## Testing Order
 
@@ -32,6 +40,7 @@ Prefer integration confidence over isolated test quantity. The main goal is to p
 3. Add the smallest integration test that proves mounting and boot work.
 4. Add request, routing, configuration, and generator coverage as needed.
 5. Add regression tests for coupling or reload bugs before refactoring.
+6. Verify: dummy app exercises real host integration; routes tested through engine namespace; configurable seams covered with at least one non-default case; generators safe to run twice.
 
 ## Minimum Baseline
 
@@ -44,68 +53,14 @@ For a non-trivial engine, aim for:
 
 If generators exist, add generator specs. If decorators or reload hooks exist, add reload-focused coverage.
 
-## Common Mistakes
-
-| Mistake | Reality |
-|---------|---------|
-| No dummy app | Engines must be tested inside a host; unit tests alone cannot prove mount and integration work |
-| Testing against real host instead of dummy | Use spec/dummy; real host apps are environment-specific and slow |
-| Skipping reload-safety tests | Decorators and patches can break in development; add regression coverage for reload behavior |
-
-## Red Flags
-
-- Tests pass only with a specific Rails version; no version matrix or compatibility checks
-- No dummy app in spec/; engine boot and mount are untested
-- Generator specs missing when install generators exist
-- No config spec; configuration overrides are untested
-
-## What To Test In The Dummy App
-
-Use the dummy app for:
-
-- mounting the engine
-- route resolution
-- controller and view rendering
-- interactions with configured host models or adapters
-- initializer-driven setup
-- copied migrations or install flow where practical
-
-Do not rely only on isolated unit tests when the behavior depends on Rails integration.
-
-## Good Test Boundaries
-
-- Unit tests: services, value objects, adapters, policy objects.
-- Request specs: public engine endpoints.
-- Routing specs: engine route expectations and mount behavior.
-- System specs: only when the engine ships meaningful UI flows.
-- Generator specs: install commands, copied files, idempotency.
-
-## Review Checklist
-
-- Does the dummy app exercise real host integration?
-- Are engine routes tested through the engine namespace?
-- Are configurable seams covered with at least one non-default case?
-- Are generators safe to run twice?
-- Are reload-sensitive hooks protected by regression tests?
-
-## Common Gaps To Fix
-
-- Engine boots but no test proves the host app can mount it.
-- Request specs exist but use stubs instead of real engine wiring.
-- Configuration object exists but default and override behavior are untested.
-- Install generators exist without file or route assertions.
-- Dummy app exists only as scaffolding and is not used in meaningful specs.
-
-## Examples
-
-**Minimal dummy-app request spec (engine mounted):**
+**Minimal request spec to prove the engine mounts:**
 
 ```ruby
-# spec/requests/my_engine/root_spec.rb or spec/integration/engine_mount_spec.rb
+# spec/requests/my_engine/root_spec.rb
 require 'rails_helper'
 
 RSpec.describe 'MyEngine mount', type: :request do
-  it 'mounts the engine and returns success for the engine root' do
+  it 'returns ok for the engine root' do
     get my_engine.root_path
     expect(response).to have_http_status(:ok)
   end
@@ -130,13 +85,18 @@ RSpec.describe MyEngine::Configuration do
 end
 ```
 
-## Output Style
+For generator and reload-safety spec examples, see [EXAMPLES.md](./EXAMPLES.md).
 
-When asked to help with tests:
+## Pitfalls
 
-1. List the highest-value missing integration tests.
-2. Add a minimal passing baseline first.
-3. Expand with focused regression coverage for risky seams.
+| Pitfall | What to do |
+|---------|------------|
+| No dummy app | Test inside spec/dummy; unit tests alone cannot prove mount and integration |
+| Testing against real host | Use spec/dummy; real host apps are environment-specific and slow |
+| Skipping reload-safety tests | Add regression coverage for decorators and patches in development |
+| Tests pass only with specific Rails version | Run a version matrix; pin nothing unless required |
+| Request specs use stubs instead of real wiring | Mount the engine in dummy and call through it |
+| Install generators without file assertions | Assert copied files and idempotency in generator specs |
 
 ## Integration
 

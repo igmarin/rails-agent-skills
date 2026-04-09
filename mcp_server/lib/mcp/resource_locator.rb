@@ -11,7 +11,7 @@ module MCP
     end
 
     # Finds all +SKILL.md+ files under {#initialize}'s root and returns MCP-style resource descriptors.
-    # Skips +skill-template+ and +rails-agent-skills+ directories (scaffolding / discovery-only skills).
+    # Skips +skill-template+ and +rails-skills-orchestrator+ directories (scaffolding / discovery-only skills).
     # @return [Array<Hash>] Each element includes +:uri+ (+String+, +file://+), +:name+ (+String+, +skill/+ prefix),
     #   and +:mimeType+ (+String+, typically +'text/markdown'+).
     def list_skill_resources
@@ -24,8 +24,8 @@ module MCP
         # Filter out the skill-template.md as it's not a functional skill
         next if skill_name == 'skill-template'
 
-        # Also filter out the main rails-agent-skills/SKILL.md as it's a discovery skill
-        next if skill_name == 'rails-agent-skills'
+        # Also filter out the orchestrator SKILL.md (rails-skills-orchestrator) as it's a discovery-only skill
+        next if skill_name == 'rails-skills-orchestrator'
 
         {
           uri: "file://#{file_path}",
