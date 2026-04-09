@@ -3,4 +3,3 @@
 .claude/
 tmp/
 .Gemfile.lock
-evals/*

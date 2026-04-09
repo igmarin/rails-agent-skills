@@ -1,0 +1,56 @@
+{
+  "context": "Tests whether the agent uses Ruby constants for error messages and defaults, writes YARD documentation on public methods, creates class-only (static) services when no instance state is needed, and produces a README for the module.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Error message constants",
+      "max_score": 12,
+      "description": "At least two error messages or default values are defined as Ruby constants (ALL_CAPS names) rather than inline string or numeric literals"
+    },
+    {
+      "name": "YARD on self.call",
+      "max_score": 10,
+      "description": "The `.call` class method has a YARD comment block (starts with `# @param` or `# @return` or `##`)"
+    },
+    {
+      "name": "YARD on other public methods",
+      "max_score": 8,
+      "description": "At least one other public method (besides `.call`) has a YARD comment block"
+    },
+    {
+      "name": "Class-only service used",
+      "max_score": 12,
+      "description": "At least one helper or validator class uses only class methods (no instance variables, no `new`) for stateless operations"
+    },
+    {
+      "name": "No instance state in class-only service",
+      "max_score": 10,
+      "description": "The class-only service does NOT define `initialize`, `attr_reader`, or instance variables"
+    },
+    {
+      "name": "README present",
+      "max_score": 10,
+      "description": "A `README.md` file is created that documents the module's purpose and public interface"
+    },
+    {
+      "name": "Frozen string literal",
+      "max_score": 8,
+      "description": "Every service file begins with `# frozen_string_literal: true`"
+    },
+    {
+      "name": "Response format",
+      "max_score": 10,
+      "description": "The main service returns `{ success: true/false, response: { ... } }` for both success and failure"
+    },
+    {
+      "name": "Module namespace matches directory",
+      "max_score": 8,
+      "description": "Service file is under `app/services/<module>/` and the Ruby module name matches that directory"
+    },
+    {
+      "name": "Constants not duplicated inline",
+      "max_score": 12,
+      "description": "The defined constants are actually used in the code — no same string/number appears as both a constant definition AND a duplicated literal elsewhere in the same file"
+    }
+  ]
+}

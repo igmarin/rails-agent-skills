@@ -1,0 +1,56 @@
+{
+  "context": "Tests whether the agent respects service object boundary rules: keeping the orchestrator's call method concise by extracting sub-services, ensuring services return data (not HTTP responses), and avoiding cross-domain model modifications.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Orchestrator call length",
+      "max_score": 14,
+      "description": "The main orchestrator service's `call` (or `def call`) instance method body is 20 lines or fewer (comments and blank lines excluded)"
+    },
+    {
+      "name": "Sub-services extracted",
+      "max_score": 12,
+      "description": "At least two distinct sub-service classes or helper classes are created to handle steps that the orchestrator delegates to"
+    },
+    {
+      "name": "Orchestrator delegates, not implements",
+      "max_score": 10,
+      "description": "The orchestrator's `call` method calls other service objects or methods rather than containing the full implementation logic inline"
+    },
+    {
+      "name": "No HTTP response returned",
+      "max_score": 12,
+      "description": "No service class renders or returns an HTTP response object (no `render`, `redirect_to`, `ActionDispatch::Response`, or `head` calls inside any service)"
+    },
+    {
+      "name": "Data-only return",
+      "max_score": 8,
+      "description": "All services return plain Ruby hashes or data objects, not controller/HTTP concerns"
+    },
+    {
+      "name": "Single responsibility",
+      "max_score": 10,
+      "description": "Each service class addresses one domain concern and does NOT modify models clearly outside its declared scope"
+    },
+    {
+      "name": "Frozen string literal",
+      "max_score": 8,
+      "description": "Every service file begins with `# frozen_string_literal: true`"
+    },
+    {
+      "name": "File structure",
+      "max_score": 8,
+      "description": "All service files are placed under `app/services/<module>/` with namespaced module declarations"
+    },
+    {
+      "name": "Response format",
+      "max_score": 10,
+      "description": "Return values across all services use `{ success: true/false, response: { ... } }` structure"
+    },
+    {
+      "name": "Error handling",
+      "max_score": 8,
+      "description": "At least one service has a rescue block that returns an error hash rather than leaking exceptions"
+    }
+  ]
+}

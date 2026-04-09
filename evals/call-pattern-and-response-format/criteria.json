@@ -1,0 +1,56 @@
+{
+  "context": "Tests whether the agent implements a Ruby service object using the correct .call class method pattern, standardized hash response format, proper file placement, and frozen_string_literal pragma — the foundational conventions for any service object.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Self.call delegation",
+      "max_score": 12,
+      "description": "The service class defines `def self.call(params)` that delegates to `new(params).call` (or equivalent)"
+    },
+    {
+      "name": "Instance call method",
+      "max_score": 8,
+      "description": "There is a separate instance `def call` method that performs the actual work"
+    },
+    {
+      "name": "Success response key",
+      "max_score": 10,
+      "description": "Success return value contains a `success:` key set to `true`"
+    },
+    {
+      "name": "Success response nesting",
+      "max_score": 10,
+      "description": "Success return value wraps payload inside a `response:` key (e.g. `{ success: true, response: { ... } }`)"
+    },
+    {
+      "name": "Error response key",
+      "max_score": 8,
+      "description": "Failure return value contains a `success:` key set to `false`"
+    },
+    {
+      "name": "Error response nesting",
+      "max_score": 10,
+      "description": "Failure return value wraps error details inside a `response:` key (e.g. `{ success: false, response: { error: { ... } } }`)"
+    },
+    {
+      "name": "File location",
+      "max_score": 10,
+      "description": "Service file is placed under `app/services/<module_name>/` directory, not directly in `app/services/`"
+    },
+    {
+      "name": "Frozen string literal",
+      "max_score": 10,
+      "description": "Service file begins with `# frozen_string_literal: true`"
+    },
+    {
+      "name": "Module namespace",
+      "max_score": 10,
+      "description": "The service class is wrapped in a module namespace that matches the directory name"
+    },
+    {
+      "name": "No raw exceptions returned",
+      "max_score": 12,
+      "description": "The `.call` / `call` method does NOT raise unhandled exceptions to the caller — errors are caught and returned as hashes"
+    }
+  ]
+}

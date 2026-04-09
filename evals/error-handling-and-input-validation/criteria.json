@@ -1,0 +1,56 @@
+{
+  "context": "Tests whether the agent implements proper error handling in a Ruby service object: rescuing specific exception types, logging errors, returning structured error hashes, validating inputs early, and handling partial failures gracefully.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Early input validation",
+      "max_score": 12,
+      "description": "The service raises (or returns an error) before reaching business logic when required input is missing or invalid — validation happens at the start of the `call` method"
+    },
+    {
+      "name": "Specific rescue clauses",
+      "max_score": 10,
+      "description": "The `call` method rescues at least one specific exception class (e.g. `ActiveRecord::RecordInvalid`, `ArgumentError`) rather than only `StandardError`"
+    },
+    {
+      "name": "StandardError rescue",
+      "max_score": 8,
+      "description": "A `rescue StandardError` (or equivalent catch-all) is present as a fallback to prevent any exception escaping"
+    },
+    {
+      "name": "Error logged",
+      "max_score": 10,
+      "description": "Each rescue block calls a logging method (e.g. `log_error`, `Rails.logger.error`, or similar) — NOT just silently rescuing"
+    },
+    {
+      "name": "Error hash returned",
+      "max_score": 12,
+      "description": "Each rescue block returns a hash with `success: false` (not re-raises the exception)"
+    },
+    {
+      "name": "No exception leakage",
+      "max_score": 10,
+      "description": "No rescue block calls `raise` or `raise e` — exceptions are fully absorbed and converted to error hashes"
+    },
+    {
+      "name": "Partial success response",
+      "max_score": 10,
+      "description": "When some items succeed and others fail, the response includes BOTH successful results AND failure details in the same response hash (partial success pattern)"
+    },
+    {
+      "name": "Frozen string literal",
+      "max_score": 8,
+      "description": "Service file begins with `# frozen_string_literal: true`"
+    },
+    {
+      "name": "Response format consistency",
+      "max_score": 10,
+      "description": "All return paths (success, partial success, error) use the `{ success: ..., response: { ... } }` structure"
+    },
+    {
+      "name": "Backtrace logged for unexpected errors",
+      "max_score": 10,
+      "description": "The catch-all `rescue StandardError` logs a backtrace (e.g. passes `include_backtrace: true` or logs `e.backtrace`)"
+    }
+  ]
+}

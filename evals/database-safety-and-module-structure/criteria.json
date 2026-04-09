@@ -1,0 +1,56 @@
+{
+  "context": "Tests whether the agent wraps multi-step database operations in a transaction, uses SQL sanitization for dynamic queries, keeps module namespaces aligned with directory structure, and includes a README for the module.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Transaction present",
+      "max_score": 14,
+      "description": "The service wraps its multi-step database operations inside `ActiveRecord::Base.transaction` (or equivalent) — not just a single operation"
+    },
+    {
+      "name": "Transaction scope correct",
+      "max_score": 10,
+      "description": "Only the multi-step operations that must be atomic are inside the transaction — NOT the entire `call` method body"
+    },
+    {
+      "name": "SQL sanitization used",
+      "max_score": 14,
+      "description": "Any dynamic raw SQL query uses `ActiveRecord::Base.sanitize_sql` (or a parameterized query with `?` placeholders) rather than string interpolation"
+    },
+    {
+      "name": "No SQL string interpolation",
+      "max_score": 10,
+      "description": "Does NOT construct raw SQL with `\"... #{variable}\"` string interpolation"
+    },
+    {
+      "name": "Module namespace",
+      "max_score": 10,
+      "description": "The service class is wrapped in a module whose name matches the subdirectory under `app/services/`"
+    },
+    {
+      "name": "File path correct",
+      "max_score": 8,
+      "description": "Service file is at `app/services/<module>/<service>.rb` — not flat in `app/services/`"
+    },
+    {
+      "name": "README present",
+      "max_score": 10,
+      "description": "A `README.md` file is created alongside or documenting the service module"
+    },
+    {
+      "name": "Frozen string literal",
+      "max_score": 8,
+      "description": "Service file begins with `# frozen_string_literal: true`"
+    },
+    {
+      "name": "Response format",
+      "max_score": 8,
+      "description": "Return value uses `{ success: true/false, response: { ... } }` structure"
+    },
+    {
+      "name": "Error constants",
+      "max_score": 8,
+      "description": "At least one error message or default value is defined as a Ruby constant rather than an inline string literal"
+    }
+  ]
+}
