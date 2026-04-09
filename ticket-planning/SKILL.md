@@ -58,21 +58,19 @@ Do **not** add those prefixes to tickets that are not owned by those areas unles
 
 ### 4. Draft tickets in the standard structure
 
-Use this section order:
+Use this section order — each section has one job:
 
-1. **Summary**
-2. **Background**
-3. **Acceptance Criteria**
-4. **Dependencies**
-5. **Technical Notes**
+| Section | Job |
+|---------|-----|
+| **Summary** | State the outcome |
+| **Background** | Explain why |
+| **Acceptance Criteria** | List observable criteria |
+| **Dependencies** | Note blockers |
+| **Technical Notes** | Implementation details that affect sequencing or scoping only |
 
-Write primarily for planning and execution clarity. Keep the main sections business-facing; use **Technical Notes** only for implementation details that help sequencing or scoping.
+Keep the main sections business-facing. Do not restate the background in the summary or repeat the AC in Technical Notes.
 
-### 5. Reduce redundancy
-
-Do not repeat the same business intent in every section. Each section has one job — state the outcome, explain why, list observable criteria, note blockers, or describe implementation constraints. Do not restate the background in the summary or repeat the AC in technical notes.
-
-### 6. Decide whether to stop at drafts or create in the issue tracker
+### 5. Decide: drafts or create in the issue tracker
 
 **Drafts only:**
 
