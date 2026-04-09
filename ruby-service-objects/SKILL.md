@@ -135,7 +135,7 @@ Validators raise; the calling service rescues and converts to an error hash.
 
 ### 4. Orchestrator Delegation (≤20-line `call`)
 
-All sub-services return `{ success:, response: {} }`. The orchestrator checks each result and returns early on failure:
+All sub-services return `{ success:, response: {} }`. The orchestrator checks each result and returns early on failure. Keep the orchestrator rescue minimal — sub-services handle their own detailed error logging:
 
 ```ruby
 # Orchestrator call — delegates to sub-service classes, validates each result

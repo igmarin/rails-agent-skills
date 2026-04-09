@@ -74,11 +74,17 @@ Choose the first failing spec at the boundary that gives the strongest signal wi
 - Use **let** and **let!** for test data; prefer `let` when value isn't needed for setup.
 - Use **shared_examples** / **shared_context** for repeated behavior; extract helpers when it improves clarity.
 - Use `let_it_be` only when `test-prof` already exists in the project.
-- Use `travel_to` for time-dependent behavior — never stub `Time.now`:
+- **Time-dependent behavior MUST use `travel_to`** — do not set dates in the past as a shortcut, do not stub `Time.now`. Wrap assertions in a `travel_to` block to control the clock:
 
 ```ruby
-travel_to 31.days.from_now do
-  expect(subscription).to be_expired
+let(:subscription) { create(:subscription, activated_at: Time.current) }
+
+context 'after expiration' do
+  it 'is expired' do
+    travel_to 31.days.from_now do
+      expect(subscription).to be_expired
+    end
+  end
 end
 ```
 
@@ -110,6 +116,7 @@ For more examples (model spec, service spec, shared_examples, travel_to), see [E
 | Excessive `let!` and nested contexts | Prefer `let`; keep nesting shallow |
 | Recommending `let_it_be` in every repo | Only use it when `test-prof` already exists in the project |
 | Factories creating large graphs by default | Minimal factories — only what the test needs |
+| Setting dates in the past instead of `travel_to` | Always use `travel_to` for time-dependent assertions — it makes boundary conditions deterministic |
 | Code written before the test | Delete it. Reproduction step isn't done yet. |
 | Test name contains "and" | One behavior per example. Split it. |
 

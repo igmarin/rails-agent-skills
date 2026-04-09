@@ -84,13 +84,16 @@ end
 
 ## Time-Dependent Spec (travel_to)
 
+Always use `travel_to` for time-dependent assertions — do not set dates in the past as a shortcut.
+
 ```ruby
 # spec/models/subscription_spec.rb
 RSpec.describe Subscription, type: :model do
   describe '#expired?' do
-    let(:subscription) { create(:subscription, expires_at: 30.days.from_now) }
+    # Create with current time — then travel forward to test boundaries
+    let(:subscription) { create(:subscription, activated_at: Time.current) }
 
-    context 'before expiration' do
+    context 'before expiration (29 days)' do
       it 'is not expired' do
         travel_to 29.days.from_now do
           expect(subscription).not_to be_expired
@@ -98,7 +101,7 @@ RSpec.describe Subscription, type: :model do
       end
     end
 
-    context 'after expiration' do
+    context 'after expiration (31 days)' do
       it 'is expired' do
         travel_to 31.days.from_now do
           expect(subscription).to be_expired

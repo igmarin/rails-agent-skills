@@ -60,6 +60,8 @@ def self.call(params)
 ### Method-level: exceptions (list each raise)
 >>>>>>> abb2ba1 (Fixing best practices for skills and examples)
 
+Document `@raise` for every exception a method can raise — **even if the method rescues it internally**. This tells callers what error conditions exist and what exception classes are available:
+
 ```ruby
 # Processes the billing update for the given plan.
 # @param plan_id [Integer] ID of the target plan
@@ -109,10 +111,7 @@ def self.validate_shelters!(source_id, target_id)
 |---------|------------|
 | Documenting only the class, not public methods | Callers need param types and return shape for every public method |
 | Skipping `@option` for hash params | Without it, consumers don't know valid keys or types |
-| No `@return` for methods that return values | Always document the return type and meaning |
-| No `@raise` when the method can raise | Callers need to know what exceptions to rescue |
-| Only one `@raise` for a method that raises multiple exceptions | List EVERY exception type the method can raise — one `@raise` tag per exception class |
-| Merging without YARD on new/changed public API | Post-implementation gate — document before PR |
+| Only one `@raise` for multiple exceptions | List EVERY exception type — one `@raise` per class, even if rescued internally |
 | YARD text in a language other than English | Write in English unless the user explicitly requests otherwise |
 
 For advanced tags (`@abstract`, `@deprecated`, `@api private`, `@yield`, `@overload`) see [ADVANCED_TAGS.md](./ADVANCED_TAGS.md).
