@@ -102,7 +102,17 @@ Do not scatter configuration across unrelated constants and initializers.
 
 - Use `isolate_namespace` for mountable and public-facing engines.
 - Keep initializers idempotent and safe in development reloads; use `config.to_prepare` only for reload-sensitive code (e.g. decorators).
-- Treat migrations as host-owned — provide install/copy generators, never apply silently.
+- Treat migrations as host-owned — provide install/copy generators, never apply silently. Do NOT use `config.paths['db/migrate']` or `ActiveRecord::Migrator` in initializers:
+
+```ruby
+# WRONG — auto-applies migrations at boot, host loses control
+initializer 'my_engine.migrations' do
+  config.paths['db/migrate'] << root.join('db/migrate')
+end
+
+# RIGHT — host copies via install generator, runs manually
+# See rails-engine-installers for generator patterns
+```
 - Reference host app models through configurable class names or adapters; do not hard-code host constants.
 - Expose integration seams through services, adapters, or hooks — not direct host constants.
 - Keep assets and generators namespaced and idempotent.

@@ -56,13 +56,15 @@ module AnimalTransfers
 def self.call(params)
 ```
 
-### Method-level: exceptions
+### Method-level: exceptions (list each @raise)
 
 ```ruby
-# Fetches the token; caches it for subsequent calls.
-# @raise [Client::Error] when credentials are missing or request fails
-# @return [String] Bearer token
-def token
+# Processes the billing update for the given plan.
+# @param plan_id [Integer] ID of the target plan
+# @raise [InvalidPlanError] when the plan does not exist or is inactive
+# @raise [PaymentGatewayError] when the payment provider rejects the charge
+# @return [Hash] Result with :success and :response keys
+def self.call(plan_id:)
 ```
 
 ### Optional: examples

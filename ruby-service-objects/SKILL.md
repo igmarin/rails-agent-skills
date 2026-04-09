@@ -55,7 +55,11 @@ module AnimalTransfers
     def call
       source = ShelterValidator.validate_source_shelter!(@source_shelter_id)
       target = ShelterValidator.validate_target_shelter!(@target_shelter_id)
-      result = execute_transfer(source, target)
+      result = ActiveRecord::Base.transaction do
+        source.decrement!(:animal_count)
+        target.increment!(:animal_count)
+        TransferLog.create!(source:, target:, tag_number: @tag_number)
+      end
       { success: true, response: { transfer: result } }
     rescue ActiveRecord::RecordInvalid => e
       Rails.logger.error("Validation Error: #{e.message}")
@@ -64,16 +68,6 @@ module AnimalTransfers
       Rails.logger.error("Processing Error: #{e.message}")
       Rails.logger.error(e.backtrace.join("\n"))
       { success: false, response: { error: { message: TRANSFER_FAILED } } }
-    end
-
-    private
-
-    def execute_transfer(source, target)
-      ActiveRecord::Base.transaction do
-        source.decrement!(:animal_count)
-        target.increment!(:animal_count)
-        TransferLog.create!(source:, target:, tag_number: @tag_number)
-      end
     end
   end
 end
@@ -120,31 +114,23 @@ end
 
 ### 4. Orchestrator Delegation (≤20-line `call`)
 
+All sub-services return `{ success:, response: {} }`. The orchestrator checks each result and returns early on failure:
+
 ```ruby
-module Onboarding
-  class OnboardingService
-    ONBOARDING_FAILED = 'Onboarding could not be completed'
+# Orchestrator call — delegates to sub-service classes, validates each result
+def call
+  user_result = UserCreationService.call(@params)
+  return user_result unless user_result[:success]
 
-    # @param params [Hash] user attributes
-    # @return [Hash] { success: Boolean, response: Hash }
-    def self.call(params) = new(params).call
-    def initialize(params) = @params = params
+  workspace_result = WorkspaceSetupService.call(user_result[:response])
+  return workspace_result unless workspace_result[:success]
 
-    def call
-      user      = UserCreationService.call(@params)
-      workspace = WorkspaceSetupService.call(user)
-      BillingService.call(workspace)
-      NotificationService.call(user)
-      { success: true, response: { user: } }
-    rescue ActiveRecord::RecordInvalid => e
-      Rails.logger.error("Onboarding failed: #{e.message}")
-      { success: false, response: { error: { message: e.message } } }
-    rescue StandardError => e
-      Rails.logger.error("Unexpected: #{e.message}")
-      Rails.logger.error(e.backtrace.join("\n"))
-      { success: false, response: { error: { message: ONBOARDING_FAILED } } }
-    end
-  end
+  BillingService.call(workspace_result[:response])
+  NotificationService.call(user_result[:response])
+  { success: true, response: { user: user_result[:response] } }
+rescue StandardError => e
+  Rails.logger.error("Orchestrator failed: #{e.message}")
+  { success: false, response: { error: { message: ONBOARDING_FAILED } } }
 end
 ```
 

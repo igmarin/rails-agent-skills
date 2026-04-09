@@ -82,6 +82,33 @@ RSpec.describe Orders::CreateOrder do
 end
 ```
 
+## Time-Dependent Spec (travel_to)
+
+```ruby
+# spec/models/subscription_spec.rb
+RSpec.describe Subscription, type: :model do
+  describe '#expired?' do
+    let(:subscription) { create(:subscription, expires_at: 30.days.from_now) }
+
+    context 'before expiration' do
+      it 'is not expired' do
+        travel_to 29.days.from_now do
+          expect(subscription).not_to be_expired
+        end
+      end
+    end
+
+    context 'after expiration' do
+      it 'is expired' do
+        travel_to 31.days.from_now do
+          expect(subscription).to be_expired
+        end
+      end
+    end
+  end
+end
+```
+
 ## Shared Examples
 
 ```ruby

@@ -64,35 +64,37 @@ DO NOT rely solely on type-level authorization — see Authorization section.
 
 ### Resolution
 
-Use `dataloader` (built into graphql-ruby 1.12+) or `graphql-batch`:
+Use `dataloader` (built into graphql-ruby 1.12+). Never call an ActiveRecord association directly on `object` — batch it:
 
 ```ruby
-# BAD — one query per record
-def resolve = object.user
-
-# GOOD — single batched query
 def resolve
   dataloader.with(Sources::RecordById, User).load(object.user_id)
 end
 ```
 
-**Rule:** If a resolver calls an ActiveRecord association on `object`, it must go through a dataloader source.
+**Source class definition:**
+
+```ruby
+# app/graphql/sources/record_by_id.rb
+class Sources::RecordById < GraphQL::Dataloader::Source
+  def initialize(model_class)
+    @model_class = model_class
+  end
+
+  def fetch(ids)
+    records = @model_class.where(id: ids).index_by(&:id)
+    ids.map { |id| records[id] }
+  end
+end
+```
 
 ## Authorization
 
 ### Field-Level Authorization
 
-Type-level authorization is **not sufficient**. Add field-level checks for sensitive fields:
+Type-level authorization is **not sufficient** — add field-level checks for sensitive fields:
 
 ```ruby
-# Type-level only — insufficient when the type is reused elsewhere
-class Types::UserType < Types::BaseObject
-  guard -> (obj, args, ctx) { ctx[:current_user].admin? }
-  field :email, String, null: false
-  field :internal_notes, String, null: true  # sensitive — needs its own guard
-end
-
-# GOOD — field-level guard on sensitive fields
 field :internal_notes, String, null: true do
   guard -> (obj, args, ctx) { ctx[:current_user].admin? }
 end
@@ -140,11 +142,14 @@ class Mutations::CreateOrder < Mutations::BaseMutation
     result.success? ? { order: result.order, errors: [] } : { order: nil, errors: result.errors }
   rescue ActiveRecord::RecordInvalid => e
     { order: nil, errors: e.record.errors.full_messages }
+  rescue StandardError => e
+    Rails.logger.error("Mutation failed: #{e.message}")
+    { order: nil, errors: ['An unexpected error occurred'] }
   end
 end
 ```
 
-**Shape contract:** `errors` is always present and always an array. System errors are rescued at the schema level, not per-mutation.
+**Shape contract:** `errors` is always present and always an array. Every mutation must rescue both domain errors and unexpected errors — never let exceptions leak to the client.
 
 ## Performance
 

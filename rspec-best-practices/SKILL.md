@@ -74,26 +74,43 @@ Choose the first failing spec at the boundary that gives the strongest signal wi
 - Use **let** and **let!** for test data; prefer `let` when value isn't needed for setup.
 - Use **shared_examples** / **shared_context** for repeated behavior; extract helpers when it improves clarity.
 - Use `let_it_be` only when `test-prof` already exists in the project.
-- Use `travel_to` for time-dependent behavior.
+- Use `travel_to` for time-dependent behavior — never stub `Time.now`:
+
+```ruby
+travel_to 31.days.from_now do
+  expect(subscription).to be_expired
+end
+```
+
+**Minimal request spec skeleton:**
+
+```ruby
+RSpec.describe 'POST /orders', type: :request do
+  let(:product) { create(:product, stock: 5) }
+
+  context 'when product is in stock' do
+    it 'creates the order and returns 201' do
+      post orders_path, params: { order: { product_id: product.id } }, as: :json
+      expect(response).to have_http_status(:created)
+    end
+  end
+end
+```
 
 **Monolith vs engine:** When the project is a Rails engine, use `rails-engine-testing` for dummy-app setup and engine request/routing/generator specs; keep using this skill for general RSpec style.
 
-For executable spec examples (request, model, shared_examples), see [EXAMPLES.md](./EXAMPLES.md).
+For more examples (model spec, service spec, shared_examples, travel_to), see [EXAMPLES.md](./EXAMPLES.md).
 
 ## Pitfalls
 
 | Pitfall | What to do |
 |---------|------------|
-| "Too simple to test" | Simple code breaks. Test takes 30 seconds. |
-| "I'll test after" | Tests passing immediately prove nothing. |
-| "Keep as reference, write tests first" | You'll adapt it. Delete means delete. |
 | Starting with the lowest layer by habit | Begin at the boundary that proves the behavior users care about |
-| Testing mock behavior instead of real behavior | Mock returns what you told it to. Test the real thing. |
-| Brittle assertions on internal calls | Assert outcomes, not implementation details. |
-| Excessive `let!` and nested contexts | Prefer `let` when value isn't needed for setup. Keep nesting shallow. |
+| Testing mock behavior instead of real behavior | Assert outcomes, not implementation details |
+| Excessive `let!` and nested contexts | Prefer `let`; keep nesting shallow |
 | Recommending `let_it_be` in every repo | Only use it when `test-prof` already exists in the project |
-| Factories creating large graphs by default | Minimal factories — only what the test needs. |
-| Code written before the test | Can't explain why it failed? Reproduction step isn't done yet. |
+| Factories creating large graphs by default | Minimal factories — only what the test needs |
+| Code written before the test | Delete it. Reproduction step isn't done yet. |
 | Test name contains "and" | One behavior per example. Split it. |
 
 ## Integration
