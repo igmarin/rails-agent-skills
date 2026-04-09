@@ -49,55 +49,37 @@ WHEN building or reviewing an install generator:
 | Manual steps | Document rollback steps and required env vars | Leaving install gaps undocumented |
 | Docs accuracy | Match install docs to generator behavior | Docs that describe a different install path than the generator produces |
 
-## Examples
-
-**Idempotent install generator — only inject once:**
+**Idempotency guards — check before creating or injecting:**
 
 ```ruby
-# lib/generators/my_engine/install/install_generator.rb
-module MyEngine
-  class InstallGenerator < Rails::Generators::Base
-    def create_initializer
-      return if File.exist?(File.join(destination_root, 'config/initializers/my_engine.rb'))
-
-      create_file 'config/initializers/my_engine.rb', <<~RUBY
-        MyEngine.configure do |config|
-          config.user_class = "User"
-        end
-      RUBY
+def create_initializer
+  return if File.exist?(File.join(destination_root, 'config/initializers/my_engine.rb'))
+  create_file 'config/initializers/my_engine.rb', <<~RUBY
+    MyEngine.configure do |config|
+      config.user_class = "User"
     end
+  RUBY
+end
 
-    def mount_route
-      route "mount MyEngine::Engine, at: '/admin'"
-    end
-  end
+def mount_route
+  # inject_into_file with force: false skips insertion if sentinel already present
+  inject_into_file 'config/routes.rb',
+    "\n  mount MyEngine::Engine, at: '/admin'\n",
+    after: "Rails.application.routes.draw do",
+    force: false
 end
 ```
 
-**Generator test — covers single run and idempotent rerun:**
+**Minimal rerun spec (must always pass):**
 
 ```ruby
-RSpec.describe MyEngine::InstallGenerator, type: :generator do
-  destination File.expand_path('../../tmp', __dir__)
-  before { prepare_destination }
-
-  it 'creates the initializer' do
-    run_generator
-    expect(file('config/initializers/my_engine.rb')).to exist
-  end
-
-  it 'does not duplicate the initializer on rerun' do
-    2.times { run_generator }
-    content = File.read(file('config/initializers/my_engine.rb'))
-    expect(content.scan('MyEngine.configure').size).to eq(1)
-  end
-
-  it 'does not duplicate the route mount on rerun' do
-    2.times { run_generator }
-    expect(File.read(file('config/routes.rb')).scan('mount MyEngine::Engine').size).to eq(1)
-  end
+it 'does not duplicate the route mount on rerun' do
+  2.times { run_generator }
+  expect(File.read(file('config/routes.rb')).scan('mount MyEngine::Engine').size).to eq(1)
 end
 ```
+
+See [EXAMPLES.md](./EXAMPLES.md) for a full generator class and complete spec suite.
 
 ## Generator Checklist
 
