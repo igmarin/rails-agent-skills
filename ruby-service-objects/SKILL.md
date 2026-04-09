@@ -28,8 +28,17 @@ See rspec-best-practices for the full gate cycle.
 | Pragma | `frozen_string_literal: true` in every file |
 | Docs | YARD on every public method (see **yard-documentation**) |
 | Validation | Raise early on invalid input |
-| Errors | Rescue, log, return error hash — don't leak exceptions |
+| Error handling | Every `rescue` block must: (1) log with `Rails.logger.error`, (2) log backtrace via `e.backtrace.join("\n")`, (3) return error hash — never re-raise |
 | Transactions | Wrap multi-step DB operations |
+
+## When to Use Each Pattern
+
+| Signal in the task | Pattern |
+|--------------------|---------|
+| Orchestrates multiple steps, needs instance state | Pattern 1: `.call → new.call` |
+| Processes a collection with per-item error handling | Pattern 2: Batch processing |
+| Stateless helper, validator, or utility — no instance state needed | Pattern 3: Class-only (static methods) |
+| Coordinates multiple sub-services | Pattern 4: Orchestrator delegation |
 
 ## Core Patterns
 
@@ -63,6 +72,7 @@ module AnimalTransfers
       { success: true, response: { transfer: result } }
     rescue ActiveRecord::RecordInvalid => e
       Rails.logger.error("Validation Error: #{e.message}")
+      Rails.logger.error(e.backtrace.join("\n"))
       { success: false, response: { error: { message: e.message } } }
     rescue StandardError => e
       Rails.logger.error("Processing Error: #{e.message}")
@@ -100,17 +110,28 @@ end
 
 ### 3. Class-only Services (Static Methods)
 
-When no instance state is needed:
+When no instance state is needed — use ONLY class methods, no `initialize`, no instance variables. Validators and stateless helpers should always use this pattern:
 
 ```ruby
-class ShelterValidator
-  def self.validate_source_shelter!(shelter_id)
-    shelter = Shelter.find_by(id: shelter_id)
-    raise ArgumentError, 'Source shelter not found' unless shelter
-    shelter
+class PackageValidator
+  MAX_WEIGHT_KG = 30
+  MAX_LENGTH_CM = 150
+
+  # @param dimensions [Hash] :weight_kg, :length_cm, :width_cm, :height_cm
+  # @return [nil, String] nil if valid, error message otherwise
+  def self.validate(dimensions)
+    return 'Weight exceeds limit' if dimensions[:weight_kg] > MAX_WEIGHT_KG
+    return 'Length exceeds limit' if dimensions[:length_cm] > MAX_LENGTH_CM
+    nil
+  end
+
+  def self.within_limits?(dimensions)
+    validate(dimensions).nil?
   end
 end
 ```
+
+Validators raise; the calling service rescues and converts to an error hash.
 
 ### 4. Orchestrator Delegation (≤20-line `call`)
 
@@ -118,6 +139,7 @@ All sub-services return `{ success:, response: {} }`. The orchestrator checks ea
 
 ```ruby
 # Orchestrator call — delegates to sub-service classes, validates each result
+# RULE: ≤20 lines of code in call — if longer, extract another sub-service
 def call
   user_result = UserCreationService.call(@params)
   return user_result unless user_result[:success]

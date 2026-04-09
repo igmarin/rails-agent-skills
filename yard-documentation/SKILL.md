@@ -32,6 +32,7 @@ implementation. If you only wrote specs + code, stop and document before PR.
 |-------|------|
 | Classes | One-line summary; optional `@since` if version matters |
 | Public methods | `@param`, `@option` for hash params, `@return`, `@raise` when applicable; `@example` for non-obvious usage |
+| Exceptions | One `@raise` tag per exception class — list each separately |
 | Private methods | Document only if behavior is non-obvious; same tag rules |
 
 ## Standard Tags
@@ -110,6 +111,7 @@ def self.validate_shelters!(source_id, target_id)
 | Skipping `@option` for hash params | Without it, consumers don't know valid keys or types |
 | No `@return` for methods that return values | Always document the return type and meaning |
 | No `@raise` when the method can raise | Callers need to know what exceptions to rescue |
+| Only one `@raise` for a method that raises multiple exceptions | List EVERY exception type the method can raise — one `@raise` tag per exception class |
 | Merging without YARD on new/changed public API | Post-implementation gate — document before PR |
 | YARD text in a language other than English | Write in English unless the user explicitly requests otherwise |
 
