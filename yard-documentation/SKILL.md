@@ -58,9 +58,8 @@ def self.call(params)
 ```
 
 ### Method-level: exceptions (list each raise)
->>>>>>> abb2ba1 (Fixing best practices for skills and examples)
 
-Document `@raise` for every exception a method can raise — **even if the method rescues it internally**. This tells callers what error conditions exist and what exception classes are available:
+Document `@raise` for every exception a method can raise — **even if the method rescues it internally**:
 
 ```ruby
 # Processes the billing update for the given plan.
@@ -113,6 +112,14 @@ def self.validate_shelters!(source_id, target_id)
 | Skipping `@option` for hash params | Without it, consumers don't know valid keys or types |
 | Only one `@raise` for multiple exceptions | List EVERY exception type — one `@raise` per class, even if rescued internally |
 | YARD text in a language other than English | Write in English unless the user explicitly requests otherwise |
+
+## Verification
+
+Run validation before considering documentation complete:
+
+1. `yard stats --list-undoc`
+2. `yard doc`
+3. If output shows undocumented public surfaces you changed, update YARD and re-run.
 
 For advanced tags (`@abstract`, `@deprecated`, `@api private`, `@yield`, `@overload`) see [ADVANCED_TAGS.md](./ADVANCED_TAGS.md).
 

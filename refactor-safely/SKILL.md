@@ -71,38 +71,45 @@ AFTER each step:
 - "Looks correct" (run the tests)
 - "I'm confident" (confidence is not evidence)
 
-## Examples
+## Minimal Inline Example
 
-**Stable behavior to preserve:** "Creating an order validates line items, applies pricing, persists the order, and enqueues NotifyWarehouseJob."
+Use this as the default tiny slice when extracting controller orchestration.
 
-**Smallest safe sequence (extract service):**
+**Characterization test (before refactor):**
 
-1. Add a characterization test (request or service spec) that covers the current `OrdersController#create` flow.
-2. Extract `Orders::CreateOrder` with the same behavior; call it from the controller; keep controller response/redirect logic. Verify tests pass.
-3. Remove duplicated logic from the controller. No behavior change. Verify tests pass.
-4. (Later) Improve the service internals if needed; the refactor is done.
+```ruby
+it "creates order and enqueues warehouse notification" do
+  expect { post :create, params: valid_params }.to change(Order, :count).by(1)
+  expect(NotifyWarehouseJob).to have_been_enqueued
+end
+```
 
-**Red-flag refactor (avoid):** "Rename `Order` to `Purchase` and update all 50 call sites in one PR" — too many touchpoints; do renames in small steps with find/replace and tests after each commit.
+**Before (controller does orchestration):**
 
-## Common Mistakes
+```ruby
+def create
+  order = OrderCreator.new(params).call
+  NotifyWarehouseJob.perform_later(order.id)
+  redirect_to order_path(order)
+end
+```
 
-| Mistake | Reality |
-|---------|---------|
-| "Quick refactor, no tests needed" | No characterization tests = no safety net. Bugs will slip through. |
-| Mixing behavior change with structural change | Do one or the other. Mixed changes are impossible to review. |
-| Renaming 50 call sites in one commit | Do it in small batches with tests between each. |
-| Adding abstraction to satisfy a pattern | Abstractions must serve a real boundary, not a textbook. |
-| Removing old code before new path is proven | Keep compatibility shims until callers are fully migrated. |
+**After (same behavior, extraction only):**
 
-## Red Flags
+```ruby
+def create
+  order = Orders::CreateOrder.call(params: params)
+  redirect_to order_path(order)
+end
+```
 
-- Refactor plan requires touching many unrelated call sites at once
-- No tests prove current behavior before starting
-- Structural cleanup is mixed with new feature work
-- Old and new paths diverge without a migration plan
-- New abstractions exist only to satisfy a pattern, not a real boundary
-- More than 3 refactoring steps without running tests
-- Using "should", "probably", "seems to" when claiming tests pass
+## Deeper Guidance
+
+Use support files for detailed guidance and examples:
+
+- [EXAMPLES.md](./EXAMPLES.md): End-to-end refactor sequences and anti-pattern examples
+- [HEURISTICS.md](./HEURISTICS.md): Common mistakes, red flags, and review heuristics
+- [INTEGRATION.md](./INTEGRATION.md): How to chain this skill with related skills
 
 ## Output Style
 
@@ -118,7 +125,7 @@ When asked to refactor:
 
 | Skill | When to chain |
 |-------|---------------|
-| **rspec-best-practices** | For writing characterization tests before refactoring |
-| **rails-architecture-review** | When refactor reveals structural problems |
-| **rails-code-review** | For reviewing the refactored code |
-| **ruby-service-objects** | When extracting logic into service objects |
+| **rspec-best-practices** | For writing characterization tests before refactoring ([details](./INTEGRATION.md#rspec-best-practices)) |
+| **rails-architecture-review** | When refactor reveals structural problems ([details](./INTEGRATION.md#rails-architecture-review)) |
+| **rails-code-review** | For reviewing the refactored code ([details](./INTEGRATION.md#rails-code-review)) |
+| **ruby-service-objects** | When extracting logic into service objects ([details](./INTEGRATION.md#ruby-service-objects)) |
