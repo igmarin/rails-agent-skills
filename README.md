@@ -9,7 +9,7 @@
 ---
 
 - **Repository / install path:** `rails-agent-skills` ([docs/implementation-guide.md](docs/implementation-guide.md))
-- **Bootstrap discovery skill:** `[rails-agent-skills](rails-agent-skills/)` (session hook loads `rails-agent-skills/SKILL.md` where applicable)
+- **Bootstrap discovery skill:** `[rails-skills-orchestrator](rails-skills-orchestrator/)` (session hook loads `rails-skills-orchestrator/SKILL.md` where applicable)
 - **Workflows:** [docs/workflow-guide.md](docs/workflow-guide.md) — **Skill structure:** [docs/architecture.md](docs/architecture.md)
 - **How to invoke a skill or workflow:** [docs/workflow-guide.md#how-to-invoke](docs/workflow-guide.md#how-to-invoke-a-skill-or-workflow-claude-code)
 
@@ -232,7 +232,7 @@ This guide provides detailed, step-by-step instructions for both the symlink-bas
 
 | Skill                                            | Description                                                    |
 | ------------------------------------------------ | -------------------------------------------------------------- |
-| [rails-agent-skills](rails-agent-skills/)        | Discover and invoke the right skill for the current Rails task |
+| [rails-skills-orchestrator](rails-skills-orchestrator/) | Discover and invoke the right skill for the current Rails task |
 | [docs/skill-template.md](docs/skill-template.md) | Authoring template and checklist for expanding the library     |
 
 

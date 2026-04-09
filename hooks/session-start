@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# SessionStart hook for my-cursor-skills plugin
+# SessionStart hook for rails-agent-skills
 
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 PLUGIN_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
-bootstrap_skill_content=$(cat "${PLUGIN_ROOT}/rails-agent-skills/SKILL.md" 2>&1 || echo "Error reading rails-agent-skills skill")
+bootstrap_skill_content=$(cat "${PLUGIN_ROOT}/rails-skills-orchestrator/SKILL.md" 2>&1 || echo "Error reading rails-skills-orchestrator skill")
 
 escape_for_json() {
     local s="$1"

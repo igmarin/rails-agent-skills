@@ -1,6 +1,6 @@
 {
   "name": "igmarin/rails-agent-skills",
-  "version": "1.2.2",
+  "version": "2.0.0",
   "summary": "Curated library of AI agent skills for Ruby on Rails development. Covers code review, architecture, security, testing (RSpec), engines, service objects, DDD patterns, and workflow automation.",
   "skills": {
     "api-rest-collection": { "path": "api-rest-collection/SKILL.md" },
@@ -9,7 +9,7 @@
     "ddd-rails-modeling": { "path": "ddd-rails-modeling/SKILL.md" },
     "ddd-ubiquitous-language": { "path": "ddd-ubiquitous-language/SKILL.md" },
     "generate-tasks": { "path": "generate-tasks/SKILL.md" },
-    "rails-agent-skills": { "path": "rails-agent-skills/SKILL.md" },
+    "rails-skills-orchestrator": { "path": "rails-skills-orchestrator/SKILL.md" },
     "rails-architecture-review": { "path": "rails-architecture-review/SKILL.md" },
     "rails-background-jobs": { "path": "rails-background-jobs/SKILL.md" },
     "rails-bug-triage": { "path": "rails-bug-triage/SKILL.md" },

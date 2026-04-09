@@ -2,7 +2,7 @@
 
 Reference for less common YARD tags used in Rails and Ruby engine development.
 
-## @abstract
+## abstract
 
 Marks a method intended to be overridden by subclasses.
 
@@ -14,7 +14,7 @@ def queue_name
 end
 ```
 
-## @deprecated
+## deprecated
 
 Signals that a method or class should not be used in new code.
 
@@ -23,7 +23,7 @@ Signals that a method or class should not be used in new code.
 def old_method
 ```
 
-## @api private
+## api private
 
 Documents that a method is part of the private API and may change without notice.
 
@@ -32,7 +32,7 @@ Documents that a method is part of the private API and may change without notice
 def internal_reset!
 ```
 
-## @yield / @yieldparam / @yieldreturn
+## yield / yieldparam / yieldreturn
 
 Documents blocks accepted by a method.
 
@@ -44,7 +44,7 @@ Documents blocks accepted by a method.
 def each_result(&block)
 ```
 
-## @overload
+## overload
 
 Documents multiple signatures for the same method.
 
