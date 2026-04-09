@@ -101,22 +101,22 @@ Here is the recommended, step-by-step workflow for building a new feature from s
 **Step 1: Planning & Task Breakdown**
 
 - **Action:** Define the feature's requirements.
-  - **Use Skill:** `[create-prd](create-prd/)`
+  - **Use Skill:** [create-prd](create-prd/)
 - **Then:** Break the PRD into a detailed, TDD-ready checklist.
-  - **Use Skill:** `[generate-tasks](generate-tasks/)`
+  - **Use Skill:** [generate-tasks](generate-tasks/)
 
 **Step 2: Start the TDD Cycle**
 
 - **Action:** Pick the first, highest-value "slice" of behavior from your task list.
 - **Action:** Get guidance on choosing the right *type* of test to write first (e.g., a request spec).
-  - **Use Skill:** `[rails-tdd-slices](rails-tdd-slices/)`
+  - **Use Skill:** [rails-tdd-slices](rails-tdd-slices/)
 - **Action:** Write the first failing test. **Crucially, run it and watch it fail.**
-  - **Use Skill:** `[rspec-best-practices](rspec-best-practices/)`
+  - **Use Skill:** [rspec-best-practices](rspec-best-practices/)
 
 **Step 3: Implementation**
 
 - **Action:** Write the minimum amount of application code required to make your failing test pass.
-  - **Use Skills:** `[ruby-service-objects](ruby-service-objects/)` for business logic, `[rails-code-conventions](rails-code-conventions/)` for general code quality.
+  - **Use Skills:** [ruby-service-objects](ruby-service-objects/) for business logic, [rails-code-conventions](rails-code-conventions/) for general code quality.
 
 **Step 4: Verification**
 
@@ -126,14 +126,14 @@ Here is the recommended, step-by-step workflow for building a new feature from s
 **Step 5: Documentation & Self-Review**
 
 - **Action:** Add inline documentation to any new public classes or methods.
-  - **Use Skill:** `[yard-documentation](yard-documentation/)`
+  - **Use Skill:** [yard-documentation](yard-documentation/)
 - **Action:** Perform a self-review of your changes.
-  - **Use Skill:** `[rails-code-review](rails-code-review/)`
+  - **Use Skill:** [rails-code-review](rails-code-review/)
 
 **Step 6: Responding to Peer Review**
 
 - **Action:** When you receive feedback from teammates, evaluate and implement their suggestions systematically.
-  - **Use Skill:** `[rails-review-response](rails-review-response/)`
+  - **Use Skill:** [rails-review-response](rails-review-response/)
 
 *For more detailed diagrams of these flows, see the **[Workflow Guide](docs/workflow-guide.md)**.*
 

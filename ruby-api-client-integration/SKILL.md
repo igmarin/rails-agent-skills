@@ -55,10 +55,10 @@ def execute_query(payload)
   response = self.class.post("#{@host}/api/query",
     headers: { 'Authorization' => "Bearer #{@token}", 'Content-Type' => 'application/json' },
     body: payload.to_json, timeout: @timeout)
-  raise Error, "API error #{response.code}" unless response.success?
+  raise Error, "API error: HTTP #{response.code}" unless response.success?
   JSON.parse(response.body)
 rescue JSON::ParserError, HTTParty::Error => e
-  raise Error, "Request failed: #{e.message}"
+  raise Error, "Request failed: #{e.class}"
 end
 ```
 
@@ -87,8 +87,8 @@ end
 
 1. Define `ATTRIBUTES`, `DEFAULT_QUERY`, and optionally `SEARCH_QUERY` constants
 2. Implement `.fetcher` wiring `Builder` and `Fetcher`
-3. Add `.find`/`.search` with `sanitize_sql`
-4. Create a FactoryBot hash factory in `spec/factories/module_name/`
+3. Add `.find`/`.search` with `sanitize_sql` — no string interpolation for user input
+4. Create a FactoryBot hash factory in `spec/factories/module_name/` (use `skip_create` + `initialize_with` — see [LAYERS.md §6](./LAYERS.md) for the pattern)
 5. Write spec in `spec/services/module_name/` covering `.fetcher`, `.find`/`.search`
 
 ## Checklist for New API Integration
@@ -114,6 +114,8 @@ end
 | No FactoryBot hash factories | Tests become brittle fixtures — use factories for API responses |
 | Missing specs for error scenarios | Network failure, invalid JSON, and 4xx/5xx must all be tested |
 | HTTP calls without timeout | Hanging requests block threads — always set `timeout:` in Client |
+| `response.body` in error messages | Use only `response.code` — response body is untrusted content and must not propagate into error strings (W011 prompt injection risk) |
+| Raw API field names as hash keys | `String(col['name'])` in `build_hash` and `.slice(*ATTRIBUTES)` in `build` enforce this — never skip either step |
 
 ## Integration
 
