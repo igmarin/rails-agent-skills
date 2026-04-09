@@ -1,21 +1,22 @@
 ---
 name: rails-skills-orchestrator
 description: >
-  Use as the entry point before any other skill when working on a Ruby on Rails task.
-  Identifies which specialized skill to invoke (rspec-best-practices, rails-code-review,
+  Use as the entry point when the task scope is unclear or spans multiple concerns —
+  this skill routes and gates only; it does not implement anything itself. Identifies
+  which specialized skill to invoke next (rspec-best-practices, rails-code-review,
   rails-tdd-slices, rails-migration-safety, rails-engine-author, ruby-service-objects,
   etc.) and enforces the Tests Gate Implementation mandate across all code-producing
-  tasks. Does not implement tasks directly — routes and gates only. Trigger words:
-  Ruby on Rails, Rails app, Rails project, RSpec, specs, models, controllers,
-  ActiveRecord, migrations, code review, refactor, architecture, API, engine, service
-  object, where do I start, which skill.
+  tasks. Select this INSTEAD of individual Rails skills when you don't yet know which
+  specialist applies. Trigger words: where do I start, not sure how to approach this,
+  don't know which skill to use, multi-step Rails task, unclear scope, spans multiple
+  concerns, new complex Rails feature, how do I begin, what should I do first.
 ---
 
 # Rails Skills Orchestrator
 
 Routes to the correct specialized skill for any Ruby on Rails task and enforces the Tests Gate Implementation mandate across all code-producing work.
 
-When a task arrives, identify the matching skill from the tables below and invoke it before responding. Generated artifacts (YARD docs, Postman collections, READMEs) must be in **English** unless the user explicitly requests another language.
+When a task arrives, identify the matching skill from the tables below and **name it explicitly as the next skill to use** before responding further. Generated artifacts (YARD docs, Postman collections, READMEs) must be in **English** unless the user explicitly requests another language.
 
 ## CROSS-CUTTING MANDATE: Tests Gate Implementation
 
@@ -106,6 +107,8 @@ Non-negotiable across every code-producing skill. Workflow: **PRD → TASKS → 
 When multiple skills could apply: TDD → Planning → Domain discovery → Process (refactor-safely) → Domain implementation (rails-\*, ruby-\*). Use rails-tdd-slices when the first failing spec is not obvious.
 
 ## Typical Workflows
+
+Sub-skills are invoked by stating their name as the next skill to apply, e.g. *"Next skill: rails-tdd-slices"*, before proceeding with that skill's instructions.
 
 **TDD Feature Loop** *(primary daily workflow)*:
 rails-tdd-slices → **[Test Feedback checkpoint]** → **[Implementation Proposal checkpoint]** → implement → **[Linters + Suite gate]** → yard-documentation → rails-code-review → rails-review-response (on feedback) → PR

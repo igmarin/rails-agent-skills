@@ -31,13 +31,19 @@ Generate one if it doesn't exist:
 cd my_engine && bundle exec rails plugin new . --dummy-path=spec/dummy --skip-git
 ```
 
-This ensures the engine behaves correctly within a host application environment, proving its boot and mount process.
+**Validate the dummy app boots before proceeding:**
+
+```bash
+cd spec/dummy && bundle exec rails runner "puts 'Boot OK'"
+```
+
+If this fails, check the engine's `engine.rb` initializer order and ensure the engine is correctly mounted in `spec/dummy/config/routes.rb` before writing any specs.
 
 ## Testing Order
 
 1. Identify the engine type and public behaviors.
 2. Decide which behaviors need unit tests versus dummy-app integration tests.
-3. Add the smallest integration test that proves mounting and boot work.
+3. Add the smallest integration test that proves mounting and boot work. **Verify it passes before continuing** — if it fails, check `engine.rb` initializer order and mount configuration rather than adding more specs on top of a broken foundation.
 4. Add request, routing, configuration, and generator coverage as needed.
 5. Add regression tests for coupling or reload bugs before refactoring.
 6. Verify: dummy app exercises real host integration; routes tested through engine namespace; configurable seams covered with at least one non-default case; generators safe to run twice.
@@ -91,7 +97,7 @@ For generator and reload-safety spec examples, see [EXAMPLES.md](./EXAMPLES.md).
 
 | Pitfall | What to do |
 |---------|------------|
-| No dummy app | Test inside spec/dummy; unit tests alone cannot prove mount and integration |
+| No dummy app | Use spec/dummy; unit tests alone cannot prove mount and integration |
 | Testing against real host | Use spec/dummy; real host apps are environment-specific and slow |
 | Skipping reload-safety tests | Add regression coverage for decorators and patches in development |
 | Tests pass only with specific Rails version | Run a version matrix; pin nothing unless required |
