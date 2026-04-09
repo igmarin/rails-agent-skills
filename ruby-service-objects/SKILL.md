@@ -58,10 +58,11 @@ module AnimalTransfers
       result = execute_transfer(source, target)
       { success: true, response: { transfer: result } }
     rescue ActiveRecord::RecordInvalid => e
-      log_error('Validation Error', e)
+      Rails.logger.error("Validation Error: #{e.message}")
       { success: false, response: { error: { message: e.message } } }
     rescue StandardError => e
-      log_error('Processing Error', e, include_backtrace: true)
+      Rails.logger.error("Processing Error: #{e.message}")
+      Rails.logger.error(e.backtrace.join("\n"))
       { success: false, response: { error: { message: TRANSFER_FAILED } } }
     end
 
