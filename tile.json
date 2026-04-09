@@ -1,6 +1,6 @@
 {
   "name": "igmarin/rails-agent-skills",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "summary": "Curated library of AI agent skills for Ruby on Rails development. Covers code review, architecture, security, testing (RSpec), engines, service objects, DDD patterns, and workflow automation.",
   "skills": {
     "api-rest-collection": { "path": "api-rest-collection/SKILL.md" },
