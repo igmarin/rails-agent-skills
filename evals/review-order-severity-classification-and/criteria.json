@@ -1,0 +1,56 @@
+{
+  "context": "Tests whether the agent produces a Rails PR review that applies the correct severity levels (Critical/Suggestion/Nice to have), identifies specific high-risk patterns, follows the defined review area order, and explicitly mandates re-review after Critical findings are fixed.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Correct severity levels used",
+      "max_score": 10,
+      "description": "The review uses exactly the three severity labels Critical, Suggestion, and Nice to have — not custom labels like 'Minor', 'Major', 'Warning', 'Error', or others"
+    },
+    {
+      "name": "permit! flagged Critical",
+      "max_score": 14,
+      "description": "The review identifies the params.require(...).permit! call and assigns it Critical severity"
+    },
+    {
+      "name": "N+1 query identified",
+      "max_score": 12,
+      "description": "The review identifies the N+1 query pattern (loading an association inside a loop without eager loading) and reports it as a finding"
+    },
+    {
+      "name": "Missing index flagged",
+      "max_score": 10,
+      "description": "The review identifies the missing database index on the foreign key column and reports it as a finding"
+    },
+    {
+      "name": "Business logic in controller flagged",
+      "max_score": 10,
+      "description": "The review identifies inline business logic in the controller action (pricing, calculation, or workflow logic) and flags it as a convention violation"
+    },
+    {
+      "name": "Review covers multiple areas",
+      "max_score": 8,
+      "description": "The review explicitly addresses at least four distinct review areas (e.g. Controllers, Queries, Migrations, Security) — not just a flat list of issues without area attribution"
+    },
+    {
+      "name": "Each finding includes mitigation",
+      "max_score": 10,
+      "description": "Every finding in the review includes a concrete remediation suggestion (not just an identification of the problem)"
+    },
+    {
+      "name": "Re-review explicitly required",
+      "max_score": 12,
+      "description": "The review explicitly states that a re-review is required after the Critical findings are addressed — not just 'please fix' but a statement that the reviewer expects to see the diff again"
+    },
+    {
+      "name": "html_safe / raw usage flagged",
+      "max_score": 8,
+      "description": "The review identifies the unsafe use of html_safe or raw on user-supplied content and reports it as a finding (Critical or Suggestion)"
+    },
+    {
+      "name": "Severity action prescribed per level",
+      "max_score": 6,
+      "description": "For each severity level used, the review communicates the required action: Critical items must be fixed before merge, Suggestion items fixed or ticketed, Nice to have items optional"
+    }
+  ]
+}

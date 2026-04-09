@@ -1,0 +1,61 @@
+{
+  "context": "Tests whether the agent implements the Strategy + Factory + Null Object calculator pattern: a frozen SERVICE_MAP dispatch table in the Factory, a NullService that returns safely for all unknown variants, the prescribed file structure, the single-call public API, and concrete services that override the correct methods.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "SERVICE_MAP constant",
+      "max_score": 12,
+      "description": "The Factory class defines a SERVICE_MAP constant (frozen hash) that maps variant keys to service classes — not a case statement or if/elsif chain"
+    },
+    {
+      "name": "Factory NullService fallback",
+      "max_score": 10,
+      "description": "The Factory's .for method returns a NullService instance (or NullService.new) when the variant is not found in SERVICE_MAP or when the qualifying context is nil/inactive"
+    },
+    {
+      "name": "NullService never raises",
+      "max_score": 12,
+      "description": "The NullService class does NOT raise any exception under any input — its calculate (or equivalent public) method returns nil or a safe value for all inputs"
+    },
+    {
+      "name": "Correct file structure",
+      "max_score": 10,
+      "description": "The module contains at least factory.rb, base_service.rb, null_service.rb, and one concrete service file — all under app/services/<module_name>/"
+    },
+    {
+      "name": "Single entry point API",
+      "max_score": 8,
+      "description": "The client-facing usage demonstrated (in code, specs, or documentation) is Factory.for(entity).calculate — a single chained method call, not a multi-step instantiation"
+    },
+    {
+      "name": "Concrete overrides should_calculate?",
+      "max_score": 8,
+      "description": "At least one concrete service class overrides a should_calculate? (or equivalent guard) method that adds a variant-specific check on top of calling super"
+    },
+    {
+      "name": "Concrete overrides compute_result",
+      "max_score": 8,
+      "description": "At least one concrete service class overrides compute_result (or equivalent calculation) method containing the variant-specific business logic"
+    },
+    {
+      "name": "NullService spec context",
+      "max_score": 12,
+      "description": "The spec file contains a context or describe block that explicitly tests the NullService path — e.g. unknown variant, nil entity, or inactive qualifier returns the null object"
+    },
+    {
+      "name": "Variant spec coverage",
+      "max_score": 8,
+      "description": "The spec file includes at least one example per concrete variant (e.g. standard tier, express tier) verifying the factory dispatches to the correct service class"
+    },
+    {
+      "name": "Frozen string literal",
+      "max_score": 6,
+      "description": "Every Ruby file in the module begins with # frozen_string_literal: true"
+    },
+    {
+      "name": "SERVICE_MAP key type consistency",
+      "max_score": 6,
+      "description": "The SERVICE_MAP keys are the same type (all strings or all symbols) as what would be retrieved from the entity attribute — not a mix that would cause silent NullService fallbacks"
+    }
+  ]
+}

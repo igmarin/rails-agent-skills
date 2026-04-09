@@ -1,0 +1,51 @@
+{
+  "context": "Tests whether the agent follows the refactor-safely protocol: writing characterization tests that pass on the existing code before any structural change, explicitly stating stable behavior, proposing a minimal step-by-step sequence, verifying tests after each step with concrete evidence, and avoiding mixing behavior changes with structural work.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Stable behavior statement",
+      "max_score": 10,
+      "description": "A written statement declaring which behaviors must not change is present before or alongside the refactoring plan — not implied, but explicitly stated"
+    },
+    {
+      "name": "Characterization tests before refactoring",
+      "max_score": 15,
+      "description": "Spec or test file content appears in the process log or workspace before any implementation-level structural change is described — test code is NOT introduced after the new service file"
+    },
+    {
+      "name": "Characterization tests target current code",
+      "max_score": 10,
+      "description": "The characterization tests are written against the existing code (the fat controller or original structure), not the extracted service — they protect existing behavior, not new behavior"
+    },
+    {
+      "name": "Smallest safe sequence proposed",
+      "max_score": 10,
+      "description": "The refactoring plan lists discrete steps in sequence (numbered or ordered), extracting one boundary per step, not a single all-at-once rewrite"
+    },
+    {
+      "name": "Test run evidence per step",
+      "max_score": 15,
+      "description": "The process log contains at least two entries that report concrete test run results (e.g. pass count, zero failures, exit code) at different points in the sequence — NOT just a final result"
+    },
+    {
+      "name": "No behavior mixed with structure",
+      "max_score": 12,
+      "description": "The refactoring does NOT alter application logic (add discount rules, change tax calculation, add validations) in the same commit or step as the structural extraction"
+    },
+    {
+      "name": "Temporary compatibility noted",
+      "max_score": 8,
+      "description": "If the public interface changes (e.g. the controller action delegates to a new class), the process log or plan explicitly identifies any interim shim or compatibility wrapper and states when it will be removed"
+    },
+    {
+      "name": "No forbidden confidence claims",
+      "max_score": 10,
+      "description": "The process log does NOT contain any of the following unsupported claims without accompanying test evidence: 'should work', 'looks correct', 'I'm confident', or 'this is fine'"
+    },
+    {
+      "name": "One boundary extracted per step",
+      "max_score": 10,
+      "description": "Each numbered step in the plan/log touches a single extraction target (e.g. only the pricing logic, or only the notification dispatch) — not multiple unrelated concerns in one step"
+    }
+  ]
+}
