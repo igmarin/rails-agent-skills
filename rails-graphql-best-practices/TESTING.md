@@ -4,7 +4,7 @@
 
 ```ruby
 # spec/graphql/mutations/create_order_spec.rb
-RSpec.describe "Mutations::CreateOrder", type: :request do
+RSpec.describe "Mutations::CreateOrder" do
   let(:user)    { create(:user) }
   let(:product) { create(:product, stock: 5) }
   let(:query) do
@@ -37,6 +37,8 @@ RSpec.describe "Mutations::CreateOrder", type: :request do
   end
 end
 ```
+
+Call `AppSchema.execute` directly in GraphQL specs. Do not route these checks through controller/request dispatch when the behavior under test is schema, resolver, authorization, or mutation response shape.
 
 ## What to Always Test
 

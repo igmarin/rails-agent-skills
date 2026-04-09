@@ -62,9 +62,9 @@ RSpec.describe Orders::CreateOrder do
   describe '.call' do
     let(:user)    { create(:user) }
     let(:product) { create(:product, stock: 5) }
+    subject(:result) { described_class.call(user: user, product_id: product.id, quantity: 1) }
 
     it 'returns success with the new order' do
-      result = described_class.call(user: user, product_id: product.id, quantity: 1)
       expect(result[:success]).to be true
       expect(result[:order]).to be_persisted
     end
@@ -73,7 +73,6 @@ RSpec.describe Orders::CreateOrder do
       before { product.update!(stock: 0) }
 
       it 'returns failure with an error message' do
-        result = described_class.call(user: user, product_id: product.id, quantity: 1)
         expect(result[:success]).to be false
         expect(result[:error]).to eq('Out of stock')
       end

@@ -28,15 +28,15 @@ Check off each task when done: change `- [ ]` to `- [x]`. Update the file after 
 - [ ] 0.0 Create feature branch
   - [ ] 0.1 Create and checkout branch (e.g. `git checkout -b feature/[feature-name]`)
 - [ ] 1.0 [Parent task title]
-  - [ ] 1.1 Write spec for [behavior] (`spec/path/to/spec.rb`)
-  - [ ] 1.2 Run spec — verify it fails (feature does not exist yet)
-  - [ ] 1.3 Implement [behavior] to pass spec (`app/path/to/file.rb`)
-  - [ ] 1.4 Run spec — verify it passes and no other tests break
+  - [ ] 1.1a Write spec for [behavior] (`spec/path/to/spec.rb`)
+  - [ ] 1.1b Run spec — verify it fails (feature does not exist yet)
+  - [ ] 1.1c Implement [behavior] to pass spec (`app/path/to/file.rb`)
+  - [ ] 1.1d Run spec — verify it passes and no other tests break
 - [ ] 2.0 [Parent task title]
-  - [ ] 2.1 Write spec for [behavior] (`spec/path/to/spec.rb`)
-  - [ ] 2.2 Run spec — verify it fails (feature does not exist yet)
-  - [ ] 2.3 Implement [behavior] to pass spec (`app/path/to/file.rb`)
-  - [ ] 2.4 Run spec — verify it passes
+  - [ ] 2.1a Write spec for [behavior] (`spec/path/to/spec.rb`)
+  - [ ] 2.1b Run spec — verify it fails (feature does not exist yet)
+  - [ ] 2.1c Implement [behavior] to pass spec (`app/path/to/file.rb`)
+  - [ ] 2.1d Run spec — verify it passes
 - [ ] 3.0 YARD and public API documentation
   - [ ] 3.1 Add YARD to new/changed public classes and methods (`app/path/to/file.rb`) — English only
   - [ ] 3.2 Run `yard doc` or project doc task if applicable — fix warnings on touched files

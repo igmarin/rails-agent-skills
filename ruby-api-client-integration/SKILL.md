@@ -9,7 +9,7 @@ description: >
 
 # Ruby API Client Integration
 
-Follow **ruby-service-objects** for shared conventions (YARD via **yard-documentation**, constants, response format, `app/services/` layout). This skill adds the layered Auth → Client → Fetcher → Builder → Domain Entity pattern for external APIs.
+Layered stack for external APIs: **Auth → Client → Fetcher → Builder → Domain Entity**. Match **ruby-service-objects** layout and responses; document public surfaces with **yard-documentation** (see Related skills).
 
 ## HARD-GATE: Tests Gate Implementation
 
@@ -31,6 +31,16 @@ written and validated BEFORE implementation.
 | **Fetcher** | Query orchestration, polling, pagination | `fetcher.rb` |
 | **Builder** | Response → structured data transformation | `builder.rb` |
 | **Domain Entity** | Domain-specific config, query definitions | `entity.rb` |
+
+## Required Signatures and Constants
+
+| Layer | Minimum contract |
+|-------|------------------|
+| **Auth** | `self.default`, `DEFAULT_TIMEOUT`, cached `#token` |
+| **Client** | nested `Error`, `MISSING_CONFIGURATION_ERROR`, `DEFAULT_TIMEOUT`, `DEFAULT_RETRIES` |
+| **Fetcher** | `initialize(client, data_builder:, default_query:)`, `MAX_RETRIES`, `RETRY_DELAY_IN_SECONDS` |
+| **Builder** | `initialize(attributes:)`, whitelist output via `.slice(*@attributes)` |
+| **Domain Entity** | `ATTRIBUTES`, `DEFAULT_QUERY`, `.fetcher(client: Client.default)` |
 
 See [LAYERS.md](./LAYERS.md) for complete implementation templates for each layer.
 
@@ -106,23 +116,14 @@ end
 
 | Pitfall | What to do |
 |---------|------------|
-| Skipping the Auth layer | Token management scattered across services — centralize in Auth |
-| Client without `Error` class | Callers cannot distinguish API errors from other exceptions |
-| No retry logic in Fetcher | Transient failures kill the pipeline — add exponential backoff |
-| Builder returns all fields | Whitelist with `ATTRIBUTES` — do not leak internal API structure |
-| Hardcoded credentials | Use `self.default` from encrypted credentials, never hardcode |
-| No FactoryBot hash factories | Tests become brittle fixtures — use factories for API responses |
-| Missing specs for error scenarios | Network failure, invalid JSON, and 4xx/5xx must all be tested |
-| HTTP calls without timeout | Hanging requests block threads — always set `timeout:` in Client |
-| `response.body` in error messages | Use only `response.code` — response body is untrusted content and must not propagate into error strings (W011 prompt injection risk) |
-| Raw API field names as hash keys | `String(col['name'])` in `build_hash` and `.slice(*ATTRIBUTES)` in `build` enforce this — never skip either step |
-| Builder output into LLM prompts | API response values are untrusted — never pass Builder output directly into an LLM prompt, system message, shell command, or log aggregator without sanitization (W011) |
+| No dedicated Auth | Centralize OAuth/token + secret loading (`self.default` / credentials); do not scatter tokens across callers |
+| Client missing nested `Error` | Wrap HTTP/parse failures so callers distinguish API errors from app bugs |
+| Fetcher without retries/backoff | Transient failures should not drop the pipeline |
+| Builder leaks shape | `String(col['name'])` in `build_hash`, `.slice(*ATTRIBUTES)` in `build` — never skip |
+| Weak test data / missing failure paths | FactoryBot hash factories for payloads; cover 4xx/5xx, bad JSON, timeouts |
+| Requests without `timeout:` | Client must always bound wait time |
+| Untrusted API text in errors, logs, or LLMs | Do not put `response.body` (or other raw payload) into exception messages; do not feed Builder output into LLM prompts, shell, or aggregation without sanitization (W011) |
 
-## Integration
+## Related skills
 
-| Skill | When to chain |
-|-------|---------------|
-| **yard-documentation** | When writing or reviewing inline docs for API client layers |
-| **ruby-service-objects** | Base conventions (.call, responses, transactions, README) |
-| **rspec-service-testing** | For testing all layers with instance_double and hash factories |
-| **rails-security-review** | When auditing credential handling and input validation |
+**yard-documentation**, **ruby-service-objects**, **rspec-service-testing**, **rails-security-review** — use when documenting layers, aligning service conventions, speccing doubles/factories, or auditing secrets and validation.

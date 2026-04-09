@@ -25,6 +25,13 @@ EVERY job MUST have its test written and validated BEFORE implementation.
 EVERY job that performs a side effect (charge, email, API call) MUST have
 an idempotency check BEFORE the side effect.
 
+EVERY perform method should do only three things:
+  1. Load the record from the passed ID
+  2. Guard for idempotency / permanent no-op conditions
+  3. Delegate the side effect or orchestration to a service object
+
+If perform needs more than that, extract a service.
+
 After implementation: run full suite, confirm job appears in queue dashboard,
 verify idempotency by enqueueing twice and checking the second run is a no-op.
 ```
@@ -36,7 +43,7 @@ verify idempotency by enqueueing twice and checking the second run is a no-op.
 | Arguments | Pass IDs, not objects. Load in `perform`. |
 | Idempotency | Check "already done?" before doing work |
 | Retries | `retry_on` for transient, `discard_on` for permanent errors |
-| Job size | One responsibility. Call services for complex logic. |
+| Job size | Load, guard, delegate. No multi-step orchestration in `perform`. |
 | Backend (Rails 8) | Solid Queue (database-backed, no Redis) |
 | Backend (Rails 7) | Sidekiq + Redis for high throughput |
 | Recurring | `config/recurring.yml` (Solid Queue) or cron/sidekiq-cron |
@@ -64,19 +71,32 @@ SomeJob.perform_later(@order)
 SomeJob.perform_later(@order.id)
 ```
 
-**Job with idempotency and retry:**
+**Thin job with idempotency and retry:**
 
 ```ruby
-class NotifyOrderShippedJob < ApplicationJob
+class SendInvoiceReminderJob < ApplicationJob
   queue_as :default
   retry_on Net::OpenTimeout, wait: :polynomially_longer, attempts: 5
   discard_on ActiveRecord::RecordNotFound
 
-  def perform(order_id)
-    order = Order.find(order_id)
-    return if order.shipped_notification_sent?
-    OrderMailer.shipped(order).deliver_now
-    order.update!(shipped_notification_sent_at: Time.current)
+  def perform(invoice_id)
+    invoice = Invoice.find(invoice_id)
+    return if invoice.reminder_sent_at?
+
+    InvoiceReminders::Send.call(invoice:)
+  end
+end
+```
+
+**Service owns the side effect and state update:**
+
+```ruby
+module InvoiceReminders
+  class Send
+    def self.call(invoice:)
+      InvoiceMailer.overdue(invoice).deliver_now
+      invoice.update!(reminder_sent_at: Time.current)
+    end
   end
 end
 ```
@@ -106,6 +126,16 @@ production:
 | Complex business logic in `perform` | Keep `perform` thin — delegate to service objects |
 | Using `:inline` or `:async` in production | No persistence, no retry, no monitoring |
 | Recurring job defined only in code | Use `recurring.yml` or equivalent for visibility and recoverability |
+
+## Verification
+
+Before calling the job done:
+
+1. Enqueue or perform the job twice and confirm the second run is a no-op.
+2. Confirm `retry_on` has an explicit `attempts:` limit and `discard_on` covers at least one permanent error.
+3. Confirm recurring jobs live in `config/recurring.yml` (Rails 8) or the chosen scheduler config.
+4. Confirm `perform` only loads, guards, and delegates.
+5. If the task asks for an ops artifact, record backend, retry, and idempotency decisions in `process_log.md`.
 
 ## Integration
 

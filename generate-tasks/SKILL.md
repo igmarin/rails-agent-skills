@@ -42,7 +42,11 @@ POST-IMPLEMENTATION GATE (add as explicit parent tasks after tests pass):
 2. **Detect work type:** Rails monolith, engine, API-only, background job, or external integration — affects spec paths and follow-up skills.
 3. **Relevant Files:** List files to create or modify including tests, docs, and diagrams. Infer test command (`bundle exec rspec` or `npm test`).
 4. **Save:** Save as `tasks-[feature-name].md` in `/tasks/`. Use the same `[feature-name]` as the PRD if one was provided.
-5. **Verify:** Re-read the saved file and confirm the task count and structure match expectations.
+5. **Verify:** Re-read the saved file and confirm all of the following:
+   - Task `0.0` creates the feature branch
+   - `Relevant Files` section is present
+   - At least 3 implementation task groups use the full TDD sequence: write spec -> run fail -> implement -> run pass
+   - YARD, documentation, and code-review parent tasks appear after implementation work
 
 ## Rails-First Slice Heuristics
 

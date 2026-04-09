@@ -22,6 +22,19 @@ Keep this skill focused on structure and design. Use adjacent skills for install
 | Engine | Needs Rails autoload paths, initializers, migrations, assets, jobs, or host integration |
 | Mountable engine | Needs its own routes, controllers, views, assets, and namespace boundary |
 
+## HARD-GATE
+
+```text
+Before engine work is complete, confirm all of the following:
+
+1. The root file is minimal: requires version, configuration, and engine only.
+2. Public-facing engines use isolate_namespace.
+3. The root module exposes .configure yielding a Configuration object.
+4. Host model references stay configurable strings (for example "User"), never ::User.
+5. Engine code never auto-applies migrations at boot.
+6. The host contract is documented: what host configures, what engine exposes.
+```
+
 ## Pitfalls
 
 | Pitfall | What to do |
@@ -131,6 +144,27 @@ Minimum coverage through the dummy app (not just isolated classes):
 
 ## Examples
 
+**Minimal root module:**
+
+```ruby
+# lib/my_engine.rb
+require "my_engine/version"
+require "my_engine/configuration"
+require "my_engine/engine"
+
+module MyEngine
+  class << self
+    def configuration
+      @configuration ||= Configuration.new
+    end
+
+    def configure
+      yield(configuration)
+    end
+  end
+end
+```
+
 **Minimal mountable engine class:**
 
 ```ruby
@@ -156,6 +190,16 @@ MyEngine::Engine.routes.draw do
   resources :widgets, only: %i[index show]
 end
 ```
+
+## Verification
+
+Before calling the engine structure done:
+
+1. Check `lib/my_engine.rb` is still requires + configuration only.
+2. Search engine files for hard-coded host constants such as `::User` or `::Employee`.
+3. Search engine boot code for migration auto-apply patterns such as `db:migrate`, `ActiveRecord::Migrator`, or `config.paths['db/migrate']`.
+4. Mount the engine in the dummy app and verify routes load correctly.
+5. Confirm the host contract doc names required host config and engine-provided surfaces.
 
 ## Output Style
 

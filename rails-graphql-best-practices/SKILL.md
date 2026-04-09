@@ -12,33 +12,39 @@ Use this skill when **designing, implementing, or reviewing GraphQL APIs** in a 
 
 ## Quick Reference
 
-| Topic | Rule |
-|-------|------|
-| Type naming | PascalCase, match domain language from `ddd-ubiquitous-language` |
-| Mutations | Return `{ result, errors }` — never raise from a mutation |
-| N+1 | Every association load in a resolver must use a dataloader or batch loader |
-| Authorization | Field-level auth required — type-level auth is not sufficient |
-| Production | Disable introspection; set `max_depth` and `max_complexity` |
-| Testing | Use `schema.execute` in request or integration specs |
-| Docs | Write `description` on every type, field, argument, and mutation |
+| Topic | Where to read |
+|-------|----------------|
+| Type naming | [Type Conventions](#type-conventions) |
+| Paginated lists (`connection_type`) | [Type Conventions](#type-conventions) |
+| Mutations `{ result, errors }` | [Error Handling](#error-handling) |
+| N+1 / dataloaders | [N+1 Prevention](#n1-prevention) |
+| Field-level authorization | [Authorization](#authorization) |
+| Introspection off, `max_depth`, `max_complexity` | [Schema safeguards](#schema-safeguards) |
+| Spec template & checklist | [TESTING.md](./TESTING.md) |
+| `description` on types/fields | [Documentation](#documentation) |
 
 ## HARD-GATE
 
 ```text
 Tests gate implementation — write specs before resolver code (see rspec-best-practices).
-DO NOT add a new resolver or mutation without completing the N+1 analysis step below.
-DO NOT rely solely on type-level authorization — see Authorization section.
+Before shipping a resolver/mutation slice, ALL of the following must be true (details in linked sections; do not duplicate checks in prose here):
+- N+1 Prevention: every association load batched via dataloader (or equivalent).
+- Authorization: sensitive fields have field-level guards (not type-level alone).
+- Type Conventions: paginated collections use Types::*Type.connection_type, not plain arrays.
+- Schema safeguards: AppSchema disables introspection in production and sets max_depth / max_complexity.
+- TESTING.md: new behavior covered; specs execute via AppSchema.execute (not HTTP controller dispatch).
 ```
 
 ## Workflow: Adding a New Resolver or Mutation
 
 ```text
-1. SPEC:      Write failing spec (happy path + auth cases + validation error case)
-2. TYPE:      Define argument and return types
-3. IMPLEMENT: Write resolver or mutation class — delegate logic to a service object
-4. N+1 CHECK: Verify every association load goes through a dataloader source
-5. AUTH CHECK: Confirm field-level guards on all sensitive fields
-6. RUN:       All new specs pass; run full suite before opening PR
+1. SPEC:       Write failing spec (happy path + auth + validation error case) — see TESTING.md
+2. TYPE:       Arguments and return types — Type Conventions for pagination shape
+3. IMPLEMENT:  Resolver/mutation class delegating to a service object
+4. N+1 CHECK:  N+1 Prevention (dataloader on every association load from GraphQL)
+5. AUTH CHECK: Authorization (field-level guards where data is sensitive)
+6. SCHEMA CHECK: Schema safeguards + pagination fields use connection_type (Type Conventions)
+7. RUN:        Full suite green before PR
 ```
 
 **DO NOT proceed to step 3 before step 1 is written and failing.**
@@ -47,24 +53,28 @@ DO NOT rely solely on type-level authorization — see Authorization section.
 
 ### Type Conventions
 
-- Match type names and field names to domain language — do not leak internal model names
-- Use connection types for all paginated collections: `field :orders, Types::OrderType.connection_type, null: false`
+- Match type and field names to domain language — do not leak internal model names.
+- **Paginated collections:** use `connection_type`, never a plain array of nodes.
+
+```ruby
+field :orders, Types::OrderType.connection_type, null: false, resolver: Resolvers::Orders::ListResolver
+```
 
 ### Resolver Structure
 
-- Prefer **dedicated resolver classes** over inline field blocks for non-trivial logic
-- Keep `QueryType` and `MutationType` as entry points only — delegate to resolver objects: `field :summary, resolver: Resolvers::Orders::SummaryResolver`
+- Prefer **dedicated resolver classes** over inline field blocks for non-trivial logic.
+- Keep `QueryType` and `MutationType` as entry points only — delegate: `field :summary, resolver: Resolvers::Orders::SummaryResolver`.
 
 ## N+1 Prevention
 
 ### Detection
 
-- Enable `bullet` gem in development — treat GraphQL N+1s as **Critical** severity
-- Assert query counts with `expect { }.to make_database_queries(count: N)` using `db-query-matchers`
+- Enable `bullet` gem in development — treat GraphQL N+1s as **Critical** severity.
+- Assert query counts with `expect { }.to make_database_queries(count: N)` using `db-query-matchers`.
 
 ### Resolution
 
-Use `dataloader` (built into graphql-ruby 1.12+). Never call an ActiveRecord association directly on `object` — batch it:
+Use `dataloader` (graphql-ruby 1.12+). Never call an ActiveRecord association directly on `object` — batch it:
 
 ```ruby
 def resolve
@@ -92,11 +102,11 @@ end
 
 ### Field-Level Authorization
 
-Type-level authorization is **not sufficient** — add field-level checks for sensitive fields:
+Type-level authorization is **not sufficient** — add field-level checks for sensitive fields. Use safe navigation so unauthenticated contexts deny instead of raising:
 
 ```ruby
 field :internal_notes, String, null: true do
-  guard -> (obj, args, ctx) { ctx[:current_user].admin? }
+  guard -> (_obj, _args, ctx) { ctx[:current_user]&.admin? }
 end
 ```
 
@@ -109,26 +119,24 @@ def resolve
 end
 ```
 
-### Production Introspection
+## Schema safeguards
+
+Configure **production introspection** and **query limits** on `AppSchema` in one place:
 
 ```ruby
 class AppSchema < GraphQL::Schema
   disable_introspection_entry_points if Rails.env.production?
-end
-```
 
-## Query Limits
-
-```ruby
-class AppSchema < GraphQL::Schema
   max_depth 10
   max_complexity 300
 end
 ```
 
+Adjust depth/complexity to your API; document the chosen limits in the PR or schema comments if non-default.
+
 ## Error Handling
 
-Mutations must return a structured response — never raise unhandled exceptions:
+Mutations must return a structured response — never raise unhandled exceptions to the client:
 
 ```ruby
 class Mutations::CreateOrder < Mutations::BaseMutation
@@ -143,28 +151,37 @@ class Mutations::CreateOrder < Mutations::BaseMutation
   rescue ActiveRecord::RecordInvalid => e
     { order: nil, errors: e.record.errors.full_messages }
   rescue StandardError => e
-    Rails.logger.error("Mutation failed: #{e.message}")
+    Rails.logger.error("Mutation failed: #{e.class}: #{e.message}")
     { order: nil, errors: ['An unexpected error occurred'] }
   end
 end
 ```
 
-**Shape contract:** `errors` is always present and always an array. Every mutation must rescue both domain errors and unexpected errors — never let exceptions leak to the client.
+Contract: `errors` is always an array; rescue both domain and unexpected errors so nothing leaks as an unhandled GraphQL exception.
 
 ## Performance
 
-- Use **persisted queries** in production to prevent arbitrary query execution
-- Add APM tracing on resolver execution (Datadog: `GraphQL::Tracing::DataDogTracing`; OpenTelemetry: `GraphQL::Tracing::OpenTelemetryTracing`)
+- Use **persisted queries** in production to limit arbitrary query execution.
+- Add APM tracing on resolver execution (Datadog: `GraphQL::Tracing::DataDogTracing`; OpenTelemetry: `GraphQL::Tracing::OpenTelemetryTracing`).
 
 ## Testing
 
-Always test: happy path, unauthenticated, unauthorized, validation errors returning the errors array (not exceptions), N+1 via query count matchers, and depth/complexity limits.
+See [TESTING.md](./TESTING.md) for the spec template, paths, and checklist (happy path, unauthenticated, unauthorized, validation `errors`, N+1 counts, limits).
 
-See [TESTING.md](./TESTING.md) for a complete spec template, spec paths, and the full test checklist.
+## Verification
+
+Confirm each area once (no duplicate rule text):
+
+1. [N+1 Prevention](#n1-prevention) — dataloaders on association loads.
+2. [Authorization](#authorization) — field-level guards on sensitive fields.
+3. [Error Handling](#error-handling) — mutations return `errors`; no client-facing exception leaks.
+4. [Schema safeguards](#schema-safeguards) — introspection and limits on `AppSchema`.
+5. [Type Conventions](#type-conventions) — paginated fields use `connection_type`.
+6. [TESTING.md](./TESTING.md) — `AppSchema.execute` and full checklist.
 
 ## Documentation
 
-Write `description` on every type, field, argument, and mutation — GraphQL schemas are self-documenting:
+Write `description` on every type, field, argument, and mutation:
 
 ```ruby
 class Types::OrderType < Types::BaseObject

@@ -24,6 +24,7 @@ Use this skill when the task is to write, review, or clean up RSpec tests.
 | Mocking | Stub external boundaries, not internal code |
 | Isolation | Each example independent; no shared mutable state |
 | Naming | `describe` for class/method, `context` for scenario |
+| Service specs | Use `describe '.call'` and `subject(:result)` for the primary invocation |
 | First slice | Start at the highest-value boundary that proves behavior |
 | TDD | Write test first, run it, verify failure, then implement |
 
@@ -72,7 +73,7 @@ Choose the first failing spec at the boundary that gives the strongest signal wi
 - **describe** for the class, module, or behavior; **context** for scenarios ("when valid", "when user is missing").
 - Mirror source paths under `spec/` (e.g. `app/models/user.rb` → `spec/models/user_spec.rb`).
 - Use **let** and **let!** for test data; prefer `let` when value isn't needed for setup.
-- Use **shared_examples** / **shared_context** for repeated behavior; extract helpers when it improves clarity.
+- Use **shared_examples** / **shared_context** for repeated behavior; put reusable shared examples under `spec/support/`.
 - Use `let_it_be` only when `test-prof` already exists in the project.
 - **Time-dependent behavior MUST use `travel_to`** — do not set dates in the past as a shortcut, do not stub `Time.now`. Wrap assertions in a `travel_to` block to control the clock:
 
@@ -95,7 +96,7 @@ RSpec.describe 'POST /orders', type: :request do
   let(:product) { create(:product, stock: 5) }
 
   context 'when product is in stock' do
-    it 'creates the order and returns 201' do
+    it 'returns 201 for an in-stock product' do
       post orders_path, params: { order: { product_id: product.id } }, as: :json
       expect(response).to have_http_status(:created)
     end

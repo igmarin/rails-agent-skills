@@ -31,7 +31,8 @@ implementation. If you only wrote specs + code, stop and document before PR.
 | Scope | Rule |
 |-------|------|
 | Classes | One-line summary; optional `@since` if version matters |
-| Public methods | `@param`, `@option` for hash params, `@return`, `@raise` when applicable; `@example` for non-obvious usage |
+| Public methods | `@param`, `@option` for hash params, `@return`, `@raise` when applicable; include `@example` on primary entry points such as `.call` |
+| Public `initialize` | Add `@param` for constructor inputs when initialization is part of the public contract |
 | Exceptions | One `@raise` tag per exception class — list each separately |
 | Private methods | Document only if behavior is non-obvious; same tag rules |
 
@@ -70,7 +71,9 @@ Document `@raise` for every exception a method can raise — **even if the metho
 def self.call(plan_id:)
 ```
 
-### Optional: examples
+### Examples on public entry points
+
+Prefer at least one `@example` on `.call` or the main public entry point of the object.
 
 ```ruby
 # @example Basic usage
