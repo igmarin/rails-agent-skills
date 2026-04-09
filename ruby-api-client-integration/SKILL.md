@@ -62,12 +62,24 @@ rescue JSON::ParserError, HTTParty::Error => e
 end
 ```
 
-### SQL sanitization (Entity)
+### Domain entity skeleton
 
 ```ruby
-def self.find(tag_number:)
-  query = ActiveRecord::Base.sanitize_sql([SEARCH_QUERY, tag_number])
-  fetcher.execute_query(query)
+class Reading
+  ATTRIBUTES    = %w[temperature humidity wind_speed region_id recorded_at].freeze
+  DEFAULT_QUERY = 'SELECT * FROM schema.readings;'
+  SEARCH_QUERY  = 'SELECT * FROM schema.readings WHERE region_id = ?;'
+
+  def self.fetcher(client: Client.default)
+    Fetcher.new(client,
+      data_builder: Builder.new(attributes: ATTRIBUTES),
+      default_query: DEFAULT_QUERY)
+  end
+
+  def self.find(region_id:)
+    query = ActiveRecord::Base.sanitize_sql([SEARCH_QUERY, region_id])
+    fetcher.execute_query(query)
+  end
 end
 ```
 
