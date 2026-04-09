@@ -1,0 +1,61 @@
+{
+  "context": "Tests whether the agent implements background jobs following the rails-background-jobs skill: passing IDs not objects, adding idempotency checks before side effects, using correct retry/discard strategies, keeping perform thin, and configuring the recurring schedule in recurring.yml.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Pass ID not object",
+      "max_score": 10,
+      "description": "SendInvoiceReminderJob.perform_later is called with an invoice ID (integer/string), NOT an Invoice object"
+    },
+    {
+      "name": "Load record in perform",
+      "max_score": 8,
+      "description": "The job's perform method looks up the invoice via a finder (e.g. Invoice.find) using the passed ID, not from an instance variable or argument object"
+    },
+    {
+      "name": "Idempotency check present",
+      "max_score": 12,
+      "description": "SendInvoiceReminderJob checks whether the reminder was already sent (e.g. checks reminder_sent_at or a flag) BEFORE sending the email"
+    },
+    {
+      "name": "Side effect after guard",
+      "max_score": 8,
+      "description": "The mailer call (InvoiceMailer or similar) appears AFTER the idempotency guard, not before it"
+    },
+    {
+      "name": "retry_on with attempts",
+      "max_score": 10,
+      "description": "retry_on is used for at least one transient error class AND includes an explicit attempts: N limit (not open-ended)"
+    },
+    {
+      "name": "discard_on permanent error",
+      "max_score": 8,
+      "description": "discard_on is used for at least one permanent/non-retriable error (e.g. ActiveRecord::RecordNotFound)"
+    },
+    {
+      "name": "Thin perform — service delegation",
+      "max_score": 8,
+      "description": "SendInvoiceReminderJob delegates business logic to a service object or mailer rather than containing multi-step orchestration inline in perform"
+    },
+    {
+      "name": "Recurring in recurring.yml",
+      "max_score": 10,
+      "description": "config/recurring.yml exists and defines the nightly sweep job with a cron or schedule expression targeting 08:00 UTC"
+    },
+    {
+      "name": "Solid Queue adapter",
+      "max_score": 8,
+      "description": "The implementation uses Solid Queue as the queue adapter (referenced in config, gemfile, or process_log.md) — not Sidekiq or async"
+    },
+    {
+      "name": "Spec covers idempotency",
+      "max_score": 10,
+      "description": "SendInvoiceReminderJob spec includes a test case verifying that enqueueing the job twice does NOT send the email twice (second enqueue is a no-op)"
+    },
+    {
+      "name": "Spec written for job",
+      "max_score": 8,
+      "description": "Both spec files exist (send_invoice_reminder_job_spec.rb and nightly_overdue_invoice_sweep_job_spec.rb) with at least one describe/it block each"
+    }
+  ]
+}

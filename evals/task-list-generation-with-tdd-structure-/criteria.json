@@ -1,0 +1,61 @@
+{
+  "context": "Tests whether the agent generates a task list following generate-tasks skill conventions: feature branch as Task 0.0, TDD write-spec→fail→implement→pass sub-task quadruplets, exact file paths in sub-tasks, correct output file location, and explicit post-implementation gates for YARD, documentation, and code review.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Feature branch task 0.0",
+      "max_score": 10,
+      "description": "The task list contains a Task 0.0 (or equivalent first task) explicitly about creating a feature branch, with a checkout command or instruction"
+    },
+    {
+      "name": "TDD write-spec sub-task",
+      "max_score": 10,
+      "description": "At least 3 implementation sub-tasks include a step to 'Write spec for X' (or equivalent) with an explicit RSpec file path before the corresponding implementation step"
+    },
+    {
+      "name": "TDD run-spec-fail sub-task",
+      "max_score": 10,
+      "description": "At least 3 implementation sub-tasks include a 'Run spec — verify it fails' step paired with each write-spec step (before implementation exists)"
+    },
+    {
+      "name": "TDD implement sub-task",
+      "max_score": 8,
+      "description": "At least 3 implementation sub-tasks include an 'Implement X' step with an explicit app/ file path, following the spec steps"
+    },
+    {
+      "name": "TDD run-spec-pass sub-task",
+      "max_score": 8,
+      "description": "At least 3 implementation sub-tasks include a 'Run spec — verify it passes' step after the implement step"
+    },
+    {
+      "name": "Exact file paths in sub-tasks",
+      "max_score": 10,
+      "description": "Sub-tasks reference explicit file paths (e.g. app/models/referral.rb, spec/models/referral_spec.rb) — not vague references like 'create the model file'"
+    },
+    {
+      "name": "Saved in /tasks/ with correct name",
+      "max_score": 8,
+      "description": "The output file is saved as tasks/tasks-referral-program.md (matching the prd- filename convention)"
+    },
+    {
+      "name": "YARD post-implementation gate",
+      "max_score": 10,
+      "description": "The task list includes an explicit parent task for YARD documentation after the implementation tasks, naming files to document"
+    },
+    {
+      "name": "Documentation update task",
+      "max_score": 8,
+      "description": "The task list includes an explicit parent task to update documentation (README, diagrams, or domain docs) with concrete file paths"
+    },
+    {
+      "name": "Code review gate",
+      "max_score": 10,
+      "description": "The task list includes an explicit final parent task for self-review or code review before opening a PR"
+    },
+    {
+      "name": "Relevant Files section",
+      "max_score": 8,
+      "description": "The task list includes a 'Relevant Files' section listing files to create or modify"
+    }
+  ]
+}

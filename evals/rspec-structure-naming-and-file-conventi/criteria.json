@@ -1,0 +1,56 @@
+{
+  "context": "Tests whether the agent structures the spec file following RSpec conventions: describe for class/method, context for scenarios, spec path mirroring source path, prefer let over let!, and no 'and' in example descriptions. Also verifies frozen_string_literal pragma and subject definition.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Spec file at mirrored path",
+      "max_score": 15,
+      "description": "The spec file is placed at spec/services/notifications/user_notifier_spec.rb — mirroring the source path app/services/notifications/user_notifier.rb"
+    },
+    {
+      "name": "RSpec.describe uses module::class",
+      "max_score": 10,
+      "description": "The top-level RSpec.describe references the full constant Notifications::UserNotifier (or described_class equivalent)"
+    },
+    {
+      "name": "describe for method",
+      "max_score": 10,
+      "description": "A describe block is used for the '.call' class method (e.g. describe '.call')"
+    },
+    {
+      "name": "context for scenario variations",
+      "max_score": 12,
+      "description": "At least two context blocks are used to describe scenario variations — phrased with 'when' or 'with' (e.g. 'when event_type is invalid')"
+    },
+    {
+      "name": "let used for test data",
+      "max_score": 10,
+      "description": "Test data (user_id, event_type, params) is set up using let blocks, not bare instance variables or local variables in before hooks"
+    },
+    {
+      "name": "No let! for non-setup data",
+      "max_score": 10,
+      "description": "let! is NOT used for data that does not need to exist unconditionally — only plain let is used for parameters and simple values"
+    },
+    {
+      "name": "No 'and' in example descriptions",
+      "max_score": 12,
+      "description": "No it block description contains ' and ' — each example tests exactly one behavior"
+    },
+    {
+      "name": "Frozen string literal",
+      "max_score": 8,
+      "description": "The spec file begins with # frozen_string_literal: true"
+    },
+    {
+      "name": "Subject defined",
+      "max_score": 8,
+      "description": "A subject or named subject is defined for the main service call (e.g. subject(:result) { described_class.call(...) })"
+    },
+    {
+      "name": "let_it_be NOT used",
+      "max_score": 5,
+      "description": "let_it_be is NOT used anywhere in the spec file (test-prof is not in this project)"
+    }
+  ]
+}

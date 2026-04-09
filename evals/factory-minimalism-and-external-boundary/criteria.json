@@ -1,0 +1,56 @@
+{
+  "context": "Tests whether the agent applies factory minimalism (only attributes needed for the test) and mocks at the correct boundary: the external service (SendgridClient) is doubled, while internal ActiveRecord operations (Campaign.find, UserSegment.find) are NOT mocked with doubles.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Factory attributes minimal",
+      "max_score": 12,
+      "description": "Each FactoryBot factory definition contains 3 or fewer attribute declarations — factories are lean, not exhaustive"
+    },
+    {
+      "name": "SendgridClient mocked",
+      "max_score": 15,
+      "description": "The spec doubles or stubs SendgridClient (e.g. allow(SendgridClient).to receive(:deliver) or instance_double) — it is not called for real"
+    },
+    {
+      "name": "No real HTTP/email calls",
+      "max_score": 12,
+      "description": "The spec does NOT make real calls to SendgridClient or any external service — all external calls are intercepted"
+    },
+    {
+      "name": "ActiveRecord finders NOT mocked",
+      "max_score": 12,
+      "description": "Campaign.find and UserSegment.find are NOT stubbed with allow(...).to receive(:find) — the spec uses real (or factory-created) records for ActiveRecord lookups"
+    },
+    {
+      "name": "Factory file exists",
+      "max_score": 5,
+      "description": "spec/factories/campaigns.rb is present with at least one factory definition"
+    },
+    {
+      "name": "SendgridClient failure case tested",
+      "max_score": 12,
+      "description": "The spec contains at least one example where SendgridClient.deliver returns a failure result and the service response is verified"
+    },
+    {
+      "name": "RecordNotFound case tested",
+      "max_score": 10,
+      "description": "The spec contains at least one example covering the missing campaign or missing segment scenario"
+    },
+    {
+      "name": "let used for factory setup",
+      "max_score": 8,
+      "description": "Factory-backed test data is set up with let (lazy) rather than let! where the record doesn't need to exist before other setup runs"
+    },
+    {
+      "name": "External mock at class method level",
+      "max_score": 7,
+      "description": "The SendgridClient stub is set on the class method (allow(SendgridClient).to receive(:deliver)) rather than on an instance double of the class"
+    },
+    {
+      "name": "Factory attributes match service usage",
+      "max_score": 7,
+      "description": "The factory-defined attributes correspond to fields actually accessed by the service (campaign.subject, campaign.body, user.email) — no irrelevant default attributes"
+    }
+  ]
+}

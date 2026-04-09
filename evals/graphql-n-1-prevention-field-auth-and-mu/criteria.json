@@ -1,0 +1,66 @@
+{
+  "context": "Tests whether the agent follows rails-graphql-best-practices: using dataloaders for association loads, applying field-level auth on sensitive fields, returning structured { result, errors } from mutations, disabling introspection in production, setting query depth/complexity limits, using dedicated resolver classes, connection types for paginated fields, and schema.execute in tests.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Dataloader for association",
+      "max_score": 10,
+      "description": "ListResolver loads the buyer association through a dataloader (dataloader.with(...).load(...)) rather than calling object.buyer or object.buyer_id directly"
+    },
+    {
+      "name": "Field-level guard on sensitive field",
+      "max_score": 10,
+      "description": "The internal_notes field in Types::OrderType has its own field-level authorization guard (not just relying on type-level auth)"
+    },
+    {
+      "name": "No type-only auth for sensitive field",
+      "max_score": 8,
+      "description": "Types::OrderType does NOT rely solely on a class-level guard — internal_notes has a separate guard block or before_check"
+    },
+    {
+      "name": "Mutation returns errors array",
+      "max_score": 10,
+      "description": "Mutations::PlaceOrder defines a field :errors of array type (e.g. [String]) that is always present in the response"
+    },
+    {
+      "name": "Mutation no unhandled raise",
+      "max_score": 8,
+      "description": "Mutations::PlaceOrder does NOT raise unhandled exceptions to the caller — errors are caught and returned in the errors field"
+    },
+    {
+      "name": "Introspection disabled in production",
+      "max_score": 10,
+      "description": "AppSchema calls disable_introspection_entry_points (conditionally for production environment, or unconditionally)"
+    },
+    {
+      "name": "max_depth set",
+      "max_score": 6,
+      "description": "AppSchema sets max_depth with a numeric value"
+    },
+    {
+      "name": "max_complexity set",
+      "max_score": 6,
+      "description": "AppSchema sets max_complexity with a numeric value"
+    },
+    {
+      "name": "Dedicated resolver class",
+      "max_score": 8,
+      "description": "Orders list resolution is in a dedicated Resolvers::Orders::ListResolver class, not as an inline field block in QueryType"
+    },
+    {
+      "name": "Connection type for paginated list",
+      "max_score": 8,
+      "description": "The orders field (wherever it is defined) uses .connection_type (e.g. Types::OrderType.connection_type) rather than a plain array type"
+    },
+    {
+      "name": "schema.execute in specs",
+      "max_score": 8,
+      "description": "Both spec files use AppSchema.execute(...) to run queries/mutations — not controller dispatch or request specs via HTTP"
+    },
+    {
+      "name": "descriptions on fields",
+      "max_score": 8,
+      "description": "Types::OrderType includes description calls on at least 3 of its fields"
+    }
+  ]
+}

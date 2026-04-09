@@ -1,0 +1,61 @@
+{
+  "context": "Tests whether the agent adds complete and correct YARD documentation to a Ruby service class, including class-level summaries, @param, @option tags for hash arguments, @return shapes, @raise for raised exceptions, and English-only text.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Class-level summary",
+      "max_score": 8,
+      "description": "The Billing::SubscriptionBillingService class has a one-line YARD summary comment directly above the class definition"
+    },
+    {
+      "name": "self.call @param",
+      "max_score": 8,
+      "description": "self.call has a @param tag documenting the params argument with its type (e.g. [Hash])"
+    },
+    {
+      "name": "@option for hash keys",
+      "max_score": 12,
+      "description": "self.call uses @option tags (not just @param) to enumerate the valid hash keys: at minimum :plan, :customer_id, and :action"
+    },
+    {
+      "name": "self.call @return",
+      "max_score": 10,
+      "description": "self.call has a @return tag documenting the return shape (Hash with :success and :response keys)"
+    },
+    {
+      "name": "@raise for InvalidPlanError",
+      "max_score": 10,
+      "description": "self.call or call documents @raise [Billing::InvalidPlanError] (or InvalidPlanError) as a possible exception"
+    },
+    {
+      "name": "@raise for PaymentGatewayError",
+      "max_score": 8,
+      "description": "self.call or call documents @raise [Billing::PaymentGatewayError] (or PaymentGatewayError) as a possible exception"
+    },
+    {
+      "name": "supported_plans @return",
+      "max_score": 8,
+      "description": "self.supported_plans has a @return tag documenting its return type (e.g. [Array<String>])"
+    },
+    {
+      "name": "English only",
+      "max_score": 8,
+      "description": "All YARD comment text (summaries, descriptions, tag descriptions) is written in English — no other language used"
+    },
+    {
+      "name": "No logic changes",
+      "max_score": 10,
+      "description": "The Ruby implementation logic is unchanged — only YARD comments were added (the method bodies remain identical to the input)"
+    },
+    {
+      "name": "initialize documented",
+      "max_score": 8,
+      "description": "The initialize method has at least a @param tag for the params argument"
+    },
+    {
+      "name": "@example present",
+      "max_score": 10,
+      "description": "At least one public method (self.call recommended) has a @example tag showing sample usage"
+    }
+  ]
+}

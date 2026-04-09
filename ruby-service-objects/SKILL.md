@@ -79,23 +79,29 @@ module AnimalTransfers
 end
 ```
 
-### 2. Standardized Response Format
+### 2. Batch Processing + Per-Item Rescue (Partial Success)
 
 ```ruby
-# Success
-{ success: true, response: { successful_items: [...] } }
-
-# Error
-{ success: false, response: { error: { message: '...', failed_items: [...] } } }
-
-# Partial success
-{
-  success: true,
-  response: {
-    successful_transfers: ['TAG001'],
-    error: { message: 'Some animals were not found...', failed_transfers: ['TAG002'] }
-  }
-}
+# Batch — each rescue block logs; outer rescue returns { success: false }
+def call
+  results = @items.each_with_object({ successful: [], failed: [] }) do |item, acc|
+    validate_item!(item)
+    process_item(item)
+    acc[:successful] << item[:sku]
+  rescue ActiveRecord::RecordNotFound => e
+    Rails.logger.error("Item not found: #{e.message}")
+    acc[:failed] << { sku: item[:sku], error: e.message }
+  rescue StandardError => e
+    Rails.logger.error("Unexpected item error: #{e.message}")
+    Rails.logger.error(e.backtrace.join("\n"))
+    acc[:failed] << { sku: item[:sku], error: e.message }
+  end
+  { success: true, response: results }
+rescue StandardError => e
+  Rails.logger.error("Service failed: #{e.message}")
+  Rails.logger.error(e.backtrace.join("\n"))
+  { success: false, response: { error: { message: PROCESSING_FAILED } } }
+end
 ```
 
 ### 3. Class-only Services (Static Methods)
@@ -108,6 +114,36 @@ class ShelterValidator
     shelter = Shelter.find_by(id: shelter_id)
     raise ArgumentError, 'Source shelter not found' unless shelter
     shelter
+  end
+end
+```
+
+### 4. Orchestrator Delegation (≤20-line `call`)
+
+```ruby
+module Onboarding
+  class OnboardingService
+    ONBOARDING_FAILED = 'Onboarding could not be completed'
+
+    # @param params [Hash] user attributes
+    # @return [Hash] { success: Boolean, response: Hash }
+    def self.call(params) = new(params).call
+    def initialize(params) = @params = params
+
+    def call
+      user      = UserCreationService.call(@params)
+      workspace = WorkspaceSetupService.call(user)
+      BillingService.call(workspace)
+      NotificationService.call(user)
+      { success: true, response: { user: } }
+    rescue ActiveRecord::RecordInvalid => e
+      Rails.logger.error("Onboarding failed: #{e.message}")
+      { success: false, response: { error: { message: e.message } } }
+    rescue StandardError => e
+      Rails.logger.error("Unexpected: #{e.message}")
+      Rails.logger.error(e.backtrace.join("\n"))
+      { success: false, response: { error: { message: ONBOARDING_FAILED } } }
+    end
   end
 end
 ```

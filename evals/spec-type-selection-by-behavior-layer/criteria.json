@@ -1,0 +1,56 @@
+{
+  "context": "Tests whether the agent selects the appropriate spec type for each layer of behavior: request spec for the HTTP endpoint (not controller spec), and model spec for the domain validation rule. Also verifies the agent places specs at the correct paths and covers the right behavioral boundaries.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "type: :request used",
+      "max_score": 15,
+      "description": "The endpoint spec uses `type: :request` in the RSpec.describe declaration"
+    },
+    {
+      "name": "type: :controller NOT used",
+      "max_score": 15,
+      "description": "No spec file uses `type: :controller` — controller spec style is absent"
+    },
+    {
+      "name": "Model spec file exists",
+      "max_score": 8,
+      "description": "A spec file for the Booking model is present at spec/models/booking_spec.rb"
+    },
+    {
+      "name": "type: :model used",
+      "max_score": 8,
+      "description": "The model spec uses `type: :model` in the RSpec.describe declaration"
+    },
+    {
+      "name": "No system or feature spec",
+      "max_score": 10,
+      "description": "No spec file uses `type: :system` or `type: :feature` for these behaviors"
+    },
+    {
+      "name": "Request spec in spec/requests/",
+      "max_score": 10,
+      "description": "The endpoint spec file is placed under spec/requests/ (not spec/controllers/)"
+    },
+    {
+      "name": "Endpoint URL in describe",
+      "max_score": 8,
+      "description": "The request spec's RSpec.describe block references the HTTP method and endpoint path (e.g. 'POST /bookings')"
+    },
+    {
+      "name": "Endpoint success case covered",
+      "max_score": 8,
+      "description": "The request spec contains at least one example asserting a 2xx HTTP status for a successful booking"
+    },
+    {
+      "name": "Endpoint failure case covered",
+      "max_score": 8,
+      "description": "The request spec contains at least one example asserting a non-2xx status for a failed booking (full class or duplicate)"
+    },
+    {
+      "name": "Model uniqueness validation tested",
+      "max_score": 10,
+      "description": "The model spec contains an example that verifies a duplicate booking is invalid"
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "context": "Tests whether the agent follows rails-engine-author conventions: using isolate_namespace, providing a configure block with a Configuration class, defining the host-app contract, providing copy generators for migrations (not silent apply), referencing host models via configurable class names, and using a minimal lib/engine.rb structure.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "isolate_namespace used",
+      "max_score": 12,
+      "description": "lib/audit_trail/engine.rb calls isolate_namespace AuditTrail inside the Engine class"
+    },
+    {
+      "name": "configure block pattern",
+      "max_score": 10,
+      "description": "lib/audit_trail.rb defines a self.configure method that yields a Configuration instance (the standard configure do |config| pattern)"
+    },
+    {
+      "name": "Configuration class",
+      "max_score": 8,
+      "description": "lib/audit_trail/configuration.rb defines an AuditTrail::Configuration class with at least one attr_accessor for the host user class or equivalent"
+    },
+    {
+      "name": "Configurable user class",
+      "max_score": 12,
+      "description": "The Configuration class has an attribute for the host app's user class name (e.g. user_class or actor_class) defaulting to a string (e.g. 'User'), NOT a hard-coded constant"
+    },
+    {
+      "name": "No hard-coded host constant",
+      "max_score": 10,
+      "description": "The engine code does NOT reference ::User, ::Employee, or any other host app constant directly — uses the configurable class name or constantize pattern instead"
+    },
+    {
+      "name": "Migrations not auto-applied",
+      "max_score": 10,
+      "description": "lib/audit_trail/engine.rb does NOT call initializer or config block that runs migrations automatically — no db:migrate call in engine code"
+    },
+    {
+      "name": "Host contract documented",
+      "max_score": 10,
+      "description": "host_contract.md exists and describes at minimum: (1) what the host must configure, and (2) what the engine exposes"
+    },
+    {
+      "name": "lib/audit_trail.rb minimal",
+      "max_score": 8,
+      "description": "lib/audit_trail.rb requires version, configuration, and engine — does not contain business logic"
+    },
+    {
+      "name": "Dummy app routes mount engine",
+      "max_score": 8,
+      "description": "spec/dummy/config/routes.rb mounts AuditTrail::Engine at some path"
+    },
+    {
+      "name": "Model namespaced",
+      "max_score": 8,
+      "description": "app/models/audit_trail/audit_event.rb defines AuditTrail::AuditEvent (namespace matches engine isolation)"
+    },
+    {
+      "name": "Engine type justified",
+      "max_score": 4,
+      "description": "host_contract.md or engine.rb comments state the engine type chosen (mountable/full/plain) — OR the engine class correctly inherits from ::Rails::Engine"
+    }
+  ]
+}

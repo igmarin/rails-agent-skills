@@ -1,0 +1,51 @@
+{
+  "context": "Tests whether the agent uses shared_examples for the repeated authorization behavior across three endpoints, uses travel_to for the time-dependent expiry assertions, and avoids let_it_be in a project without test-prof.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "shared_examples defined",
+      "max_score": 18,
+      "description": "RSpec.shared_examples is used to define the shared subscription authorization behavior"
+    },
+    {
+      "name": "shared_examples consumed twice or more",
+      "max_score": 12,
+      "description": "it_behaves_like or include_examples referencing the shared behavior is invoked at least twice — covering at least 2 of the 3 endpoints"
+    },
+    {
+      "name": "travel_to used",
+      "max_score": 18,
+      "description": "travel_to is used in the subscription expiry spec to control the current time during assertions"
+    },
+    {
+      "name": "Expiry true at >30 days",
+      "max_score": 10,
+      "description": "At least one example asserts that expired? returns true when activated_at is more than 30 days in the past"
+    },
+    {
+      "name": "Expiry false at <30 days",
+      "max_score": 8,
+      "description": "At least one example asserts that expired? returns false when activated_at is fewer than 30 days in the past"
+    },
+    {
+      "name": "let_it_be NOT used",
+      "max_score": 14,
+      "description": "let_it_be does NOT appear in any spec file (test-prof is not available in this project)"
+    },
+    {
+      "name": "Shared examples in spec/support/",
+      "max_score": 8,
+      "description": "The shared_examples definition is in a file under spec/support/ rather than inline in an endpoint spec file"
+    },
+    {
+      "name": "403 response asserted in shared behavior",
+      "max_score": 7,
+      "description": "The shared examples include an assertion that a user without a subscription receives a 403 HTTP status"
+    },
+    {
+      "name": "Model spec path correct",
+      "max_score": 5,
+      "description": "The subscription expiry spec is placed at spec/models/subscription_spec.rb (or equivalent mirrored path)"
+    }
+  ]
+}

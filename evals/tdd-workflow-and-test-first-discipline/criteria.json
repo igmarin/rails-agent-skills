@@ -1,0 +1,56 @@
+{
+  "context": "Tests whether the agent follows a test-first development workflow: writing the spec before the implementation, documenting the expected failure before any service code is written, and explicitly planning the implementation scope before coding it.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "process_log.md exists",
+      "max_score": 5,
+      "description": "A process_log.md file is present in the workspace"
+    },
+    {
+      "name": "Spec content before implementation",
+      "max_score": 20,
+      "description": "In process_log.md, the section describing or quoting spec/test content appears earlier in the document than the section describing or quoting implementation code"
+    },
+    {
+      "name": "Expected failure documented",
+      "max_score": 15,
+      "description": "process_log.md includes a description of what the test would produce (fail, error, or expected failure output) before implementation code was written — not just 'test passes'"
+    },
+    {
+      "name": "Test design phase present",
+      "max_score": 12,
+      "description": "process_log.md contains a distinct phase or section focused on test design — describing the boundary being tested, edge cases, or what the spec is intended to verify"
+    },
+    {
+      "name": "Implementation plan before code",
+      "max_score": 12,
+      "description": "process_log.md contains an explicit step where the scope of the implementation is planned (which class/methods will be created) before source code is written"
+    },
+    {
+      "name": "No implementation code before spec phase",
+      "max_score": 12,
+      "description": "process_log.md does NOT show Ruby service implementation code in a section that precedes any spec/test content — implementation code only appears after test content"
+    },
+    {
+      "name": "At least three distinct phases",
+      "max_score": 8,
+      "description": "process_log.md contains at least three clearly labelled or structurally distinct phases of development work"
+    },
+    {
+      "name": "Spec file exists",
+      "max_score": 5,
+      "description": "spec/services/memberships/upgrade_service_spec.rb is present"
+    },
+    {
+      "name": "Implementation file exists",
+      "max_score": 5,
+      "description": "app/services/memberships/upgrade_service.rb is present"
+    },
+    {
+      "name": "Spec uses describe/context structure",
+      "max_score": 6,
+      "description": "The spec file uses RSpec.describe for the class and at least one context block for a scenario variation"
+    }
+  ]
+}
