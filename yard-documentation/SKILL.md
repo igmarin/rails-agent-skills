@@ -56,7 +56,8 @@ module AnimalTransfers
 def self.call(params)
 ```
 
-### Method-level: exceptions (list each @raise)
+### Method-level: exceptions (list each raise)
+>>>>>>> abb2ba1 (Fixing best practices for skills and examples)
 
 ```ruby
 # Processes the billing update for the given plan.
