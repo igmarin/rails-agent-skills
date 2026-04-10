@@ -89,17 +89,13 @@ See [EXAMPLES.md](./EXAMPLES.md) for mixed-concern and controller workflow patte
 | Pitfall | What to do |
 |---------|------------|
 | "Fat model is fine, controllers should be skinny" | Both should be focused — extract to services, not models |
-| "One concern per model keeps it clean" | Concerns combining unrelated behavior are worse than inline code |
 | "Service objects for everything" | Trivial one-liner wrappers add indirection without value |
-| Callbacks for business workflows | Callbacks are persistence-level — use explicit service calls |
 | Model with 500+ lines and multiple concerns | Extract domain logic to services or query objects |
 | Controller action > 15 lines | Extract to service — controller coordinates, not implements |
-| Callback chain triggering jobs, mailers, or external APIs | Move side effects into explicit service calls |
-| Concern used by only one class | Just inline it — a single-use concern adds no value |
 
 ## Output Style
 
-Write findings first.
+**Begin with entry points.** Open the review by identifying the application's entry points (controllers, jobs, public API surface) before listing findings. Then write findings ordered by review area — boundary problems first, then model/callback issues, then concerns/helpers.
 
 For each finding include:
 

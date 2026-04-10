@@ -11,17 +11,6 @@ description: >
 
 Focus on *what* and *why*, not *how*. No code until the PRD is approved.
 
-## Quick Reference
-
-| Step | Action | Output |
-|------|--------|--------|
-| 1 | Receive feature description | Raw input |
-| 2 | Ask clarifying questions (only if ambiguous) | Shared understanding |
-| 3 | Identify likely implementation surface (when useful) | Rails-aware scope |
-| 4 | Generate PRD | `prd-[feature-name].md` |
-| 5 | Save to `/tasks/` | File on disk |
-| 6 | Suggest next step | Link to **generate-tasks** / optional **ticket-planning** |
-
 ## Process
 
 1. **Receive prompt:** User provides a feature description or request.
@@ -48,7 +37,7 @@ Include **all 10 sections** — none are optional. Sections with nothing to say 
 | 5 | **Non-Goals** | What this version will NOT include |
 | 6 | **Design Considerations** | UI/UX notes, mockup links, pending design decisions |
 | 7 | **Technical Considerations** | Constraints, dependencies, performance concerns |
-| 8 | **Implementation Surface** | REQUIRED — name the specific Rails layers this feature will touch. Must include at least one of: `controllers`, `models`, `services`, `jobs`, `mailers`. Never skip or leave vague. |
+| 8 | **Implementation Surface** | REQUIRED — name the specific Rails layers this feature will touch (e.g. `controllers`, `models`, `services`, `jobs`, `mailers`). Describe entry points and architectural areas in plain language — do NOT include class names, module paths, or code. |
 | 9 | **Success Metrics** | How success is measured |
 | 10 | **Open Questions** | Anything still to be decided |
 
@@ -56,14 +45,10 @@ Include **all 10 sections** — none are optional. Sections with nothing to say 
 
 | Pitfall | What to do |
 |---------|------------|
-| PRD describes "how" instead of "what" | PRD is requirements, not implementation — leave "how" for tasks |
 | Vague requirements ("make it fast", "good UX") | Every requirement must use "must" and be testable |
 | Skipping Non-Goals section | Non-Goals prevent scope creep. Always include them |
 | Generic user stories | "As a user, I want a good experience" is not a user story |
-| PRD contains implementation details | No code, schema, or class names — requirements only |
-| Generic Implementation Surface | "The Rails app" or "controllers and models" is insufficient — name specific modules, e.g. `Inventory::ImportService`, `admin/inventory#import`, `InventoryImportJob` |
-| PRD written to chat but not saved to disk | Must use a file-writing tool to create `tasks/prd-[name].md` — chat output alone fails the file-saved criterion |
-
+| Generic Implementation Surface | "The Rails app" or "controllers and models" is insufficient — name the specific Rails layers and areas, e.g. `admin inventory controller`, `background import job`, `inventory validation service layer` |
 ## Integration
 
 | Skill | When to chain |

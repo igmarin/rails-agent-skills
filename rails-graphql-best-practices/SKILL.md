@@ -10,20 +10,6 @@ description: >
 
 Use this skill when **designing, implementing, or reviewing GraphQL APIs** in a Rails application with the `graphql-ruby` gem.
 
-## Quick Reference
-
-| Topic | Where to read |
-|-------|----------------|
-| Type naming | [Type Conventions](#type-conventions) |
-| Paginated lists (`connection_type`) | [Type Conventions](#type-conventions) |
-| Mutations `{ result, errors }` | [Error Handling](#error-handling) |
-| N+1 / dataloaders | [N+1 Prevention](#n1-prevention) |
-| Field-level authorization | [Authorization](#authorization) |
-| Introspection off, `max_depth`, `max_complexity` | [Schema safeguards](#schema-safeguards) |
-| Spec template & checklist | [TESTING.md](./TESTING.md) |
-| `description` on types/fields | [Documentation](#documentation) |
-| **Complete worked example (all patterns)** | [EXAMPLES.md](./EXAMPLES.md) |
-
 ## HARD-GATE
 
 ```text
@@ -34,6 +20,9 @@ Before shipping a resolver/mutation slice, ALL of the following must be true (de
 - Type Conventions: paginated collections use Types::*Type.connection_type, not plain arrays.
 - Schema safeguards: AppSchema disables introspection in production and sets max_depth / max_complexity.
 - TESTING.md: specs in `spec/graphql/` use `AppSchema.execute` — **ALL spec files** (resolver specs AND mutation specs). Never use HTTP controller dispatch for GraphQL specs.
+- Error Handling: mutations return `{ result, errors }` with rescue blocks — no unhandled exceptions.
+- Documentation: `description:` on every field in every type.
+- Resolver Structure: dedicated resolver classes, not inline field blocks.
 ```
 
 ## Workflow: Adding a New Resolver or Mutation
@@ -44,7 +33,7 @@ Before shipping a resolver/mutation slice, ALL of the following must be true (de
 3. IMPLEMENT:  Resolver/mutation class delegating to a service object
 4. N+1 CHECK:  N+1 Prevention (dataloader on every association load from GraphQL)
 5. AUTH CHECK: Authorization (field-level guards where data is sensitive)
-6. SCHEMA CHECK: Schema safeguards + pagination fields use connection_type (Type Conventions)
+6. FINAL CHECK: Verify every HARD-GATE item above against the code you wrote — all 8 must be true
 7. RUN:        Full suite green before PR
 ```
 
@@ -158,20 +147,13 @@ class Mutations::CreateOrder < Mutations::BaseMutation
 end
 ```
 
-Contract: `errors` is always an array; rescue both domain and unexpected errors so nothing leaks as an unhandled GraphQL exception.
-
-## Performance
-
-- Use **persisted queries** in production to limit arbitrary query execution.
-- Add APM tracing on resolver execution (Datadog: `GraphQL::Tracing::DataDogTracing`; OpenTelemetry: `GraphQL::Tracing::OpenTelemetryTracing`).
-
 ## Testing
 
 See [TESTING.md](./TESTING.md) for the spec template, paths, and checklist (happy path, unauthenticated, unauthorized, validation `errors`, N+1 counts, limits).
 
 ## Documentation
 
-Write `description:` inline on **every** field in every type — no field left undescribed. The reviewer checks each field individually:
+Write `description:` inline on **every** field in every type — no field left undescribed:
 
 ```ruby
 class Types::OrderType < Types::BaseObject
