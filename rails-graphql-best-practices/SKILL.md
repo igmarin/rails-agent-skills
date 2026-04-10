@@ -33,7 +33,7 @@ Before shipping a resolver/mutation slice, ALL of the following must be true (de
 - Authorization: sensitive fields have field-level guards (not type-level alone).
 - Type Conventions: paginated collections use Types::*Type.connection_type, not plain arrays.
 - Schema safeguards: AppSchema disables introspection in production and sets max_depth / max_complexity.
-- TESTING.md: new behavior covered; specs execute via AppSchema.execute (not HTTP controller dispatch).
+- TESTING.md: specs in `spec/graphql/` use `AppSchema.execute` — **ALL spec files** (resolver specs AND mutation specs). Never use HTTP controller dispatch for GraphQL specs.
 ```
 
 ## Workflow: Adding a New Resolver or Mutation
@@ -169,20 +169,9 @@ Contract: `errors` is always an array; rescue both domain and unexpected errors 
 
 See [TESTING.md](./TESTING.md) for the spec template, paths, and checklist (happy path, unauthenticated, unauthorized, validation `errors`, N+1 counts, limits).
 
-## Verification
-
-Confirm each area once (no duplicate rule text):
-
-1. [N+1 Prevention](#n1-prevention) — dataloaders on association loads.
-2. [Authorization](#authorization) — field-level guards on sensitive fields.
-3. [Error Handling](#error-handling) — mutations return `errors`; no client-facing exception leaks.
-4. [Schema safeguards](#schema-safeguards) — introspection and limits on `AppSchema`.
-5. [Type Conventions](#type-conventions) — paginated fields use `connection_type`.
-6. [TESTING.md](./TESTING.md) — `AppSchema.execute` and full checklist.
-
 ## Documentation
 
-Write `description` on every type, field, argument, and mutation:
+Write `description:` inline on **every** field in every type — no field left undescribed. The reviewer checks each field individually:
 
 ```ruby
 class Types::OrderType < Types::BaseObject

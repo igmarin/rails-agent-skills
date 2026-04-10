@@ -31,7 +31,7 @@ implementation. If you only wrote specs + code, stop and document before PR.
 | Scope | Rule |
 |-------|------|
 | Classes | One-line summary; optional `@since` if version matters |
-| Public methods | `@param`, `@option` for hash params, `@return`, `@raise` when applicable; include `@example` on primary entry points such as `.call` |
+| Public methods | `@param`, `@option` for hash params, `@return`, `@raise` when applicable; `@example` **required** on `.call` — show realistic usage AND the expected return value (e.g., `result[:success] # => true`) |
 | Public `initialize` | Add `@param` for constructor inputs when initialization is part of the public contract |
 | Exceptions | One `@raise` tag per exception class — list each separately |
 | Private methods | Document only if behavior is non-obvious; same tag rules |

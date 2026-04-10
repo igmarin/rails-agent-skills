@@ -31,9 +31,9 @@ Focus on *what* and *why*, not *how*. No code until the PRD is approved.
    - Ask one question at a time when possible — do not overwhelm with a wall of questions.
 3. **Identify implementation surface:** Note which Rails areas the feature will touch: `controllers`, `models`, `services`, `jobs`, `mailers`, `engines`, or external integrations. This feeds directly into section 8 of the PRD.
 4. **Generate PRD:** Use the structure below. Derive `[feature-name]` from the feature (lowercase, hyphenated slug, e.g. `user-onboarding`, `export-csv`).
-5. **Save:** Save as `prd-[feature-name].md` in the `/tasks` directory (create the directory if needed).
+5. **Write file:** Use a file-writing tool to create `tasks/prd-[feature-name].md` (create the `tasks/` directory if needed). Generating the PRD content in the chat without writing the file does NOT satisfy this step — the file must exist on disk.
 6. **Verify:** Re-read the saved file and confirm it matches the agreed scope.
-7. **Do NOT** start implementing the PRD. Always suggest the recommended next step: **generate-tasks** (for implementation checklist with TDD sequencing, YARD, docs, and code review gate) and optionally **ticket-planning** (for Jira-ready tickets). Name the skill explicitly so the user can invoke it.
+7. **Do NOT** start implementing the PRD. After saving the file, end your response with a visible **"Recommended next step:"** line naming at least one skill: **generate-tasks** (implementation tasks with TDD gates) and optionally **ticket-planning** (Jira tickets). This line must appear in your conversational response — not inside the PRD document.
 
 ## PRD Structure
 
@@ -62,6 +62,7 @@ Include **all 10 sections** — none are optional. Sections with nothing to say 
 | Generic user stories | "As a user, I want a good experience" is not a user story |
 | PRD contains implementation details | No code, schema, or class names — requirements only |
 | Generic Implementation Surface | "The Rails app" or "controllers and models" is insufficient — name specific modules, e.g. `Inventory::ImportService`, `admin/inventory#import`, `InventoryImportJob` |
+| PRD written to chat but not saved to disk | Must use a file-writing tool to create `tasks/prd-[name].md` — chat output alone fails the file-saved criterion |
 
 ## Integration
 

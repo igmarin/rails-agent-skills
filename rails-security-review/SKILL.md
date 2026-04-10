@@ -91,12 +91,18 @@ See [PITFALLS.md](./PITFALLS.md) for the full list. Critical anti-patterns: `per
 
 ## Output Style
 
-Write findings first.
+Write findings first. **Order findings by review area — auth/authz always first:**
+
+1. Authentication and authorization findings
+2. SQL/injection and parameter findings
+3. Secrets, logging, and output findings
+
+Do not reorder based on which issue looks most obvious. Even if SQL injection is more apparent, authorization findings lead the report.
 
 For each finding include:
 - **Severity:** label it **High** or **Medium** (not "High-Severity" or "Critical")
 - Attack path or failure mode
-- Affected file or area
+- Affected file (name the specific file, e.g. `app/controllers/documents_controller.rb`)
 - Smallest credible mitigation
 
 ## Integration
