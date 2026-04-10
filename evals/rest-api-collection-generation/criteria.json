@@ -1,0 +1,51 @@
+{
+  "context": "Tests whether the agent produces a Postman-compatible API collection for a set of Rails REST endpoints, following the api-rest-collection skill: correct format version, file location, use of base_url variable, complete endpoint coverage, and valid JSON.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Postman v2.1 schema",
+      "max_score": 12,
+      "description": "The collection JSON includes a 'info' object with a 'schema' field containing the Postman Collection v2.1 schema URL (postman.com/schemas/collection/v2.1.0/collection.json)"
+    },
+    {
+      "name": "Correct file location",
+      "max_score": 12,
+      "description": "The collection file is saved at docs/api-collections/<name>.json OR spec/fixtures/api-collections/<name>.json — NOT in any other location"
+    },
+    {
+      "name": "base_url variable used",
+      "max_score": 12,
+      "description": "Every request URL in the collection uses {{base_url}} as the host/base rather than a hardcoded URL or hostname"
+    },
+    {
+      "name": "All endpoints present",
+      "max_score": 12,
+      "description": "The collection contains a request entry for every endpoint defined in the provided routes/controller code — no endpoint is omitted"
+    },
+    {
+      "name": "HTTP methods correct",
+      "max_score": 10,
+      "description": "Each request entry specifies the correct HTTP method (GET, POST, PUT/PATCH, DELETE) matching the route definition"
+    },
+    {
+      "name": "Headers included",
+      "max_score": 10,
+      "description": "Each request entry includes at least one header (e.g. Content-Type, Authorization, or Accept)"
+    },
+    {
+      "name": "Body examples for POST/PUT",
+      "max_score": 10,
+      "description": "Requests using POST or PUT/PATCH include a body example with representative field values"
+    },
+    {
+      "name": "Syntactically valid JSON",
+      "max_score": 12,
+      "description": "The collection file is valid JSON (no trailing commas, unmatched brackets, or syntax errors)"
+    },
+    {
+      "name": "URL path parameters",
+      "max_score": 10,
+      "description": "Requests with path parameters (e.g. /orders/:id) use the Postman path variable syntax (:id or {{id}}) rather than hardcoded example IDs"
+    }
+  ]
+}

@@ -71,18 +71,32 @@ AFTER each step:
 - "Looks correct" (run the tests)
 - "I'm confident" (confidence is not evidence)
 
-## Minimal Inline Example
+## Characterization Test Template
 
-Use this as the default tiny slice when extracting controller orchestration.
-
-**Characterization test (before refactor):**
+**Write this before touching any production file.** This is not optional — no refactoring step begins until this test exists and passes on the current (un-refactored) code.
 
 ```ruby
-it "creates order and enqueues warehouse notification" do
-  expect { post :create, params: valid_params }.to change(Order, :count).by(1)
-  expect(NotifyWarehouseJob).to have_been_enqueued
+# spec/requests/orders_spec.rb  (or service/model spec — mirror the file being refactored)
+# frozen_string_literal: true
+
+RSpec.describe "Orders#create current behavior", type: :request do
+  describe "POST /orders" do
+    let(:valid_params) { { order: { product_id: 1, quantity: 2 } } }
+
+    it "creates order and enqueues warehouse notification" do
+      expect { post orders_path, params: valid_params }
+        .to change(Order, :count).by(1)
+      expect(NotifyWarehouseJob).to have_been_enqueued
+    end
+  end
 end
 ```
+
+Run it: `bundle exec rspec spec/requests/orders_spec.rb` — it must pass on the **current** code before any refactoring begins. If it fails, stop and fix the test or the existing code first.
+
+## Minimal Inline Example
+
+The default tiny slice when extracting controller orchestration:
 
 **Before (controller does orchestration):**
 
@@ -117,15 +131,15 @@ When asked to refactor:
 
 1. State the stable behavior that must not change.
 2. Propose the smallest safe sequence.
-3. Add or point to the tests that protect each step.
-4. Call out any temporary compatibility code and when to remove it.
+3. Show the characterization test code in your output — do not touch any production file until the test exists and passes.
+4. Call out any temporary compatibility code explicitly: name the shim, its purpose, and the condition under which it must be removed.
 5. Run verification after each step and report results with evidence.
 
 ## Integration
 
 | Skill | When to chain |
 |-------|---------------|
-| **rspec-best-practices** | For writing characterization tests before refactoring ([details](./INTEGRATION.md#rspec-best-practices)) |
+| **rspec-best-practices** | For additional spec structure and shared examples after characterization tests are written |
 | **rails-architecture-review** | When refactor reveals structural problems ([details](./INTEGRATION.md#rails-architecture-review)) |
 | **rails-code-review** | For reviewing the refactored code ([details](./INTEGRATION.md#rails-code-review)) |
 | **ruby-service-objects** | When extracting logic into service objects ([details](./INTEGRATION.md#ruby-service-objects)) |

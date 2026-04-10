@@ -1,0 +1,61 @@
+{
+  "context": "Tests whether the agent performs a Rails security review following the rails-security-review skill: covering the correct review areas in order, classifying findings by correct severity levels, and producing output with all four required fields per finding.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Auth/authz reviewed first",
+      "max_score": 8,
+      "description": "The review report addresses authentication or authorization issues before or separately from parameter, query, or output issues — the first finding or section covers auth concerns"
+    },
+    {
+      "name": "Parameter handling reviewed",
+      "max_score": 8,
+      "description": "The review explicitly addresses how parameters are handled (strong params, mass assignment, or permit patterns)"
+    },
+    {
+      "name": "Query safety reviewed",
+      "max_score": 8,
+      "description": "The review addresses SQL query construction, injection risk, or use of parameterized queries"
+    },
+    {
+      "name": "High severity: SQL injection identified",
+      "max_score": 10,
+      "description": "The SQL injection vulnerability in the provided code is classified as High severity (not Medium or Low)"
+    },
+    {
+      "name": "High severity: missing authz identified",
+      "max_score": 10,
+      "description": "The missing authorization check is classified as High severity"
+    },
+    {
+      "name": "Medium severity finding identified",
+      "max_score": 8,
+      "description": "At least one finding is correctly classified as Medium severity (e.g. sensitive data logging, unscoped mass assignment, or weak filtering)"
+    },
+    {
+      "name": "Attack path per finding",
+      "max_score": 10,
+      "description": "Each High severity finding includes an attack path — a description of how an attacker would exploit the issue"
+    },
+    {
+      "name": "Affected file per finding",
+      "max_score": 10,
+      "description": "Each finding names the specific file (and ideally line or method) where the vulnerability exists"
+    },
+    {
+      "name": "Mitigation per finding",
+      "max_score": 10,
+      "description": "Each finding includes a smallest credible mitigation — a concrete, actionable fix rather than a generic recommendation"
+    },
+    {
+      "name": "Exploitability focus",
+      "max_score": 8,
+      "description": "The review prioritizes findings that are directly exploitable (e.g. no auth check, raw string interpolation in query) over style issues — does NOT lead with stylistic concerns"
+    },
+    {
+      "name": "Secrets and output reviewed",
+      "max_score": 10,
+      "description": "The review addresses at least one of: secrets in code/logs, unsafe redirects, or output rendering (HTML/XSS) concerns"
+    }
+  ]
+}

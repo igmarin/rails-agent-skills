@@ -61,9 +61,9 @@ Use these levels when reporting findings:
 
 | Level | Meaning | Action |
 |-------|---------|--------|
-| **Critical** | Security risk, data loss, or crash | Fix before merge |
-| **Suggestion** | Convention violation or performance concern | Fix in this PR or create follow-up |
-| **Nice to have** | Style improvement, minor optimization | Optional |
+| **Critical** | Security risk, data loss, or crash | Block merge — must fix before approval; mandatory re-review after fix |
+| **Suggestion** | Convention violation or performance concern | Fix in this PR; create a tracked follow-up ticket only if the fix requires significant redesign |
+| **Nice to have** | Style improvement, minor optimization | Optional — author's discretion; no follow-up required |
 
 ## Re-Review Loop
 

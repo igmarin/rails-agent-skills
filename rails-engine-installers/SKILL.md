@@ -90,14 +90,6 @@ See [EXAMPLES.md](./EXAMPLES.md) for a full generator class and complete spec su
 - [ ] Rollback steps documented
 - [ ] Install docs match what the generator actually produces
 
-## Output Style
-
-When implementing an install flow:
-
-1. Identify what must be generated vs. manually configured — state this explicitly.
-2. Implement with idempotency guards for every file, route, and migration copy.
-3. Add generator specs covering single-run and rerun behavior, then write concise user-facing setup instructions.
-
 ## Integration
 
 | Skill | When to chain |

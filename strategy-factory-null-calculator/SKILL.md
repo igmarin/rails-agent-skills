@@ -72,6 +72,8 @@ No qualifying context or unknown variant → `NullService`. For full BaseService
 price = PricingCalculator::Factory.for(order).calculate
 ```
 
+**Single entry point rule:** `Factory.for(entity)` is the **only** permitted access path. Clients never instantiate service classes directly. If you see `StandardPricingService.new(order)` outside of `Factory`, that is a bug — route through the factory.
+
 ## 3. Tests (RSpec)
 
 **Factory dispatch (all branches):**
@@ -96,8 +98,11 @@ Cover inactive plan, each variant, and unknown variant. See [TESTING.md](./TESTI
 
 ## Pitfalls
 
-- **SERVICE_MAP key mismatch**: verify keys match exactly what is stored in the database — typos cause silent NullService fallbacks.
-- **Missing test for NullService path**: always add a spec context for unknown/nil variants or tests will never catch the fallback regression.
+| Pitfall | Fix |
+|---------|-----|
+| SERVICE_MAP key mismatch | Verify keys match exactly what is stored in the database — typos cause silent NullService fallbacks |
+| Missing NullService spec | Always add a spec context for unknown/nil variants or tests will never catch the fallback regression |
+| Direct service instantiation (`ServiceClass.new(entity)`) | Route through `Factory.for(entity)` — it is the sole public entry point; direct instantiation bypasses the NullService safety net |
 
 ## Integration
 

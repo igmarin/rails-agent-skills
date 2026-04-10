@@ -1,0 +1,56 @@
+{
+  "context": "Tests whether the agent follows the rails-engine-release skill when preparing a Rails engine gem for release: updating CHANGELOG and version constant before anything else, applying semantic versioning correctly, following the release order, and producing all required output artifacts.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Version constant updated",
+      "max_score": 10,
+      "description": "The version file (lib/<engine>/version.rb or equivalent) has its VERSION constant updated to the new version number"
+    },
+    {
+      "name": "CHANGELOG updated",
+      "max_score": 12,
+      "description": "The CHANGELOG.md file is updated with entries for the new release (new version header and list of changes)"
+    },
+    {
+      "name": "Upgrade notes produced",
+      "max_score": 10,
+      "description": "Upgrade notes are drafted — either as a separate file or as a section in the output — describing what consumers need to do when upgrading"
+    },
+    {
+      "name": "Semantic version bump correct",
+      "max_score": 12,
+      "description": "The version bump type (patch/minor/major) matches the nature of the changes: patch for bug fixes only, minor for new backward-compatible features, major for breaking changes"
+    },
+    {
+      "name": "Version bump reasoning provided",
+      "max_score": 10,
+      "description": "The output explicitly states WHY this version bump level was chosen (e.g. 'minor because new feature X was added without breaking the existing API')"
+    },
+    {
+      "name": "Gemspec verified",
+      "max_score": 8,
+      "description": "The agent checks or mentions verifying gemspec metadata (authors, description, files, dependencies) as part of the release process"
+    },
+    {
+      "name": "Test suite mentioned",
+      "max_score": 8,
+      "description": "The agent mentions running or confirms that the full test suite passes as a step in the release process"
+    },
+    {
+      "name": "Blockers called out",
+      "max_score": 8,
+      "description": "The output explicitly calls out any blockers or open items that would prevent a clean release (or states there are none)"
+    },
+    {
+      "name": "CHANGELOG entries are specific",
+      "max_score": 10,
+      "description": "The CHANGELOG entries describe specific changes (feature names, bug descriptions) rather than generic placeholder text like 'various improvements'"
+    },
+    {
+      "name": "No release without CHANGELOG",
+      "max_score": 12,
+      "description": "The agent does NOT proceed to gem build or publish steps until both the CHANGELOG and version file have been updated"
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "context": "Tests whether the agent produces a PRD following the create-prd skill conventions: correct file location, required 10 sections, content focused on what/why rather than how, and no premature code.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "File saved to /tasks/",
+      "max_score": 10,
+      "description": "The PRD file is saved at /tasks/prd-[feature-name].md (in the /tasks/ directory with a prd- prefix)"
+    },
+    {
+      "name": "Introduction section",
+      "max_score": 7,
+      "description": "The PRD contains an 'Introduction' section"
+    },
+    {
+      "name": "Goals section",
+      "max_score": 7,
+      "description": "The PRD contains a 'Goals' section"
+    },
+    {
+      "name": "User Stories section",
+      "max_score": 7,
+      "description": "The PRD contains a 'User Stories' section"
+    },
+    {
+      "name": "Functional Requirements section",
+      "max_score": 7,
+      "description": "The PRD contains a 'Functional Requirements' section"
+    },
+    {
+      "name": "Non-Goals section",
+      "max_score": 7,
+      "description": "The PRD contains a 'Non-Goals' section"
+    },
+    {
+      "name": "Design and Technical Considerations",
+      "max_score": 7,
+      "description": "The PRD contains both a 'Design Considerations' section and a 'Technical Considerations' section"
+    },
+    {
+      "name": "Implementation Surface section",
+      "max_score": 8,
+      "description": "The PRD contains an 'Implementation Surface' section describing entry points, architectural layer, or primary components"
+    },
+    {
+      "name": "Success Metrics section",
+      "max_score": 7,
+      "description": "The PRD contains a 'Success Metrics' section"
+    },
+    {
+      "name": "Open Questions section",
+      "max_score": 7,
+      "description": "The PRD contains an 'Open Questions' section"
+    },
+    {
+      "name": "No implementation code",
+      "max_score": 10,
+      "description": "The PRD does NOT contain any code blocks, code snippets, or implementation-level code"
+    },
+    {
+      "name": "What/why focus",
+      "max_score": 8,
+      "description": "The PRD describes WHAT should be built and WHY, not HOW — requirements are expressed as outcomes or user needs rather than technical steps or specific implementations"
+    },
+    {
+      "name": "Next steps suggestion",
+      "max_score": 8,
+      "description": "The agent suggests at least one next step from: generate-tasks, ticket-planning, rails-architecture-review, rails-engine-author, or rails-stack-conventions"
+    }
+  ]
+}

@@ -1,10 +1,12 @@
 ---
 name: rails-stack-conventions
 description: >
-  Use when writing new Rails code for a project using PostgreSQL, Hotwire, and
-  Tailwind CSS. Covers MVC structure, query patterns, Turbo Frames/Streams,
-  Stimulus controllers, and Tailwind components. For design principles, use
-  rails-code-conventions.
+  Use when writing new Rails code for a project using the PostgreSQL + Hotwire +
+  Tailwind CSS stack. Covers stack-specific patterns only: MVC structure,
+  ActiveRecord query conventions, Turbo Frames/Streams wiring, Stimulus
+  controllers, and Tailwind component patterns. Not for general Rails design
+  principles — this skill is scoped to what changes based on this specific
+  technology stack.
 ---
 
 # Rails Stack Conventions

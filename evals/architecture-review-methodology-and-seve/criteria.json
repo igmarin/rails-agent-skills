@@ -1,0 +1,61 @@
+{
+  "context": "Tests whether the agent performs a Rails architecture review following the rails-architecture-review skill: covering review areas in the correct order, classifying findings by severity, and producing output with all four required fields per finding.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Entry points identified first",
+      "max_score": 8,
+      "description": "The review begins by identifying the entry points of the application (routes, controllers, or public API surface) before examining domain logic or models"
+    },
+    {
+      "name": "Domain logic layer checked",
+      "max_score": 8,
+      "description": "The review explicitly examines where domain/business logic lives — whether it's in models, services, callbacks, or controllers"
+    },
+    {
+      "name": "Models and callbacks inspected",
+      "max_score": 8,
+      "description": "The review addresses model associations, callbacks, or ActiveRecord concerns"
+    },
+    {
+      "name": "High: business logic in callbacks",
+      "max_score": 10,
+      "description": "Business logic embedded in ActiveRecord callbacks is classified as High severity (not Medium or Low)"
+    },
+    {
+      "name": "High: controller multi-step workflow",
+      "max_score": 10,
+      "description": "A controller action that performs multiple sequential domain operations is classified as High severity"
+    },
+    {
+      "name": "Boundary problems prioritised",
+      "max_score": 8,
+      "description": "The findings section leads with boundary violations (cross-layer coupling, misplaced logic) rather than style or naming issues"
+    },
+    {
+      "name": "Medium finding identified",
+      "max_score": 8,
+      "description": "At least one finding is correctly classified as Medium severity (e.g. duplicated workflow, heavy scope/class method, concern mixing responsibilities)"
+    },
+    {
+      "name": "Affected files per finding",
+      "max_score": 10,
+      "description": "Each finding names the specific file(s) where the problem exists"
+    },
+    {
+      "name": "Risk described per finding",
+      "max_score": 10,
+      "description": "Each finding includes a description of the risk — what goes wrong if the issue is not addressed"
+    },
+    {
+      "name": "Improvement per finding",
+      "max_score": 10,
+      "description": "Each finding includes a smallest credible improvement — a specific, actionable refactor suggestion rather than a generic principle"
+    },
+    {
+      "name": "Concerns and helpers checked",
+      "max_score": 10,
+      "description": "The review addresses at least one concern, helper, or module mixin — assessing whether it mixes responsibilities"
+    }
+  ]
+}
