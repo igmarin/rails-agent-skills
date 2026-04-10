@@ -135,12 +135,10 @@ Validators raise; the calling service rescues and converts to an error hash.
 
 ### 4. Orchestrator Delegation (≤20-line `call`)
 
-All sub-services return `{ success:, response: {} }`. The orchestrator propagates failures via early returns only — sub-services handle their own rescue and error logging, so the orchestrator needs no rescue block:
+Sub-services handle their OWN rescue and return `{ success: false, response: { error: { message: ... } } }` on failure. The orchestrator propagates early returns only — no rescue block needed:
 
 ```ruby
-# Orchestrator call — delegates to sub-service classes, validates each result
-# RULE: ≤20 lines of code in call — if longer, extract another sub-service
-# Sub-services return { success: false, response: } on error; no rescue needed here.
+# RULE: ≤20 lines in call — if longer, extract another sub-service
 def call
   user_result = UserCreationService.call(@params)
   return user_result unless user_result[:success]
@@ -184,7 +182,7 @@ end
 
 | Problem | Correct approach |
 |---------|-----------------|
-| Returning raw exceptions instead of error hash | Callers should get `{ success: false, ... }`, not unhandled exceptions |
+| Response format inconsistency | Always use `{ success: bool, response: { ... } }`. Error response: `{ success: false, response: { error: { message: ... } } }`. Sub-services handle their own rescue — never let exceptions propagate to callers |
 | Skipping input validation | Bad input causes cryptic errors deep in the call chain |
 | Transaction wrapping everything | Only wrap multi-step DB operations that must be atomic |
 | `.call` method longer than 20 lines | Extract to sub-services — orchestrator should coordinate, not implement |

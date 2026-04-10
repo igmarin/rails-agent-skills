@@ -31,7 +31,7 @@ Use this skill when the task is to review or improve the structure of a Rails ap
 2. Check where domain logic lives.
 3. Inspect model responsibilities, callbacks, and associations.
 4. Inspect controller size and orchestration.
-5. **Check concerns, helpers, and presenters** — read each one: does it do one coherent thing, or does it mix auditing + notifications + emails + external API calls? Mixed concerns are High or Medium severity depending on blast radius.
+5. **Check concerns, helpers, and presenters** — read each one: does it do one coherent thing, or does it mix auditing + notifications + emails + external API calls? Mixed concerns are High or Medium severity depending on blast radius. **Treat any concern used by only one class as a candidate for deletion — inline it instead.**
 6. Check whether abstractions clarify the design or only move code around.
 7. **Verify each High-severity finding** by reading the actual code — confirm it is a real structural problem, not just a pattern match on file size or line count.
 
@@ -51,7 +51,7 @@ Use this skill when the task is to review or improve the structure of a Rails ap
 - Scopes or class methods carrying too much query or policy logic
 - Helpers or presenters leaking domain behavior
 - Service objects wrapping trivial one-liners
-- Concerns combining unrelated responsibilities
+- Concerns combining unrelated responsibilities — check EVERY concern in the app
 
 ## Output Format
 

@@ -29,7 +29,7 @@ Focus on *what* and *why*, not *how*. No code until the PRD is approved.
    - If the prompt is **already detailed** (clear goal, scope, and success criteria), skip clarifying questions and generate the PRD directly.
    - If anything is **ambiguous**, ask only the most essential questions (3-5 max). Understand "what" and "why", not "how". Use letter/number options for quick answers.
    - Ask one question at a time when possible — do not overwhelm with a wall of questions.
-3. **Identify implementation surface (optional):** If the feature is for a Rails app or engine, note the likely areas it will touch without prescribing the solution: `controllers`, `models`, `services`, `jobs`, `serializers`, `policies`, `mailers`, `engines`, `docs`, or external integrations.
+3. **Identify implementation surface:** Note which Rails areas the feature will touch: `controllers`, `models`, `services`, `jobs`, `mailers`, `engines`, or external integrations. This feeds directly into section 8 of the PRD.
 4. **Generate PRD:** Use the structure below. Derive `[feature-name]` from the feature (lowercase, hyphenated slug, e.g. `user-onboarding`, `export-csv`).
 5. **Save:** Save as `prd-[feature-name].md` in the `/tasks` directory (create the directory if needed).
 6. **Verify:** Re-read the saved file and confirm it matches the agreed scope.
@@ -48,7 +48,7 @@ Include **all 10 sections** — none are optional. Sections with nothing to say 
 | 5 | **Non-Goals** | What this version will NOT include |
 | 6 | **Design Considerations** | UI/UX notes, mockup links, pending design decisions |
 | 7 | **Technical Considerations** | Constraints, dependencies, performance concerns |
-| 8 | **Implementation Surface** | Rails areas touched: `controllers`, `services`, `jobs`, `engines`, etc. — no code |
+| 8 | **Implementation Surface** | REQUIRED — name the specific Rails layers this feature will touch. Must include at least one of: `controllers`, `models`, `services`, `jobs`, `mailers`. Never skip or leave vague. |
 | 9 | **Success Metrics** | How success is measured |
 | 10 | **Open Questions** | Anything still to be decided |
 

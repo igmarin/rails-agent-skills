@@ -36,7 +36,7 @@ Use this skill when the task is to review or harden Rails code from a security p
 
 ## Severity Levels
 
-### High-Severity Findings
+### High
 
 - Missing or bypassable authorization checks
 - SQL, shell, YAML, or constantization injection paths
@@ -44,7 +44,7 @@ Use this skill when the task is to review or harden Rails code from a security p
 - File upload handling that trusts filename, content type, or destination blindly
 - Secrets or tokens stored in code, logs, or unsafe config
 
-### Medium-Severity Findings
+### Medium
 
 - Unscoped mass assignment through weak parameter filtering
 - User-controlled HTML rendered without clear sanitization
@@ -94,7 +94,7 @@ See [PITFALLS.md](./PITFALLS.md) for the full list. Critical anti-patterns: `per
 Write findings first.
 
 For each finding include:
-- Severity
+- **Severity:** label it **High** or **Medium** (not "High-Severity" or "Critical")
 - Attack path or failure mode
 - Affected file or area
 - Smallest credible mitigation

@@ -24,7 +24,9 @@ Use this skill when the task is to write, review, or clean up RSpec tests.
 | Mocking | Stub external boundaries, not internal code |
 | Isolation | Each example independent; no shared mutable state |
 | Naming | `describe` for class/method, `context` for scenario |
-| Service specs | Use `describe '.call'` and `subject(:result)` for the primary invocation |
+| Service specs | **Required:** `describe '.call'` and `subject(:result)` for the primary invocation |
+| `let` vs `let!` | Default to `let`. Use `let!` ONLY when the object must exist before the example runs (e.g., a DB record checked via `.count`) |
+| Example names | Never use "and" in an example name — one behavior per example; split it |
 | First slice | Start at the highest-value boundary that proves behavior |
 | TDD | Write test first, run it, verify failure, then implement |
 
@@ -72,7 +74,6 @@ Choose the first failing spec at the boundary that gives the strongest signal wi
 
 - **describe** for the class, module, or behavior; **context** for scenarios ("when valid", "when user is missing").
 - Mirror source paths under `spec/` (e.g. `app/models/user.rb` → `spec/models/user_spec.rb`).
-- Use **let** and **let!** for test data; prefer `let` when value isn't needed for setup.
 - Use **shared_examples** / **shared_context** for repeated behavior; put reusable shared examples under `spec/support/`.
 - Use `let_it_be` only when `test-prof` already exists in the project.
 - **Time-dependent behavior MUST use `travel_to`** — do not set dates in the past as a shortcut, do not stub `Time.now`. Wrap assertions in a `travel_to` block to control the clock:
@@ -92,6 +93,8 @@ end
 **Minimal request spec skeleton:**
 
 ```ruby
+# frozen_string_literal: true
+
 RSpec.describe 'POST /orders', type: :request do
   let(:product) { create(:product, stock: 5) }
 
@@ -114,7 +117,8 @@ For more examples (model spec, service spec, shared_examples, travel_to), see [E
 |---------|------------|
 | Starting with the lowest layer by habit | Begin at the boundary that proves the behavior users care about |
 | Testing mock behavior instead of real behavior | Assert outcomes, not implementation details |
-| Excessive `let!` and nested contexts | Prefer `let`; keep nesting shallow |
+| Using `let!` when `let` works | `let!` forces eager evaluation; use it ONLY when the object must exist before the example runs (e.g., DB records checked via `.count`). Default to `let` |
+| Not using `subject(:result)` for service specs | Service specs MUST use `subject(:result) { described_class.call(...) }` — it's required, not optional |
 | Recommending `let_it_be` in every repo | Only use it when `test-prof` already exists in the project |
 | Factories creating large graphs by default | Minimal factories — only what the test needs |
 | Setting dates in the past instead of `travel_to` | Always use `travel_to` for time-dependent assertions — it makes boundary conditions deterministic |

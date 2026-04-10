@@ -55,6 +55,11 @@ params.require(:user).permit!                # Bad — never in production
 params.require(:user).permit(:name, :email)  # Good
 ```
 
+**Additional Critical patterns:**
+
+- **Business logic in controller action** (multi-step domain workflow) — flag as Critical; extract to a service object. A controller action doing more than coordinate (call one service, handle response) is a Critical finding.
+- **Missing authorization check on sensitive action** — flag as Critical.
+
 ## Severity Levels
 
 Use these levels when reporting findings:
