@@ -65,6 +65,8 @@ AFTER each step:
 4. If tests pass: proceed to next step
 5. ONLY claim completion with evidence from the last test run —
    report the last line of output (e.g. "5 examples, 0 failures")
+
+Report test run output at EACH step — not only at the end. At least two separate evidence entries at different sequence points are required.
 ```
 
 **Forbidden claims:**
@@ -134,7 +136,7 @@ When asked to refactor:
 2. Propose the smallest safe sequence.
 3. Show the characterization test code in your output — do not touch any production file until the test exists and passes.
 4. Call out any temporary compatibility code explicitly: name the shim, its purpose, and the condition under which it must be removed.
-5. Run verification after each step and report: exit code, examples run, failures (e.g. `5 examples, 0 failures`). This is the evidence — not a claim like "should work now".
+5. Run verification after EACH numbered step and report: exit code, examples run, failures (e.g. `5 examples, 0 failures`). Report evidence mid-sequence AND at the end — the final report alone is insufficient.
 
 ## Integration
 

@@ -61,6 +61,7 @@ Include **all 10 sections** — none are optional. Sections with nothing to say 
 | Skipping Non-Goals section | Non-Goals prevent scope creep. Always include them |
 | Generic user stories | "As a user, I want a good experience" is not a user story |
 | PRD contains implementation details | No code, schema, or class names — requirements only |
+| Generic Implementation Surface | "The Rails app" or "controllers and models" is insufficient — name specific modules, e.g. `Inventory::ImportService`, `admin/inventory#import`, `InventoryImportJob` |
 
 ## Integration
 

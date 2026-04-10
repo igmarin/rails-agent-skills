@@ -81,6 +81,48 @@ RSpec.describe Orders::CreateOrder do
 end
 ```
 
+## External Service Mocking (class method)
+
+Use `allow(ServiceClass).to receive(:method)` — NOT `instance_double` — when the service calls an external class method. Always include a failure context for the external call.
+
+```ruby
+# spec/services/campaigns/delivery_service_spec.rb
+RSpec.describe Campaigns::DeliveryService do
+  describe '.call' do
+    let(:campaign) { create(:campaign) }
+    let(:user)     { create(:user) }
+    let(:segment)  { create(:user_segment, users: [user]) }
+
+    subject(:result) { described_class.call(campaign_id: campaign.id, segment_id: segment.id) }
+
+    context 'when delivery succeeds' do
+      before { allow(SendgridClient).to receive(:deliver).and_return({ success: true }) }
+
+      it 'returns delivered count' do
+        expect(result[:success]).to be true
+        expect(result[:response][:delivered_count]).to eq(1)
+      end
+    end
+
+    context 'when SendgridClient returns failure' do
+      before { allow(SendgridClient).to receive(:deliver).and_return({ success: false, error: 'SMTP error' }) }
+
+      it 'returns failure' do
+        expect(result[:success]).to be false
+      end
+    end
+
+    context 'when campaign is not found' do
+      subject(:result) { described_class.call(campaign_id: 999_999, segment_id: segment.id) }
+
+      it 'returns not found error' do
+        expect(result[:success]).to be false
+      end
+    end
+  end
+end
+```
+
 ## Time-Dependent Spec (travel_to)
 
 Always use `travel_to` for time-dependent assertions — do not set dates in the past as a shortcut.

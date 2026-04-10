@@ -26,6 +26,7 @@ Use this skill when the task is to write, review, or clean up RSpec tests.
 | Naming | `describe` for class/method, `context` for scenario |
 | Service specs | **Required:** `describe '.call'` and `subject(:result)` for the primary invocation |
 | `let` vs `let!` | Default to `let`. Use `let!` ONLY when the object must exist before the example runs (e.g., a DB record checked via `.count`) |
+| External service mocking | Class methods: `allow(ServiceClass).to receive(:method)` — **not** `instance_double`. Use `instance_double` only for injected instance collaborators |
 | Example names | Never use "and" in an example name — one behavior per example; split it |
 | First slice | Start at the highest-value boundary that proves behavior |
 | TDD | Write test first, run it, verify failure, then implement |
@@ -117,8 +118,6 @@ For more examples (model spec, service spec, shared_examples, travel_to), see [E
 |---------|------------|
 | Starting with the lowest layer by habit | Begin at the boundary that proves the behavior users care about |
 | Testing mock behavior instead of real behavior | Assert outcomes, not implementation details |
-| Using `let!` when `let` works | `let!` forces eager evaluation; use it ONLY when the object must exist before the example runs (e.g., DB records checked via `.count`). Default to `let` |
-| Not using `subject(:result)` for service specs | Service specs MUST use `subject(:result) { described_class.call(...) }` — it's required, not optional |
 | Recommending `let_it_be` in every repo | Only use it when `test-prof` already exists in the project |
 | Factories creating large graphs by default | Minimal factories — only what the test needs |
 | Setting dates in the past instead of `travel_to` | Always use `travel_to` for time-dependent assertions — it makes boundary conditions deterministic |
@@ -131,7 +130,7 @@ For more examples (model spec, service spec, shared_examples, travel_to), see [E
 |-------|---------------|
 | **rails-tdd-slices** | When the hardest part is choosing the first failing Rails spec or vertical slice |
 | **rails-bug-triage** | When a bug report must be turned into a reproducible failing spec and fix plan |
-| **rspec-service-testing** | For service object specs (`spec/services/`) — instance_double, hash factories, shared_examples |
+| **rspec-service-testing** | For service object specs — `instance_double` for **injected instance** collaborators, hash factories, shared_examples; NOT for external class method mocking |
 | **rails-engine-testing** | For engine specs — dummy app, routing specs, generator specs |
 | **rails-code-review** | When reviewing test quality as part of code review |
 | **refactor-safely** | When adding characterization tests before refactoring |

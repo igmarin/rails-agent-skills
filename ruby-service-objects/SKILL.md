@@ -27,7 +27,7 @@ See rspec-best-practices for the full gate cycle.
 | File location | `app/services/module_name/service_name.rb` |
 | Pragma | `frozen_string_literal: true` in every file |
 | Docs | YARD on every public method (see **yard-documentation**) |
-| Validation | Raise early on invalid input |
+| Validation | Validate method-level inputs at the TOP of `call` before any loop or business logic — return error hash immediately if invalid |
 | Error handling | Every `rescue` block must: (1) log with `Rails.logger.error`, (2) log backtrace via `e.backtrace.join("\n")`, (3) return error hash — never re-raise |
 | Transactions | Wrap multi-step DB operations |
 
@@ -88,6 +88,8 @@ end
 ```ruby
 # Batch — each rescue block logs; outer rescue returns { success: false }
 def call
+  return { success: false, response: { error: { message: 'Items list cannot be empty' } } } if @items.blank?
+
   results = @items.each_with_object({ successful: [], failed: [] }) do |item, acc|
     validate_item!(item)
     process_item(item)
