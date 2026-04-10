@@ -33,22 +33,24 @@ Focus on *what* and *why*, not *how*. No code until the PRD is approved.
 4. **Generate PRD:** Use the structure below. Derive `[feature-name]` from the feature (lowercase, hyphenated slug, e.g. `user-onboarding`, `export-csv`).
 5. **Save:** Save as `prd-[feature-name].md` in the `/tasks` directory (create the directory if needed).
 6. **Verify:** Re-read the saved file and confirm it matches the agreed scope.
-7. **Do NOT** start implementing the PRD. Offer to generate tasks if the user wants an implementation checklist. When suggesting **generate-tasks**, note that the resulting checklist will include tests-first sequencing, YARD, README/diagram/doc updates, and a code-review-before-PR phase unless the user opts out.
+7. **Do NOT** start implementing the PRD. Always suggest the recommended next step: **generate-tasks** (for implementation checklist with TDD sequencing, YARD, docs, and code review gate) and optionally **ticket-planning** (for Jira-ready tickets). Name the skill explicitly so the user can invoke it.
 
 ## PRD Structure
 
-Write for a **junior developer**: explicit, unambiguous, minimal jargon. Generate with these sections:
+Include **all 10 sections** — none are optional. Sections with nothing to say get a one-line placeholder (e.g. "No open questions at this stage."). See [PRD_TEMPLATE.md](./PRD_TEMPLATE.md) for the ready-to-fill template.
 
-1. **Introduction/Overview** — One short paragraph: what the feature is and what problem it solves.
-2. **Goals** — Specific, measurable objectives (bullet list).
-3. **User Stories** — "As a [role], I want [action] so that [benefit]." One per key flow.
-4. **Functional Requirements** — Numbered list of must-have behaviors. Clear and testable.
-5. **Non-Goals (Out of Scope)** — Explicitly what this feature will *not* include.
-6. **Design Considerations (Optional)** — UI/UX notes, mockup links, or component references.
-7. **Technical Considerations (Optional)** — Constraints, dependencies, or tech suggestions.
-8. **Implementation Surface (Optional)** — Likely Rails areas involved (`controllers`, `services`, `jobs`, `engines`, `docs`, etc.) without prescribing code structure.
-9. **Success Metrics** — How success will be measured (even if qualitative).
-10. **Open Questions** — Anything still unclear or to be decided later.
+| # | Section | Purpose |
+|---|---------|---------|
+| 1 | **Introduction** | What it is and what problem it solves |
+| 2 | **Goals** | Measurable objectives |
+| 3 | **User Stories** | One per key flow: "As a [role], I want [action] so that [benefit]" |
+| 4 | **Functional Requirements** | Numbered must-have behaviors — testable |
+| 5 | **Non-Goals** | What this version will NOT include |
+| 6 | **Design Considerations** | UI/UX notes, mockup links, pending design decisions |
+| 7 | **Technical Considerations** | Constraints, dependencies, performance concerns |
+| 8 | **Implementation Surface** | Rails areas touched: `controllers`, `services`, `jobs`, `engines`, etc. — no code |
+| 9 | **Success Metrics** | How success is measured |
+| 10 | **Open Questions** | Anything still to be decided |
 
 ## Pitfalls
 

@@ -31,7 +31,7 @@ Use this skill when the task is to review or improve the structure of a Rails ap
 2. Check where domain logic lives.
 3. Inspect model responsibilities, callbacks, and associations.
 4. Inspect controller size and orchestration.
-5. Check concerns, helpers, and presenters for mixed responsibilities.
+5. **Check concerns, helpers, and presenters** — read each one: does it do one coherent thing, or does it mix auditing + notifications + emails + external API calls? Mixed concerns are High or Medium severity depending on blast radius.
 6. Check whether abstractions clarify the design or only move code around.
 7. **Verify each High-severity finding** by reading the actual code — confirm it is a real structural problem, not just a pattern match on file size or line count.
 
@@ -53,36 +53,36 @@ Use this skill when the task is to review or improve the structure of a Rails ap
 - Service objects wrapping trivial one-liners
 - Concerns combining unrelated responsibilities
 
-## Examples
+## Output Format
 
-**High-severity finding (controller doing too much):**
+Every finding uses this four-field structure:
+
+```
+**Severity:** High
+**Affected file:** app/controllers/orders_controller.rb — OrdersController#create
+**Risk:** Controller runs a 5-step domain workflow. Partial state on failure; untestable without HTTP.
+**Improvement:** Extract to Orders::CreateOrder.call(params). Controller handles response/redirect only.
+```
+
+**High-severity callback example:**
 
 ```ruby
-# Bad: domain workflow in controller
-class OrdersController < ApplicationController
-  def create
-    order = Order.new(order_params)
-    Inventory.check!(order.line_items)
-    Pricing.apply_promotions!(order)
-    order.save!
-    NotifyWarehouseJob.perform_later(order.id)
-    redirect_to order
+# Bad — hidden side effects on every save
+module Auditable
+  included do
+    after_create :log_creation
+  end
+  def log_creation
+    AuditLog.create!(...)
+    Slack.notify(...)      # external API in callback
+    UserMailer.admin_alert(...).deliver_later  # mailer in callback
   end
 end
 ```
 
-- **Severity:** High. **Area:** `OrdersController#create`. **Risk:** Controllers should coordinate, not run multi-step domain workflows. **Improvement:** Extract to `Orders::CreateOrder.call(params)` and have the controller call it and handle response/redirect.
+Fix: keep only `AuditLog.create!` in the callback; move Slack/mailer to an explicit service call at the call site.
 
-**Good (single responsibility):**
-
-```ruby
-class OrdersController < ApplicationController
-  def create
-    result = Orders::CreateOrder.call(order_params)
-    result[:success] ? redirect_to(result[:order]) : render(:new, status: :unprocessable_entity)
-  end
-end
-```
+See [EXAMPLES.md](./EXAMPLES.md) for mixed-concern and controller workflow patterns.
 
 ## Pitfalls
 

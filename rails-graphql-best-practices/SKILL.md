@@ -22,6 +22,7 @@ Use this skill when **designing, implementing, or reviewing GraphQL APIs** in a 
 | Introspection off, `max_depth`, `max_complexity` | [Schema safeguards](#schema-safeguards) |
 | Spec template & checklist | [TESTING.md](./TESTING.md) |
 | `description` on types/fields | [Documentation](#documentation) |
+| **Complete worked example (all patterns)** | [EXAMPLES.md](./EXAMPLES.md) |
 
 ## HARD-GATE
 
