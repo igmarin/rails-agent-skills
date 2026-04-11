@@ -15,7 +15,7 @@ Use this skill when **designing, implementing, or reviewing GraphQL APIs** in a 
 ```text
 Tests gate implementation — write specs before resolver code (see rspec-best-practices).
 Before shipping a resolver/mutation slice, ALL of the following must be true (details in linked sections; do not duplicate checks in prose here):
-- N+1 Prevention: every association load batched via dataloader (or equivalent).
+- N+1 Prevention: use `dataloader.with(Source, Model).load(id)` — NEVER `object.association`
 - Authorization: sensitive fields have field-level guards (not type-level alone).
 - Type Conventions: paginated collections use Types::*Type.connection_type, not plain arrays.
 - Schema safeguards: AppSchema disables introspection in production and sets max_depth / max_complexity.

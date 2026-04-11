@@ -32,6 +32,7 @@ Use this skill when the task is to change structure without changing intended be
 ```
 NO REFACTORING WITHOUT CHARACTERIZATION TESTS FIRST.
 NEVER mix behavior changes with structural refactors in the same step.
+ONE boundary per refactoring step — never extract two abstractions in the same step.
 VERIFY tests pass after EVERY step — not just at the end.
 If a public interface changes, document the compatibility shim and its removal condition.
 ```
@@ -40,7 +41,7 @@ If a public interface changes, document the compatibility shim and its removal c
 
 - When behavior changes are also needed, complete the structural refactor first, then apply behavior changes in a separate step with its own test.
 - Keep public interfaces stable until callers are migrated.
-- Extract one boundary at a time.
+- Extract boundaries one at a time; split any step that would touch two abstractions.
 - Prefer adapters, facades, or wrappers for transitional states.
 - Stop and simplify if the refactor introduces more indirection than clarity.
 
@@ -132,7 +133,7 @@ Use support files for detailed guidance and examples:
 When asked to refactor:
 
 1. State the stable behavior that must not change.
-2. Propose the smallest safe sequence.
+2. Propose the smallest safe sequence — each step extracts exactly ONE boundary (one class, one module, or one extracted delegation). A step that moves two abstractions is too large; split it.
 3. Show the characterization test code in your output — do not touch any production file until the test exists and passes.
 4. **Compatibility shims (required when public interface changes):** For each shim, state: (a) what the shim is, (b) why it exists, (c) the specific condition under which it will be removed (e.g., "remove after all callers migrate to Orders::CreateOrder.call"). If no public interface changes, state "No compatibility shims needed — public interface unchanged."
 5. Follow Verification Protocol after each step — report evidence mid-sequence AND at the end.
