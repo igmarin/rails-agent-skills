@@ -21,7 +21,7 @@ Focus on *what* and *why*, not *how*. No code until the PRD is approved.
 3. **Identify implementation surface:** Note which Rails areas the feature will touch: `controllers`, `models`, `services`, `jobs`, `mailers`, `engines`, or external integrations. This feeds directly into section 8 of the PRD.
 4. **Generate PRD:** Use the structure below. Derive `[feature-name]` from the feature (lowercase, hyphenated slug, e.g. `user-onboarding`, `export-csv`).
 5. **Save:** Save as `tasks/prd-[feature-name].md` in `/tasks/`. Create the directory if it does not exist.
-6. **Verify and close:** Re-read the saved file, confirm it matches scope, then output this exact line in your reply: `Recommended next step: generate-tasks — break this PRD into implementation tasks with TDD gates.`
+6. **Verify:** Re-read the saved file and confirm it matches the agreed scope. In your reply, include this exact line: `Recommended next step: generate-tasks — break this PRD into implementation tasks with TDD gates.`
 7. **Do NOT** start implementing the PRD — that is the user's decision after review.
 
 ## PRD Structure
