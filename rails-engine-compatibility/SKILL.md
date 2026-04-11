@@ -36,9 +36,17 @@ DO NOT ship compatibility changes without verifying both autoloading and full su
 1. Define supported Ruby and Rails versions — state them in gemspec and README.
 2. Run `bundle exec rake zeitwerk:check` — file paths must match constant names exactly.
 3. Check initializer behavior across boot and reload — use `config.to_prepare` for reload-sensitive hooks.
-4. Verify gemspec dependency bounds match tested versions.
+4. Verify gemspec dependency bounds match tested versions: `spec.add_dependency "rails", ">= 7.0", "< 8.0"` — bounds must match what CI actually tests.
 5. Check optional integrations (jobs, mailers, assets, routes) per version.
-6. CI matrix must run against each claimed Rails/Ruby combination.
+6. CI matrix must run against each claimed Rails/Ruby combination:
+
+```yaml
+strategy:
+  matrix:
+    include:
+      - { ruby: "3.2", rails: "7.1" }
+      - { ruby: "3.3", rails: "7.2" }
+```
 
 ## Pitfalls
 
@@ -51,55 +59,21 @@ DO NOT ship compatibility changes without verifying both autoloading and full su
 | Reload-unsafe hooks at load time | Move to `config.to_prepare` — it runs on each reload in development |
 | Tests only on one Rails version | CI matrix required before claiming multi-version support |
 
-## Examples
-
-**Feature detection instead of version branching:**
+## Key Example: Feature Detection
 
 ```ruby
-# Bad — brittle, wrong for patch versions
+# ❌ Bad — brittle, wrong for patch versions
 if Rails.version >= "7.0"
   config.active_support.cache_format_version = 7.0
 end
 
-# Good — detect the capability directly
+# ✅ Good — detect the capability directly
 if ActiveSupport::Cache.respond_to?(:format_version=)
   config.active_support.cache_format_version = 7.0
 end
 ```
 
-**Gemspec version bounds (honest, testable):**
-
-```ruby
-# Good: narrow and tested
-spec.add_dependency "rails", ">= 7.0", "< 8.0"
-spec.required_ruby_version = ">= 3.0"
-
-# Bad: claims support without CI
-# spec.add_dependency "rails", ">= 5.2"  # untested on 5.2/6.x
-```
-
-**Zeitwerk: file and constant must match:**
-
-```ruby
-# File: lib/my_engine/widget_policy.rb
-# Good: constant matches path
-module MyEngine
-  class WidgetPolicy
-  end
-end
-
-# Bad: will break with Zeitwerk
-# class WidgetPolicy  # expected in widget_policy.rb at root
-```
-
-**Reload-safe hook:**
-
-```ruby
-# In engine.rb
-config.to_prepare do
-  MyEngine::Decorator.apply  # runs on each reload in dev
-end
-```
+See [EXAMPLES.md](./EXAMPLES.md) for gemspec bounds, Zeitwerk file/constant naming, reload-safe hooks, and CI matrix YAML.
 
 ## Output Style
 
