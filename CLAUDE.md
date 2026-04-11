@@ -135,6 +135,24 @@ Skills are located in subdirectories of this plugin. Read the relevant `SKILL.md
 **Refactoring:**
 `refactor-safely` → **[GATE: characterization tests pass]** → refactor → verify tests still pass
 
+## Code Quality Defaults
+
+These apply to ALL generated Ruby/Rails code regardless of which skill is active:
+
+**Service response format:** Always return `{ success: bool, response: { ... } }` — data under `response:`, errors under `response: { error: { message: '...' } }`.
+
+**Ruby files:** Every `.rb` file begins with `# frozen_string_literal: true`.
+
+**Error logging:** Every `rescue StandardError` block MUST log message AND backtrace: `Rails.logger.error(e.message)` and `Rails.logger.error(e.backtrace.first(5).join("\n"))`.
+
+**YARD @raise:** Add one `@raise` tag per exception class for every public method that can raise — even internally rescued exceptions.
+
+**RSpec time tests:** Time-dependent behavior MUST use `travel_to` — never stub `Time.now` or set dates in the past.
+
+**Background jobs:** Always include `retry_on ExceptionClass, wait: :polynomially_longer, attempts: N` for transient errors and `discard_on` for permanent errors (e.g. `ActiveRecord::RecordNotFound`).
+
+**Task lists (generate-tasks):** Task 0.0 ALWAYS creates the feature branch. Each implementation task MUST have four sub-tasks: (a) write spec, (b) run spec — verify fails, (c) implement, (d) run spec — verify passes. Always include a Relevant Files section.
+
 ## Output Language
 
 Generated artifacts (YARD docs, Postman collections, READMEs, task descriptions) must be in **English** unless the user explicitly requests another language.

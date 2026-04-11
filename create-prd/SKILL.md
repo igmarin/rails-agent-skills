@@ -20,9 +20,10 @@ Focus on *what* and *why*, not *how*. No code until the PRD is approved.
    - Ask one question at a time when possible — do not overwhelm with a wall of questions.
 3. **Identify implementation surface:** Note which Rails areas the feature will touch: `controllers`, `models`, `services`, `jobs`, `mailers`, `engines`, or external integrations. This feeds directly into section 8 of the PRD.
 4. **Generate PRD:** Use the structure below. Derive `[feature-name]` from the feature (lowercase, hyphenated slug, e.g. `user-onboarding`, `export-csv`).
-5. **Write file:** Use a file-writing tool to create `tasks/prd-[feature-name].md` (create the `tasks/` directory if needed). Generating the PRD content in the chat without writing the file does NOT satisfy this step — the file must exist on disk.
+5. **Save:** Save as `tasks/prd-[feature-name].md` in `/tasks/`. Create the directory if it does not exist.
 6. **Verify:** Re-read the saved file and confirm it matches the agreed scope.
-7. **Do NOT** start implementing the PRD. After saving the file, end your response with a visible **"Recommended next step:"** line naming at least one skill: **generate-tasks** (implementation tasks with TDD gates) and optionally **ticket-planning** (Jira tickets). This line must appear in your conversational response — not inside the PRD document.
+7. **Do NOT** start implementing the PRD — that is the user's decision after review.
+8. **Required final line:** End your conversational response (NOT inside the PRD file) with exactly: `Recommended next step: generate-tasks — break this PRD into implementation tasks with TDD gates.`
 
 ## PRD Structure
 

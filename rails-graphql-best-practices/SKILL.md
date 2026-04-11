@@ -64,11 +64,15 @@ field :orders, Types::OrderType.connection_type, null: false, resolver: Resolver
 
 ### Resolution
 
-Use `dataloader` (graphql-ruby 1.12+). Never call an ActiveRecord association directly on `object` — batch it:
+**FORBIDDEN:** Never call `object.buyer`, `object.user`, or any association directly — every association load MUST use the dataloader (graphql-ruby 1.12+):
 
 ```ruby
-def resolve
-  dataloader.with(Sources::RecordById, User).load(object.user_id)
+# ❌ causes N+1 for every record in the list
+def buyer; object.buyer; end
+
+# ✅ batches loads across all records
+def buyer
+  dataloader.with(Sources::RecordById, Buyer).load(object.buyer_id)
 end
 ```
 
@@ -92,7 +96,7 @@ end
 
 ### Field-Level Authorization
 
-Type-level authorization is **not sufficient** — add field-level checks for sensitive fields. Use safe navigation so unauthenticated contexts deny instead of raising:
+Type-level auth alone is insufficient — add field-level guards for sensitive fields:
 
 ```ruby
 field :internal_notes, String, null: true do
@@ -100,14 +104,7 @@ field :internal_notes, String, null: true do
 end
 ```
 
-### Pundit Integration
-
-```ruby
-def resolve
-  authorize! object, to: :read?, with: OrderPolicy
-  # ... resolver logic
-end
-```
+For Pundit: `authorize! object, to: :read?, with: OrderPolicy` in the resolver's `resolve` method.
 
 ## Schema safeguards
 
@@ -164,8 +161,6 @@ class Types::OrderType < Types::BaseObject
   field :total_cents, Integer, null: false, description: "Total order amount in cents."
 end
 ```
-
-Prefer **Insomnia** or **GraphQL Playground** over Postman for GraphQL endpoints — see `api-rest-collection`.
 
 ## Integration
 
