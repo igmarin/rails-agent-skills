@@ -1,0 +1,19 @@
+{
+  "per_slice_requirements": [
+    "one_coherent_responsibility",
+    "minimal_new_public_api",
+    "passing_regression_tests"
+  ],
+  "extraction_order": [
+    "identify_bounded_feature",
+    "list_host_dependencies",
+    "define_engine_boundary",
+    "move_domain_logic_first",
+    "add_adapters_for_host_dependencies",
+    "move_controllers_routes_views"
+  ],
+  "verification": {
+    "tests_command": "bundle exec rspec <slice_spec_paths>",
+    "no_behavior_change": true
+  }
+}
