@@ -74,40 +74,7 @@ bundle exec rspec spec/services/pricing/ spec/requests/orders/
 
 Move engine-local models in the same slice, or keep host models and inject via an adapter in a later slice.
 
-**Adapter for host dependency:**
-
-```ruby
-# lib/my_engine/configuration.rb
-module MyEngine
-  class Configuration
-    attr_accessor :current_user_provider
-  end
-
-  def self.config
-    @config ||= Configuration.new
-  end
-
-  def self.configure
-    yield config
-  end
-end
-
-# In engine: resolve user through config, not hardcoded constant
-class OrderCreator
-  def initialize(user)
-    @user = user
-  end
-
-  def self.for_request(request)
-    new(MyEngine.config.current_user_provider.call(request))
-  end
-end
-
-# Host initializer (config/initializers/my_engine.rb)
-MyEngine.configure do |config|
-  config.current_user_provider = ->(request) { request.env['warden'].user }
-end
-```
+**Adapter for host dependency:** See references/adapter_examples.md for the full adapter example. Compact examples and the per-slice checklist are available at rails-engine-extraction/assets/examples.md and rails-engine-extraction/assets/checklist.json.
 
 ## Integration
 
