@@ -74,7 +74,21 @@ bundle exec rspec spec/services/pricing/ spec/requests/orders/
 
 Move engine-local models in the same slice, or keep host models and inject via an adapter in a later slice.
 
-**Adapter for host dependency:** See references/adapter_examples.md for the full adapter example. Compact examples and the per-slice checklist are available at rails-engine-extraction/assets/examples.md and rails-engine-extraction/assets/checklist.json.
+**Adapter for host dependency (compact):**
+
+```ruby
+# config seam (compact)
+module MyEngine
+  def self.current_user_for(request)
+    config.current_user_provider.call(request)
+  end
+end
+
+# usage
+OrderCreator.for_request(request) # resolves via MyEngine.current_user_for(request)
+```
+
+See references/adapter_examples.md for the full adapter example. Compact examples and the per-slice checklist are available at rails-engine-extraction/assets/examples.md and rails-engine-extraction/assets/checklist.json.
 
 ## Integration
 
