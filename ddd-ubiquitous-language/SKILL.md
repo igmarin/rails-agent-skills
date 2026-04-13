@@ -63,24 +63,15 @@ When using this skill, return:
 5. **Likely related context**
 6. **Open questions**
 
-## Example — Naming Inconsistency in a Rails App
-
-A Rails app has `Booking` (model), `ReservationsController`, and `HoldService` all referring to the same concept. The resulting glossary resolves it:
+**Minimal example (one row):**
 
 | Canonical term | Aliases | Definition | Invariant | Context |
 |----------------|---------|------------|-----------|---------|
-| Reservation | Booking, Hold | A customer claim on an inventory slot for a future date | Must expire or be confirmed within 24h | Fleet Booking |
+| Shipment | Parcel, Package | Physical goods sent to a customer address | Must reference a valid Order | Fulfillment |
 
-Once the glossary is agreed, rename code toward the canonical term incrementally — do not rename all 50 call sites in one PR.
+**Open questions:** Does "Parcel" ever mean an internal warehouse bin ID? If yes, split into two glossary entries.
 
-## Common Mistakes
-
-| Mistake | Reality |
-|---------|---------|
-| Keeping every synonym alive forever | Pick one preferred business term or the codebase stays muddy |
-| Using technical class names as domain truth | Domain language comes from the business, not from current code accidents |
-| Jumping to aggregates before agreeing on words | Overloaded terms produce bad boundaries and bad models |
-| One term meaning different things in different screens | Flag it early — it usually signals multiple bounded contexts |
+See [EXAMPLES.md](./EXAMPLES.md) for a full worked glossary example and common mistakes.
 
 ## Integration
 
