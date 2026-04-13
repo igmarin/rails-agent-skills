@@ -1,0 +1,13 @@
+{
+  "type": "object",
+  "properties": {
+    "severity": {"type": "string", "enum": ["critical", "high", "medium", "low"]},
+    "area": {"type": "string"},
+    "file": {"type": "string"},
+    "line": {"type": ["integer","null"]},
+    "risk": {"type": "string"},
+    "recommendation": {"type": "string"},
+    "proof_of_concept": {"type": ["string", "null"]}
+  },
+  "required": ["severity","area","file","risk","recommendation"]
+}
