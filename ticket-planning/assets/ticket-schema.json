@@ -1,0 +1,12 @@
+{
+  "type": "object",
+  "properties": {
+    "title": {"type": "string"},
+    "description": {"type": "string"},
+    "steps_to_reproduce": {"type": "array", "items": {"type": "string"}},
+    "acceptance_criteria": {"type": "array", "items": {"type": "string"}},
+    "estimate": {"type": ["integer","string"]},
+    "labels": {"type": "array", "items": {"type": "string"}}
+  },
+  "required": ["title","description"]
+}
