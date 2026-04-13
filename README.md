@@ -335,3 +335,4 @@ For guidance on skill authoring, refer to the [Skill Design Principles](docs/ski
 Huge thanks to **[Mumo Carlos (@mumoc)](https://github.com/mumoc)**. His mentorship has shaped my growth as a developer and influenced many of the habits and practices reflected in this library — not only the **ticket-planning** workflow he shared, but the broader discipline around quality, clarity, and thoughtful use of tools. This repo and the learning behind it would not be what they are without him.
 
 - ticket-planning: added assets/ticket-samples and ticket-schema.json to aid robust ticket generation across models
+- rails-stack-conventions: added compact assets/snippets for few-shot examples to improve cross-model robustness
