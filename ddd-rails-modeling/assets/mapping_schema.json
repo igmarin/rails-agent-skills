@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "aggregates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {"type": "string"},
+          "model": {"type": "string"},
+          "repository": {"type": "string"},
+          "services": {"type": "array", "items": {"type": "string"}},
+          "events": {"type": "array", "items": {"type": "string"}},
+          "owner": {"type": "string"}
+        },
+        "required": ["name","model"]
+      }
+    },
+    "value_objects": {"type": "array", "items": {"type": "string"}},
+    "bounded_contexts": {
+      "type": "array",
+      "items": {"type": "object", "properties": {"name": {"type":"string"}, "path": {"type":"string"}, "owner": {"type":"string"}}}
+    }
+  },
+  "required": ["aggregates"]
+}
