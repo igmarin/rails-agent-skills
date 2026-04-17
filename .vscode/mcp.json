@@ -1,12 +1,17 @@
 {
-  "servers": {
-    "tessl": {
-      "type": "stdio",
-      "command": "tessl",
-      "args": [
-        "mcp",
-        "start"
-      ]
-    }
-  }
+	"servers": {
+		"tessl": {
+			"type": "stdio",
+			"command": "tessl",
+			"args": [
+				"mcp",
+				"start"
+			]
+		},
+		"agentskills": {
+			"url": "https://agentskills.io/mcp",
+			"type": "http"
+		}
+	},
+	"inputs": []
 }

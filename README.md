@@ -71,7 +71,7 @@ PR
 
 See [docs/workflow-guide.md](docs/workflow-guide.md) for the full TDD Feature Loop and all workflow diagrams.
 
-**Note:** `ticket-planning` is an **optional** step. The assistant should **not** push for Jira ticket generation unless the user asks explicitly (e.g. "turn this into Jira tickets") or the context clearly indicates work should be mapped to a Jira board/sprint.
+**Note:** `ticket-planning` is an **optional** step. The assistant should **not** push for ticket generation unless the user asks explicitly (e.g. "turn this into tickets") or the context clearly indicates work should be mapped to a board/sprint.
 
 ### 3. Rails-First Pattern Reuse
 
@@ -152,7 +152,7 @@ This guide provides detailed, step-by-step instructions for both the symlink-bas
 | ----------------------------------- | ---------------------------------------------------------------------------- |
 | [create-prd](create-prd/)           | Generate Product Requirements Documents from feature descriptions            |
 | [generate-tasks](generate-tasks/)   | Break down PRDs into step-by-step implementation task lists                  |
-| [ticket-planning](ticket-planning/) | Draft or create Jira tickets from plans; sprint placement and classification |
+| [ticket-planning](ticket-planning/) | Draft or create tickets from plans; sprint placement and classification |
 
 
 ### Rails Code Quality
@@ -248,7 +248,7 @@ flowchart TD
     dddModeling --> generateTasks
     dddModeling --> railsConventions
 
-    generateTasks --> jiraPlanning[ticket-planning]
+    generateTasks --> ticketPlanning[ticket-planning]
     generateTasks --> tddSlices[rails-tdd-slices]
 
     tddSlices --> rspecBest[rspec-best-practices]

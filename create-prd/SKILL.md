@@ -54,7 +54,7 @@ Include **all 10 sections** — none are optional. Sections with nothing to say 
 | Skill | When to chain |
 |-------|---------------|
 | **generate-tasks** | After PRD is approved — implementation + tests + YARD + docs + review tasks |
-| **ticket-planning** | When the plan also needs Jira-ready tickets, classification, or sprint placement |
+| **ticket-planning** | When the plan also needs tracker-ready ticket drafts, classification, or sprint placement |
 | **rails-architecture-review** | When PRD reveals architectural concerns |
 | **rails-engine-author** | When the PRD is clearly for a mountable engine or host-app integration |
 | **rails-stack-conventions** | When PRD is for a Rails feature |

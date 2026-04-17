@@ -81,7 +81,7 @@ Skills and workflows are not slash commands or buttons — you invoke them throu
 ```
 "Create a PRD for [feature]"           → create-prd
 "Break this PRD into tasks"            → generate-tasks
-"Turn these tasks into Jira tickets"   → ticket-planning
+"Turn these tasks into tracker tickets" → ticket-planning
 ```
 
 ### What the checkpoints look like in practice
@@ -261,18 +261,18 @@ flowchart LR
 - Prefer the smallest credible boundary improvement over a DDD rewrite
 - Chain back to `rails-architecture-review` or `refactor-safely` when the domain problem lives in existing code structure
 
-### Optional: Jira tickets from the plan
+### Optional: tickets from the plan (tool-agnostic)
 
-When the team tracks work in **Jira**, run **ticket-planning** after **generate-tasks** (or from any approved initiative plan):
+When the team tracks work in **any issue tracker** (Jira, Linear, GitHub Issues, Azure DevOps, etc.), run **ticket-planning** after **generate-tasks** (or from any approved initiative plan):
 
 ```mermaid
 flowchart LR
     D[generate-tasks] --> J[ticket-planning]
     J --> K[Draft markdown tickets]
-    J --> L[Create in Jira when approved]
+    J --> L[Create in tracker when approved]
 ```
 
-- Use it for **draft-only** output (markdown tickets, classification, sprint buckets) or **create-in-Jira** after the user confirms project, issue types, and fields.
+- Use it for **draft-only** output (markdown tickets, classification, sprint buckets) or **create in your tracker** after the user confirms project/workspace, issue types, and fields for that tool.
 - It does not replace the PRD/tasks artifacts; it **maps** planning output to board-ready tickets.
 
 ---

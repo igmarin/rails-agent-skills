@@ -77,5 +77,5 @@ See [TASK_TEMPLATES.md](./TASK_TEMPLATES.md) for full templates. A typical task 
 |-------|---------------|
 | **create-prd** | Generate PRD first, then derive tasks from it |
 | **rails-tdd-slices** | When planning the best first failing spec for a Rails change |
-| **ticket-planning** | When the same initiative also needs Jira ticket drafts |
+| **ticket-planning** | When the same initiative also needs ticket drafts |
 | **rails-bug-triage** | When the request starts from a bug report |

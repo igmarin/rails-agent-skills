@@ -7,7 +7,7 @@
     {"intent": "review rails engine", "skill": "rails-engine-reviewer", "examples": ["Review mountable engine for namespace leakage and migrations"]},
     {"intent": "service object", "skill": "ruby-service-objects", "examples": ["Implement a service to sync users with external API"]},
     {"intent": "api collection", "skill": "api-rest-collection", "examples": ["Generate Postman collection for /api/v1/users endpoints"]},
-    {"intent": "create tickets", "skill": "ticket-planning", "examples": ["Create Jira tickets from task list"]}
+    {"intent": "create tickets", "skill": "ticket-planning", "examples": ["Create tickets from task list"]}
   ],
   "defaults": {
     "test_gate": "rspec-best-practices",

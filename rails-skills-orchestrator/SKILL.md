@@ -40,7 +40,7 @@ Non-negotiable across every code-producing skill. Workflow: **PRD → TASKS → 
 | ----- | ----------- |
 | **create-prd** | Planning a feature or writing requirements |
 | **generate-tasks** | Breaking a PRD into implementation tasks |
-| **ticket-planning** | Creating Jira tickets from a plan |
+| **ticket-planning** | Creating tickets from a plan |
 
 ### Rails Code Quality
 

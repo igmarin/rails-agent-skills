@@ -76,7 +76,7 @@ All generated artifacts (YARD docs, Postman collections, task lists, PRDs, READM
 
 ## Key Constraints
 
-- Do not generate Jira tickets unless the user asks explicitly — `ticket-planning` is optional.
+- Do not generate tickets unless the user asks explicitly — `ticket-planning` is optional.
 - Do not skip the verify-failure step in the TDD gate.
 - Do not add repositories, aggregates, or domain events just because a task looks "DDD" — see `ddd-rails-modeling`.
 - Do not use `rails-graphql-best-practices` for REST endpoints or `api-rest-collection` for GraphQL endpoints.
