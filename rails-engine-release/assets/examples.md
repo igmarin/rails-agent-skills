@@ -1,10 +1,17 @@
 # rails-engine-release examples
 
-1) Preparing a minor release
-   - Follow rails-engine-release/assets/release_checklist.md
-   - Update lib/my_engine/version.rb to 1.2.1
-   - Update CHANGELOG.md entry under 'Unreleased'
-   - Run tests and build gem locally
+See also: [EXAMPLES.md](../EXAMPLES.md) for complete changelog and upgrade note templates.
 
-2) Release notes example
-   - Use rails-engine-release/assets/release_notes_template.md to draft notes for GitHub release
+## Using the Release Checklist
+
+Load [release_checklist.md](release_checklist.md) when you need a comprehensive verification list:
+- Pre-release validation steps
+- Gem build and testing verification
+- RubyGems publishing checklist
+
+## Using the Release Notes Template
+
+Load [release_notes_template.md](release_notes_template.md) when drafting GitHub release notes:
+- Structured summary format
+- Highlights and breaking changes section
+- Upgrade steps for host applications
