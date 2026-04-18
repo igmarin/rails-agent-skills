@@ -2,10 +2,10 @@
 name: yard-documentation
 description: >
   Use when writing or reviewing inline documentation for Ruby code. Every public method
-  MUST include @param, @return, and @raise tags. For self.call methods, @return MUST
-  specify the return type and structure (e.g., @return [Hash] with :success and :response
-  keys). List each exception separately with @raise. Trigger words: YARD, inline docs,
-  method documentation, API docs, public interface, rdoc, @return, @raise.
+  MUST include param, return, and raise tags. For self.call methods, the return tag MUST
+  specify the return type and structure (e.g., return [Hash] with :success and :response
+  keys). List each exception separately with its own raise tag. Trigger words: YARD, inline docs,
+  method documentation, API docs, public interface, rdoc, return tag, raise tag.
 ---
 # YARD Documentation
 

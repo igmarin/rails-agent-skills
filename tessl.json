@@ -2,7 +2,7 @@
   "name": "rails-agent-skills",
   "dependencies": {
     "igmarin/rails-agent-skills": {
-      "version": "2.3.6"
+      "version": "2.4.15"
     },
     "tessl-labs/eval-setup": {
       "version": "0.5.0"
