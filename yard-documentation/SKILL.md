@@ -20,38 +20,25 @@ YARD is not optional polish. After any feature or fix that adds or changes
 public Ruby API (classes, modules, public methods):
 
 1. Add or update YARD on those surfaces before the work is considered done.
-2. Do not skip YARD because "the PR is small" or "I'll do it later."
+2. Do not skip YARD because "the PR is small" or "I'll do it later".
 3. All YARD text must be in English unless user explicitly requests otherwise.
 
 Task lists from generate-tasks MUST include explicit YARD sub-tasks after
-implementation. If you only wrote specs + code, stop and document before PR.
+implementation.
 ```
 
-## Output Style (MUST Follow)
-
-When adding YARD to public methods, your output MUST include:
-
-1. **@param tag** — Every parameter: `@param [Type] name`
-2. **@option tag** — For hash params, list each valid key with type
-3. **@return tag** — REQUIRED for every public method. Specify type and structure:
-   - `@return [Hash] Result with :success and :response keys`
-   - `@return [nil, String] nil if valid, error message otherwise`
-4. **@raise tag** — REQUIRED for every exception. One tag per class:
-   - `@raise [InvalidPlanError] when the plan does not exist or is inactive`
-   - `@raise [PaymentGatewayError] when the payment provider rejects the charge`
-5. **@example tag** — REQUIRED on `.call` methods showing usage AND return value
-6. **Class summary** — One-line summary describing class responsibility
-
 ## Tag Reference
+
+Canonical examples for common tags: [EXAMPLES.md](./EXAMPLES.md) — includes `@param`, `@return`, and `@raise` tag usage.
 
 | Scope | Rule |
 |-------|------|
 | Classes | One-line summary; optional `@since` if version matters |
-| Public methods | See Output Style above; all tags required unless explicitly inapplicable |
+| Public methods | All tags required unless explicitly inapplicable: `@param`, `@option` (for hash params), `@return`, `@raise` |
 | Public `initialize` | Add `@param` for constructor inputs when initialization is part of the public contract |
 | Private methods | Document only if behavior is non-obvious; same tag rules |
 
-## Standard Tags
+## Standard Tags with Examples
 
 ### Class-level
 
@@ -62,7 +49,9 @@ module AnimalTransfers
   class TransferService
 ```
 
-### Method-level: params and return
+### Method-level: params, options, return, and example
+
+Use `@option` for every valid key in hash params. Include at least one `@example` on `.call` or the main public entry point.
 
 ```ruby
 # Performs the transfer and returns a standardized response.
@@ -70,12 +59,15 @@ module AnimalTransfers
 # @option params [Hash] :source_shelter Shelter hash with :shelter_id
 # @option params [Hash] :target_shelter Target shelter with :shelter_id
 # @return [Hash] Result with :success and :response keys
+# @example Basic usage
+#   result = TransferService.call(source_shelter: { shelter_id: 1 }, target_shelter: { shelter_id: 2 })
+#   result[:success] # => true
 def self.call(params)
 ```
 
-### Method-level: exceptions (list each raise)
+### Method-level: exceptions
 
-Document `@raise` for every exception a method can raise — **even if the method rescues it internally**:
+Document `@raise` for every exception a method can raise — **even if the method rescues it internally**. One tag per exception class.
 
 ```ruby
 # Processes the billing update for the given plan.
@@ -86,19 +78,7 @@ Document `@raise` for every exception a method can raise — **even if the metho
 def self.call(plan_id:)
 ```
 
-### Examples on public entry points
-
-Prefer at least one `@example` on `.call` or the main public entry point of the object.
-
-```ruby
-# @example Basic usage
-#   result = TransferService.call(source_shelter: { shelter_id: 1 }, target_shelter: { shelter_id: 2 })
-#   result[:success] # => true
-```
-
-## Good vs Bad
-
-**Good:**
+### Nullable / conditional returns
 
 ```ruby
 # Validates source and target shelters and returns the first validation error.
@@ -108,11 +88,24 @@ Prefer at least one `@example` on `.call` or the main public entry point of the 
 def self.validate_shelters!(source_id, target_id)
 ```
 
+## Good vs Bad
+
+**Good:**
+
+```ruby
+# Processes the billing update for the given plan.
+# @param plan_id [Integer] ID of the target plan
+# @raise [InvalidPlanError] when the plan does not exist or is inactive
+# @raise [PaymentGatewayError] when the payment provider rejects the charge
+# @return [Hash] Result with :success and :response keys
+def self.call(plan_id:)
+```
+
 **Bad:**
 
 ```ruby
-# Validates stuff.  (Too vague; no @param/@return)
-def self.validate_shelters!(source_id, target_id)
+# Updates billing.  (Too vague; no @param/@return/@raise)
+def self.call(plan_id:)
 ```
 
 ## Pitfalls
