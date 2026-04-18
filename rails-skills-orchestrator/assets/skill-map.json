@@ -1,0 +1,17 @@
+{
+  "mappings": [
+    {"intent": "write PRD", "skill": "create-prd", "examples": ["Create a product requirements document for a new feature to import CSVs"]},
+    {"intent": "generate tasks", "skill": "generate-tasks", "examples": ["Break down PRD into implementation tasks for backend and frontend"]},
+    {"intent": "triage bug", "skill": "rails-bug-triage", "examples": ["Triage a production 500 error for orders#create"]},
+    {"intent": "start TDD slice", "skill": "rails-tdd-slices", "examples": ["Choose first failing spec for authentication flow"]},
+    {"intent": "review rails engine", "skill": "rails-engine-reviewer", "examples": ["Review mountable engine for namespace leakage and migrations"]},
+    {"intent": "service object", "skill": "ruby-service-objects", "examples": ["Implement a service to sync users with external API"]},
+    {"intent": "api collection", "skill": "api-rest-collection", "examples": ["Generate Postman collection for /api/v1/users endpoints"]},
+    {"intent": "create tickets", "skill": "ticket-planning", "examples": ["Create tickets from task list"]}
+  ],
+  "defaults": {
+    "test_gate": "rspec-best-practices",
+    "tdd_flow": ["rails-tdd-slices", "rspec-best-practices"],
+    "review_flow": ["rails-code-review", "rails-review-response"]
+  }
+}

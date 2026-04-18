@@ -1,0 +1,1 @@
+This directory contains scaffolding templates and release checklists for rails-engine-author. Templates are minimal and intended to be adapted by the developer before execution.

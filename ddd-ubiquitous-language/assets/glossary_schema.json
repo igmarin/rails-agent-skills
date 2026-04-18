@@ -1,0 +1,11 @@
+{
+  "type": "object",
+  "properties": {
+    "term": {"type": "string"},
+    "definition": {"type": "string"},
+    "synonyms": {"type": "array", "items": {"type": "string"}},
+    "context": {"type": "string"},
+    "owner": {"type": "string"}
+  },
+  "required": ["term","definition"]
+}

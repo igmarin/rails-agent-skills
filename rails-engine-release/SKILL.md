@@ -2,10 +2,11 @@
 name: rails-engine-release
 description: >
   Use when preparing a Rails engine gem release. Generates CHANGELOG.md entries,
-  produces step-by-step upgrade notes, sets semantic version constants, updates
-  gemspec metadata, and sequences gem build and publish commands. Trigger words:
-  version bump, changelog, deprecation, gemspec, upgrade, migration guide, release,
-  publish gem, ship gem.
+  produces step-by-step upgrade notes for host apps, sets semantic version constants,
+  verifies gemspec metadata, confirms test suite passes, and sequences gem build
+  and publish commands. Trigger words: version bump, changelog, deprecation,
+  gemspec, upgrade, migration guide, release, publish gem, ship gem, verify gemspec,
+  test suite.
 ---
 # Rails Engine Release
 
@@ -39,9 +40,9 @@ Release work should make upgrades predictable for host applications.
 
 ## Versioning Rules
 
-- Patch: bug fixes and internal changes without public behavior breakage.
-- Minor: backward-compatible features and new extension points.
-- Major: breaking changes to API, setup, routes, migrations, configuration, or supported framework versions.
+- **Patch:** bug fixes and internal changes without public behavior breakage.
+- **Minor:** backward-compatible features and new extension points.
+- **Major:** breaking changes to API, setup, routes, migrations, configuration, or supported framework versions.
 
 If the engine requires host changes during upgrade, document them explicitly even if the version bump is minor.
 
@@ -57,14 +58,25 @@ If the engine requires host changes during upgrade, document them explicitly eve
 
 See [EXAMPLES.md](./EXAMPLES.md) for a full changelog entry and upgrade note template.
 
+## Extended Resources (Progressive Disclosure)
+
+Load these files only when their specific content is needed:
+
+- **[assets/release_checklist.md](assets/release_checklist.md)** — Use when you need a detailed step-by-step verification checklist before finalizing the release
+- **[assets/release_notes_template.md](assets/release_notes_template.md)** — Use when drafting GitHub release notes or long-form release announcements
+- **[assets/examples.md](assets/examples.md)** — Reference for how to use the supporting templates
+
 ## Output Style
 
-When asked to prepare a release:
+When asked to prepare a release, produce a release summary ready for team lead review, with code blocks for all file changes. It MUST include:
 
-1. Recommend the version bump and why.
-2. Draft concise changelog entries.
-3. Draft upgrade notes for host apps.
-4. Call out any release blockers clearly.
+1. **Version bump recommendation** — New version (patch/minor/major) with explicit reasoning
+2. **Version constant** — Updated `lib/<engine>/version.rb` with the new `VERSION = "x.y.z"`
+3. **CHANGELOG entries** — User-facing changes under Added/Changed/Fixed/Deprecated headers
+4. **Upgrade notes** — Steps host apps must take (config changes, migration steps, dependency updates)
+5. **Gemspec verification** — Confirm metadata, files, and dependencies match tested Rails/Ruby versions
+6. **Test suite status** — Confirm `bundle exec rspec` passes before proceeding to build
+7. **Release blockers** — Open issues preventing release, or explicitly state "No blockers"
 
 ## Integration
 

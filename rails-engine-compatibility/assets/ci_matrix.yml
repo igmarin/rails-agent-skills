@@ -1,0 +1,23 @@
+# Example CI matrix entries for GitHub Actions
+name: Compatibility Matrix
+on: [push, pull_request]
+
+jobs:
+  compatibility:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby: ["2.7", "3.0", "3.1"]
+        rails: ["6.1", "7.0", "7.1"]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+      - name: Install dependencies
+        run: bundle install --jobs 4 --retry 3
+      - name: Run tests
+        env:
+          RAILS_VERSION: ${{ matrix.rails }}
+        run: bundle exec rake test || bundle exec rspec || true

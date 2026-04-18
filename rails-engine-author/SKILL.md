@@ -32,7 +32,7 @@ Before engine work is complete, confirm all of the following:
 3. The root module exposes .configure yielding a Configuration object.
 4. Host model references stay configurable strings (for example "User"), never ::User.
 5. Engine code never auto-applies migrations at boot.
-6. The host contract is documented: what host configures, what engine exposes.
+6. The host contract is documented per the Host App Contract section.
 ```
 
 ## Pitfalls
@@ -41,7 +41,7 @@ Before engine work is complete, confirm all of the following:
 |---------|------------|
 | Starting with mountable when plain gem suffices | Use the lightest option — mountable adds routes, controllers, views only when needed |
 | Missing `isolate_namespace` | Mountable and public-facing engines must isolate to avoid constant collisions with host |
-| No host contract defined | Without a documented contract, integration becomes guesswork across host apps |
+| No host contract defined | Without a documented contract, integration becomes guesswork across host apps — see Host App Contract section |
 | Engine depends on host internals | Reference host models through configurable class names or adapters |
 | No dummy app | Integration must be verified through a real mounted engine, not isolated classes |
 
@@ -53,7 +53,7 @@ Before engine work is complete, confirm all of the following:
    rails plugin new my_engine --full        # full engine (non-isolated)
    rails plugin new my_engine               # plain Railtie/gem
    ```
-2. Define the host-app contract (what host must provide; what engine exposes).
+2. Define the host-app contract (see Host App Contract section).
 3. Create the minimal engine structure. **Checkpoint:** `bundle exec rake` inside the engine must pass.
 4. Implement features behind the namespace. **Checkpoint:** mount engine in dummy app routes and verify with `bundle exec rails routes`.
 5. Plan and write minimum integration coverage through the dummy app.
@@ -94,11 +94,11 @@ Keep the root module small:
 
 ## Host App Contract
 
-Before implementation, define:
+This is the single authoritative definition of the engine's integration surface. Define it before implementation and keep it updated throughout.
 
-- What the host app must add: mount route, initializer, migrations, credentials, background jobs, or assets.
-- What the engine exposes: models, controllers, helpers, configuration, rake tasks, generators, middleware, or events.
-- Which extension points are supported: config block, adapter interface, callbacks, or service objects.
+- **What the host app must add:** mount route, initializer, migrations, credentials, background jobs, or assets.
+- **What the engine exposes:** models, controllers, helpers, configuration, rake tasks, generators, middleware, or events.
+- **Which extension points are supported:** config block, adapter interface, callbacks, or service objects.
 
 Prefer one explicit configuration surface, for example:
 
@@ -199,7 +199,7 @@ Before calling the engine structure done:
 2. Search engine files for hard-coded host constants such as `::User` or `::Employee`.
 3. Search engine boot code for migration auto-apply patterns such as `db:migrate`, `ActiveRecord::Migrator`, or `config.paths['db/migrate']`.
 4. Mount the engine in the dummy app and verify routes load correctly.
-5. Confirm the host contract doc names required host config and engine-provided surfaces.
+5. Confirm the host contract (see Host App Contract section) names required host config and engine-provided surfaces.
 
 ## Output Style
 

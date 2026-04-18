@@ -1,0 +1,11 @@
+{
+  "strategies": [
+    {"name": "default_calculator", "class": "Calculators::DefaultCalculator", "description": "Standard calculation using base rules"},
+    {"name": "discount_calculator", "class": "Calculators::DiscountCalculator", "description": "Applies discounts for eligible accounts"},
+    {"name": "null_calculator", "class": "Calculators::NullCalculator", "description": "Returns zero values — safe fallback"}
+  ],
+  "factory": {
+    "lookup_order": ["default_calculator", "discount_calculator", "null_calculator"],
+    "default": "default_calculator"
+  }
+}

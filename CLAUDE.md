@@ -45,7 +45,7 @@ Skills are located in subdirectories of this plugin. Read the relevant `SKILL.md
 |-------|-------------|
 | `create-prd` | User asks to plan a feature or write requirements |
 | `generate-tasks` | User asks for implementation steps or task breakdown |
-| `ticket-planning` | User wants Jira-ready tickets from a plan |
+| `ticket-planning` | User wants tickets from a plan |
 
 ### Rails Code Quality
 | Skill | Use when... |
