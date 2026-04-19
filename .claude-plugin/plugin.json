@@ -1,7 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/claude-plugin.json",
   "name": "rails-agent-skills",
-  "displayName": "Rails Agent Skills",
   "description": "Curated library of AI agent skills for Ruby on Rails development. Includes code review, architecture, security, testing (RSpec), engines, service objects, DDD patterns, and workflow automation.",
   "version": "1.0.0",
   "author": {
@@ -10,10 +9,7 @@
   },
   "license": "MIT",
   "homepage": "https://github.com/igmarin/rails-agent-skills",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/igmarin/rails-agent-skills.git"
-  },
+  "repository": "https://github.com/igmarin/rails-agent-skills.git",
   "keywords": [
     "rails",
     "ruby",
@@ -28,6 +24,41 @@
     "tdd",
     "workflow"
   ],
-  "skills": "./",
-  "hooks": "./hooks/hooks.json"
+  "skills": [
+    "./api-rest-collection",
+    "./create-prd",
+    "./ddd-boundaries-review",
+    "./ddd-rails-modeling",
+    "./ddd-ubiquitous-language",
+    "./generate-tasks",
+    "./rails-architecture-review",
+    "./rails-background-jobs",
+    "./rails-bug-triage",
+    "./rails-code-conventions",
+    "./rails-code-review",
+    "./rails-context-engineering",
+    "./rails-engine-author",
+    "./rails-engine-compatibility",
+    "./rails-engine-docs",
+    "./rails-engine-extraction",
+    "./rails-engine-installers",
+    "./rails-engine-release",
+    "./rails-engine-reviewer",
+    "./rails-engine-testing",
+    "./rails-graphql-best-practices",
+    "./rails-migration-safety",
+    "./rails-review-response",
+    "./rails-security-review",
+    "./rails-skills-orchestrator",
+    "./rails-stack-conventions",
+    "./rails-tdd-slices",
+    "./refactor-safely",
+    "./rspec-best-practices",
+    "./rspec-service-testing",
+    "./ruby-api-client-integration",
+    "./ruby-service-objects",
+    "./strategy-factory-null-calculator",
+    "./ticket-planning",
+    "./yard-documentation"
+  ]
 }
