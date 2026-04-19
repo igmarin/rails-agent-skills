@@ -75,6 +75,11 @@ Skills are located in subdirectories of this plugin. Read the relevant `SKILL.md
 | `strategy-factory-null-calculator` | Building variant-based calculators |
 | `yard-documentation` | Writing or reviewing YARD docs |
 
+### Context & Setup
+| Skill | Use when... |
+|-------|-------------|
+| `rails-context-engineering` | Before any code/spec/PRD in an existing Rails codebase — loads schema, routes, nearest patterns, surfaces ambiguity |
+
 ### Testing
 | Skill | Use when... |
 |-------|-------------|

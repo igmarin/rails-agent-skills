@@ -32,6 +32,7 @@ Load the skill that best matches the current task. The bootstrap skill `rails-ag
 | Rails code quality | `rails-code-review`, `rails-review-response`, `rails-architecture-review`, `rails-security-review`, `rails-migration-safety`, `rails-stack-conventions`, `rails-code-conventions`, `rails-background-jobs`, `rails-graphql-best-practices`, `api-rest-collection` |
 | DDD | `ddd-ubiquitous-language`, `ddd-boundaries-review`, `ddd-rails-modeling` |
 | Ruby patterns | `ruby-service-objects`, `ruby-api-client-integration`, `strategy-factory-null-calculator`, `yard-documentation` |
+| Context & Setup | `rails-context-engineering` |
 | Testing | `rspec-best-practices`, `rails-tdd-slices`, `rails-bug-triage`, `rspec-service-testing` |
 | Rails engines | `rails-engine-author`, `rails-engine-testing`, `rails-engine-reviewer`, `rails-engine-release`, `rails-engine-docs`, `rails-engine-installers`, `rails-engine-extraction`, `rails-engine-compatibility` |
 | Refactoring | `refactor-safely` |
@@ -51,7 +52,8 @@ Do not write implementation code before the test exists and fails. Every skill t
 The default daily workflow for a Rails feature:
 
 ```
-rails-tdd-slices → write failing test
+rails-context-engineering → post Context Summary
+  → rails-tdd-slices → write failing test
   → [CHECKPOINT: confirm test boundary and behavior]
   → [CHECKPOINT: confirm implementation approach]
   → implement (minimal code to pass test)
@@ -62,7 +64,7 @@ rails-tdd-slices → write failing test
   → PR
 ```
 
-For a full feature from scratch: `create-prd` → `generate-tasks` → TDD Feature Loop above.
+For a full feature from scratch: `rails-context-engineering` → `create-prd` → `generate-tasks` → TDD Feature Loop above.
 
 See `docs/workflow-guide.md` for all workflow variants (bug fix, GraphQL, engine, migration, refactor, etc.).
 
