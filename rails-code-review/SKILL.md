@@ -74,7 +74,7 @@ Use these **exact** labels. Nothing else.
 | **Suggestion** | Convention violation or performance concern | Fix in this PR; ticket only if fix requires significant redesign |
 | **Nice to have** | Style improvement or minor optimization | Optional — author's discretion; no follow-up required |
 
-**BANNED labels — never use these in review output:** `High`, `Medium`, `Low`, `Major`, `Minor`, `Warning`, `Error`, `Info`, `Blocker`, `P0`/`P1`/`P2`, numeric severities. If you find yourself reaching for one of these, the correct label is one of the three above.
+**Only `Critical` / `Suggestion` / `Nice to have` — no other labels** (no High/Medium/Low, Major/Minor, Warning/Error, P0/P1/P2, numeric severities).
 
 ## Output Style
 
@@ -131,7 +131,6 @@ Review → Categorize findings (Critical / Suggestion / Nice to have)
 |---------|------------|
 | "Skinny controller" means move to model | Move to services — avoid fat models |
 | Skipping N+1 check because "it's just one query" | One query per record in a collection is N+1 |
-| `permit!` for convenience | Privilege escalation risk — always whitelist attributes |
 | Index added in same migration as column | On large tables, separate migration with `algorithm: :concurrent` |
 | Callbacks for business logic | Callbacks are for persistence-level concerns, not orchestration |
 | Approving after Critical fix without re-reviewing | A fix can introduce new issues — re-review is mandatory |
