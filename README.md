@@ -10,8 +10,11 @@
 
 - **Repository / install path:** `rails-agent-skills` ([docs/implementation-guide.md](docs/implementation-guide.md))
 - **Bootstrap discovery skill:** `[rails-skills-orchestrator](rails-skills-orchestrator/)` (session hook loads `rails-skills-orchestrator/SKILL.md` where applicable)
-- **Workflows:** [docs/workflow-guide.md](docs/workflow-guide.md) — **Skill structure:** [docs/architecture.md](docs/architecture.md)
-- **How to invoke a skill or workflow:** [docs/workflow-guide.md#how-to-invoke](docs/workflow-guide.md#how-to-invoke-a-skill-or-workflow-claude-code)
+- **Documentation:** [docs/README.md](docs/README.md) — Complete guides and workflows
+- **Workflows by Stage:** [docs/workflows/](docs/workflows/) — Step-by-step workflows (Discovery → Planning → Development → Quality → Review → Engines)
+- **Skill Catalog:** [docs/reference/skill-catalog.md](docs/reference/skill-catalog.md) — All 34+ skills with trigger words
+- **Integration Matrix:** [docs/reference/integration-matrix.md](docs/reference/integration-matrix.md) — Skill chaining and workflows
+- **Skill structure:** [docs/architecture.md](docs/architecture.md)
 
 ## Methodology
 
@@ -69,7 +72,7 @@ rails-code-review (self-review) → rails-review-response (on feedback)
 PR
 ```
 
-See [docs/workflow-guide.md](docs/workflow-guide.md) for the full TDD Feature Loop and all workflow diagrams.
+See [docs/workflows/](docs/workflows/) for the full TDD Feature Loop and all workflow diagrams by lifecycle stage.
 
 **Note:** `ticket-planning` is an **optional** step. The assistant should **not** push for ticket generation unless the user asks explicitly (e.g. "turn this into tickets") or the context clearly indicates work should be mapped to a board/sprint.
 
@@ -92,7 +95,7 @@ The rule of thumb is: **reuse patterns, not names**. If a broader skill maps cle
 
 ## How to Build a Feature (Your Daily Workflow)
 
-*For a practical guide on how to talk to the AI and effectively invoke these workflows, please see our **[How to Invoke a Workflow Guide](docs/workflow-guide.md#how-to-invoke-a-workflow-a-practical-guide)**.*
+*For a practical guide on how to talk to the AI and effectively invoke these workflows, please see our **[Workflows Index](docs/workflows/)**.*
 
 Here is the recommended, step-by-step workflow for building a new feature from scratch using this skill library. This ensures every feature is well-planned, robustly tested, and adheres to project quality standards.
 
@@ -135,7 +138,7 @@ Here is the recommended, step-by-step workflow for building a new feature from s
 - **Action:** When you receive feedback from teammates, evaluate and implement their suggestions systematically.
   - **Use Skill:** [rails-review-response](rails-review-response/)
 
-*For more detailed diagrams of these flows, see the **[Workflow Guide](docs/workflow-guide.md)**.*
+*For more detailed diagrams of these flows, see the **[Workflows Index](docs/workflows/)**.*
 
 ## Platforms & Quick Start
 
@@ -169,6 +172,11 @@ This guide provides detailed, step-by-step instructions for both the symlink-bas
 | [rails-code-conventions](rails-code-conventions/)             | Daily coding checklist: DRY/YAGNI/PORO/CoC/KISS; linter as style SoT; structured logging; per-path rules |
 | [rails-background-jobs](rails-background-jobs/)               | Design idempotent background jobs with Active Job / Solid Queue                                          |
 | [rails-graphql-best-practices](rails-graphql-best-practices/) | GraphQL schema design, N+1 prevention, authorization, error handling, and testing with graphql-ruby      |
+| [rails-authorization-policies](rails-authorization-policies/) *(NEW)* | Pundit/CanCanCan, roles, permissions, policy objects                                                  |
+| [rails-performance-optimization](rails-performance-optimization/) *(NEW)* | N+1 prevention, profiling, caching, query optimization                                                |
+| [rails-api-versioning](rails-api-versioning/) *(NEW)* | REST API versioning strategies and deprecation policies                                              |
+| [rails-database-seeding](rails-database-seeding/) *(NEW)* | Fixtures vs Seeds for dev/test data management                                                         |
+| [rails-frontend-hotwire](rails-frontend-hotwire/) *(NEW)* | Turbo/Stimulus integration patterns                                                                    |
 | [api-rest-collection](api-rest-collection/)                   | Generate or update Postman Collection (JSON v2.1) for REST endpoints; use Insomnia for GraphQL           |
 
 
@@ -199,6 +207,7 @@ This guide provides detailed, step-by-step instructions for both the symlink-bas
 | Skill                                                       | Description                                                                                   |
 | ----------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
 | [rails-context-engineering](rails-context-engineering/)     | Load schema, routes, nearest patterns before any code/spec/PRD — surface ambiguity explicitly |
+| [rails-project-onboarding](rails-project-onboarding/) *(NEW)* | Complete dev environment setup (Docker, env vars, database)                               |
 
 
 ### Testing
@@ -247,65 +256,72 @@ This guide provides detailed, step-by-step instructions for both the symlink-bas
 ## Skill Relationships
 
 ```mermaid
-flowchart TD
-    contextEng[rails-context-engineering] --> createPRD[create-prd]
-    contextEng --> tddSlices
-    createPRD --> generateTasks[generate-tasks]
-    createPRD --> dddLanguage[ddd-ubiquitous-language]
-    dddLanguage --> dddBoundaries[ddd-boundaries-review]
-    dddBoundaries --> dddModeling[ddd-rails-modeling]
-    dddBoundaries --> archReview
-    dddModeling --> generateTasks
-    dddModeling --> railsConventions
+graph TB
+    subgraph Discovery [🔍 00: Discovery]
+        direction TB
+        A[rails-context-engineering] --> B{New project?}
+        B -- Yes --> C[rails-project-onboarding]
+        B -- No --> D[Start]
+        C --> D
+    end
 
-    generateTasks --> ticketPlanning[ticket-planning]
-    generateTasks --> tddSlices[rails-tdd-slices]
+    subgraph Planning [📝 10: Planning]
+        direction TB
+        D --> E[create-prd]
+        E --> F{PRD approved?}
+        F -- No --> E
+        F -- Yes --> G[generate-tasks]
+        G --> H{Need DDD?}
+        H -- Yes --> I[ddd-ubiquitous-language]
+        I --> J[ddd-boundaries-review]
+        J --> K[ddd-rails-modeling]
+        K --> G
+    end
 
-    tddSlices --> rspecBest[rspec-best-practices]
-    rspecBest --> testFeedback["CHECKPOINT: Test Feedback"]
-    testFeedback --> implProposal["CHECKPOINT: Implementation Proposal"]
-    implProposal --> implement["Implement"]
-    implement --> lintersGate["GATE: Linters + Full Suite"]
+    subgraph Development [💻 30: Development]
+        direction TB
+        H -- No --> L[rails-tdd-slices]
+        G --> L
+        L --> M[rspec-best-practices]
+        M --> N{Test OK?}
+        N -- No --> M
+        N -- Yes --> O{Proposal OK?}
+        O -- No --> O
+        O -- Yes --> P[Implement]
+        P --> Q{Passes?}
+        Q -- No --> P
+        Q -- Yes --> R{More?}
+        R -- Yes --> M
+        R -- No --> S[Linters + Suite]
+    end
 
-    lintersGate --> railsConventions[rails-code-conventions]
-    railsConventions --> stackConventions[rails-stack-conventions]
-    lintersGate --> yardDoc[yard-documentation]
-    yardDoc --> docUpdates[README diagrams docs]
-    docUpdates --> codeReview[rails-code-review]
+    subgraph Quality [✅ 40-50: Quality & Review]
+        direction TB
+        S --> T[yard-documentation]
+        T --> U[rails-code-review]
+        U --> V{Findings?}
+        V -- Critical --> W[rails-review-response]
+        W --> X[Fix]
+        X --> U
+        V -- None/Minor --> Y((Merge))
+    end
 
-    codeReview --> reviewResponse[rails-review-response]
-    reviewResponse --> codeReview
+    subgraph Engines [🔧 60: Engines]
+        direction TB
+        Z[rails-engine-author] --> AA{Tests pass?}
+        AA -- No --> AB[Fix]
+        AB --> Z
+        AA -- Yes --> AC[rails-engine-release]
+        AC --> AD((Release))
+    end
 
-    codeReview --> archReview[rails-architecture-review]
-    codeReview --> secReview[rails-security-review]
-    codeReview --> migrationSafety[rails-migration-safety]
+    %% Cross-connections
+    U --> V1[rails-security-review]
+    U --> V2[rails-architecture-review]
+    V2 --> V3[refactor-safely]
+    V3 --> V4[ruby-service-objects]
 
-    archReview --> refactorSafely[refactor-safely]
-    refactorSafely --> serviceObjects[ruby-service-objects]
-
-    serviceObjects --> apiClient[ruby-api-client-integration]
-    serviceObjects --> strategyFactory[strategy-factory-null-calculator]
-    serviceObjects --> yardDoc
-    apiClient --> yardDoc
-
-    graphql[rails-graphql-best-practices] --> tddSlices
-    graphql --> secReview
-    graphql --> yardDoc
-
-    engineAuthor --> postman[api-rest-collection]
-    engineDocs[rails-engine-docs] --> postman
-
-    bugTriage[rails-bug-triage] --> tddSlices
-    rspecService[rspec-service-testing] --> rspecBest
-
-    engineAuthor[rails-engine-author] --> engineTestGate["GATE: Write engine specs, verify failure"]
-    engineTestGate --> engineTesting[rails-engine-testing]
-    engineAuthor --> engineDocs
-    engineAuthor --> engineInstallers[rails-engine-installers]
-    engineTesting --> engineReviewer[rails-engine-reviewer]
-    engineReviewer --> engineRelease[rails-engine-release]
-    engineRelease --> engineCompat[rails-engine-compatibility]
-    engineExtraction[rails-engine-extraction] --> engineAuthor
+    BT[rails-bug-triage] --> L
 ```
 
 
@@ -316,7 +332,7 @@ Each skill is a `SKILL.md` file in its own directory. For detailed conventions a
 
 ## Typical Workflows
 
-Tests are a **gate** between planning and implementation. See [docs/workflow-guide.md](docs/workflow-guide.md) for full diagrams.
+Tests are a **gate** between planning and implementation. See [docs/workflows/](docs/workflows/) for full diagrams.
 
 
 | Workflow                                        | Skill Chain                                                                                                                                                                                                               |

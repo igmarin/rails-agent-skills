@@ -64,7 +64,7 @@ field :orders, Types::OrderType.connection_type, null: false, resolver: Resolver
 
 ### Resolution
 
-**FORBIDDEN:** Never call `object.buyer`, `object.user`, or any association directly — every association load MUST use the dataloader (graphql-ruby 1.12+):
+**FORBIDDEN:** Never call `object.association` directly and never use `.includes` on the scope — every association load MUST go through the dataloader (graphql-ruby 1.12+). This applies both in type field definitions and in list resolvers:
 
 ```ruby
 # ❌ causes N+1 for every record in the list
@@ -73,6 +73,21 @@ def buyer; object.buyer; end
 # ✅ batches loads across all records
 def buyer
   dataloader.with(Sources::RecordById, Buyer).load(object.buyer_id)
+end
+```
+
+List resolvers must also prime the dataloader for each association the returned records will expose:
+
+```ruby
+# app/graphql/resolvers/orders/list_resolver.rb
+class Resolvers::Orders::ListResolver < Resolvers::BaseResolver
+  type Types::OrderType.connection_type, null: false
+
+  def resolve
+    orders = Order.for_user(context[:current_user])
+    orders.each { |order| dataloader.with(Sources::RecordById, Buyer).load(order.buyer_id) }
+    orders
+  end
 end
 ```
 

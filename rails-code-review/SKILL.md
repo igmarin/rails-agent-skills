@@ -39,7 +39,7 @@ generate-tasks must include a "Code review before merge" task.
 
 ## Review Order
 
-Work through the diff in this sequence. See [REVIEW_CHECKLIST.md](./REVIEW_CHECKLIST.md) for the full per-area check criteria.
+Work through the diff in this sequence. Deep criteria: [REVIEW_CHECKLIST.md](./REVIEW_CHECKLIST.md). One-page PR baseline: [assets/checklist.md](./assets/checklist.md). Finding examples (JSON + comment shape): [assets/examples.md](./assets/examples.md).
 
 Configuration → Routing → Controllers → Views → Models → Associations → Queries → Migrations → Validations → I18n → Sessions → Security → Caching → Jobs → Tests
 
@@ -55,54 +55,54 @@ params.require(:user).permit!                # Bad — never in production
 params.require(:user).permit(:name, :email)  # Good
 ```
 
-**Additional Critical patterns:**
+**Always Critical (flag every occurrence as `Critical`):**
 
-- **Business logic in controller action** (multi-step domain workflow) — flag as Critical; extract to a service object. A controller action doing more than coordinate (call one service, handle response) is a Critical finding.
-- **Missing authorization check on sensitive action** — flag as Critical.
+- `params.require(...).permit!` — mass-assignment / privilege escalation
+- `html_safe` or `raw` applied to user-supplied content — XSS
+- Missing authorization check on a sensitive action
+- **Business logic inside a controller action** — pricing, tax, discount, multi-step workflow, or any domain calculation inline. A controller action that does more than coordinate (call one service, render response) is `Critical`, not a Suggestion.
+- Unparameterized / string-interpolated SQL — injection
+- Destructive migration without a safe path on large tables
 
-## Severity Levels
+## Severity levels
 
-Use these levels when reporting findings:
+Use **only** these labels (no High/Low, P0–P2, etc.): **`Critical`** | **`Suggestion`** | **`Nice to have`**.
 
-| Level | Meaning | Action |
-|-------|---------|--------|
-| **Critical** | Security risk, data loss, or crash | Block merge — must fix before approval; mandatory re-review after fix |
-| **Suggestion** | Convention violation or performance concern | Fix in this PR; create a tracked follow-up ticket only if the fix requires significant redesign |
-| **Nice to have** | Style improvement, minor optimization | Optional — author's discretion; no follow-up required |
+- **Critical** — security, data loss, crash, or any **Always Critical** rule → block merge; re-diff after fix.
+- **Suggestion** — conventions / performance → fix in PR, or ticket if redesign is large.
+- **Nice to have** — small style or micro-optimization → optional for the author.
 
-## Re-Review Loop
+## Output style
 
-When critical or significant findings were addressed, re-review before merging:
+Group findings under `### Critical` / `### Suggestion` / `### Nice to have` (omit empty sections). Do not use a single flat list mixed by severity.
 
+```text
+## Review — <PR title or area>
+
+### Critical
+- [path/to/file.rb:LINE] (Area) One-line risk. **Mitigation:** concrete next step.
+
+### Suggestion
+- [path/to/file.rb:LINE] (Area) … **Mitigation:** …
+
+### Nice to have
+- …
+
+**Actions required:** <one line per severity level that appeared — e.g. Critical → block merge + re-review; Suggestion → …>
 ```
-Review → Categorize findings (Critical / Suggestion / Nice to have)
-       → Developer addresses findings
-       → Critical findings fixed? → Re-review the diff
-       → Suggestion items resolved or ticketed?
-       → All green → Approve PR
-```
 
-**Re-review triggers:**
-- Any Critical finding was present → mandatory re-review after fixes
-- More than 3 Suggestion items addressed → re-review recommended
-- Logic or architecture changed during feedback → re-review required
+**Template rules:** each bullet is `[file:line] (Area)` + risk + **`Mitigation:`** (required). Tag **(Area)** from: Controllers, Routing, Views, Models, Queries, Migrations, Validations, Security, Caching, Jobs, Tests — across the whole review, cover **≥4** distinct areas when the diff touches that many surfaces.
 
-**Skip re-review only when:** All findings were Nice to have or single-line fixes with zero logic change.
+## Re-review before merge
 
-## Pitfalls
+Re-diff the branch after **any** Critical fix (mandatory), after **>3** Suggestion fixes or any logic/architecture change during feedback (recommended), or whenever the fix could alter queries, auth, or migrations. Skip only for **Nice to have**-only feedback or trivial one-line edits with **no** behavior change.
 
-| Pitfall | What to do |
-|---------|------------|
-| "Skinny controller" means move to model | Move to services — avoid fat models |
-| Skipping N+1 check because "it's just one query" | One query per record in a collection is N+1 |
-| `permit!` for convenience | Privilege escalation risk — always whitelist attributes |
-| Index added in same migration as column | On large tables, separate migration with `algorithm: :concurrent` |
-| Callbacks for business logic | Callbacks are for persistence-level concerns, not orchestration |
-| Approving after Critical fix without re-reviewing | A fix can introduce new issues — re-review is mandatory |
-| Controller action > ~15 lines | Extract to service — controllers orchestrate, not implement |
-| Model with > 3 callbacks | Extract to service or observer |
-| `html_safe`/`raw` on user-provided content | XSS risk — escape or sanitize first |
-| Migration combining schema change and data backfill | Split: schema migration first, then data migration |
+## Review anti-patterns (adds to checklist, does not replace it)
+
+- **Thin controller → fat model:** extract orchestration to **services** (PORO / `*.call`), not giant model methods.
+- **N+1 in dev:** small seeds hide N+1 — if associations run inside a loop, count queries (request spec, rack-mini-profiler, logs) instead of assuming “it’s fast here.”
+- **Hot-table migrations:** add concurrent indexes and heavy backfills in **separate** deploy steps from reversible schema changes (chain **rails-migration-safety** when unsure).
+- **Callbacks vs jobs:** persistence hooks only; external I/O and multi-step workflows belong in services/jobs with clear idempotency.
 
 ## Integration
 

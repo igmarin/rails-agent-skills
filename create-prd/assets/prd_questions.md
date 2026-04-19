@@ -1,4 +1,6 @@
-# PRD Template — Key Questions
+# PRD — key questions (clarification inventory)
+
+Use when the user’s prompt is **ambiguous**. In chat, ask the **smallest** set that unblocks writing [PRD_TEMPLATE.md](../PRD_TEMPLATE.md) — typically **3–5** questions, drawn from the areas below (do not run through all 12 as a questionnaire).
 
 1. Name & Summary
    - What is the feature name? Provide a 1-2 sentence summary.

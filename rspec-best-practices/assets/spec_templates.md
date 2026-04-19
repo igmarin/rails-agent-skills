@@ -16,7 +16,7 @@ RSpec.describe "API::V1::Users", type: :request do
   end
 end
 
-2) Model spec template
+1) Model spec template
 
 RSpec.describe User, type: :model do
   it 'validates presence of email' do
@@ -26,18 +26,34 @@ RSpec.describe User, type: :model do
   end
 end
 
-3) Service spec template
+1) Service spec template
 
 RSpec.describe MyService, type: :unit do
   describe '.call' do
-    it 'returns success for valid input' do
-      result = MyService.call(params)
-      expect(result[:success]).to be true
+    subject(:result) { described_class.call(params) }
+
+    context 'with valid input' do
+      let(:params) { { key: 'value' } }
+
+      it 'returns success' do
+        expect(result[:success]).to be true
+        expect(result[:response]).to be_present
+      end
+    end
+
+    context 'with invalid input' do
+      let(:params) { {} }
+
+      it 'returns failure with error message' do
+        expect(result[:success]).to be false
+        expect(result[:response][:error][:message]).to be_present
+      end
     end
   end
 end
 
-4) Common matchers & helpers
+1) Common matchers & helpers
+
 - use `perform_enqueued_jobs` for background jobs
 - use `travel_to` for time-dependent tests
 - `expect { }.to change { Model.count }.by(1)` for side effects

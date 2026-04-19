@@ -1,0 +1,56 @@
+{
+  "context": "Tests whether the agent writes structured logging calls using a static string as the first argument and a hash of structured fields as the second argument, avoids string interpolation in the log message, and includes an `event:` key for ops dashboard integration.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Static first argument",
+      "max_score": 14,
+      "description": "Every Rails.logger call uses a static string literal as its first argument — no string interpolation (e.g., no `\"Processing #{id}\"`) in the first argument of any logger call"
+    },
+    {
+      "name": "Hash second argument",
+      "max_score": 12,
+      "description": "At least two Rails.logger calls pass a hash as the second argument containing key-value pairs of structured data (e.g., `{ order_id: ..., user_id: ... }`)"
+    },
+    {
+      "name": "Dynamic data in hash only",
+      "max_score": 14,
+      "description": "Dynamic values (IDs, amounts, statuses, names) appear exclusively inside the hash argument — NOT interpolated or concatenated into the first string argument"
+    },
+    {
+      "name": "event: key present",
+      "max_score": 10,
+      "description": "At least one logger call includes an `event:` key in its hash argument (e.g., `event: \"payment.processed\"` or `event: \"payment.failed\"`)"
+    },
+    {
+      "name": "Domain-specific hash fields",
+      "max_score": 8,
+      "description": "The log hash(es) include domain-relevant field names such as `payment_id:`, `user_id:`, `amount_cents:`, or `status:` — not just generic keys like `data:` or `info:`"
+    },
+    {
+      "name": "Multiple log levels",
+      "max_score": 8,
+      "description": "Uses at least two distinct logger severity levels (e.g., `logger.info` and `logger.error`) to distinguish normal events from error conditions"
+    },
+    {
+      "name": "No interpolation in any logger call",
+      "max_score": 10,
+      "description": "No logger call in the file uses Ruby string interpolation (`#{}`) or string concatenation (`+`) in the message argument — zero occurrences"
+    },
+    {
+      "name": "At least four log statements",
+      "max_score": 8,
+      "description": "The service contains at least four distinct Rails.logger calls, covering different stages (e.g., start, success, failure, and at least one intermediate step)"
+    },
+    {
+      "name": "Failure path logged at error level",
+      "max_score": 8,
+      "description": "The failure or error path uses `Rails.logger.error` (or `.warn`) — NOT `Rails.logger.info` — for the failure condition"
+    },
+    {
+      "name": "No puts or p for logging",
+      "max_score": 8,
+      "description": "The service does NOT use `puts`, `p`, or `pp` to output log information — all logging goes through Rails.logger"
+    }
+  ]
+}

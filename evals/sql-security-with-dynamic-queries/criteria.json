@@ -1,0 +1,56 @@
+{
+  "context": "Tests whether the agent safely handles dynamic SQL queries with user-controlled sort columns, sort directions, and filter values by using allowlists, bound parameters or sanitize_sql_array, and avoiding direct string interpolation of untrusted input into SQL.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "No sort column interpolation",
+      "max_score": 13,
+      "description": "The sort column name is NOT directly interpolated or concatenated into a SQL string from a user-supplied parameter — zero occurrences of `\"#{params` or `\"#{sort` or similar inside a SQL fragment"
+    },
+    {
+      "name": "Sort column allowlist",
+      "max_score": 13,
+      "description": "An explicit allowlist (array or hash) of permitted column names is defined in the code, and the sort column is validated against it before being used in a query"
+    },
+    {
+      "name": "Sort direction allowlist",
+      "max_score": 10,
+      "description": "Sort direction (ASC/DESC or asc/desc) is validated against a whitelist — NOT taken verbatim from the request parameter and interpolated into SQL"
+    },
+    {
+      "name": "Bound params or sanitize_sql_array for WHERE",
+      "max_score": 13,
+      "description": "WHERE clause filter values are passed using bound parameters (e.g., `where('status = ?', status)`, `where(status: status)`) or `sanitize_sql_array` — NOT string interpolation of the raw param value"
+    },
+    {
+      "name": "No user input in order() string",
+      "max_score": 12,
+      "description": "No call to `.order()` passes a string argument that directly incorporates an unvalidated request parameter value"
+    },
+    {
+      "name": "Allowlist as constant or frozen structure",
+      "max_score": 8,
+      "description": "The column allowlist is defined as a constant (ALL_CAPS), a frozen array/hash, or is initialised once — NOT rebuilt inline on every method call via a raw array literal in the guard clause"
+    },
+    {
+      "name": "No send or eval with user column",
+      "max_score": 10,
+      "description": "The code does NOT use `send`, `public_send`, or `eval` with the user-supplied sort column string to call methods dynamically on the model"
+    },
+    {
+      "name": "Comment on raw SQL rationale",
+      "max_score": 8,
+      "description": "If raw SQL fragments are used (e.g., `Arel.sql(...)` or a string passed to `order()`), a comment explains WHY the raw SQL approach was chosen over a pure ActiveRecord alternative"
+    },
+    {
+      "name": "Safe fallback on invalid input",
+      "max_score": 8,
+      "description": "The code handles the case where the sort column or direction is not in the allowlist — either by returning an error, using a default value, or ignoring the invalid parameter — not crashing or silently executing"
+    },
+    {
+      "name": "Frozen string literal",
+      "max_score": 5,
+      "description": "The file begins with `# frozen_string_literal: true`"
+    }
+  ]
+}

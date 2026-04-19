@@ -1,0 +1,56 @@
+{
+  "context": "Tests whether the agent adds comments that explain the WHY behind design decisions rather than restating what the code does, and uses tagged notes (TODO:, FIXME:, HACK:, NOTE:, OPTIMIZE:) with enough context for a future reader to act on them.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "No what-comments",
+      "max_score": 15,
+      "description": "No added comment simply restates what the immediately following code does (e.g., no `# iterates over tiers` above `tiers.each`, no `# returns result` above a return value)"
+    },
+    {
+      "name": "Why-comments on business rules",
+      "max_score": 15,
+      "description": "At least two comments explain a business rule, constraint, or edge case that is NOT obvious from reading the code alone (e.g., why a particular threshold was chosen, what a constant represents in the domain)"
+    },
+    {
+      "name": "Why-comment on design tradeoff",
+      "max_score": 12,
+      "description": "At least one comment explains a design or implementation tradeoff — why this approach was chosen over a plausible alternative (e.g., why promo replaces base in certain conditions rather than always adding)"
+    },
+    {
+      "name": "Tagged note present",
+      "max_score": 10,
+      "description": "At least one comment uses a recognised tag in the format: TODO:, FIXME:, HACK:, NOTE:, or OPTIMIZE: (colon included, uppercase)"
+    },
+    {
+      "name": "Tagged note has actionable context",
+      "max_score": 13,
+      "description": "The tagged note includes enough context for a future reader to act on it — not just `# TODO: fix` but something like `# TODO: replace with lookup table once pricing team confirms final tier structure`"
+    },
+    {
+      "name": "Comment on MAX_DISCOUNT rationale",
+      "max_score": 10,
+      "description": "A comment near the MAX_DISCOUNT constant or its usage explains WHY the 60% cap exists (e.g., business rule, margin requirement, contractual constraint) — not just that it is a maximum"
+    },
+    {
+      "name": "Comment on promo branching logic",
+      "max_score": 10,
+      "description": "A comment explains WHY the `promo > base` branch replaces (rather than adds) the base discount — capturing the intent that the higher of promo-only or combined discount applies"
+    },
+    {
+      "name": "Domain concept referenced",
+      "max_score": 5,
+      "description": "At least one comment references a domain concept or business term by name (e.g., a pricing model name, a tier definition, a promotional programme name) rather than only describing technical mechanics"
+    },
+    {
+      "name": "Comment on inactive subscription guard",
+      "max_score": 5,
+      "description": "A comment near the `return 0.0 unless @subscription.active?` guard explains WHY an inactive subscription returns zero rather than raising or returning nil (capturing the expected caller contract)"
+    },
+    {
+      "name": "No code duplicated in comments",
+      "max_score": 5,
+      "description": "No comment restates code by writing Ruby syntax or variable names into the comment text (e.g., no `# calls TIER_RATES.fetch(@subscription.tier, 0.0)` — this is just quoting code)"
+    }
+  ]
+}
