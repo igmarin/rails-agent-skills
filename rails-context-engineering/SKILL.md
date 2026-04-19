@@ -18,16 +18,6 @@ description: >
 
 Load minimum context before any code, spec, or PRD in an existing Rails codebase. A fifteen-second read of `db/schema.rb`, `config/routes.rb`, and one neighbor saves a full retry.
 
-## Quick Reference
-
-| Aspect | Rule |
-|--------|------|
-| Trigger | Any task in an existing Rails repo where relevant patterns, schema, routes, or engine boundaries are not yet known |
-| Output | A short **Context Summary** (≤10 lines) posted BEFORE any code/spec proposal |
-| Primary sources | `db/schema.rb`, `config/routes.rb`, nearest model + factory + spec, `Gemfile.lock`, `config/application.rb`, engine mount points |
-| Ambiguity | When two requirements conflict or a spec contradicts current code, STOP and post a **Confusion Block** — do not silently pick |
-| Size limit | Context read must be scoped — never load the whole repo. See [references/context-sources.md](./references/context-sources.md) for exact Grep/Read patterns |
-
 ## HARD-GATE
 
 ```text
@@ -40,15 +30,15 @@ ALWAYS re-check context when the user's request changes scope mid-conversation.
 
 ## Process
 
-1. **Scope the change:** In one sentence, name the Rails layer the change touches (controller, model, service, job, engine, view/Turbo, migration, API, GraphQL).
+1. **Scope the change:** In one sentence, name the Rails layer touched (controller, model, service, job, engine, view/Turbo, migration, API, GraphQL).
 2. **Load baseline Rails context:** Read at minimum:
    - `db/schema.rb` — tables and columns involved (grep by table name)
    - `config/routes.rb` — routes that border the change
    - `Gemfile.lock` — confirm Rails version + domain gems (sidekiq, pundit, rspec, rails-i18n, graphql, etc.)
-3. **Load one neighbor of each kind:** For each Rails layer touched, open the nearest sibling that already solves a similar problem — a comparable controller, a comparable service, a comparable spec, a comparable factory. See [references/context-sources.md](./references/context-sources.md).
+3. **Load one neighbor of each kind:** For each Rails layer touched, open the nearest sibling that already solves a similar problem — a comparable controller, service, spec, factory. See [references/context-sources.md](./references/context-sources.md) for exact Grep/Read patterns per layer.
 4. **Detect drift:** If there is an existing spec for the area, compare what it asserts vs what the code currently does. Drift is a red flag — document it.
 5. **Post the Context Summary:** Before any proposal, output the template below (see Output Style).
-6. **Handle ambiguity:** If step 2-4 surface a conflict (two patterns used, spec vs code drift, missing requirement, unclear boundary), produce a Confusion Block using [references/confusion-management.md](./references/confusion-management.md). Do not pick silently.
+6. **Handle ambiguity:** If steps 2–4 surface a conflict (two patterns used, spec vs code drift, missing requirement, unclear boundary), produce a Confusion Block using [references/confusion-management.md](./references/confusion-management.md). Do not pick silently.
 7. **Hand off:** With context loaded, proceed to the next skill (`create-prd`, `generate-tasks`, `rails-tdd-slices`, `rails-stack-conventions`, etc.). The Context Summary travels with the task.
 
 ## Extended Resources
@@ -75,7 +65,7 @@ Every invocation of this skill MUST produce a **Context Summary** in this exact 
 - Confusion: <NONE, or a one-line pointer to the Confusion Block below>
 ```
 
-Additional MUSTs (not covered by HARD-GATE):
+Additional MUSTs:
 
 1. **One neighbor per layer.** Do not dump 5 similar files; pick the closest match and name it.
 2. **Facts only, no code.** The summary lists facts about the codebase, not proposed implementation.
@@ -86,9 +76,9 @@ Additional MUSTs (not covered by HARD-GATE):
 | Pitfall | What to do |
 |---------|------------|
 | Generic "the model, the controller" language | Name the class and file — generic language is the symptom of skipped context |
-| Citing paths without line numbers for specific definitions | Use `path:line` when referencing a method, class, or association |
+| Citing paths without line numbers | Use `path:line` when referencing a method, class, or association |
 | Ignoring engine boundaries | Name the engine and its host integration points when a mounted engine is touched |
-| Ignoring spec/code drift | A passing stale spec is worse than a missing spec — call it out explicitly in Confusion |
+| Ignoring spec/code drift | A passing stale spec is worse than a missing spec — call it out in Confusion |
 
 ## Integration
 
@@ -98,3 +88,6 @@ Additional MUSTs (not covered by HARD-GATE):
 | **rails-tdd-slices** | Nearest spec in the summary usually reveals the right first failing spec |
 | **rails-bug-triage** / **refactor-safely** | Context precedes reproduction or characterization tests |
 | **rails-architecture-review** / **ddd-ubiquitous-language** | When context reveals boundary or naming drift |
+
+See [EXAMPLES.md](./EXAMPLES.md) for worked Context Summaries and a Confusion Block.
+ 
