@@ -41,6 +41,24 @@ Include **all 10 sections** — none are optional. Sections with nothing to say 
 | 9 | **Success Metrics** | How success is measured |
 | 10 | **Open Questions** | Anything still to be decided |
 
+## Output Style
+
+Every PRD invocation MUST end the reply (after confirming the file was saved) with a **Recommended next step** line. Pick one from the list below — never omit this line, even when the user has not asked for next steps.
+
+```text
+Recommended next step: <skill-name> — <one-line reason>.
+```
+
+Allowed skills for the next-step line:
+
+- **generate-tasks** — default when the PRD is approved and implementation is next
+- **ticket-planning** — when tracker-ready tickets or sprint placement are needed
+- **rails-architecture-review** — when the PRD surfaces structural concerns
+- **rails-engine-author** — when the PRD scopes a mountable engine
+- **rails-stack-conventions** — when the PRD is a Rails feature needing stack alignment
+
+If none of the above clearly fits, default to `generate-tasks`.
+
 ## Pitfalls
 
 | Pitfall | What to do |
