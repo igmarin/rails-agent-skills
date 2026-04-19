@@ -62,12 +62,39 @@ def find_by_email(email)
 end
 ```
 
+### Tagged notes — REQUIRED when code carries unresolved work
+
+When the code you write has a known limitation, follow-up, or assumption a future reader must act on, leave a tagged note. The tag is **UPPERCASE with a trailing colon** (`TODO:`, `FIXME:`, `HACK:`, `NOTE:`, `OPTIMIZE:`) followed by **actionable context** — who/what/when the reader needs to decide.
+
+```ruby
+# BAD — tag without context, unusable
+# TODO: fix this
+rate = TIER_RATES.fetch(tier, 0.0)
+
+# GOOD — tag + actionable context a future reader can act on
+# TODO: replace TIER_RATES with a DB-backed lookup once the pricing team
+# finalises the enterprise tier (ticket PRI-482, blocked on legal review).
+rate = TIER_RATES.fetch(tier, 0.0)
+
+# GOOD — NOTE: captures a non-obvious invariant for maintainers
+# NOTE: promo discount REPLACES base discount when it exceeds it — we take
+# the higher of promo-only vs combined to match the contract with marketing.
+discount = [promo_discount, base_discount + promo_discount].max
+```
+
+Rules:
+
+1. Every `TODO:` / `FIXME:` / `HACK:` includes a concrete resolution path (ticket, owner, condition to unblock).
+2. Every `NOTE:` captures an invariant or domain intent that would otherwise surprise a reader.
+3. Do not quote code back in the comment (no `# calls TIER_RATES.fetch(...)` — the line below already says that).
+4. Never commit bare `# TODO`, `# TODO:`, or `# TODO: fix later` — no context means delete the tag or do the work.
+
 ## Structured Logging
 
 - **First argument:** static string (message key or human-readable template without interpolated values).
 - **Second argument:** hash with structured fields (`user_id:`, `order_id:`, etc.).
 - **Do not** build the primary message with string interpolation; put dynamic data in the hash.
-- Include **`event:`** (or equivalent) for error or ops dashboards when the team uses tagged events.
+- **Always include an `event:` key** in the hash — it is the primary grouping dimension in log aggregators (Datadog, Loki, Kibana). Use a dot-namespaced value like `"order.processing_started"` or `"payment.capture_failed"`. No alternate key names (`:type`, `:action`, `:name`) — the key MUST be literally `event:`.
 
 ```ruby
 # BAD — interpolation loses structure; cannot filter by user_id in log aggregators
