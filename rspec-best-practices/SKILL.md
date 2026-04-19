@@ -91,6 +91,30 @@ context 'after expiration' do
 end
 ```
 
+### One behavior per example — NEVER "and" in example names
+
+The word **"and"** in an `it` / `specify` description is a hard signal that the example is asserting two behaviors. Split it into two examples — one behavior per example. This applies to every spec: model, service, request, job, mailer.
+
+```ruby
+# BAD — two behaviors in one example; if the first fails, the second is never reached
+it 'returns 201 and creates the record' do
+  # ...
+end
+
+it 'saves the order and sends the confirmation email' do
+  # ...
+end
+
+# GOOD — one behavior per example, descriptions state observable outcomes
+it 'returns 201' do; end
+it 'creates the record' do; end
+
+it 'saves the order' do; end
+it 'sends the confirmation email' do; end
+```
+
+Rule enforced in self-review: grep the spec for `\band\b` inside `it '...'` / `it "..."` strings before committing — any hit is a split.
+
 **Minimal request spec skeleton:**
 
 ```ruby
