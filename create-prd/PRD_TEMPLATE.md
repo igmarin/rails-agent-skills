@@ -52,3 +52,9 @@ Rails areas this feature will likely touch (no code — discovery only):
 
 - [Question 1 — owner / deadline if known]
 - [Question 2 — owner / deadline if known]
+
+## Next Steps
+
+Recommended next step: **generate-tasks** — break this PRD into implementation tasks with TDD gates.
+
+Alternative chain targets: `ticket-planning` (tracker-ready tickets), `rails-architecture-review` (structural concerns surfaced by the PRD), `rails-engine-author` (if the PRD scopes a mountable engine), `rails-stack-conventions` (stack alignment for a Rails feature).

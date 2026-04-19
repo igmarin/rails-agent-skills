@@ -26,7 +26,7 @@ Focus on *what* and *why*, not *how*. No code until the PRD is approved.
 
 ## PRD Structure
 
-Include **all 10 sections** — none are optional. Sections with nothing to say get a one-line placeholder (e.g. "No open questions at this stage."). See [PRD_TEMPLATE.md](./PRD_TEMPLATE.md) for the ready-to-fill template.
+Include **all 11 sections** — none are optional. Sections with nothing to say get a one-line placeholder (e.g. "No open questions at this stage."). See [PRD_TEMPLATE.md](./PRD_TEMPLATE.md) for the ready-to-fill template.
 
 | # | Section | Purpose |
 |---|---------|---------|
@@ -40,6 +40,7 @@ Include **all 10 sections** — none are optional. Sections with nothing to say 
 | 8 | **Implementation Surface** | REQUIRED — name the specific Rails layers this feature will touch (e.g. `controllers`, `models`, `services`, `jobs`, `mailers`). Describe entry points and architectural areas in plain language — do NOT include class names, module paths, or code. |
 | 9 | **Success Metrics** | How success is measured |
 | 10 | **Open Questions** | Anything still to be decided |
+| 11 | **Next Steps** | REQUIRED — a `## Next Steps` section at the END of the PRD file itself (not just in the reply) containing the line `Recommended next step: <skill-name> — ...` using one of: `generate-tasks`, `ticket-planning`, `rails-architecture-review`, `rails-engine-author`, `rails-stack-conventions`. Default: `generate-tasks`. |
 
 ## Output Style
 
