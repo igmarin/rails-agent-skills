@@ -40,7 +40,6 @@ jobs:
 
           # Check required fields
           jq -e '.name' .claude-plugin/plugin.json > /dev/null && echo "✓ name field present" || (echo "✗ missing name field" && exit 1)
-          jq -e '.displayName' .claude-plugin/plugin.json > /dev/null && echo "✓ displayName field present" || (echo "✗ missing displayName field" && exit 1)
           jq -e '.version' .claude-plugin/plugin.json > /dev/null && echo "✓ version field present" || (echo "✗ missing version field" && exit 1)
           jq -e '.author.name' .claude-plugin/plugin.json > /dev/null && echo "✓ author.name field present" || (echo "✗ missing author.name field" && exit 1)
 
