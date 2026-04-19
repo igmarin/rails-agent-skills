@@ -193,6 +193,14 @@ This guide provides detailed, step-by-step instructions for both the symlink-bas
 | [yard-documentation](yard-documentation/)                             | Write YARD docs for Ruby classes and public methods (all output in English)  |
 
 
+### Context & Setup
+
+
+| Skill                                                       | Description                                                                                   |
+| ----------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| [rails-context-engineering](rails-context-engineering/)     | Load schema, routes, nearest patterns before any code/spec/PRD — surface ambiguity explicitly |
+
+
 ### Testing
 
 
@@ -240,7 +248,9 @@ This guide provides detailed, step-by-step instructions for both the symlink-bas
 
 ```mermaid
 flowchart TD
-    createPRD[create-prd] --> generateTasks[generate-tasks]
+    contextEng[rails-context-engineering] --> createPRD[create-prd]
+    contextEng --> tddSlices
+    createPRD --> generateTasks[generate-tasks]
     createPRD --> dddLanguage[ddd-ubiquitous-language]
     dddLanguage --> dddBoundaries[ddd-boundaries-review]
     dddBoundaries --> dddModeling[ddd-rails-modeling]
@@ -311,9 +321,9 @@ Tests are a **gate** between planning and implementation. See [docs/workflow-gui
 
 | Workflow                                        | Skill Chain                                                                                                                                                                                                               |
 | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **TDD Feature Loop** *(primary daily workflow)* | rails-tdd-slices → **[Test Feedback checkpoint]** → **[Implementation Proposal checkpoint]** → implement → **[Linters + Suite gate]** → yard-documentation → rails-code-review → rails-review-response (on feedback) → PR |
-| **New feature**                                 | create-prd → generate-tasks → (optional **ticket-planning**) → *TDD Feature Loop*                                                                                                                                         |
-| **DDD-first feature**                           | create-prd → ddd-ubiquitous-language → ddd-boundaries-review → ddd-rails-modeling → generate-tasks → *TDD Feature Loop*                                                                                                   |
+| **TDD Feature Loop** *(primary daily workflow)* | rails-context-engineering → rails-tdd-slices → **[Test Feedback checkpoint]** → **[Implementation Proposal checkpoint]** → implement → **[Linters + Suite gate]** → yard-documentation → rails-code-review → rails-review-response (on feedback) → PR |
+| **New feature**                                 | rails-context-engineering → create-prd → generate-tasks → (optional **ticket-planning**) → *TDD Feature Loop*                                                                                                             |
+| **DDD-first feature**                           | rails-context-engineering → create-prd → ddd-ubiquitous-language → ddd-boundaries-review → ddd-rails-modeling → generate-tasks → *TDD Feature Loop*                                                                       |
 | **Bug fix**                                     | rails-bug-triage → rails-tdd-slices → **[write reproduction spec, verify failure]** → fix → verify passes → rails-code-review                                                                                             |
 | **Code review + response**                      | rails-code-review → rails-review-response (on feedback) → re-review if Critical items addressed                                                                                                                           |
 | **Security audit**                              | rails-security-review → rails-code-review (verify fixes) → PR                                                                                                                                                             |

@@ -152,7 +152,8 @@ This is the most-used daily workflow. It covers everything from a task to a merg
 
 ```mermaid
 flowchart TD
-    A[Task / behavior to implement] --> B[rails-tdd-slices\nChoose first slice]
+    A[Task / behavior to implement] --> CE[rails-context-engineering\nLoad schema, routes, nearest patterns]
+    CE --> B[rails-tdd-slices\nChoose first slice]
     B --> C[rspec-best-practices\nWrite failing test]
     C --> D{Test Feedback\nCheckpoint}
     D -->|Approved| E[Implementation Proposal\nCheckpoint]
@@ -177,17 +178,18 @@ flowchart TD
 
 **Step by step:**
 
-1. **rails-tdd-slices** — Choose the highest-value first failing spec (request, service, model, job).
-2. **rspec-best-practices** — Write the failing test and run it.
-3. **Test Feedback Checkpoint** — Present the test. Confirm: right behavior? right boundary? edge cases? Only proceed when approved.
-4. **Implementation Proposal Checkpoint** — Propose the implementation in plain language (classes, methods, structure). Wait for confirmation before writing code.
-5. **Implement** — Write the minimum code to pass the test. Run. Refactor. Repeat for each behavior.
-6. **GATE: Linters + Full Test Suite** — Run linters (`bundle exec [linter]` or equivalent) and the full suite. Fix all failures before proceeding.
-7. **yard-documentation** — Document new or changed public API.
-8. **rails-code-review** — Self-review the full branch diff.
-9. **rails-review-response** — When feedback is received: evaluate, push back if wrong, implement one item at a time.
-10. **Re-review** — After Critical or significant findings are addressed, re-review before merging.
-11. **api-rest-collection** — If the change adds or modifies API endpoints, update the collection.
+1. **rails-context-engineering** — Load the minimum Rails context (schema, routes, nearest pattern, nearest spec). Post the Context Summary before anything else.
+2. **rails-tdd-slices** — Choose the highest-value first failing spec (request, service, model, job).
+3. **rspec-best-practices** — Write the failing test and run it.
+4. **Test Feedback Checkpoint** — Present the test. Confirm: right behavior? right boundary? edge cases? Only proceed when approved.
+5. **Implementation Proposal Checkpoint** — Propose the implementation in plain language (classes, methods, structure). Wait for confirmation before writing code.
+6. **Implement** — Write the minimum code to pass the test. Run. Refactor. Repeat for each behavior.
+7. **GATE: Linters + Full Test Suite** — Run linters (`bundle exec [linter]` or equivalent) and the full suite. Fix all failures before proceeding.
+8. **yard-documentation** — Document new or changed public API.
+9. **rails-code-review** — Self-review the full branch diff.
+10. **rails-review-response** — When feedback is received: evaluate, push back if wrong, implement one item at a time.
+11. **Re-review** — After Critical or significant findings are addressed, re-review before merging.
+12. **api-rest-collection** — If the change adds or modifies API endpoints, update the collection.
 
 **Key rules:**
 - Test Feedback and Implementation Proposal checkpoints are not optional — they prevent wasted implementation cycles
@@ -200,7 +202,8 @@ flowchart TD
 
 ```mermaid
 flowchart LR
-    A[Feature idea] --> B[create-prd]
+    A[Feature idea] --> CE[rails-context-engineering]
+    CE --> B[create-prd]
     B --> C[User reviews PRD]
     C --> D[generate-tasks]
     D --> E[rails-tdd-slices]

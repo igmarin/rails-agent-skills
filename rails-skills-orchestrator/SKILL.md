@@ -73,6 +73,12 @@ Non-negotiable across every code-producing skill. Workflow: **PRD → TASKS → 
 | **strategy-factory-null-calculator** | Building variant-based calculators with SERVICE_MAP dispatch |
 | **yard-documentation** | Writing or reviewing YARD docs for Ruby classes and public methods |
 
+### Context & Setup
+
+| Skill | Use when... |
+| ----- | ----------- |
+| **rails-context-engineering** | Before any code/spec/PRD in an existing Rails codebase — load schema, routes, nearest patterns, surface ambiguity |
+
 ### Testing
 
 | Skill | Use when... |
@@ -111,11 +117,11 @@ When multiple skills could apply: TDD → Planning → Domain discovery → Proc
 Sub-skills are invoked by stating their name as the next skill to apply, e.g. *"Next skill: rails-tdd-slices"*, before proceeding with that skill's instructions.
 
 **TDD Feature Loop** *(primary daily workflow)*:
-rails-tdd-slices → **[Test Feedback checkpoint]** → **[Implementation Proposal checkpoint]** → implement → **[Linters + Suite gate]** → yard-documentation → rails-code-review → rails-review-response (on feedback) → PR
+rails-context-engineering → rails-tdd-slices → **[Test Feedback checkpoint]** → **[Implementation Proposal checkpoint]** → implement → **[Linters + Suite gate]** → yard-documentation → rails-code-review → rails-review-response (on feedback) → PR
 
-**Feature (standard):** create-prd → generate-tasks → *TDD Feature Loop*
+**Feature (standard):** rails-context-engineering → create-prd → generate-tasks → *TDD Feature Loop*
 
-**Feature (DDD-first):** create-prd → ddd-ubiquitous-language → ddd-boundaries-review → ddd-rails-modeling → generate-tasks → *TDD Feature Loop*
+**Feature (DDD-first):** rails-context-engineering → create-prd → ddd-ubiquitous-language → ddd-boundaries-review → ddd-rails-modeling → generate-tasks → *TDD Feature Loop*
 
 **Code review + response:** rails-code-review → rails-review-response (on feedback) → re-review if Critical items addressed
 
