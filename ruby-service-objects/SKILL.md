@@ -18,6 +18,36 @@ EVERY service object MUST have its test written and validated BEFORE implementat
 See rspec-best-practices for the full gate cycle.
 ```
 
+## MANDATORY Response Contract
+
+Every service's `.call` / `call` MUST return a hash matching EXACTLY one of these two shapes. No other keys at the top level. No returning booleans, ActiveRecord objects, or raw models.
+
+```ruby
+# Success
+{ success: true, response: { <domain_key>: <value>, ... } }
+
+# Failure
+{ success: false, response: { error: { message: 'human-readable reason' } } }
+```
+
+Rules enforced by this contract:
+
+1. Top-level keys are exactly `:success` (Boolean) and `:response` (Hash). Never flatten payload onto the top level.
+2. Payload goes under `response:` on success — never directly under `:success` or a custom key like `:data` / `:result`.
+3. Errors nest under `response: { error: { message: ... } }` — never `response: { message: ... }` and never `error: ...` at the top level.
+4. A service MUST NOT raise to its caller — wrap `rescue` blocks and convert to the failure shape.
+5. Orchestrators propagate sub-service hashes verbatim (`return result unless result[:success]`) — they do not repack.
+
+Banned shapes (reject during self-review):
+
+```ruby
+{ success: true, data: ... }                  # wrong key — must be :response
+{ success: true, subscription: ... }          # flattened payload — must nest under :response
+{ success: false, message: '...' }            # error at top level — must nest under :response, :error
+{ success: false, response: { message: '...' } }  # missing :error wrapper
+true / false / subscription                   # raw values — never return anything but the two shapes
+```
+
 ## Quick Reference
 
 | Convention | Rule |
