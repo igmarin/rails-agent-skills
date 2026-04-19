@@ -84,14 +84,18 @@ Every review MUST render findings in this exact structure. Group by severity hea
 ## Review — <PR title or area>
 
 ### Critical
-- [app/controllers/foo_controller.rb:42] `params.require(:user).permit!` allows mass assignment of any attribute. **Mitigation:** whitelist explicitly with `.permit(:name, :email)`.
-- [app/controllers/orders_controller.rb:15] Pricing calculation inline in controller action. **Mitigation:** extract to `Orders::CalculatePricing.call(...)` service.
+- [app/controllers/foo_controller.rb:42] (Controllers) `params.require(:user).permit!` allows mass assignment. **Mitigation:** whitelist with `.permit(:name, :email)`.
+- [app/controllers/orders_controller.rb:15] (Controllers) Pricing calculation inline in controller action. **Mitigation:** extract to `Orders::CalculatePricing.call(...)` service.
+- [db/migrate/20260412_add_index.rb:6] (Migrations) `add_index` on large table without `algorithm: :concurrent` — locks writes. **Mitigation:** split into schema migration + concurrent index migration.
 
 ### Suggestion
-- [app/models/post.rb:30] N+1 on `post.comments.each`. **Mitigation:** add `includes(:comments)` to the scope.
+- [app/models/post.rb:30] (Queries) N+1 on `post.comments.each`. **Mitigation:** `includes(:comments)` in the scope.
+- [app/models/user.rb:88] (Models) Callback orchestrating external API call. **Mitigation:** move to a service object; keep callbacks persistence-only.
+- [config/routes.rb:22] (Routing) Deeply nested routes (3 levels). **Mitigation:** flatten with shallow nesting.
 
 ### Nice to have
-- [app/views/orders/show.html.erb:8] Extract repeated partial for DRY.
+- [app/views/orders/show.html.erb:8] (Views) Repeated partial — extract for DRY.
+- [spec/models/order_spec.rb:44] (Tests) Missing context block for error path. **Mitigation:** add `context "when invalid"`.
 
 **Actions required:**
 - Critical items block merge; re-review mandatory after fixes land.
@@ -103,7 +107,7 @@ Every review MUST render findings in this exact structure. Group by severity hea
 
 1. Every finding cites `file:line`.
 2. Every finding ends with a **Mitigation:** — identifying the problem without a remediation is not a review.
-3. Review covers at least four distinct areas (Controllers, Queries, Models, Migrations, Security, etc.) — group findings by severity first, but ensure the set of findings spans multiple areas.
+3. Review covers at least **four distinct areas** from: Controllers, Routing, Views, Models, Queries, Migrations, Validations, Security, Caching, Jobs, Tests. Tag each finding with its area in parentheses (e.g. `(Controllers)`, `(Queries)`) so coverage is visible. Group findings by severity first, then ensure area breadth across the review.
 4. The **Actions required** block appears at the end, restating the action per severity level used — even if only one level fired.
 
 ## Re-Review Loop
