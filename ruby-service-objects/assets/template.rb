@@ -1,21 +1,30 @@
 # frozen_string_literal: true
 
-# Template service object file
-class TemplateService
-  def self.call(**kwargs)
-    new(**kwargs).call
-  end
+module ModuleName
+  class ServiceName
+    MISSING_PARAM = 'Missing required parameter'
 
-  def initialize(**kwargs)
-    @kwargs = kwargs
-  end
+    # @param params [Hash] :key1, :key2
+    # @return [Hash] { success: Boolean, response: Hash }
+    def self.call(params)
+      new(params).call
+    end
 
-  def call
-    # TODO: implement minimal behavior
-    { success: true, response: {} }
-  rescue StandardError => e
-    Rails.logger.error(e.message)
-    Rails.logger.error(e.backtrace.first(5).join("\n"))
-    { success: false, response: { error: e.message } }
+    def initialize(params)
+      @key1 = params[:key1]
+      @key2 = params[:key2]
+    end
+
+    # @return [Hash] { success: Boolean, response: Hash }
+    def call
+      return { success: false, response: { error: { message: MISSING_PARAM } } } if @key1.blank?
+
+      # TODO: implement business logic
+      { success: true, response: {} }
+    rescue StandardError => e
+      Rails.logger.error(e.message)
+      Rails.logger.error(e.backtrace.first(5).join("\n"))
+      { success: false, response: { error: { message: e.message } } }
+    end
   end
 end

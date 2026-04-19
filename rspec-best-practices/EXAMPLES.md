@@ -66,7 +66,7 @@ RSpec.describe Orders::CreateOrder do
 
     it 'returns success with the new order' do
       expect(result[:success]).to be true
-      expect(result[:order]).to be_persisted
+      expect(result[:response][:order]).to be_persisted
     end
 
     context 'when out of stock' do
@@ -74,7 +74,7 @@ RSpec.describe Orders::CreateOrder do
 
       it 'returns failure with an error message' do
         expect(result[:success]).to be false
-        expect(result[:error]).to eq('Out of stock')
+        expect(result[:response][:error][:message]).to eq('Out of stock')
       end
     end
   end
@@ -105,7 +105,7 @@ RSpec.describe Campaigns::DeliveryService do
     end
 
     context 'when SendgridClient returns failure' do
-      before { allow(SendgridClient).to receive(:deliver).and_return({ success: false, error: 'SMTP error' }) }
+      before { allow(SendgridClient).to receive(:deliver).and_return({ success: false, response: { error: { message: 'SMTP error' } } }) }
 
       it 'returns failure' do
         expect(result[:success]).to be false

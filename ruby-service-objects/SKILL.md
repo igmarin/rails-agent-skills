@@ -30,41 +30,29 @@ Every service's `.call` / `call` MUST return a hash matching EXACTLY one of thes
 { success: false, response: { error: { message: 'human-readable reason' } } }
 ```
 
-Rules enforced by this contract:
+1. Top-level keys are exactly `:success` (Boolean) and `:response` (Hash). Reject `{ data: ... }`, `{ subscription: ... }`, or any key other than `:success` / `:response` at the top level.
+2. Errors nest under `response: { error: { message: ... } }`. Reject `{ message: '...' }` at top level or `{ response: { message: '...' } }` missing the `:error` wrapper.
 
-1. Top-level keys are exactly `:success` (Boolean) and `:response` (Hash). Never flatten payload onto the top level.
-2. Payload goes under `response:` on success — never directly under `:success` or a custom key like `:data` / `:result`.
-3. Errors nest under `response: { error: { message: ... } }` — never `response: { message: ... }` and never `error: ...` at the top level.
-4. A service MUST NOT raise to its caller — wrap `rescue` blocks and convert to the failure shape.
-5. Orchestrators propagate sub-service hashes verbatim (`return result unless result[:success]`) — they do not repack.
-
-Banned shapes (reject during self-review):
-
-```ruby
-{ success: true, data: ... }                  # wrong key — must be :response
-{ success: true, subscription: ... }          # flattened payload — must nest under :response
-{ success: false, message: '...' }            # error at top level — must nest under :response, :error
-{ success: false, response: { message: '...' } }  # missing :error wrapper
-true / false / subscription                   # raw values — never return anything but the two shapes
-```
-
-## Quick Reference
+## Conventions
 
 | Convention | Rule |
 |-----------|------|
-| Entry point | `.call` class method delegating to `new.call` |
-| Response format | `{ success: true/false, response: { ... } }` |
+| Entry point | `.call` class method → `new.call` |
 | File location | `app/services/module_name/service_name.rb` |
-| Pragma | `frozen_string_literal: true` in every file |
-| Docs | YARD on every public method (see **yard-documentation**) |
-| Validation | Validate method-level inputs at the TOP of `call` before any loop or business logic — return error hash immediately if invalid |
-| Error handling | Every `rescue` block must: (1) log with `Rails.logger.error`, (2) log backtrace via `e.backtrace.join("\n")`, (3) return error hash — never re-raise |
-| Transactions | Wrap multi-step DB operations |
+| Pragma | `frozen_string_literal: true` |
+| Docs | YARD on every public method (→ **yard-documentation**) |
+| Validation | Validate inputs at top of `call`; return error hash if invalid |
+| Error handling | `rescue` → log + error hash; never re-raise to caller |
+| Transactions | Only wrap multi-step DB operations that must be atomic |
+| `call` length | ≤20 lines; extract sub-services if longer |
+| Scope | Return data only (no HTTP); single responsibility per service |
+| SQL | `sanitize_sql` for any dynamic queries |
+| Shared logic | Extract validators to class-only services (Pattern 3) |
 
 ## When to Use Each Pattern
 
 | Signal in the task | Pattern |
-|--------------------|---------|
+|--------------------|----------|
 | Orchestrates multiple steps, needs instance state | Pattern 1: `.call → new.call` |
 | Processes a collection with per-item error handling | Pattern 2: Batch processing |
 | Stateless helper, validator, or utility — no instance state needed | Pattern 3: Class-only (static methods) |
@@ -184,51 +172,13 @@ def call
 end
 ```
 
-## Additional Patterns
-
-### Constants for configuration
-
-```ruby
-MISSING_CONFIGURATION_ERROR = 'Missing required configuration'
-DEFAULT_TIMEOUT = 30
-```
-
-### SQL sanitization
-
-```ruby
-def self.find(tag_number:)
-  query = ActiveRecord::Base.sanitize_sql(['SELECT * FROM table WHERE tag_number = ?;', tag_number])
-  fetcher.execute_query(query)
-end
-```
-
-## Checklist for New Service Objects
-
-- [ ] Module namespace matches directory structure
-- [ ] Constants defined for error messages and defaults
-- [ ] Graceful handling for non-critical failures
-- [ ] SQL sanitization for any dynamic queries
-- [ ] `README.md` documenting the module
-
-## Pitfalls
-
-| Problem | Correct approach |
-|---------|-----------------|
-| Response format inconsistency | Always use `{ success: bool, response: { ... } }`. Error response: `{ success: false, response: { error: { message: ... } } }`. Sub-services handle their own rescue — never let exceptions propagate to callers |
-| Skipping input validation | Bad input causes cryptic errors deep in the call chain |
-| Transaction wrapping everything | Only wrap multi-step DB operations that must be atomic |
-| `.call` method longer than 20 lines | Extract to sub-services — orchestrator should coordinate, not implement |
-| Service renders HTTP responses | That's the controller's job — service returns data only |
-| Service modifies unrelated models | Unclear boundary — extract a new service with a single responsibility |
-| Duplicated validation across services | Extract to a shared validator object |
-
 ## Integration
 
 | Skill | When to chain |
 |-------|---------------|
-| **yard-documentation** | When writing or reviewing inline docs for classes and public methods |
-| **ruby-api-client-integration** | For external API integrations (Auth, Client, Fetcher, Builder layers) |
-| **strategy-factory-null-calculator** | For variant-based calculators (Factory + Strategy + Null Object) |
-| **rspec-service-testing** | For testing service objects |
-| **rspec-best-practices** | For general RSpec structure |
-| **rails-architecture-review** | When service extraction is part of an architecture review |
+| **yard-documentation** | Writing/reviewing inline docs |
+| **ruby-api-client-integration** | External API integrations |
+| **strategy-factory-null-calculator** | Variant-based calculators |
+| **rspec-service-testing** | Testing service objects |
+| **rspec-best-practices** | General RSpec structure |
+| **rails-architecture-review** | Architecture review involving service extraction |

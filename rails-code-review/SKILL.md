@@ -39,7 +39,7 @@ generate-tasks must include a "Code review before merge" task.
 
 ## Review Order
 
-Work through the diff in this sequence. See [REVIEW_CHECKLIST.md](./REVIEW_CHECKLIST.md) for the full per-area check criteria.
+Work through the diff in this sequence. Deep criteria: [REVIEW_CHECKLIST.md](./REVIEW_CHECKLIST.md). One-page PR baseline: [assets/checklist.md](./assets/checklist.md). Finding examples (JSON + comment shape): [assets/examples.md](./assets/examples.md).
 
 Configuration → Routing → Controllers → Views → Models → Associations → Queries → Migrations → Validations → I18n → Sessions → Security → Caching → Jobs → Tests
 
@@ -64,84 +64,45 @@ params.require(:user).permit(:name, :email)  # Good
 - Unparameterized / string-interpolated SQL — injection
 - Destructive migration without a safe path on large tables
 
-## Severity Levels
+## Severity levels
 
-Use these **exact** labels. Nothing else.
+Use **only** these labels (no High/Low, P0–P2, etc.): **`Critical`** | **`Suggestion`** | **`Nice to have`**.
 
-| Level | Meaning | Action |
-|-------|---------|--------|
-| **Critical** | Security risk, data loss, crash, or rule from "Always Critical" list | Block merge — must fix before approval; mandatory re-review after fix |
-| **Suggestion** | Convention violation or performance concern | Fix in this PR; ticket only if fix requires significant redesign |
-| **Nice to have** | Style improvement or minor optimization | Optional — author's discretion; no follow-up required |
+- **Critical** — security, data loss, crash, or any **Always Critical** rule → block merge; re-diff after fix.
+- **Suggestion** — conventions / performance → fix in PR, or ticket if redesign is large.
+- **Nice to have** — small style or micro-optimization → optional for the author.
 
-**Only `Critical` / `Suggestion` / `Nice to have` — no other labels** (no High/Medium/Low, Major/Minor, Warning/Error, P0/P1/P2, numeric severities).
+## Output style
 
-## Output Style
-
-Every review MUST render findings in this exact structure. Group by severity header; do not inline severities in a flat list.
+Group findings under `### Critical` / `### Suggestion` / `### Nice to have` (omit empty sections). Do not use a single flat list mixed by severity.
 
 ```text
 ## Review — <PR title or area>
 
 ### Critical
-- [app/controllers/foo_controller.rb:42] (Controllers) `params.require(:user).permit!` allows mass assignment. **Mitigation:** whitelist with `.permit(:name, :email)`.
-- [app/controllers/orders_controller.rb:15] (Controllers) Pricing calculation inline in controller action. **Mitigation:** extract to `Orders::CalculatePricing.call(...)` service.
-- [db/migrate/20260412_add_index.rb:6] (Migrations) `add_index` on large table without `algorithm: :concurrent` — locks writes. **Mitigation:** split into schema migration + concurrent index migration.
+- [path/to/file.rb:LINE] (Area) One-line risk. **Mitigation:** concrete next step.
 
 ### Suggestion
-- [app/models/post.rb:30] (Queries) N+1 on `post.comments.each`. **Mitigation:** `includes(:comments)` in the scope.
-- [app/models/user.rb:88] (Models) Callback orchestrating external API call. **Mitigation:** move to a service object; keep callbacks persistence-only.
-- [config/routes.rb:22] (Routing) Deeply nested routes (3 levels). **Mitigation:** flatten with shallow nesting.
+- [path/to/file.rb:LINE] (Area) … **Mitigation:** …
 
 ### Nice to have
-- [app/views/orders/show.html.erb:8] (Views) Repeated partial — extract for DRY.
-- [spec/models/order_spec.rb:44] (Tests) Missing context block for error path. **Mitigation:** add `context "when invalid"`.
+- …
 
-**Actions required:**
-- Critical items block merge; re-review mandatory after fixes land.
-- Suggestion items: fix in this PR, or ticket if redesign is needed.
-- Nice to have: optional at author's discretion.
+**Actions required:** <one line per severity level that appeared — e.g. Critical → block merge + re-review; Suggestion → …>
 ```
 
-**Rules enforced by this template:**
+**Template rules:** each bullet is `[file:line] (Area)` + risk + **`Mitigation:`** (required). Tag **(Area)** from: Controllers, Routing, Views, Models, Queries, Migrations, Validations, Security, Caching, Jobs, Tests — across the whole review, cover **≥4** distinct areas when the diff touches that many surfaces.
 
-1. Every finding cites `file:line`.
-2. Every finding ends with a **Mitigation:** — identifying the problem without a remediation is not a review.
-3. Review covers at least **four distinct areas** from: Controllers, Routing, Views, Models, Queries, Migrations, Validations, Security, Caching, Jobs, Tests. Tag each finding with its area in parentheses (e.g. `(Controllers)`, `(Queries)`) so coverage is visible. Group findings by severity first, then ensure area breadth across the review.
-4. The **Actions required** block appears at the end, restating the action per severity level used — even if only one level fired.
+## Re-review before merge
 
-## Re-Review Loop
+Re-diff the branch after **any** Critical fix (mandatory), after **>3** Suggestion fixes or any logic/architecture change during feedback (recommended), or whenever the fix could alter queries, auth, or migrations. Skip only for **Nice to have**-only feedback or trivial one-line edits with **no** behavior change.
 
-When critical or significant findings were addressed, re-review before merging:
+## Review anti-patterns (adds to checklist, does not replace it)
 
-```
-Review → Categorize findings (Critical / Suggestion / Nice to have)
-       → Developer addresses findings
-       → Critical findings fixed? → Re-review the diff
-       → Suggestion items resolved or ticketed?
-       → All green → Approve PR
-```
-
-**Re-review triggers:**
-- Any Critical finding was present → mandatory re-review after fixes
-- More than 3 Suggestion items addressed → re-review recommended
-- Logic or architecture changed during feedback → re-review required
-
-**Skip re-review only when:** All findings were Nice to have or single-line fixes with zero logic change.
-
-## Pitfalls
-
-| Pitfall | What to do |
-|---------|------------|
-| "Skinny controller" means move to model | Move to services — avoid fat models |
-| Skipping N+1 check because "it's just one query" | One query per record in a collection is N+1 |
-| Index added in same migration as column | On large tables, separate migration with `algorithm: :concurrent` |
-| Callbacks for business logic | Callbacks are for persistence-level concerns, not orchestration |
-| Approving after Critical fix without re-reviewing | A fix can introduce new issues — re-review is mandatory |
-| Controller action > ~15 lines | Extract to service — controllers orchestrate, not implement |
-| Model with > 3 callbacks | Extract to service or observer |
-| `html_safe`/`raw` on user-provided content | XSS risk — escape or sanitize first |
-| Migration combining schema change and data backfill | Split: schema migration first, then data migration |
+- **Thin controller → fat model:** extract orchestration to **services** (PORO / `*.call`), not giant model methods.
+- **N+1 in dev:** small seeds hide N+1 — if associations run inside a loop, count queries (request spec, rack-mini-profiler, logs) instead of assuming “it’s fast here.”
+- **Hot-table migrations:** add concurrent indexes and heavy backfills in **separate** deploy steps from reversible schema changes (chain **rails-migration-safety** when unsure).
+- **Callbacks vs jobs:** persistence hooks only; external I/O and multi-step workflows belong in services/jobs with clear idempotency.
 
 ## Integration
 

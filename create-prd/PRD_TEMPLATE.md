@@ -19,6 +19,10 @@
 1. The system must [behavior]. [Testable condition.]
 2. The system must [behavior]. [Testable condition.]
 
+## Non-Functional Requirements
+
+- Performance, security, accessibility, reliability, or scalability constraints relevant to the feature (testable where possible).
+
 ## Non-Goals
 
 - [Explicitly out of scope for this version.]

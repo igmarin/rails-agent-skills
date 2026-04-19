@@ -28,9 +28,18 @@ Detect → run → defer. Do not invent style rules.
 |-------|------|
 | Style/format | Project linter(s) — detect and run as above; do not invent style rules here |
 | Principles | DRY, YAGNI, PORO where it helps, CoC, KISS |
-| Comments | Explain **why**, not **what**; use tagged notes with context |
+| Comments / tags | Explain **why**; tagged notes need actionable context |
 | Logging | First arg string, second arg hash; no string interpolation; `event:` when useful for dashboards |
 | Deep stacks | Chain **rails-stack-conventions** → domain skills (services, jobs, RSpec) |
+
+## Code Review / Refactoring Workflow
+
+When reviewing or refactoring Rails code, follow this sequence:
+
+1. **Run linter** — detect config, run the appropriate tool, note absence if none found.
+2. **Check area-specific rules** — apply the "Apply by area" table below to each changed path.
+3. **Verify tests gate** — confirm failing tests exist before any new behavior; run specs and checkpoints.
+4. **Chain to specialised skills** — use the Integration table to pull in deeper guidance (security, jobs, specs, etc.) as needed.
 
 ## Design Principles
 
@@ -42,62 +51,41 @@ Detect → run → defer. Do not invent style rules.
 | **Convention over Configuration** | Prefer Rails defaults and file placement; document only intentional deviations |
 | **KISS** | Simplest design that meets acceptance criteria and **tests gate** |
 
-## Comments
+## Comments and tagged notes
 
-- Comment the **why**, not the **what** (the code shows what).
-- Use tags with **enough context** that a future reader can act: `TODO:`, `FIXME:`, `HACK:`, `NOTE:`, `OPTIMIZE:`.
+Comment **why**, not **what**. When something is unfinished, risky, or assumption-heavy, use **`TODO:` / `FIXME:` / `HACK:` / `NOTE:` / `OPTIMIZE:`** — uppercase, trailing colon, then **actionable context** (owner, ticket, deadline, or decision needed). Never a naked tag.
 
 ```ruby
-# BAD — restates the method name, adds zero value
+# BAD — narrates the code
 # Finds the user by email
 def find_by_email(email)
   User.find_by(email: email)
 end
 
-# GOOD — explains intent and tradeoff
-# Uses find_by (not find_by!) so callers can handle nil explicitly;
-# downstream auth layer is responsible for raising on missing user.
+# GOOD — why `find_by` vs `find_by!` matters for callers
+# Uses find_by (not find_by!) so callers handle nil; auth layer may raise.
 def find_by_email(email)
   User.find_by(email: email)
 end
-```
 
-### Tagged notes — REQUIRED when code carries unresolved work
-
-When the code you write has a known limitation, follow-up, or assumption a future reader must act on, leave a tagged note. The tag is **UPPERCASE with a trailing colon** (`TODO:`, `FIXME:`, `HACK:`, `NOTE:`, `OPTIMIZE:`) followed by **actionable context** — who/what/when the reader needs to decide.
-
-```ruby
-# BAD — tag without context, unusable
+# BAD — unusable
 # TODO: fix this
 rate = TIER_RATES.fetch(tier, 0.0)
 
-# GOOD — tag + actionable context a future reader can act on
-# TODO: replace TIER_RATES with a DB-backed lookup once the pricing team
-# finalises the enterprise tier (ticket PRI-482, blocked on legal review).
+# GOOD — next step + dependency visible
+# TODO: replace TIER_RATES with DB-backed lookup (PRI-482; blocked on legal).
 rate = TIER_RATES.fetch(tier, 0.0)
-
-# GOOD — NOTE: captures a non-obvious invariant for maintainers
-# NOTE: promo discount REPLACES base discount when it exceeds it — we take
-# the higher of promo-only vs combined to match the contract with marketing.
-discount = [promo_discount, base_discount + promo_discount].max
 ```
-
-Rules:
-
-1. Every `TODO:` / `FIXME:` / `HACK:` includes a concrete resolution path (ticket, owner, condition to unblock).
-2. Every `NOTE:` captures an invariant or domain intent that would otherwise surprise a reader.
-3. Do not quote code back in the comment (no `# calls TIER_RATES.fetch(...)` — the line below already says that).
-4. Never commit bare `# TODO`, `# TODO:`, or `# TODO: fix later` — no context means delete the tag or do the work.
 
 ## Structured Logging
 
 - **First argument:** static string (message key or human-readable template without interpolated values).
 - **Second argument:** hash with structured fields (`user_id:`, `order_id:`, etc.).
 - **Do not** build the primary message with string interpolation; put dynamic data in the hash.
-- **Always include an `event:` key** in the hash — it is the primary grouping dimension in log aggregators (Datadog, Loki, Kibana). Use a dot-namespaced value like `"order.processing_started"` or `"payment.capture_failed"`. No alternate key names (`:type`, `:action`, `:name`) — the key MUST be literally `event:`.
+- **Always include `event:`** — the primary grouping dimension in log aggregators (Datadog, Loki, Kibana). Use dot-namespaced values like `"order.processing_started"`. No alternate key names (`:type`, `:action`, `:name`).
 
 ```ruby
-# BAD — interpolation loses structure; cannot filter by user_id in log aggregators
+# BAD — interpolation loses structure; cannot filter by field in log aggregators
 Rails.logger.info("Processing order #{order.id} for user #{user.id}")
 
 # GOOD — static message, structured data, filterable fields
@@ -115,16 +103,16 @@ Rules below apply **when those paths exist** in the project. If a path is absent
 
 | Area | Path pattern | Guidance |
 |------|--------------|----------|
-| **ActiveRecord performance** | `app/models/**/*.rb` | Eager load in loops; prefer `pluck`, `exists?`, `find_each` over loading full records. Fix N+1s: run `bullet` → fix eager loading → re-run until clean |
-| **Background jobs** | `app/workers/**/*.rb`, `app/jobs/**/*.rb` | Clear worker/job structure, queue selection, idempotency, structured error logging (see **rails-background-jobs** for Active Job / Solid Queue / Sidekiq depth) |
-| **Error handling** | `app/services/**/*.rb`, `app/lib/**/*.rb`, `app/exceptions/**/*.rb` | Domain exceptions with prefixed codes where the team uses them; `rescue_from` or base handlers for API layers as conventions dictate |
-| **Logging / tracing** | `app/services/**/*.rb`, `app/workers/**/*.rb`, `app/jobs/**/*.rb`, `app/controllers/**/*.rb`, `app/repositories/**/*.rb` | Structured logging; add APM trace spans and tags (e.g. Datadog) for key operations when the stack includes them |
-| **Controllers** | `app/controllers/**/*_controller.rb` | Strong params; thin actions delegating to services; watch IDOR and PII exposure (see **rails-security-review**) |
-| **Repositories** | `app/repositories/**/*.rb` | Avoid new repository objects unless raw SQL, caching, a clear domain boundary, or external service isolation justifies it; document **why** in code |
-| **RSpec** | `spec/**/*_spec.rb` | FactoryBot; prefer request specs over controller specs; use `env:` metadata (or project equivalent) for ENV changes; **prefer `let` over `let!`** unless the example requires eager setup; avoid `before` for data when `let` or inline factories are clearer |
-| **Serializers** | `app/serializers/**/*.rb` | If using ActiveModel::Serializer (or similar): explicit `key:` mapping; avoid N+1; pass preloaded associations via options when applicable |
-| **Service objects** | `app/services/**/*.rb` | Single responsibility; class methods for stateless entry points, instance API when dependencies are injected; public methods first; bang (`!`) / predicate (`?`) naming as appropriate (see **ruby-service-objects**) |
-| **SQL security** | Raw SQL anywhere | No string interpolation of user input; use `sanitize_sql_array` / bound parameters; whitelist dynamic ORDER BY; document **why** raw SQL is needed |
+| **ActiveRecord performance** | `app/models/**/*.rb` | Eager load in loops; prefer `pluck` / `exists?` / `find_each`. N+1: run `bullet` → fix eager loads → re-run clean |
+| **Background jobs** | `app/workers/**/*.rb`, `app/jobs/**/*.rb` | Clear job shape, queues, idempotency, structured errors — depth: **rails-background-jobs** |
+| **Error handling** | `app/services/**/*.rb`, `app/lib/**/*.rb`, `app/exceptions/**/*.rb` | Domain exceptions + layer `rescue_from` as the app does today; after changes, specs must cover rescue paths |
+| **Logging / tracing** | `app/services/**/*.rb`, `app/workers/**/*.rb`, `app/jobs/**/*.rb`, `app/controllers/**/*.rb`, `app/repositories/**/*.rb` | Structured logs; APM spans/tags on hot paths when the stack has APM |
+| **Controllers** | `app/controllers/**/*_controller.rb` | Strong params; thin actions → services; IDOR / PII → **rails-security-review** |
+| **Repositories** | `app/repositories/**/*.rb` | New repos only for SQL, caching, clear boundary, or external I/O — document **why** |
+| **RSpec** | `spec/**/*_spec.rb` | FactoryBot; request over controller specs; `env:` (or project pattern) for ENV; **`let` > `let!`** unless eager setup required; avoid heavy `before` when `let` is clearer |
+| **Serializers** | `app/serializers/**/*.rb` | Explicit keys; no N+1; preload associations passed in |
+| **Service objects** | `app/services/**/*.rb` | Single responsibility; `.call` / injected deps per **ruby-service-objects**; after extract, specs + caller still green |
+| **SQL security** | Raw SQL anywhere | Bind params / `sanitize_sql_array`; whitelist dynamic `ORDER BY`; document **why** raw SQL |
 
 ## RSpec and `let_it_be` (test-prof)
 

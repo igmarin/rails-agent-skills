@@ -18,143 +18,81 @@ Use this skill when the task is to write, review, or clean up RSpec tests.
 
 | Aspect | Rule |
 |--------|------|
-| Spec type | Request > controller; model for domain; system only for critical E2E |
+| Spec types | Model: domain logic; Request: HTTP endpoints (prefer over controller); Job: background processing; Service/PORO: no Rails helpers; System: critical E2E only (slow) |
 | Assertions | Test behavior, not implementation |
-| Factories | Minimal — only attributes needed for the test |
+| Factories | Minimal — only attributes needed; use traits for optional states; prefer `build`/`build_stubbed` over `create` |
 | Mocking | Stub external boundaries, not internal code |
 | Isolation | Each example independent; no shared mutable state |
 | Naming | `describe` for class/method, `context` for scenario |
 | Service specs | **Required:** `describe '.call'` and `subject(:result)` for the primary invocation |
-| `let` vs `let!` | Default to `let`. Use `let!` ONLY when the object must exist before the example runs (e.g., a DB record checked via `.count`) |
-| External service mocking | Class methods: `allow(ServiceClass).to receive(:method)` — **not** `instance_double`. Use `instance_double` only for injected instance collaborators |
-| Example names | Never use "and" in an example name — one behavior per example; split it |
-| First slice | Start at the highest-value boundary that proves behavior |
-| TDD | Write test first, run it, verify failure, then implement |
+| `let` vs `let!` | Default to `let`; `let!` ONLY when object must exist before example runs |
+| External service mocking | `allow(ServiceClass).to receive(:method)` — **not** `instance_double`; `instance_double` only for injected collaborators |
+| Example names | Present tense: `it 'returns the user'`, never `it 'should ...'` |
+| `aggregate_failures` | Use when asserting multiple related items in one example |
 
-## HARD-GATE: Tests Gate Implementation
+## TDD Workflow
 
-```text
-THE WORKFLOW IS: PRD → TASKS → TESTS → IMPLEMENTATION
+When driving new behaviour with RSpec, follow this sequence:
 
-Tests are a GATE between planning and code.
-NO implementation code may be written until:
-  1. The test EXISTS
-  2. The test has been RUN
-  3. The test FAILS for the correct reason (feature missing, not typo)
-```
+1. **Write the failing spec** — pick the smallest spec type that exercises the intended behaviour (model > service > request > system).
+2. **Run it and confirm the failure message** — the error should be about missing code, not a setup problem.
+3. **Implement the minimum code** to make the spec pass.
+4. **Refactor** — clean up duplication and naming while keeping the suite green.
+5. **Verify** — run the full relevant spec file, then the suite, before committing.
 
-Write code before the test? Delete it. Start over.
+### Choosing the best first failing spec for a Rails change
 
-**The gate cycle for each behavior:**
+| Change type | Start with |
+|-------------|------------|
+| Pure domain logic | Model or PORO service spec |
+| HTTP endpoint behaviour | Request spec |
+| Background processing | Job spec |
+| Cross-layer user journey | System spec (sparingly) |
 
-1. **Write test:** One minimal test showing what the behavior should do
-2. **Run test:** Execute it — this is mandatory, not optional
-3. **Validate failure:** Confirm it fails because the feature is missing
-4. **CHECKPOINT — Test Design Review:** Present the failing test. Confirm boundary, behavior, and edge cases before writing implementation. See `rails-tdd-slices` for checkpoint format.
-5. **GATE PASSED** — you may now write implementation code
-6. **CHECKPOINT — Implementation Proposal:** Before writing code, state which classes/methods will be created or changed and the rough structure. Wait for confirmation.
-7. **Write minimal code:** Simplest implementation to make the test pass
-8. **Run test again:** Confirm it passes and no other tests break
-9. **Refactor:** Clean up — tests must stay green
-10. **Next behavior:** Return to step 1
+## Factory Design
 
-## TDD Slice Selection
+Minimal factories only. Never rely on factory defaults for business logic — set explicitly or use traits. Avoid `create` when `build`/`build_stubbed` suffices.
 
-Choose the first failing spec at the boundary that gives the strongest signal with the least setup:
-
-| Change type | Best first spec |
-|-------------|-----------------|
-| New endpoint, controller action, or API behavior | Request spec |
-| New domain rule on an existing model | Model spec |
-| New service object or orchestration flow | Service spec |
-| Background job behavior | Job spec; add service/domain spec if logic is non-trivial |
-| Rails engine route, install, or generator behavior | Engine request/routing/generator spec via `rails-engine-testing` |
-| Bug fix | Reproduction spec at the boundary where the bug is observed |
-
-## Structure and Style
-
-- **describe** for the class, module, or behavior; **context** for scenarios ("when valid", "when user is missing").
-- Mirror source paths under `spec/` (e.g. `app/models/user.rb` → `spec/models/user_spec.rb`).
-- Use **shared_examples** / **shared_context** for repeated behavior; put reusable shared examples under `spec/support/`.
-- Use `let_it_be` only when `test-prof` already exists in the project.
-- **Time-dependent behavior MUST use `travel_to`** — do not set dates in the past as a shortcut, do not stub `Time.now`. Wrap assertions in a `travel_to` block to control the clock:
+## Service Spec (anchor pattern)
 
 ```ruby
-let(:subscription) { create(:subscription, activated_at: Time.current) }
+RSpec.describe Invoices::MarkOverdue do
+  describe '.call' do
+    subject(:result) { described_class.call(invoice: invoice) }
 
-context 'after expiration' do
-  it 'is expired' do
-    travel_to 31.days.from_now do
-      expect(subscription).to be_expired
+    context 'when the invoice is overdue and unpaid' do
+      let(:invoice) { create(:invoice, due_date: 2.days.ago, paid_at: nil) }
+
+      it 'marks the invoice overdue' do
+        expect { result }.to change { invoice.reload.overdue? }.from(false).to(true)
+      end
+    end
+
+    context 'when the invoice is already paid' do
+      let(:invoice) { create(:invoice, due_date: 2.days.ago, paid_at: 1.day.ago) }
+
+      it 'does not change the invoice' do
+        expect { result }.not_to change { invoice.reload.updated_at }
+      end
     end
   end
 end
 ```
 
-### One behavior per example — NEVER "and" in example names
+→ Full examples: `EXAMPLES.md` | Copy-paste templates: `assets/spec_templates.md`
 
-The word **"and"** in an `it` / `specify` description is a hard signal that the example is asserting two behaviors. Split it into two examples — one behavior per example. This applies to every spec: model, service, request, job, mailer.
+## Shared Examples
 
-```ruby
-# BAD — two behaviors in one example; if the first fails, the second is never reached
-it 'returns 201 and creates the record' do
-  # ...
-end
+Use only when the same behavioural contract applies to multiple subjects without per-example `let` overrides. Avoid when each context needs different setup — that signals a wrong abstraction. → Example in `EXAMPLES.md`
 
-it 'saves the order and sends the confirmation email' do
-  # ...
-end
+## Flaky Tests & Deterministic Assertions
 
-# GOOD — one behavior per example, descriptions state observable outcomes
-it 'returns 201' do; end
-it 'creates the record' do; end
-
-it 'saves the order' do; end
-it 'sends the confirmation email' do; end
-```
-
-Rule enforced in self-review: grep the spec for `\band\b` inside `it '...'` / `it "..."` strings before committing — any hit is a split.
-
-**Minimal request spec skeleton:**
-
-```ruby
-# frozen_string_literal: true
-
-RSpec.describe 'POST /orders', type: :request do
-  let(:product) { create(:product, stock: 5) }
-
-  context 'when product is in stock' do
-    it 'returns 201 for an in-stock product' do
-      post orders_path, params: { order: { product_id: product.id } }, as: :json
-      expect(response).to have_http_status(:created)
-    end
-  end
-end
-```
-
-**Monolith vs engine:** When the project is a Rails engine, use `rails-engine-testing` for dummy-app setup and engine request/routing/generator specs; keep using this skill for general RSpec style.
-
-For more examples (model spec, service spec, shared_examples, travel_to), see [EXAMPLES.md](./EXAMPLES.md).
-
-## Pitfalls
-
-| Pitfall | What to do |
-|---------|------------|
-| Starting with the lowest layer by habit | Begin at the boundary that proves the behavior users care about |
-| Testing mock behavior instead of real behavior | Assert outcomes, not implementation details |
-| Recommending `let_it_be` in every repo | Only use it when `test-prof` already exists in the project |
-| Factories creating large graphs by default | Minimal factories — only what the test needs |
-| Setting dates in the past instead of `travel_to` | Always use `travel_to` for time-dependent assertions — it makes boundary conditions deterministic |
-| Code written before the test | Delete it. Reproduction step isn't done yet. |
-| Test name contains "and" | One behavior per example. Split it. |
-
-## Integration
-
-| Skill | When to chain |
-|-------|---------------|
-| **rails-tdd-slices** | When the hardest part is choosing the first failing Rails spec or vertical slice |
-| **rails-bug-triage** | When a bug report must be turned into a reproducible failing spec and fix plan |
-| **rspec-service-testing** | For service object specs — `instance_double` for **injected instance** collaborators, hash factories, shared_examples; NOT for external class method mocking |
-| **rails-engine-testing** | For engine specs — dummy app, routing specs, generator specs |
-| **rails-code-review** | When reviewing test quality as part of code review |
-| **refactor-safely** | When adding characterization tests before refactoring |
+| Cause | Fix |
+|-------|-----|
+| Time-dependent logic | `freeze_time` / `travel_to`; never set past dates as shortcut |
+| State leakage | Each example sets up own state; avoid `before(:all)` |
+| Async jobs | `queue_adapter = :test` + `have_enqueued_job`; never assert side-effects imperatively |
+| External HTTP | `WebMock` / `VCR`; never allow real network in CI |
+| DB state bleed | Transactional fixtures or `DatabaseCleaner`; never share `let!` across contexts |
+| Race conditions | Explicit Capybara waits; avoid `sleep` |
+| Imprecise assertions | `change.from().to()` over final state; exact values over `be_truthy`/`be_falsey`; never assert `updated_at` |
