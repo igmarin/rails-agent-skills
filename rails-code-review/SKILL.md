@@ -55,20 +55,56 @@ params.require(:user).permit!                # Bad — never in production
 params.require(:user).permit(:name, :email)  # Good
 ```
 
-**Additional Critical patterns:**
+**Always Critical (flag every occurrence as `Critical`):**
 
-- **Business logic in controller action** (multi-step domain workflow) — flag as Critical; extract to a service object. A controller action doing more than coordinate (call one service, handle response) is a Critical finding.
-- **Missing authorization check on sensitive action** — flag as Critical.
+- `params.require(...).permit!` — mass-assignment / privilege escalation
+- `html_safe` or `raw` applied to user-supplied content — XSS
+- Missing authorization check on a sensitive action
+- **Business logic inside a controller action** — pricing, tax, discount, multi-step workflow, or any domain calculation inline. A controller action that does more than coordinate (call one service, render response) is `Critical`, not a Suggestion.
+- Unparameterized / string-interpolated SQL — injection
+- Destructive migration without a safe path on large tables
 
 ## Severity Levels
 
-Use these levels when reporting findings:
+Use these **exact** labels. Nothing else.
 
 | Level | Meaning | Action |
 |-------|---------|--------|
-| **Critical** | Security risk, data loss, or crash | Block merge — must fix before approval; mandatory re-review after fix |
-| **Suggestion** | Convention violation or performance concern | Fix in this PR; create a tracked follow-up ticket only if the fix requires significant redesign |
-| **Nice to have** | Style improvement, minor optimization | Optional — author's discretion; no follow-up required |
+| **Critical** | Security risk, data loss, crash, or rule from "Always Critical" list | Block merge — must fix before approval; mandatory re-review after fix |
+| **Suggestion** | Convention violation or performance concern | Fix in this PR; ticket only if fix requires significant redesign |
+| **Nice to have** | Style improvement or minor optimization | Optional — author's discretion; no follow-up required |
+
+**BANNED labels — never use these in review output:** `High`, `Medium`, `Low`, `Major`, `Minor`, `Warning`, `Error`, `Info`, `Blocker`, `P0`/`P1`/`P2`, numeric severities. If you find yourself reaching for one of these, the correct label is one of the three above.
+
+## Output Style
+
+Every review MUST render findings in this exact structure. Group by severity header; do not inline severities in a flat list.
+
+```text
+## Review — <PR title or area>
+
+### Critical
+- [app/controllers/foo_controller.rb:42] `params.require(:user).permit!` allows mass assignment of any attribute. **Mitigation:** whitelist explicitly with `.permit(:name, :email)`.
+- [app/controllers/orders_controller.rb:15] Pricing calculation inline in controller action. **Mitigation:** extract to `Orders::CalculatePricing.call(...)` service.
+
+### Suggestion
+- [app/models/post.rb:30] N+1 on `post.comments.each`. **Mitigation:** add `includes(:comments)` to the scope.
+
+### Nice to have
+- [app/views/orders/show.html.erb:8] Extract repeated partial for DRY.
+
+**Actions required:**
+- Critical items block merge; re-review mandatory after fixes land.
+- Suggestion items: fix in this PR, or ticket if redesign is needed.
+- Nice to have: optional at author's discretion.
+```
+
+**Rules enforced by this template:**
+
+1. Every finding cites `file:line`.
+2. Every finding ends with a **Mitigation:** — identifying the problem without a remediation is not a review.
+3. Review covers at least four distinct areas (Controllers, Queries, Models, Migrations, Security, etc.) — group findings by severity first, but ensure the set of findings spans multiple areas.
+4. The **Actions required** block appears at the end, restating the action per severity level used — even if only one level fired.
 
 ## Re-Review Loop
 
