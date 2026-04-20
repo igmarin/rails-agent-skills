@@ -20,17 +20,7 @@ When a task arrives, identify the matching skill from the tables below and **nam
 
 ## CROSS-CUTTING MANDATE: Tests Gate Implementation
 
-Non-negotiable across every code-producing skill. Workflow: **PRD → TASKS → TESTS → IMPLEMENTATION → YARD → DOCS → CODE REVIEW → PR**. No implementation code until the test exists, has been run, and fails for the right reason.
-
-**Gate cycle per behavior:**
-
-1. Write test → `bundle exec rspec path/to/spec` → confirm failure reason is *feature missing*, not a config or syntax error
-2. **CHECKPOINT — Test Feedback:** verify right behavior, right boundary, edge cases covered — only proceed once confirmed
-3. **CHECKPOINT — Implementation Proposal:** name classes/methods to create or modify, state data flow, wait for explicit approval
-4. Write minimal implementation → `bundle exec rspec path/to/spec` → confirm green; full suite → confirm no regressions
-5. Refactor — tests stay green → repeat from step 1 for next behavior
-
-**After all behaviors pass:** GATE — `bundle exec rubocop && bundle exec rspec` → YARD docs → README/diagrams → `rails-code-review` self-review → PR → `rails-review-response` on feedback
+Non-negotiable across every code-producing skill. Workflow: **PRD → TASKS → TESTS → IMPLEMENTATION → YARD → DOCS → CODE REVIEW → PR**. No implementation code until the test exists, has been run, and fails for the right reason (*feature missing*, not config/syntax). See the TDD Feature Loop below for the per-behavior cycle and checkpoints.
 
 ## Available Skills
 
