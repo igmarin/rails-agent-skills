@@ -1,5 +1,7 @@
 # Workflow: Setup & Configuration (20)
 
+> **Roadmap notice:** the `rails-ci-cd-setup` skill referenced below is **not yet implemented** (see [skill-catalog Roadmap](../reference/skill-catalog.md#proposed-new-skills-roadmap)). The templates on this page are kept as reference material so a maintainer can lift them when the skill ships. Until then, treat this workflow as informational, not as an active skill chain.
+
 **When to use:** Configure CI/CD, deploy environment, or development infrastructure.
 
 ---
@@ -41,7 +43,7 @@ graph TB
 
 ---
 
-## rails-ci-cd-setup (NEW)
+## rails-ci-cd-setup (ROADMAP — not yet implemented)
 
 **Goal:** Configure continuous integration pipeline for Rails.
 
@@ -155,5 +157,5 @@ security:
 
 | Skill | Description | Trigger words |
 |-------|-------------|---------------|
-| **rails-ci-cd-setup** | Configure CI/CD pipeline | "CI/CD", "GitHub Actions", "GitLab CI", "deploy" |
+| **rails-ci-cd-setup** *(roadmap)* | Configure CI/CD pipeline | "CI/CD", "GitHub Actions", "GitLab CI", "deploy" |
 | **rails-project-onboarding** | Dev environment setup | "onboarding", "setup project", "Docker" |

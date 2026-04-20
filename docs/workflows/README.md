@@ -45,7 +45,7 @@ flowchart TD
 |-------|----------|-------------|----------------|
 | **00** | [Discovery & Context](00-discovery.md) | Understand codebase, project onboarding | `rails-context-engineering`, `rails-project-onboarding` |
 | **10** | [Planning & Design](10-planning.md) | Plan features, PRD, tasks, DDD | `create-prd`, `generate-tasks`, `ddd-*` |
-| **20** | [Setup & Configuration](20-setup.md) | Configure CI/CD, environment, deploy | `rails-ci-cd-setup`, `rails-project-onboarding` |
+| **20** | [Setup & Configuration](20-setup.md) | Configure CI/CD, environment, deploy | `rails-project-onboarding` *(plus roadmap `rails-ci-cd-setup`)* |
 | **30** | [Development](30-development.md) | TDD development, implementation | `rails-tdd-slices`, `rspec-*`, implementation |
 | **40** | [Code Quality](40-quality.md) | Conventions, refactoring, documentation | `rails-code-conventions`, `refactor-safely`, `yard-documentation` |
 | **50** | [Review & Validation](50-review.md) | Code review, security, architecture | `rails-code-review`, `rails-security-review`, `rails-architecture-review` |

@@ -25,8 +25,14 @@
     "rails-skills-orchestrator": {
       "path": "rails-skills-orchestrator/SKILL.md"
     },
+    "rails-api-versioning": {
+      "path": "rails-api-versioning/SKILL.md"
+    },
     "rails-architecture-review": {
       "path": "rails-architecture-review/SKILL.md"
+    },
+    "rails-authorization-policies": {
+      "path": "rails-authorization-policies/SKILL.md"
     },
     "rails-background-jobs": {
       "path": "rails-background-jobs/SKILL.md"
@@ -42,6 +48,9 @@
     },
     "rails-context-engineering": {
       "path": "rails-context-engineering/SKILL.md"
+    },
+    "rails-database-seeding": {
+      "path": "rails-database-seeding/SKILL.md"
     },
     "rails-engine-author": {
       "path": "rails-engine-author/SKILL.md"
@@ -67,11 +76,20 @@
     "rails-engine-testing": {
       "path": "rails-engine-testing/SKILL.md"
     },
+    "rails-frontend-hotwire": {
+      "path": "rails-frontend-hotwire/SKILL.md"
+    },
     "rails-graphql-best-practices": {
       "path": "rails-graphql-best-practices/SKILL.md"
     },
     "rails-migration-safety": {
       "path": "rails-migration-safety/SKILL.md"
+    },
+    "rails-performance-optimization": {
+      "path": "rails-performance-optimization/SKILL.md"
+    },
+    "rails-project-onboarding": {
+      "path": "rails-project-onboarding/SKILL.md"
     },
     "rails-review-response": {
       "path": "rails-review-response/SKILL.md"

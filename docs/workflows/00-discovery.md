@@ -133,7 +133,7 @@ docker-compose run web bin/rails db:create db:migrate db:seed
 | To plan a feature | `create-prd` → [10-planning](10-planning.md) |
 | To start coding | `rails-tdd-slices` → [30-development](30-development.md) |
 | To fix a bug | `rails-bug-triage` → [30-development#bug-fix](30-development.md) |
-| To configure CI/CD | `rails-ci-cd-setup` → [20-setup](20-setup.md) |
+| To configure CI/CD | *(roadmap — `rails-ci-cd-setup`, see [20-setup](20-setup.md))* |
 
 ---
 

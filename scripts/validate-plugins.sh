@@ -27,12 +27,12 @@ CHECKS_FAILED=0
 # Helper functions
 check_pass() {
   echo -e "${GREEN}✓${NC} $1"
-  ((CHECKS_PASSED++))
+  CHECKS_PASSED=$((CHECKS_PASSED + 1))
 }
 
 check_fail() {
   echo -e "${RED}✗${NC} $1"
-  ((CHECKS_FAILED++))
+  CHECKS_FAILED=$((CHECKS_FAILED + 1))
 }
 
 info() {
@@ -180,6 +180,41 @@ else
   WINDSURF_VERSION=$(jq -r '.version' .windsurf-plugin/plugin.json 2>/dev/null)
 fi
 
+# Validate Tessl tile.json
+section "Tessl Tile (tile.json)"
+
+if [ ! -f "tile.json" ]; then
+  check_fail "File not found: tile.json"
+else
+  if jq empty tile.json 2>/dev/null; then
+    check_pass "Valid JSON syntax"
+  else
+    check_fail "Invalid JSON syntax"
+  fi
+
+  for field in "name" "version" "summary" "skills"; do
+    if jq -e ".$field" tile.json > /dev/null 2>&1; then
+      check_pass "Field present: $field"
+    else
+      check_fail "Field missing: $field"
+    fi
+  done
+
+  TILE_VERSION=$(jq -r '.version' tile.json 2>/dev/null)
+fi
+
+# Validate tessl.json dependency version matches tile.json version
+section "Tessl Dependency Version Sync"
+
+if [ -f "tessl.json" ] && [ -n "$TILE_VERSION" ]; then
+  TESSL_DEP_VERSION=$(jq -r '.dependencies."igmarin/rails-agent-skills".version' tessl.json 2>/dev/null)
+  if [ "$TESSL_DEP_VERSION" = "$TILE_VERSION" ]; then
+    check_pass "tessl.json self-dependency matches tile.json: $TILE_VERSION"
+  else
+    check_fail "tessl.json self-dependency ($TESSL_DEP_VERSION) does not match tile.json ($TILE_VERSION)"
+  fi
+fi
+
 # Check consistency across platforms
 section "Cross-Platform Consistency"
 
@@ -234,9 +269,39 @@ while IFS= read -r skill_file; do
     check_fail "$skill_name: Missing 'description' field in frontmatter"
     skill_errors=$((skill_errors + 1))
   fi
-done < <(find . -name "SKILL.md" -not -path "./.git/*" | sort)
+
+  # Frontmatter name must match directory name
+  fm_name=$(awk '/^---$/{f++; next} f==1 && /^name:/{sub(/^name:[[:space:]]*/, ""); gsub(/^["'"'"']|["'"'"']$/, ""); print; exit}' "$skill_file")
+  if [ -n "$fm_name" ] && [ "$fm_name" != "$skill_name" ]; then
+    check_fail "$skill_name: frontmatter name ('$fm_name') does not match directory name"
+    skill_errors=$((skill_errors + 1))
+  fi
+done < <(find . -maxdepth 2 -name "SKILL.md" -not -path "./.git/*" | sort)
 
 info "Total SKILL.md files found: $skill_count"
+
+# Cross-check: every top-level skill dir with SKILL.md must be in tile.json.skills
+section "tile.json ↔ Disk Skill Inventory Sync"
+
+if [ -f "tile.json" ]; then
+  while IFS= read -r dir; do
+    skill_name=$(basename "$dir")
+    if jq -e ".skills.\"$skill_name\"" tile.json > /dev/null 2>&1; then
+      check_pass "tile.json includes skill: $skill_name"
+    else
+      check_fail "tile.json missing skill present on disk: $skill_name"
+    fi
+  done < <(find . -maxdepth 2 -name "SKILL.md" -not -path "./.git/*" -not -path "./.claude/*" -not -path "./.cursor*/*" -not -path "./.windsurf*/*" -exec dirname {} \; | sort)
+
+  # And every tile.json.skills entry must exist on disk
+  while IFS= read -r tile_skill; do
+    if [ -f "$tile_skill/SKILL.md" ]; then
+      check_pass "Disk has skill listed in tile.json: $tile_skill"
+    else
+      check_fail "tile.json references missing skill dir: $tile_skill"
+    fi
+  done < <(jq -r '.skills | keys[]' tile.json 2>/dev/null | sort)
+fi
 
 # Summary
 section "Summary"

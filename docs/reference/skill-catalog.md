@@ -40,9 +40,7 @@ Complete catalog of 34+ skills organized by development lifecycle stage.
 
 ## 20 — Setup & Configuration
 
-| Skill | Description | Trigger Words |
-|-------|-------------|---------------|
-| **rails-ci-cd-setup** *(NEW)* | Configure GitHub Actions / GitLab CI for Rails | "CI/CD", "GitHub Actions", "GitLab CI", "deploy", "pipeline" |
+*No shipped skills in this stage yet. See [Roadmap](#proposed-new-skills-roadmap) for `rails-ci-cd-setup`.*
 
 ---
 
@@ -125,7 +123,7 @@ Complete catalog of 34+ skills organized by development lifecycle stage.
 | **Create engine** | `rails-engine-author` |
 | **Review code** | `rails-code-review` |
 | **Respond to feedback** | `rails-review-response` |
-| **Setup CI/CD** | `rails-ci-cd-setup` |
+| **Setup CI/CD** | *(roadmap — `rails-ci-cd-setup`)* |
 | **Not sure** | `rails-skills-orchestrator` |
 
 ---
@@ -134,13 +132,7 @@ Complete catalog of 34+ skills organized by development lifecycle stage.
 
 | Skill | Priority | Status |
 |-------|----------|--------|
-| rails-project-onboarding | 🔴 Critical | Pending |
-| rails-authorization-policies | 🔴 Critical | Pending |
-| rails-performance-optimization | 🔴 Critical | Pending |
-| rails-ci-cd-setup | 🔴 Critical | Pending |
-| rails-api-versioning | 🟡 Medium | Pending |
-| rails-database-seeding | 🟡 Medium | Pending |
-| rails-frontend-hotwire | 🟡 Medium | Pending |
+| rails-ci-cd-setup | 🔴 Critical | Not yet implemented |
 
 ---
 
