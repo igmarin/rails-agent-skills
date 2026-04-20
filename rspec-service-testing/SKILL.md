@@ -130,3 +130,8 @@ When testing API clients, use `class: Hash` with `initialize_with` to build hash
 | **ruby-service-objects** | For the service conventions being tested |
 | **ruby-api-client-integration** | For API client layer testing patterns |
 | **rails-engine-testing** | When testing engine-specific services |
+
+## Assets
+
+- [assets/spec_examples.md](assets/spec_examples.md)
+- [assets/testing_checklist.md](assets/testing_checklist.md)

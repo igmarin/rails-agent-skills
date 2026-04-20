@@ -132,3 +132,8 @@ When asked to write or review RSpec specs, your output MUST satisfy each rule be
 | DB state bleed | Transactional fixtures or `DatabaseCleaner`; never share `let!` across contexts |
 | Race conditions | Explicit Capybara waits; avoid `sleep` |
 | Imprecise assertions | `change.from().to()` over final state; exact values over `be_truthy`/`be_falsey`; never assert `updated_at` |
+
+## Assets
+
+- [EXAMPLES.md](EXAMPLES.md)
+- [assets/spec_templates.md](assets/spec_templates.md)

@@ -138,3 +138,8 @@ Every Rails-code task lands these:
 | **rspec-best-practices** | Spec style, **tests gate** (red/green/refactor), request vs controller specs |
 | **rails-security-review** | Controllers, params, IDOR, PII |
 | **rails-code-review** | Full PR pass before merge |
+
+## Assets
+
+- [assets/checklist.md](assets/checklist.md)
+- [assets/snippets.md](assets/snippets.md)

@@ -124,3 +124,7 @@ end
 | rails-engine-author | When implementing suggested fixes or refactoring the engine |
 | rails-engine-testing | When adding missing dummy-app or integration coverage |
 | rails-engine-compatibility | When assessing Rails/Ruby version support or deprecation impact |
+
+## Assets
+
+- [assets/examples.md](assets/examples.md)

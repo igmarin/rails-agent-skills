@@ -111,3 +111,8 @@ For generator and reload-safety spec examples, see [EXAMPLES.md](./EXAMPLES.md).
 | rails-engine-author | When structuring the engine for testability or adding configuration seams |
 | rails-engine-reviewer | When validating test coverage adequacy or identifying gaps |
 | rspec-best-practices | When improving spec structure, matchers, or shared examples |
+
+## Assets
+
+- [assets/dummy_app_instructions.md](assets/dummy_app_instructions.md)
+- [assets/examples.md](assets/examples.md)

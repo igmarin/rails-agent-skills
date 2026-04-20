@@ -58,9 +58,9 @@ flowchart TD
 | Situation | Workflow | Quick Entry |
 |-----------|----------|-------------|
 | **Bug fix** | [Bug Fix Loop](30-development.md#bug-fix-loop) | `rails-bug-triage` → Fix → Test |
-| **Refactoring** | [Refactor Safely](40-quality.md#refactoring) | `refactor-safely` → characterization tests → extract |
-| **Performance** | [Performance Optimization](30-development.md#performance-optimization) | `rails-performance-optimization` |
-| **GraphQL** | [GraphQL Feature](30-development.md#graphql-feature) | `rails-graphql-best-practices` |
+| **Refactoring** | [Refactor Safely](40-quality.md#refactor-safely) | `refactor-safely` → characterization tests → extract |
+| **Performance** | [Performance Optimization](30-development.md#performance) | `rails-performance-optimization` |
+| **GraphQL** | [GraphQL Feature](30-development.md#graphql) | `rails-graphql-best-practices` |
 | **Authorization** | [Authorization Setup](30-development.md#authorization) | `rails-authorization-policies` |
 | **External API** | [API Integration](30-development.md#external-api-integration) | `ruby-api-client-integration` |
 

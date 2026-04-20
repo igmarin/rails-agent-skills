@@ -74,7 +74,7 @@ Step-by-step workflows for each development phase:
 | **50** | [Review & Validation](workflows/50-review.md) | Code review, security, architecture |
 | **60** | [Engines](workflows/60-engines.md) | Rails engines development |
 
-**Complete index:** [workflows/README.md](workflows/)
+**Complete index:** [workflows/README.md](workflows/README.md)
 
 ---
 

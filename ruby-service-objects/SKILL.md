@@ -190,3 +190,8 @@ For class-only services (Pattern 3), the rules apply to the public class methods
 | **rspec-service-testing** | Testing service objects |
 | **rspec-best-practices** | General RSpec structure |
 | **rails-architecture-review** | Architecture review involving service extraction |
+
+## Assets
+
+- [assets/examples.md](assets/examples.md)
+- [assets/service_skeleton.md](assets/service_skeleton.md)

@@ -91,3 +91,8 @@ When asked to improve compatibility:
 | rails-engine-testing | Test matrix setup, CI configuration, multi-version tests |
 | rails-engine-author | Engine structure, host contract, namespace design |
 | rails-engine-release | Versioning, changelog, upgrade notes for compatibility changes |
+
+## Assets
+
+- [assets/compatibility_matrix.md](assets/compatibility_matrix.md)
+- [assets/zeitwerk_notes.md](assets/zeitwerk_notes.md)

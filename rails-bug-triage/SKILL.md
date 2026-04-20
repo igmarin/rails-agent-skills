@@ -95,3 +95,7 @@ Quick reference:
 | **refactor-safely** | When the bug sits inside a risky refactor area and behavior must be preserved first |
 | **rails-code-review** | To review the final bug fix for regressions and missing coverage |
 | **rails-architecture-review** | When the bug points to a deeper boundary or orchestration problem |
+
+## Assets
+
+- [assets/examples.md](assets/examples.md)

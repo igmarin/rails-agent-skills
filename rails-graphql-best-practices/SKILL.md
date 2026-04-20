@@ -185,3 +185,7 @@ end
 | **rails-tdd-slices** | Choose first failing spec (mutation vs query vs resolver unit) |
 | **rspec-best-practices** | Full TDD cycle for resolvers and mutations |
 | **rails-security-review** | Auth, introspection disable, query depth/complexity limits |
+
+## Assets
+
+- [EXAMPLES.md](EXAMPLES.md)

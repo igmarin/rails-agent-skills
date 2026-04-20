@@ -138,3 +138,7 @@ rails-context-engineering → rails-tdd-slices → **[Test Feedback checkpoint]*
 **Refactoring:** refactor-safely → **[GATE: characterization tests pass on current code]** → refactor → verify still pass
 
 **GraphQL:** ddd-ubiquitous-language → rails-graphql-best-practices → *TDD Feature Loop* → rails-security-review
+
+## Assets
+
+- [assets/examples.md](assets/examples.md)

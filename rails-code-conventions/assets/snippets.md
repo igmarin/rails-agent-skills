@@ -1,7 +1,8 @@
 # Code snippets (per-path)
 
-Service object skeleton
+## Service object skeleton
 
+```ruby
 # frozen_string_literal: true
 class MyService
   def self.call(**kwargs)
@@ -17,9 +18,11 @@ class MyService
     { success: true, response: {} }
   end
 end
+```
 
-Controller thin-action example
+## Controller thin-action example
 
+```ruby
 class UsersController < ApplicationController
   def create
     result = CreateUserService.call(user_params: user_params)
@@ -36,9 +39,12 @@ class UsersController < ApplicationController
     params.require(:user).permit(:name, :email)
   end
 end
+```
 
-Model validation example
+## Model validation example
 
+```ruby
 class User < ApplicationRecord
   validates :email, presence: true, uniqueness: true
 end
+```

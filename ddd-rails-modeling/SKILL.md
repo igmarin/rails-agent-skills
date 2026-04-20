@@ -132,3 +132,8 @@ end
 | **generate-tasks** | After the tactical design is clear and ready for implementation planning |
 | **rails-tdd-slices** | When the next step is choosing the best first failing spec |
 | **rails-code-conventions** | When validating the modeling choice against Rails simplicity and repo conventions |
+
+## Assets
+
+- [assets/examples.md](assets/examples.md)
+- [assets/modeling_template.md](assets/modeling_template.md)

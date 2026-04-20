@@ -144,3 +144,7 @@ After creation, report:
 |-------|----------------|
 | **generate-tasks** | After tasks exist or in parallel — same initiative can feed ticket breakdown |
 | **create-prd** | When tickets should align with PRD scope and acceptance themes |
+
+## Assets
+
+- [assets/ticket-samples/sample_issue.md](assets/ticket-samples/sample_issue.md)

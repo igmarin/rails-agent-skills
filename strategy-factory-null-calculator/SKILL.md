@@ -110,3 +110,7 @@ Cover inactive plan, each variant, and unknown variant. See [TESTING.md](./TESTI
 |-------|---------------|
 | **rspec-service-testing** | For complete Factory, BaseService, NullService, and concrete strategy specs |
 | **ruby-service-objects** | For naming conventions, YARD docs, and `frozen_string_literal` baseline |
+
+## Assets
+
+- [assets/examples.md](assets/examples.md)

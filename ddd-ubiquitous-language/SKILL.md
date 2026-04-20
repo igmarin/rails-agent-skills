@@ -81,3 +81,7 @@ See [EXAMPLES.md](./EXAMPLES.md) for a full worked glossary example and common m
 | **ddd-boundaries-review** | When the glossary suggests multiple bounded contexts or language leakage |
 | **ddd-rails-modeling** | When the terms are clear enough to decide entities, value objects, and services |
 | **rails-architecture-review** | When naming confusion already appears in the code structure |
+
+## Assets
+
+- [assets/examples.md](assets/examples.md)
