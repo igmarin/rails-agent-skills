@@ -92,6 +92,7 @@ Complete catalog of 34+ skills organized by stage:
 | Document | Content |
 |----------|---------|
 | [skill-design-principles.md](skill-design-principles.md) | 6 skill design principles |
+| [skill-optimization-guide.md](skill-optimization-guide.md) | Eval-driven loop: baseline-vs-context targets, per-skill scoring, what to change when a skill regresses |
 | [architecture.md](architecture.md) | SKILL.md structure, frontmatter, checkpoints |
 | [skill-template.md](skill-template.md) | Template for new skills |
 
@@ -104,7 +105,7 @@ In-depth guides by specific topic:
 | Guide | Topic |
 |-------|-------|
 | **implementation-guide.md** | Installation on Claude, Cursor, Gemini |
-| **workflow-guide.md** | (Legacy) All workflows in one file |
+| **workflow-guide.md** | Narrative companion to `workflows/` — full TDD Feature Loop, planning, bug fix, GraphQL, engine, migration, refactor, performance, perf optimization, and external API chains in one file |
 | **plugin-validation.md** | Plugin validation for different IDEs |
 | **vs-code-setup.md** | VS Code specific configuration |
 

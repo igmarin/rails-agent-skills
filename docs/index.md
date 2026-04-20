@@ -14,6 +14,7 @@ Reference material for this tile: workflows, authoring, setup, and MCP. Linked f
 - [Architecture](architecture.md) — repository layout and `SKILL.md` structure
 - [Implementation guide](implementation-guide.md) — install paths and agent hooks
 - [Skill design principles](skill-design-principles.md)
+- [Skill optimization guide](skill-optimization-guide.md) — eval-driven loop: baseline-vs-context targets and how to lift skill scores
 - [Skill template](skill-template.md)
 - [VS Code setup](vs-code-setup.md)
 - [Plugin validation](plugin-validation.md)

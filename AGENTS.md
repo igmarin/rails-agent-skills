@@ -4,7 +4,7 @@ This file tells AI agents how to use this repository effectively.
 
 ## What This Repository Is
 
-A curated library of 34 AI agent skills for Ruby on Rails development. Each skill encodes specialized workflow knowledge, conventions, and hard gates for a specific Rails domain. Skills are not documentation — they are executable instructions that guide agents through structured workflows.
+A curated library of 36 AI agent skills for Ruby on Rails development. Each skill encodes specialized workflow knowledge, conventions, and hard gates for a specific Rails domain. Skills are not documentation — they are executable instructions that guide agents through structured workflows.
 
 ## How Skills Are Organized
 
@@ -29,10 +29,10 @@ Load the skill that best matches the current task. The bootstrap skill `rails-ag
 | Group | Skills |
 |-------|--------|
 | Planning | `create-prd`, `generate-tasks`, `ticket-planning` |
-| Rails code quality | `rails-code-review`, `rails-review-response`, `rails-architecture-review`, `rails-security-review`, `rails-migration-safety`, `rails-stack-conventions`, `rails-code-conventions`, `rails-background-jobs`, `rails-graphql-best-practices`, `api-rest-collection` |
+| Rails code quality | `rails-code-review`, `rails-review-response`, `rails-architecture-review`, `rails-security-review`, `rails-migration-safety`, `rails-stack-conventions`, `rails-code-conventions`, `rails-background-jobs`, `rails-graphql-best-practices`, `rails-authorization-policies`, `rails-performance-optimization`, `rails-api-versioning`, `rails-database-seeding`, `rails-frontend-hotwire`, `api-rest-collection` |
 | DDD | `ddd-ubiquitous-language`, `ddd-boundaries-review`, `ddd-rails-modeling` |
 | Ruby patterns | `ruby-service-objects`, `ruby-api-client-integration`, `strategy-factory-null-calculator`, `yard-documentation` |
-| Context & Setup | `rails-context-engineering` |
+| Context & Setup | `rails-context-engineering`, `rails-project-onboarding` |
 | Testing | `rspec-best-practices`, `rails-tdd-slices`, `rails-bug-triage`, `rspec-service-testing` |
 | Rails engines | `rails-engine-author`, `rails-engine-testing`, `rails-engine-reviewer`, `rails-engine-release`, `rails-engine-docs`, `rails-engine-installers`, `rails-engine-extraction`, `rails-engine-compatibility` |
 | Refactoring | `refactor-safely` |
@@ -75,6 +75,10 @@ Each skill's **Integration** table names the next skill to load. Follow it. Skil
 ## Output Language
 
 All generated artifacts (YARD docs, Postman collections, task lists, PRDs, READMEs, examples) must be in **English** unless the user explicitly requests another language.
+
+## Eval Strategy
+
+Skills are scored on two axes: **skill-specific criteria** AND **model performance baseline-vs-with-context**. A skill that only beats baseline marginally is under-specified — it should change the model's output meaningfully. See `docs/skill-optimization-guide.md` for the optimization loop and per-skill targets.
 
 ## Key Constraints
 
