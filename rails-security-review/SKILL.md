@@ -25,8 +25,6 @@ BEFORE returning your security review, verify:
      finding category
 ```
 
-This ordering is graded independently of finding correctness. Reporting SQL injection first costs the audit even when every individual finding is correct.
-
 ## Quick Reference
 
 | Area | Key Checks |
@@ -105,32 +103,21 @@ See [PITFALLS.md](./PITFALLS.md) for the full list. Critical anti-patterns: `per
 
 ## Output Style
 
-Your security review MUST use this exact section order. Section headings appear in your output even when a category is empty (write "no issues found"). Failing to lead with Auth/Authz is a graded miss regardless of finding quality.
+Section order per the HARD-GATE. Every heading appears even when empty (write "No issues found.").
 
 ```
 ## Authentication & Authorization
-<findings, or: "No issues found.">
-
 ## Parameter Handling & Mass Assignment
-<findings, or: "No issues found.">
-
 ## Query Safety (SQL / NoSQL / shell injection)
-<findings, or: "No issues found.">
-
 ## Output Encoding & Redirects
-<findings, or: "No issues found.">
-
 ## Secrets, Logging & Operational Exposure
-<findings, or: "No issues found.">
 ```
 
-For each finding include:
-- **Severity:** label it **High** or **Medium** (not "High-Severity" or "Critical")
-- **Attack path:** concrete exploit scenario (input → reach → impact)
-- **Affected file:** specific path, e.g. `app/controllers/documents_controller.rb:42`
+Each finding carries:
+- **Severity:** **High** or **Medium** (not "Critical")
+- **Attack path:** input → reach → impact
+- **Affected file:** path + line, e.g. `app/controllers/documents_controller.rb:42`
 - **Mitigation:** smallest credible fix
-
-Self-check before returning: the first `## ` header in your report MUST read `Authentication & Authorization`. If it does not, reorder — even if SQL injection is the more dramatic finding.
 
 ## Integration
 

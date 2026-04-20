@@ -108,17 +108,15 @@ See [EXAMPLES.md](EXAMPLES.md) for complete examples including:
 
 ## Output Style
 
-When asked to investigate or fix a performance issue, your response MUST contain each section below in this order. Each section is graded — skip one and the audit deducts.
+Report sections, in the HARD-GATE order:
 
-1. **Baseline** — current timing or query count, with the source (log line, profiler output, EXPLAIN row).
-2. **Bottleneck** — name the specific cause (e.g. "N+1 between `Post#author` and the index loop"). Cite the profiling tool that surfaced it (`bullet`, `rack-mini-profiler`, `EXPLAIN ANALYZE` — at least one MUST be named).
-3. **Regression spec — RED** — show the spec file with `make_database_queries(count: <unoptimized_count>)` (or equivalent assertion at the unoptimized number) and explicitly state "spec FAILS at current count" with the failing output. This block appears in the report BEFORE any code change.
-4. **Fix** — the minimal code change (eager load, index migration, cache, scope rewrite). Comes AFTER the failing spec block.
-5. **Regression spec — GREEN** — update the assertion to the new count (or keep it if the count was the target), rerun, show "spec PASSES at <fixed_count>".
-6. **EXPLAIN ANALYZE** — paste the actual output (or relevant rows) for any DB-touching change. Call out `Seq Scan → Index Scan`, `actual time` improvement, or row-count interpretation.
-7. **Quantified improvement** — "queries: N → M", "p95: X ms → Y ms", or "rows scanned: A → B". Numbers, not adjectives.
-
-Self-check before sending: in your response, the line containing the regression spec MUST appear earlier in the document than the line containing the fix. If the order is reversed, rewrite the report — even if the underlying work was done correctly.
+1. **Baseline** — timing or query count with source (log line, profiler output, EXPLAIN row).
+2. **Bottleneck** — specific cause + the tool that surfaced it (`bullet`, `rack-mini-profiler`, or `EXPLAIN ANALYZE` — at least one named).
+3. **Regression spec — RED** — spec with `make_database_queries(count: <unoptimized>)`, shown failing.
+4. **Fix** — minimal code change (eager load, index, cache, scope rewrite).
+5. **Regression spec — GREEN** — rerun output at the new count.
+6. **EXPLAIN ANALYZE** — actual output rows for any DB-touching change; call out `Seq Scan → Index Scan` or `actual time` delta.
+7. **Quantified improvement** — `queries: N → M`, `p95: X ms → Y ms`. Numbers, not adjectives.
 
 ## Further Reading
 
