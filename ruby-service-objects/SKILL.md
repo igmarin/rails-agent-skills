@@ -11,17 +11,20 @@ description: >
 
 # Ruby Service Objects
 
-## Quick Reference
+## Conventions
 
 | Aspect | Rule |
 |--------|------|
 | Entry point | `def self.call(...)` → `new(...).call` |
-| File path | `app/services/<module_name>/<service_name>.rb` |
-| Module README | `app/services/<module_name>/README.md` — REQUIRED for every service module |
-| Pragma | `# frozen_string_literal: true` (first line of every `.rb`) |
-| YARD | `@param` + `@return` on `self.call` AND on every other public method (no exceptions) |
-| Response shape | See **MANDATORY Response Contract** below |
-| Error log | `Rails.logger.error(e.message)` AND `Rails.logger.error(e.backtrace.first(5).join("\n"))` |
+| Validation | Validate inputs at top of `call`; return error hash if invalid |
+| Error handling | `rescue` → log + error hash; never re-raise to caller |
+| Transactions | Only wrap multi-step DB operations that must be atomic |
+| `call` length | ≤20 lines; extract sub-services if longer |
+| Scope | Return data only (no HTTP); single responsibility per service |
+| SQL | `sanitize_sql` for any dynamic queries |
+| Shared logic | Extract validators to class-only services (Pattern 3) |
+
+Required artifacts (file path, README, YARD, pragma, error log shape) are enumerated once in **Output Style**.
 
 ## HARD-GATE: Tests Gate Implementation
 
@@ -35,30 +38,12 @@ See rspec-best-practices for the full gate cycle.
 
 ## MANDATORY Response Contract
 
-Every service's `.call` / `call` MUST return a hash matching EXACTLY one of these two shapes. No other keys at the top level. No returning booleans, ActiveRecord objects, or raw models.
+`.call` MUST return EXACTLY one of these two shapes — no other top-level keys, never a Boolean, raw model, or ActiveRecord object:
 
 ```ruby
-# Success
-{ success: true, response: { <domain_key>: <value>, ... } }
-
-# Failure
+{ success: true,  response: { <domain_key>: <value>, ... } }
 { success: false, response: { error: { message: 'human-readable reason' } } }
 ```
-
-1. Top-level keys are exactly `:success` (Boolean) and `:response` (Hash). Reject `{ data: ... }`, `{ subscription: ... }`, or any key other than `:success` / `:response` at the top level.
-2. Errors nest under `response: { error: { message: ... } }`. Reject `{ message: '...' }` at top level or `{ response: { message: '...' } }` missing the `:error` wrapper.
-
-## Conventions (extends Quick Reference)
-
-| Convention | Rule |
-|-----------|------|
-| Validation | Validate inputs at top of `call`; return error hash if invalid |
-| Error handling | `rescue` → log + error hash; never re-raise to caller |
-| Transactions | Only wrap multi-step DB operations that must be atomic |
-| `call` length | ≤20 lines; extract sub-services if longer |
-| Scope | Return data only (no HTTP); single responsibility per service |
-| SQL | `sanitize_sql` for any dynamic queries |
-| Shared logic | Extract validators to class-only services (Pattern 3) |
 
 ## When to Use Each Pattern
 
@@ -162,8 +147,6 @@ class PackageValidator
 end
 ```
 
-Validators raise; the calling service rescues and converts to an error hash.
-
 ### 4. Orchestrator Delegation (≤20-line `call`)
 
 Sub-services handle their OWN rescue and return `{ success: false, response: { error: { message: ... } } }` on failure. The orchestrator propagates early returns only — no rescue block needed:
@@ -190,11 +173,10 @@ Every service-object task produces these artifacts:
 1. **Service file** at `app/services/<module_name>/<service_name>.rb` — pragma on line 1, class wrapped in a module matching the directory name.
 2. **YARD on `self.call`** — `@param` for every argument, `@return [Hash]`, plus `@raise` for any exception class that can escape (including those rescued internally elsewhere). The `self.call` wrapper is documented separately from `#call`, even when it just delegates.
 3. **YARD on every other public method** — same `@param` / `@return` / `@raise` discipline. See **yard-documentation**.
-4. **Response contract** — see the MANDATORY Response Contract section above.
-5. **Error message constants** — user-facing failure strings live in `UPPER_SNAKE_CASE` constants at the top of the class (e.g. `TRANSFER_FAILED = 'Transfer could not be completed'`), never inline inside a `rescue`.
-6. **Module README** at `app/services/<module_name>/README.md` — copy the shape from [assets/module_readme_template.md](./assets/module_readme_template.md). Required even for single-service modules.
-7. **Spec file** at `spec/services/<module_name>/<service_name>_spec.rb` written and failing BEFORE the implementation (see HARD-GATE).
-8. **English** — YARD, README, and error messages in English unless the user requests otherwise.
+4. **Error message constants** — user-facing failure strings live in `UPPER_SNAKE_CASE` constants at the top of the class (e.g. `TRANSFER_FAILED = 'Transfer could not be completed'`), never inline inside a `rescue`.
+5. **Module README** at `app/services/<module_name>/README.md` — copy the shape from [assets/module_readme_template.md](./assets/module_readme_template.md). Required even for single-service modules.
+6. **Spec file** at `spec/services/<module_name>/<service_name>_spec.rb` written and failing BEFORE the implementation (see HARD-GATE).
+7. **English** — YARD, README, and error messages in English unless the user requests otherwise.
 
 For class-only services (Pattern 3), the rules apply to the public class methods being documented; if the class returns a non-service shape (e.g. validators returning `nil` / error string), document that explicitly in YARD and the README.
 
