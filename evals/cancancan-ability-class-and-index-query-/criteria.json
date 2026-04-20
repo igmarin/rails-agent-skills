@@ -1,0 +1,66 @@
+{
+  "context": "Tests whether the agent correctly implements CanCanCan authorization: Ability class with guest-user guard, accessible_by for index scoping, authorize! in controller actions, and specs covering all three roles (finance, viewer, guest).",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Ability class defined",
+      "max_score": 8,
+      "description": "app/models/ability.rb defines a class Ability that includes CanCan::Ability"
+    },
+    {
+      "name": "Guest-user guard present",
+      "max_score": 10,
+      "description": "The Ability#initialize method contains `user ||= User.new` (or equivalent) to safely handle a nil/unauthenticated user before applying rules"
+    },
+    {
+      "name": "Finance role can manage",
+      "max_score": 8,
+      "description": "The Ability class grants `can :manage, Report` (or explicit create/read/update/destroy) to users with the finance role"
+    },
+    {
+      "name": "Viewer role read-only",
+      "max_score": 8,
+      "description": "The Ability class grants only `:read` (or `:index`/`:show`) to viewer-role users, without create/update/destroy"
+    },
+    {
+      "name": "Guest role blocked",
+      "max_score": 8,
+      "description": "The Ability class does NOT grant any Report permissions to a guest (nil) user — no `can :read, Report` for unauthenticated state"
+    },
+    {
+      "name": "load_and_authorize_resource used",
+      "max_score": 8,
+      "description": "The reports controller uses `load_and_authorize_resource` (or `authorize_resource`) rather than manually calling `authorize! :action, @report` in every action"
+    },
+    {
+      "name": "Index uses accessible_by",
+      "max_score": 10,
+      "description": "The index action uses `Report.accessible_by(current_ability)` or delegates to `load_and_authorize_resource` (which handles scoping) rather than `Report.all`"
+    },
+    {
+      "name": "Finance role tested",
+      "max_score": 8,
+      "description": "The ability spec (or request spec) includes a context for a finance-role user asserting that create/update/destroy actions are permitted"
+    },
+    {
+      "name": "Viewer role tested",
+      "max_score": 8,
+      "description": "The ability spec includes a context for a viewer-role user asserting read is permitted and create/update/destroy are denied"
+    },
+    {
+      "name": "Guest role tested",
+      "max_score": 8,
+      "description": "The ability spec includes a context for a nil user (guest) asserting that all actions are denied"
+    },
+    {
+      "name": "cancancan gem referenced",
+      "max_score": 6,
+      "description": "implementation_notes.md or any output file references adding the `cancancan` gem to the Gemfile as a required setup step"
+    },
+    {
+      "name": "No inline controller logic",
+      "max_score": 10,
+      "description": "The reports controller does NOT contain manual role checks (e.g., `if current_user.role == 'finance'`) inside action methods"
+    }
+  ]
+}

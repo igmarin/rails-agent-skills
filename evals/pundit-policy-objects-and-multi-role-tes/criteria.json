@@ -1,0 +1,66 @@
+{
+  "context": "Tests whether the agent uses Pundit policy objects (not inline controller logic) for authorization, scopes index queries, calls authorize in each action, and writes specs that cover all roles including admin, owner, other user, and guest.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Policy class defined",
+      "max_score": 8,
+      "description": "A DocumentPolicy class exists in app/policies/document_policy.rb and inherits from ApplicationPolicy"
+    },
+    {
+      "name": "No inline controller auth",
+      "max_score": 10,
+      "description": "The controller does NOT contain inline permission logic (e.g., no `if current_user.admin?` or `if @document.user_id == current_user.id` checks directly in action methods — authorization delegated entirely to the policy)"
+    },
+    {
+      "name": "authorize called in controller",
+      "max_score": 10,
+      "description": "Each mutating controller action (update, destroy, create) calls `authorize @document` or `authorize Document` rather than performing presence-only checks"
+    },
+    {
+      "name": "Index uses policy_scope",
+      "max_score": 10,
+      "description": "The index action uses `policy_scope(Document)` rather than `Document.all` or a manually filtered query"
+    },
+    {
+      "name": "Scope method in policy",
+      "max_score": 8,
+      "description": "DocumentPolicy includes a Scope class or scope method that restricts which documents each role can list"
+    },
+    {
+      "name": "Admin role tested",
+      "max_score": 8,
+      "description": "The policy spec includes a context for an admin user and asserts at least one permitted action"
+    },
+    {
+      "name": "Owner role tested",
+      "max_score": 8,
+      "description": "The policy spec includes a context for the document owner and asserts permitted actions"
+    },
+    {
+      "name": "Other-user role tested",
+      "max_score": 8,
+      "description": "The policy spec includes a context for an authenticated user who does NOT own the document and asserts denied actions"
+    },
+    {
+      "name": "Guest role tested",
+      "max_score": 8,
+      "description": "The policy spec includes a context where user is nil (guest/unauthenticated) and asserts denied actions"
+    },
+    {
+      "name": "permit_action matchers used",
+      "max_score": 8,
+      "description": "Policy specs use `permit_action` / `not_to permit_action` matchers rather than calling policy methods directly"
+    },
+    {
+      "name": "Request spec role matrix",
+      "max_score": 8,
+      "description": "The request spec covers at least two different roles (e.g., owner and unauthorized user) for a mutating action"
+    },
+    {
+      "name": "Gemfile mentions pundit",
+      "max_score": 6,
+      "description": "implementation_notes.md or any output file references adding the `pundit` gem to the Gemfile as a setup requirement"
+    }
+  ]
+}

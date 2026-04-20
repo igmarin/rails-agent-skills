@@ -1,0 +1,66 @@
+{
+  "context": "Tests whether the agent replaces presence-only authorization checks with proper Pundit policy objects, removes inline logic from controllers, covers all four roles in both policy and request specs, and uses policy_scope for index actions.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Policy class replaces inline logic",
+      "max_score": 8,
+      "description": "app/policies/project_policy.rb exists and contains authorization logic for update? and destroy? methods"
+    },
+    {
+      "name": "No presence-only checks remain",
+      "max_score": 10,
+      "description": "The refactored controller does NOT contain `if current_user.present?` as the sole authorization gate for update or destroy actions"
+    },
+    {
+      "name": "authorize called in controller",
+      "max_score": 10,
+      "description": "The update and destroy actions call `authorize @project` rather than performing any manual permission check"
+    },
+    {
+      "name": "Index uses policy_scope",
+      "max_score": 8,
+      "description": "The index action uses `policy_scope(Project)` instead of `Project.all`"
+    },
+    {
+      "name": "Policy class inherits ApplicationPolicy",
+      "max_score": 6,
+      "description": "ProjectPolicy inherits from ApplicationPolicy (not directly from Object or another base)"
+    },
+    {
+      "name": "Admin role permitted in policy",
+      "max_score": 8,
+      "description": "The policy grants admin users permission to update? and destroy? any project"
+    },
+    {
+      "name": "Owner role permitted in policy",
+      "max_score": 8,
+      "description": "The policy grants the project owner permission to update? and destroy? their own project"
+    },
+    {
+      "name": "Non-owner role denied in policy",
+      "max_score": 8,
+      "description": "The policy denies update? and destroy? to an authenticated user who is not the owner and not an admin"
+    },
+    {
+      "name": "Guest role tested in specs",
+      "max_score": 8,
+      "description": "The policy spec or request spec includes a case for a nil/unauthenticated user asserting denial of update or destroy"
+    },
+    {
+      "name": "permit_action matchers in policy spec",
+      "max_score": 8,
+      "description": "The policy spec uses `permit_action` / `not_to permit_action` matchers to assert permissions"
+    },
+    {
+      "name": "Request spec covers multiple roles",
+      "max_score": 8,
+      "description": "The request spec covers at least two distinct roles (e.g., owner vs non-owner) for a mutating action (PATCH/DELETE)"
+    },
+    {
+      "name": "implementation_notes identifies flaw",
+      "max_score": 10,
+      "description": "implementation_notes.md identifies that presence-only checks (`current_user.present?`) were the core security flaw"
+    }
+  ]
+}
