@@ -2,11 +2,27 @@
 name: ruby-service-objects
 description: >
   Use when creating or refactoring Ruby service classes in Rails. Covers the
-  .call pattern, module namespacing, YARD documentation, standardized responses,
+  .call pattern, module namespacing, YARD on self.call AND every public method,
+  module README requirement, standardized {success:, response:} response contract,
   orchestrator delegation, transaction wrapping, and error handling conventions.
+  Trigger words: service object, .call pattern, app/services, service module,
+  service README, response hash, success/response shape, YARD on self.call.
 ---
 
 # Ruby Service Objects
+
+## Quick Reference
+
+| Aspect | Rule |
+|--------|------|
+| Entry point | `def self.call(...)` → `new(...).call` |
+| File path | `app/services/<module_name>/<service_name>.rb` |
+| Module README | `app/services/<module_name>/README.md` — REQUIRED for every service module |
+| Pragma | `# frozen_string_literal: true` (first line of every `.rb`) |
+| YARD | `@param` + `@return` on `self.call` AND on every other public method (no exceptions) |
+| Success return | `{ success: true, response: { <domain_key>: <value> } }` |
+| Failure return | `{ success: false, response: { error: { message: '...' } } }` |
+| Error log | `Rails.logger.error(e.message)` AND `Rails.logger.error(e.backtrace.first(5).join("\n"))` |
 
 ## HARD-GATE: Tests Gate Implementation
 
@@ -170,6 +186,41 @@ def call
   NotificationService.call(user_result[:response])
   { success: true, response: { user: user_result[:response] } }
 end
+```
+
+## Output Style
+
+When asked to create or refactor a service object, your output MUST include EVERY item below. Each is independently graded — omitting any one drops the score even if the implementation is correct.
+
+1. **Service file** at `app/services/<module_name>/<service_name>.rb` with `# frozen_string_literal: true` as the first line and the class wrapped in a module matching the directory name.
+2. **YARD on `self.call`** — `@param` for every argument, `@return [Hash]` describing the success/failure shape, plus `@raise` for any exception class that can escape (even those rescued internally elsewhere). YARD on `self.call` is graded separately from YARD on other methods — do not skip it because the body delegates to `new(...).call`.
+3. **YARD on every other public method** — `initialize`, helpers, predicates. Same `@param` / `@return` / `@raise` discipline.
+4. **Response contract** — every return path uses EXACTLY `{ success: Boolean, response: Hash }`. Errors nest under `response: { error: { message: '...' } }`. Never return `{ data: ... }`, `{ message: ... }` at top level, raw ActiveRecord objects, booleans, or `nil`.
+5. **Error message constants** — user-facing failure strings live in `UPPER_SNAKE_CASE` constants at the top of the class (e.g. `TRANSFER_FAILED = 'Transfer could not be completed'`), not inline strings inside `rescue`.
+6. **Module README** at `app/services/<module_name>/README.md` — REQUIRED. One section per service in the module, listing: purpose (1 line), inputs, success response shape, failure response shape, exceptions raised. Even a single-service module gets a README. **Do not skip this** — it is a graded artifact, not optional documentation.
+7. **Spec file** at `spec/services/<module_name>/<service_name>_spec.rb` written and failing BEFORE the implementation (see HARD-GATE).
+8. **English** — all YARD, README content, and error messages in English unless the user explicitly asks otherwise.
+
+If the task is class-only (Pattern 3): same rules, but `self.call` becomes the public class method(s) being documented; the response contract still applies if the class returns service-style results (validators may return `nil` / error string per Pattern 3 above — document that explicitly).
+
+### Module README template
+
+```markdown
+# <ModuleName> Services
+
+Brief paragraph: what business capability this module covers.
+
+## <ServiceName>
+
+**Purpose:** one-line summary.
+
+**Inputs:** `params [Hash]` with `:key1`, `:key2`, ...
+
+**Success:** `{ success: true, response: { <domain_key>: <value> } }`
+
+**Failure:** `{ success: false, response: { error: { message: String } } }`
+
+**Raises:** `SomeError` when ..., `OtherError` when ... (internally rescued unless noted).
 ```
 
 ## Integration
