@@ -43,40 +43,13 @@ When reviewing or refactoring Rails code, follow this sequence:
 
 ## Design Principles
 
-| Principle | Apply as |
-|-----------|----------|
-| **DRY** | Extract when duplication carries real maintenance cost; avoid premature abstraction |
-| **YAGNI** | Build for current requirements; defer generalization until a second real use case |
-| **PORO** | Use plain Ruby objects when they clarify responsibility; do not wrap everything in a "pattern" |
-| **Convention over Configuration** | Prefer Rails defaults and file placement; document only intentional deviations |
-| **KISS** | Simplest design that meets acceptance criteria and **tests gate** |
+DRY, YAGNI, PORO, CoC, KISS — applied with judgment, not as rituals. Extract on real duplication; defer generalization until the second use case; prefer Rails defaults and document intentional deviations only.
 
 ## Comments and tagged notes
 
-Comment **why**, not **what**. **NEVER** write a comment that paraphrases the code (`# Finds the user by email`, `# Returns the total`, `# Loops through items`) — well-named identifiers already carry that information.
-
-**Tagged notes are MANDATORY** whenever any of the following is present in the code under review or being authored:
-
-- An assumption that may not hold forever (rate limits, magic numbers, business-rule constants like discount caps)
-- A deliberate deferral (placeholder data source, simplified logic awaiting a real implementation)
-- A known limitation, edge case, or risk the reader needs to see
-- A decision that has a non-obvious tradeoff (chose `find_by` over `find_by!`, swallowed an exception class on purpose)
-
-Use **`TODO:` / `FIXME:` / `HACK:` / `NOTE:` / `OPTIMIZE:`** — uppercase, trailing colon, then **actionable context**: owner, ticket id, decision deadline, or the next concrete step. Never a naked tag (`# TODO: fix this`) — that fails review.
+Comment **why**, not **what**. Tagged notes — `TODO:` / `FIXME:` / `HACK:` / `NOTE:` / `OPTIMIZE:` — are MANDATORY on assumptions, deferrals, business-rule constants, known limitations, and non-obvious tradeoffs. Each tag is followed by actionable context (owner, ticket id, deadline, or next step). Naked tags (`# TODO: fix this`) fail review.
 
 ```ruby
-# BAD — narrates the code
-# Finds the user by email
-def find_by_email(email)
-  User.find_by(email: email)
-end
-
-# GOOD — why `find_by` vs `find_by!` matters for callers
-# Uses find_by (not find_by!) so callers handle nil; auth layer may raise.
-def find_by_email(email)
-  User.find_by(email: email)
-end
-
 # BAD — unusable
 # TODO: fix this
 rate = TIER_RATES.fetch(tier, 0.0)
@@ -88,10 +61,9 @@ rate = TIER_RATES.fetch(tier, 0.0)
 
 ## Structured Logging
 
-- **First argument:** static string (message key or human-readable template without interpolated values).
-- **Second argument:** hash with structured fields (`user_id:`, `order_id:`, etc.).
-- **Do not** build the primary message with string interpolation; put dynamic data in the hash.
-- **Always include `event:`** — the primary grouping dimension in log aggregators (Datadog, Loki, Kibana). Use dot-namespaced values like `"order.processing_started"`. No alternate key names (`:type`, `:action`, `:name`).
+- **First arg:** static string. **Second arg:** hash of structured fields (`user_id:`, `order_id:`, …). Never interpolate values into the message.
+- **Always include `event:`** — the grouping dimension in log aggregators. Use dot-namespaced values like `"order.processing_started"`. No alternate keys (`:type`, `:action`, `:name`).
+- **Errors log the backtrace.** Every rescue for an unexpected error calls `Rails.logger.error` with BOTH `e.message` AND `e.backtrace.first(5).join("\n")`.
 
 ```ruby
 # BAD — interpolation loses structure; cannot filter by field in log aggregators
@@ -149,24 +121,11 @@ No implementation code before a failing test. See **rspec-best-practices** and *
 
 ## Output Style
 
-When asked to write, review, comment, or document Rails code, your output MUST satisfy each item below. They are graded independently — partial coverage drops the score.
+Every Rails-code task lands these:
 
-1. **No what-comments** — never paraphrase code in a comment. If a comment would just restate the method or line, delete it. Names carry the *what*; comments carry the *why*.
-2. **Tagged notes present** — any code that contains an assumption, deferred work, design tradeoff, business-rule constant, or known limitation MUST carry at least one tagged note (`TODO:` / `FIXME:` / `HACK:` / `NOTE:` / `OPTIMIZE:`). When commenting an existing file in this domain, surface at least one tagged note for the assumptions you find — silence is failure.
-3. **Tagged notes are actionable** — every tag is followed by a colon and concrete next-step context (owner, ticket id, deadline, or the precise decision pending). `# TODO: fix later` is rejected.
-4. **Why-comments on business rules** — constants like discount caps, rate limits, retry counts, magic numbers MUST have a comment explaining the *reason* for the value (regulation, contract, observed behavior).
-5. **Structured logging** — every `Rails.logger.{info,warn,error}` call uses a static first argument and a hash second argument that includes an `event:` key. No interpolation in the message.
-6. **Error logging includes backtrace** — every `rescue StandardError => e` block (or any `rescue` for an unexpected error) MUST log BOTH `e.message` AND `e.backtrace.first(5).join("\n")` (or the full backtrace) on `Rails.logger.error`. Logging only the message is graded as missing.
-7. **Linter detection noted** — if asked to review or refactor, state which linter config you detected (or note its absence) before making style claims.
-
-```ruby
-# Required shape for every unexpected-error rescue block
-rescue StandardError => e
-  Rails.logger.error("payment.unexpected_error", event: "payment.unexpected_error", error: e.message)
-  Rails.logger.error(e.backtrace.first(5).join("\n"))
-  { success: false, response: { error: { message: PAYMENT_FAILED } } }
-end
-```
+1. **Comments** follow the **Comments and tagged notes** section: no what-comments; tagged notes (`TODO:` / `FIXME:` / `HACK:` / `NOTE:` / `OPTIMIZE:`) on every assumption, deferred work, or business-rule constant; every tag carries actionable context (owner, ticket id, deadline).
+2. **Logging** follows **Structured Logging** above — static first arg, hash second arg with `event:`, and a backtrace line on every error rescue.
+3. **Linter detection noted** — when reviewing or refactoring, state which linter config you detected (or its absence) before any style claim.
 
 ## Integration
 
