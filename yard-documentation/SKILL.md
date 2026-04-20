@@ -88,20 +88,7 @@ def self.call(plan_id:)
 def self.validate_shelters!(source_id, target_id)
 ```
 
-## Good vs Bad
-
-**Good:**
-
-```ruby
-# Processes the billing update for the given plan.
-# @param plan_id [Integer] ID of the target plan
-# @raise [InvalidPlanError] when the plan does not exist or is inactive
-# @raise [PaymentGatewayError] when the payment provider rejects the charge
-# @return [Hash] Result with :success and :response keys
-def self.call(plan_id:)
-```
-
-**Bad:**
+## Anti-pattern
 
 ```ruby
 # Updates billing.  (Too vague; no @param/@return/@raise)
@@ -116,6 +103,10 @@ def self.call(plan_id:)
 | Skipping `@option` for hash params | Without it, consumers don't know valid keys or types |
 | Only one `@raise` for multiple exceptions | List EVERY exception type — one `@raise` per class, even if rescued internally |
 | YARD text in a language other than English | Write in English unless the user explicitly requests otherwise |
+
+## Inline tagged notes
+
+YARD documents the contract; tagged notes (`TODO:` / `FIXME:` / `HACK:` / `NOTE:` / `OPTIMIZE:`) document the *why* on the same code — required for business-rule constants, deferred work, workarounds, and perf tradeoffs. Every tag carries actionable context (owner, ticket, next step); naked tags fail review. See [references/tagged-notes.md](references/tagged-notes.md) and **rails-code-conventions**.
 
 ## Verification
 
