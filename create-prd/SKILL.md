@@ -37,23 +37,12 @@ Focus on *what* and *why*, not *how*. No code until the PRD is approved.
 
 ## Output Style
 
-When asked to plan a feature or write a PRD, your output MUST include EVERY item below.
+A PRD is a *what/why* document — never include code, pseudo-code, SQL, class names, method signatures, or migration syntax. Naming a model or controller for scope is fine; writing its methods is not.
 
-1. **Save location** — write the PRD to `/tasks/prd-<feature-slug>.md` (slug is lowercase, kebab-case, derived from the feature name, e.g. `/tasks/prd-google-oauth-login.md`). State the path explicitly in your response. Do not ask the user where to save — `/tasks/` is the canonical location.
-2. **All ten sections present**, in this order, even if a section is short or marked "TBD":
-   - Introduction / Overview
-   - Goals
-   - User Stories
-   - Functional Requirements
-   - Non-Goals (Out of Scope)
-   - Design and Technical Considerations
-   - Implementation Surface (files, endpoints, jobs, models likely touched)
-   - Success Metrics
-   - Open Questions
-   - Next Steps (typically: hand off to `generate-tasks`)
-3. **What/why focus** — describe observable user-facing behavior and the business reason. Do NOT include code, pseudo-code, SQL, class names, method signatures, or migration syntax. Naming a model or controller for scope context is fine; writing its methods is not.
-4. **No implementation code** — Functional Requirements use natural language ("the system MUST send a confirmation email when..."), not Ruby snippets.
-5. **Next Steps section closes the PRD** with the suggested follow-on (typically: "Run `generate-tasks` against this PRD once approved.").
-6. **English** — content in English unless the user explicitly requests another language.
+1. **Save to** `/tasks/prd-<feature-slug>.md` (lowercase, kebab-case slug — e.g. `/tasks/prd-google-oauth-login.md`). State the path in your response.
+2. **Follow [PRD_TEMPLATE.md](./PRD_TEMPLATE.md) section by section**, in order. Every section appears, even if short or marked "TBD".
+3. **Functional Requirements** are written in natural language ("the system must send a confirmation email when…"), not Ruby.
+4. **Next Steps** closes the PRD with the suggested follow-on (typically: "Run `generate-tasks` against this PRD once approved.").
+5. **English** unless the user explicitly requests another language.
 
-After saving, surface the file path to the user and request explicit approval before any implementation, task generation, or code follows.
+After saving, surface the file path and request explicit approval before any implementation or task generation.
