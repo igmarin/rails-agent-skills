@@ -20,8 +20,7 @@ description: >
 | Module README | `app/services/<module_name>/README.md` — REQUIRED for every service module |
 | Pragma | `# frozen_string_literal: true` (first line of every `.rb`) |
 | YARD | `@param` + `@return` on `self.call` AND on every other public method (no exceptions) |
-| Success return | `{ success: true, response: { <domain_key>: <value> } }` |
-| Failure return | `{ success: false, response: { error: { message: '...' } } }` |
+| Response shape | See **MANDATORY Response Contract** below |
 | Error log | `Rails.logger.error(e.message)` AND `Rails.logger.error(e.backtrace.first(5).join("\n"))` |
 
 ## HARD-GATE: Tests Gate Implementation
@@ -49,14 +48,10 @@ Every service's `.call` / `call` MUST return a hash matching EXACTLY one of thes
 1. Top-level keys are exactly `:success` (Boolean) and `:response` (Hash). Reject `{ data: ... }`, `{ subscription: ... }`, or any key other than `:success` / `:response` at the top level.
 2. Errors nest under `response: { error: { message: ... } }`. Reject `{ message: '...' }` at top level or `{ response: { message: '...' } }` missing the `:error` wrapper.
 
-## Conventions
+## Conventions (extends Quick Reference)
 
 | Convention | Rule |
 |-----------|------|
-| Entry point | `.call` class method → `new.call` |
-| File location | `app/services/module_name/service_name.rb` |
-| Pragma | `frozen_string_literal: true` |
-| Docs | YARD on every public method (→ **yard-documentation**) |
 | Validation | Validate inputs at top of `call`; return error hash if invalid |
 | Error handling | `rescue` → log + error hash; never re-raise to caller |
 | Transactions | Only wrap multi-step DB operations that must be atomic |
@@ -190,38 +185,18 @@ end
 
 ## Output Style
 
-When asked to create or refactor a service object, your output MUST include EVERY item below. Each is independently graded — omitting any one drops the score even if the implementation is correct.
+Every service-object task produces these artifacts:
 
-1. **Service file** at `app/services/<module_name>/<service_name>.rb` with `# frozen_string_literal: true` as the first line and the class wrapped in a module matching the directory name.
-2. **YARD on `self.call`** — `@param` for every argument, `@return [Hash]` describing the success/failure shape, plus `@raise` for any exception class that can escape (even those rescued internally elsewhere). YARD on `self.call` is graded separately from YARD on other methods — do not skip it because the body delegates to `new(...).call`.
-3. **YARD on every other public method** — `initialize`, helpers, predicates. Same `@param` / `@return` / `@raise` discipline.
-4. **Response contract** — every return path uses EXACTLY `{ success: Boolean, response: Hash }`. Errors nest under `response: { error: { message: '...' } }`. Never return `{ data: ... }`, `{ message: ... }` at top level, raw ActiveRecord objects, booleans, or `nil`.
-5. **Error message constants** — user-facing failure strings live in `UPPER_SNAKE_CASE` constants at the top of the class (e.g. `TRANSFER_FAILED = 'Transfer could not be completed'`), not inline strings inside `rescue`.
-6. **Module README** at `app/services/<module_name>/README.md` — REQUIRED. One section per service in the module, listing: purpose (1 line), inputs, success response shape, failure response shape, exceptions raised. Even a single-service module gets a README. **Do not skip this** — it is a graded artifact, not optional documentation.
+1. **Service file** at `app/services/<module_name>/<service_name>.rb` — pragma on line 1, class wrapped in a module matching the directory name.
+2. **YARD on `self.call`** — `@param` for every argument, `@return [Hash]`, plus `@raise` for any exception class that can escape (including those rescued internally elsewhere). The `self.call` wrapper is documented separately from `#call`, even when it just delegates.
+3. **YARD on every other public method** — same `@param` / `@return` / `@raise` discipline. See **yard-documentation**.
+4. **Response contract** — see the MANDATORY Response Contract section above.
+5. **Error message constants** — user-facing failure strings live in `UPPER_SNAKE_CASE` constants at the top of the class (e.g. `TRANSFER_FAILED = 'Transfer could not be completed'`), never inline inside a `rescue`.
+6. **Module README** at `app/services/<module_name>/README.md` — copy the shape from [assets/module_readme_template.md](./assets/module_readme_template.md). Required even for single-service modules.
 7. **Spec file** at `spec/services/<module_name>/<service_name>_spec.rb` written and failing BEFORE the implementation (see HARD-GATE).
-8. **English** — all YARD, README content, and error messages in English unless the user explicitly asks otherwise.
+8. **English** — YARD, README, and error messages in English unless the user requests otherwise.
 
-If the task is class-only (Pattern 3): same rules, but `self.call` becomes the public class method(s) being documented; the response contract still applies if the class returns service-style results (validators may return `nil` / error string per Pattern 3 above — document that explicitly).
-
-### Module README template
-
-```markdown
-# <ModuleName> Services
-
-Brief paragraph: what business capability this module covers.
-
-## <ServiceName>
-
-**Purpose:** one-line summary.
-
-**Inputs:** `params [Hash]` with `:key1`, `:key2`, ...
-
-**Success:** `{ success: true, response: { <domain_key>: <value> } }`
-
-**Failure:** `{ success: false, response: { error: { message: String } } }`
-
-**Raises:** `SomeError` when ..., `OtherError` when ... (internally rescued unless noted).
-```
+For class-only services (Pattern 3), the rules apply to the public class methods being documented; if the class returns a non-service shape (e.g. validators returning `nil` / error string), document that explicitly in YARD and the README.
 
 ## Integration
 
