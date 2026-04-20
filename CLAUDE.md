@@ -59,6 +59,11 @@ Skills are located in subdirectories of this plugin. Read the relevant `SKILL.md
 | `rails-code-conventions` | Daily coding checklist: DRY/YAGNI/PORO/CoC/KISS, linter as style SoT, per-path rules |
 | `rails-background-jobs` | Adding or reviewing background jobs |
 | `rails-graphql-best-practices` | Building or reviewing GraphQL APIs with graphql-ruby |
+| `rails-authorization-policies` | Adding or reviewing roles/permissions (Pundit, CanCanCan, policy objects) |
+| `rails-performance-optimization` | Investigating N+1s, slow queries, profiling, caching, query plans |
+| `rails-api-versioning` | Versioning REST APIs, deprecation policies, v1/v2 routing |
+| `rails-database-seeding` | Designing seeds vs fixtures for dev/test data |
+| `rails-frontend-hotwire` | Turbo/Stimulus integration, frames, streams |
 
 ### DDD & Domain Modeling
 | Skill | Use when... |
@@ -79,6 +84,7 @@ Skills are located in subdirectories of this plugin. Read the relevant `SKILL.md
 | Skill | Use when... |
 |-------|-------------|
 | `rails-context-engineering` | Before any code/spec/PRD in an existing Rails codebase — loads schema, routes, nearest patterns, surfaces ambiguity |
+| `rails-project-onboarding` | First-time dev environment setup — Docker, env vars, database, test suite |
 
 ### Testing
 | Skill | Use when... |
@@ -161,3 +167,7 @@ These apply to ALL generated Ruby/Rails code regardless of which skill is active
 ## Output Language
 
 Generated artifacts (YARD docs, Postman collections, READMEs, task descriptions) must be in **English** unless the user explicitly requests another language.
+
+## Eval Strategy
+
+Skills are scored on two axes: **skill-specific criteria** AND **model performance baseline-vs-with-context**. A skill that only beats baseline marginally is under-specified — it should change the model's output meaningfully. See [docs/skill-optimization-guide.md](docs/skill-optimization-guide.md) for the optimization loop and per-skill targets.

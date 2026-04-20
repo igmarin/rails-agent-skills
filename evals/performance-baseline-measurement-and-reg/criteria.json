@@ -1,0 +1,61 @@
+{
+  "context": "Tests whether the agent follows the performance optimization discipline: documenting a baseline before changing anything, writing a query-count regression spec before applying the fix, applying eager-loading for both associations, verifying the result with EXPLAIN ANALYZE output, and mentioning appropriate profiling tools — all documented in performance_analysis.md.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Baseline documented",
+      "max_score": 10,
+      "description": "performance_analysis.md contains a section that records the query count or timing observed BEFORE any code change was made (not just the post-fix count)"
+    },
+    {
+      "name": "N+1 bottleneck named",
+      "max_score": 8,
+      "description": "performance_analysis.md explicitly names the N+1 query pattern (loading owner and/or tasks inside a loop) as the cause of the slowdown"
+    },
+    {
+      "name": "Regression spec written",
+      "max_score": 12,
+      "description": "spec/performance/dashboard_spec.rb exists and contains at least one RSpec example with a query-count assertion (e.g. make_database_queries, db_query_matchers, or a counted block)"
+    },
+    {
+      "name": "Regression spec asserts fixed count",
+      "max_score": 8,
+      "description": "The query-count assertion in the spec uses a specific integer count (not 'any' or unbounded) that reflects the post-fix expected query number"
+    },
+    {
+      "name": "Owner eager loaded",
+      "max_score": 10,
+      "description": "app/controllers/dashboard_controller.rb uses .includes(:owner) or equivalent eager loading for the owner association — not lazy loading"
+    },
+    {
+      "name": "Tasks association optimized",
+      "max_score": 8,
+      "description": "The tasks count N+1 is also addressed — either via .includes(:tasks), counter_cache, or .size instead of .count on an included association"
+    },
+    {
+      "name": "EXPLAIN ANALYZE output present",
+      "max_score": 12,
+      "description": "performance_analysis.md contains EXPLAIN ANALYZE SQL output or a clearly labelled excerpt of it (look for lines containing 'Seq Scan', 'Index Scan', 'actual time', or 'Planning Time')"
+    },
+    {
+      "name": "Seq Scan / Index Scan interpreted",
+      "max_score": 7,
+      "description": "performance_analysis.md mentions either Seq Scan changing to Index Scan, or explains why a Seq Scan is acceptable for this table size"
+    },
+    {
+      "name": "Fix precedes regression spec claim",
+      "max_score": 10,
+      "description": "performance_analysis.md describes writing or planning the regression spec BEFORE or ALONGSIDE the fix — NOT only after verifying the fix worked"
+    },
+    {
+      "name": "Profiling tool mentioned",
+      "max_score": 5,
+      "description": "performance_analysis.md mentions at least one of: Bullet gem or rack-mini-profiler as a tool for detecting or profiling the issue"
+    },
+    {
+      "name": "Query count improvement quantified",
+      "max_score": 10,
+      "description": "performance_analysis.md shows or states the before-and-after query count (e.g. 'went from N+2 queries to 2 queries') — not just 'it is faster'"
+    }
+  ]
+}

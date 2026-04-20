@@ -226,3 +226,8 @@ For a reusable starter layout and file stubs, read [reference.md](reference.md).
 | rails-engine-docs | README, installation guide, host-app contract documentation |
 | rails-engine-installers | Generator-heavy setup, install scripts, copy migrations |
 | api-rest-collection | When the engine exposes HTTP endpoints (generate/update Postman collection) |
+
+## Assets
+
+- [assets/examples.md](assets/examples.md)
+- [assets/release-checklist.md](assets/release-checklist.md)

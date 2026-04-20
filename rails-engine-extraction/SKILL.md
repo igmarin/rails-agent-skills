@@ -97,3 +97,8 @@ See references/adapter_examples.md for the full adapter example. Compact example
 | rails-engine-author | Engine structure, host contract, namespace design after extraction |
 | rails-engine-testing | Dummy app, regression tests, integration verification |
 | refactor-safely | Behavior-preserving refactors before or after extraction slices |
+
+## Assets
+
+- [assets/examples.md](assets/examples.md)
+- [references/adapter_examples.md](references/adapter_examples.md)

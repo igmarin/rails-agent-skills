@@ -55,6 +55,11 @@ Non-negotiable across every code-producing skill. Workflow: **PRD → TASKS → 
 | **rails-code-conventions** | Daily coding checklist: DRY/YAGNI/PORO/CoC/KISS, linters, structured logging |
 | **rails-background-jobs** | Adding or reviewing background jobs |
 | **rails-graphql-best-practices** | Building or reviewing GraphQL APIs with `graphql-ruby` |
+| **rails-authorization-policies** | Adding or reviewing roles/permissions (Pundit, CanCanCan, policy objects) |
+| **rails-performance-optimization** | Investigating N+1s, slow queries, profiling, caching, query plans |
+| **rails-api-versioning** | Versioning REST APIs, deprecation policies, v1/v2 routing |
+| **rails-database-seeding** | Designing seeds vs fixtures for dev/test data |
+| **rails-frontend-hotwire** | Turbo/Stimulus integration, frames, streams |
 
 ### DDD & Domain Modeling
 
@@ -78,6 +83,7 @@ Non-negotiable across every code-producing skill. Workflow: **PRD → TASKS → 
 | Skill | Use when... |
 | ----- | ----------- |
 | **rails-context-engineering** | Before any code/spec/PRD in an existing Rails codebase — load schema, routes, nearest patterns, surface ambiguity |
+| **rails-project-onboarding** | First-time dev environment setup — Docker, env vars, database, test suite |
 
 ### Testing
 
@@ -132,3 +138,7 @@ rails-context-engineering → rails-tdd-slices → **[Test Feedback checkpoint]*
 **Refactoring:** refactor-safely → **[GATE: characterization tests pass on current code]** → refactor → verify still pass
 
 **GraphQL:** ddd-ubiquitous-language → rails-graphql-best-practices → *TDD Feature Loop* → rails-security-review
+
+## Assets
+
+- [assets/examples.md](assets/examples.md)

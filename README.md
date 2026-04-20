@@ -15,6 +15,7 @@
 - **Skill Catalog:** [docs/reference/skill-catalog.md](docs/reference/skill-catalog.md) — All 34+ skills with trigger words
 - **Integration Matrix:** [docs/reference/integration-matrix.md](docs/reference/integration-matrix.md) — Skill chaining and workflows
 - **Skill structure:** [docs/architecture.md](docs/architecture.md)
+- **Eval optimization:** [docs/skill-optimization-guide.md](docs/skill-optimization-guide.md) — baseline-vs-context targets and the per-skill loop used to lift scores
 
 ## Methodology
 

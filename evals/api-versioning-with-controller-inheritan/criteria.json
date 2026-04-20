@@ -1,0 +1,61 @@
+{
+  "context": "Tests whether the agent implements Rails API versioning correctly: choosing URL path versioning, using controller inheritance to override only changed actions, wiring the Deprecatable concern to emit Sunset and Deprecation headers on V1, and providing a backward compatibility spec. Also checks sunset timeline guidance.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "URL path versioning used",
+      "max_score": 8,
+      "description": "config/routes.rb uses namespace-based URL path versioning (e.g. namespace :v1, namespace :v2) rather than body or query-parameter versioning"
+    },
+    {
+      "name": "Both V1 and V2 namespaces present",
+      "max_score": 7,
+      "description": "config/routes.rb defines both a v1 and a v2 namespace containing users resources — neither is absent"
+    },
+    {
+      "name": "V2 controller inherits from V1",
+      "max_score": 12,
+      "description": "The V2 UsersController class definition explicitly inherits from V1::UsersController (not from ApplicationController or ActionController::API directly)"
+    },
+    {
+      "name": "V2 overrides only changed actions",
+      "max_score": 8,
+      "description": "V2::UsersController defines at most one or two overridden actions; it does NOT redefine every action from V1"
+    },
+    {
+      "name": "Deprecation concern exists",
+      "max_score": 8,
+      "description": "A Ruby module or concern exists (under app/controllers/concerns/ or similar) that encapsulates the deprecation header logic — not just inline code in the controller"
+    },
+    {
+      "name": "Deprecation header emitted",
+      "max_score": 10,
+      "description": "The Deprecatable concern sets a 'Deprecation' response header (e.g. response.set_header('Deprecation', 'true') or equivalent)"
+    },
+    {
+      "name": "Sunset header emitted",
+      "max_score": 10,
+      "description": "The Deprecatable concern sets a 'Sunset' response header containing a date value"
+    },
+    {
+      "name": "V1 controller includes Deprecatable",
+      "max_score": 8,
+      "description": "V1::UsersController includes the Deprecatable concern (or equivalent module), not V2::UsersController"
+    },
+    {
+      "name": "Backward compatibility spec present",
+      "max_score": 10,
+      "description": "At least one RSpec request spec file exists (in spec/requests/ or similar) that tests a V1 endpoint response — verifying the old contract still holds"
+    },
+    {
+      "name": "Sunset timeline documented",
+      "max_score": 10,
+      "description": "versioning_notes.md mentions a sunset timeline or minimum notice period of at least 6 months (exact wording varies)"
+    },
+    {
+      "name": "V1 endpoints not removed",
+      "max_score": 9,
+      "description": "V1 routes are still present in config/routes.rb — they are not deleted or commented out"
+    }
+  ]
+}

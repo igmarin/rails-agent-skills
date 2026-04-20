@@ -45,7 +45,7 @@ flowchart TD
 |-------|----------|-------------|----------------|
 | **00** | [Discovery & Context](00-discovery.md) | Understand codebase, project onboarding | `rails-context-engineering`, `rails-project-onboarding` |
 | **10** | [Planning & Design](10-planning.md) | Plan features, PRD, tasks, DDD | `create-prd`, `generate-tasks`, `ddd-*` |
-| **20** | [Setup & Configuration](20-setup.md) | Configure CI/CD, environment, deploy | `rails-ci-cd-setup`, `rails-project-onboarding` |
+| **20** | [Setup & Configuration](20-setup.md) | Configure CI/CD, environment, deploy | `rails-project-onboarding` *(plus roadmap `rails-ci-cd-setup`)* |
 | **30** | [Development](30-development.md) | TDD development, implementation | `rails-tdd-slices`, `rspec-*`, implementation |
 | **40** | [Code Quality](40-quality.md) | Conventions, refactoring, documentation | `rails-code-conventions`, `refactor-safely`, `yard-documentation` |
 | **50** | [Review & Validation](50-review.md) | Code review, security, architecture | `rails-code-review`, `rails-security-review`, `rails-architecture-review` |
@@ -58,9 +58,9 @@ flowchart TD
 | Situation | Workflow | Quick Entry |
 |-----------|----------|-------------|
 | **Bug fix** | [Bug Fix Loop](30-development.md#bug-fix-loop) | `rails-bug-triage` → Fix → Test |
-| **Refactoring** | [Refactor Safely](40-quality.md#refactoring) | `refactor-safely` → characterization tests → extract |
-| **Performance** | [Performance Optimization](30-development.md#performance-optimization) | `rails-performance-optimization` |
-| **GraphQL** | [GraphQL Feature](30-development.md#graphql-feature) | `rails-graphql-best-practices` |
+| **Refactoring** | [Refactor Safely](40-quality.md#refactor-safely) | `refactor-safely` → characterization tests → extract |
+| **Performance** | [Performance Optimization](30-development.md#performance) | `rails-performance-optimization` |
+| **GraphQL** | [GraphQL Feature](30-development.md#graphql) | `rails-graphql-best-practices` |
 | **Authorization** | [Authorization Setup](30-development.md#authorization) | `rails-authorization-policies` |
 | **External API** | [API Integration](30-development.md#external-api-integration) | `ruby-api-client-integration` |
 

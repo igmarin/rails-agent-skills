@@ -21,9 +21,24 @@ When **writing or generating** code for this project, follow these conventions. 
 ALL new code MUST have its test written and validated BEFORE implementation.
   1. Write the spec: bundle exec rspec spec/[path]_spec.rb
   2. Verify it FAILS — output must show the feature does not exist yet
-  3. ONLY THEN write the implementation code
+  3. Write the implementation code
+  4. Verify it PASSES — run the same spec and confirm green
+  5. Refactor if needed, keeping tests green
 See rspec-best-practices for the full gate cycle.
 ```
+
+## Feature Development Workflow
+
+For a typical feature, compose stack patterns in this order:
+
+1. **Model** — add validations, associations, scopes; eager-load with `includes` for any association used in loops
+2. **Service object** — extract non-trivial business logic from the controller (see **ruby-service-objects**)
+3. **Controller** — keep actions thin; delegate to services; respond with `turbo_stream` and `html` formats
+4. **View / Turbo wiring** — wrap dynamic sections in `<turbo-frame>` tags; broadcast `turbo_stream` responses from the controller
+5. **Stimulus** — add a controller only when client-side interactivity cannot be handled by Turbo alone
+6. **Tailwind** — apply utility classes to the view; extract repeated patterns into partials or Stimulus targets
+
+Each step should remain testable in isolation before wiring to the next layer.
 
 ## Quick Reference
 
@@ -100,7 +115,7 @@ See **ruby-service-objects** for the full `.call` pattern and response format.
 ## Common Mistakes
 
 | Mistake | Correct approach |
-|---------|-----------------|
+|---------|----------------|
 | Business logic in views | Use helpers, presenters, or Stimulus controllers |
 | N+1 queries in loops | Eager load with `includes` before the loop |
 | Raw SQL without parameterization | Use AR query methods or `ActiveRecord::Base.sanitize_sql` |
@@ -121,5 +136,5 @@ See **ruby-service-objects** for the full `.call` pattern and response format.
 | **rails-code-conventions** | For design principles, structured logging, and path-specific rules |
 | **rails-code-review** | When reviewing existing code against these conventions |
 | **ruby-service-objects** | When extracting business logic into service objects |
-| **rspec-best-practices** | For testing conventions and TDD cycle |
+| **rspec-best-practices** | For testing conventions and full red/green/refactor TDD cycle |
 | **rails-architecture-review** | For structural review beyond conventions |

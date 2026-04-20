@@ -88,3 +88,9 @@ When asked to write docs:
 | rails-engine-installers | Install generators, setup steps to document |
 | rails-engine-release | Changelog, upgrade notes, version documentation |
 | api-rest-collection | When documenting or adding API endpoints (keep Postman collection in sync) |
+
+## Assets
+
+- [assets/configuration.md](assets/configuration.md)
+- [assets/examples.md](assets/examples.md)
+- [assets/installation.md](assets/installation.md)

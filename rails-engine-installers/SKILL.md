@@ -97,3 +97,7 @@ See [EXAMPLES.md](./EXAMPLES.md) for a full generator class and complete spec su
 | rails-engine-author | When designing the engine structure that installers will configure |
 | rails-engine-docs | When documenting install steps or upgrade instructions |
 | rails-engine-testing | When adding generator specs or dummy-app install coverage |
+
+## Assets
+
+- [assets/README.md](assets/README.md)

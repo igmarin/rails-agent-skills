@@ -390,27 +390,121 @@ flowchart LR
 
 ## Performance Optimization
 
-Use when slow queries, N+1s, or response time regressions are identified.
+Use when slow queries, N+1s, profiling, caching, or response time regressions are identified.
 
 ```mermaid
 flowchart LR
-    A[Perf issue identified] --> B[rails-code-conventions\nActiveRecord performance rules]
-    B --> C[rspec-best-practices\nAdd regression spec with query count]
-    C --> D["GATE: failing regression spec"]
-    D --> E[Optimize]
-    E --> F["Verify spec passes + EXPLAIN output improved"]
-    F --> G[rails-code-review]
+    A[Perf issue identified] --> B[rails-performance-optimization\nProfile + identify bottleneck]
+    B --> C[rails-code-conventions\nActiveRecord performance rules]
+    C --> D[rspec-best-practices\nAdd regression spec with query count]
+    D --> E["GATE: failing regression spec"]
+    E --> F[Optimize]
+    F --> G["Verify spec passes + EXPLAIN output improved"]
+    G --> H[rails-code-review]
 ```
 
-1. **rails-code-conventions**: Apply the ActiveRecord performance section (`app/models/**/*.rb`) — eager loading, `exists?`, `pluck`, `find_each`.
-2. **rspec-best-practices**: Add a regression spec with a query count assertion (`make_database_queries(count: N)`) before optimizing.
-3. **Optimize**: Apply the fix — `includes`, `preload`, `eager_load`, index, or query rewrite.
-4. **rails-code-review**: Review before merging.
+1. **rails-performance-optimization**: Profile first — identify the bottleneck (N+1, slow query, cache miss, allocation). Decide intervention (eager load, index, fragment cache, background move).
+2. **rails-code-conventions**: Apply the ActiveRecord performance section (`app/models/**/*.rb`) — eager loading, `exists?`, `pluck`, `find_each`.
+3. **rspec-best-practices**: Add a regression spec with a query count assertion (`make_database_queries(count: N)`) before optimizing.
+4. **Optimize**: Apply the fix — `includes`, `preload`, `eager_load`, index, or query rewrite.
+5. **rails-code-review**: Review before merging.
 
 **Key rules:**
 - Write the regression spec first — it proves the optimization worked and prevents future regressions
 - Use `EXPLAIN ANALYZE` to confirm query plan improvement, not just timing
 - Treat GraphQL N+1 as Critical (see **rails-graphql-best-practices**)
+
+---
+
+## Authorization (Roles & Permissions)
+
+Use when adding or reviewing roles, permissions, or policy objects (Pundit, CanCanCan, custom policy services).
+
+```mermaid
+flowchart LR
+    A[Auth need] --> B[rails-authorization-policies\nChoose Pundit / CanCanCan / policy service]
+    B --> C[rails-tdd-slices\nPolicy spec first]
+    C --> D["GATE: failing policy spec"]
+    D --> E[Implement policy + controller wiring]
+    E --> F[rails-security-review]
+    F --> G[rails-code-review]
+```
+
+1. **rails-authorization-policies**: Decide the right tool, define roles/permissions matrix, plan policy objects per resource.
+2. **rails-tdd-slices**: Start from the policy spec (allow/deny per role), then controller request specs.
+3. **rails-security-review**: IDOR, privilege escalation, and missing controller authorization checks.
+
+**Key rules:**
+- Policies are objects, not controller `before_action` puzzles
+- Default-deny: every action must be explicitly authorized
+- Test allow AND deny per role — both branches matter
+
+---
+
+## Frontend (Hotwire / Turbo / Stimulus)
+
+Use when adding Turbo Frames, Turbo Streams, Stimulus controllers, or upgrading interactions to Hotwire.
+
+```mermaid
+flowchart LR
+    A[Frontend need] --> B[rails-frontend-hotwire\nFrames vs Streams vs Stimulus]
+    B --> C[rails-stack-conventions\nHotwire + Tailwind defaults]
+    C --> D[rails-tdd-slices\nSystem spec first]
+    D --> E["GATE: failing system / request spec"]
+    E --> F[Implement frame / stream / controller]
+    F --> G[rails-code-review]
+```
+
+1. **rails-frontend-hotwire**: Pick Frame, Stream, or Stimulus per interaction; define broadcast triggers and target IDs.
+2. **rails-stack-conventions**: Stick to Hotwire + Tailwind defaults — no SPA frameworks unless justified.
+3. **rails-tdd-slices**: System spec for user-visible behavior; request spec for stream broadcast assertions.
+
+**Key rules:**
+- Prefer Frames over Streams unless server-pushed updates are required
+- Stimulus controllers stay thin — heavy logic belongs in services or models
+- Keep DOM IDs stable across partials so Streams target reliably
+
+---
+
+## REST API Versioning
+
+Use when adding `v1`/`v2` namespaces, deprecating endpoints, or planning a contract change.
+
+1. **rails-api-versioning**: Choose the strategy (URL `:api_version`, `Accept` header, subdomain). Plan the deprecation window and the parallel-run period.
+2. **api-rest-collection**: Update or fork the Postman collection per version.
+3. **rails-code-review**: Verify back-compat shim, deprecation headers, and changelog entry.
+
+**Key rules:**
+- Never break a public version in place — branch first, deprecate next
+- Communicate deprecation via response header (`Sunset`, `Deprecation`) before removal
+- Keep one canonical version live at a time as the "default" if no version is requested
+
+---
+
+## Development & Test Data (Seeds vs Fixtures)
+
+Use when designing data for `bin/rails db:seed`, RSpec fixtures, or factories.
+
+1. **rails-database-seeding**: Decide seeds vs fixtures vs factories per use case (demo data → seeds; deterministic test rows → fixtures; flexible per-spec data → factories).
+2. **rspec-best-practices**: Factories must produce minimal valid records; avoid global state.
+
+**Key rules:**
+- Seeds are idempotent — running twice does not create duplicates
+- Never seed real PII or production-like secrets in dev
+- Fixtures and factories solve different problems; do not pick one to "ban" the other
+
+---
+
+## Project Onboarding (First-time Dev Environment)
+
+Use when bringing a new developer onto an existing Rails app.
+
+1. **rails-project-onboarding**: Walk Docker / docker-compose, env vars, credentials, database create/migrate/seed, test suite, linters, IDE setup.
+2. **rails-context-engineering**: After environment is green, load schema/routes/nearest patterns before the first code change.
+
+**Key rules:**
+- Onboarding is not optional — finish it before opening a PR
+- Document every drift discovered during onboarding back into the README so the next developer hits less friction
 
 ---
 

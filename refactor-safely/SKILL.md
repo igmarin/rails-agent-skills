@@ -146,3 +146,8 @@ When asked to refactor:
 | **rails-architecture-review** | When refactor reveals structural problems ([details](./INTEGRATION.md#rails-architecture-review)) |
 | **rails-code-review** | For reviewing the refactored code ([details](./INTEGRATION.md#rails-code-review)) |
 | **ruby-service-objects** | When extracting logic into service objects ([details](./INTEGRATION.md#ruby-service-objects)) |
+
+## Assets
+
+- [assets/characterization_tests.md](assets/characterization_tests.md)
+- [assets/examples.md](assets/examples.md)

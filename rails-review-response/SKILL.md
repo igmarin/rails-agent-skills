@@ -116,3 +116,7 @@ After implementing feedback, decide whether to request a re-review:
 | **rspec-best-practices** | Run the TDD loop after implementing feedback that changes logic |
 | **refactor-safely** | When feedback suggests a larger structural change |
 | **rails-security-review** | When Critical feedback involves security — get a dedicated review |
+
+## Assets
+
+- [assets/response_templates.md](assets/response_templates.md)

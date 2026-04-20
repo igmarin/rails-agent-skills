@@ -6,6 +6,45 @@ A systematic process for improving tessl evaluation scores across all skills in 
 
 This guide provides a repeatable workflow for diagnosing and fixing skill evaluation failures. It was developed while optimizing `rails-engine-release` and is designed to be applicable to any skill in the library.
 
+## Library Baseline — 2026-04-20
+
+Full-library eval on `claude-sonnet-4-6` (32 scenarios, tile `igmarin/rails-agent-skills`):
+
+- **With-context avg: 100%** (28 scenarios at 100%, 4 at 98–99%)
+- **Baseline avg: 78%** — the score any Sonnet-4.6 agent produces *without* this library loaded
+- **Average lift: +22 points** — the value this library adds on top of the base model
+
+### Why the 78% baseline is the right number, not a regression target
+
+Per the library's eval strategy: *a skill that only beats baseline marginally is under-specified.* The gap between baseline and with-context is the **signal that skills are earning their token cost**. Chasing the baseline up means codifying what the model already knows — bloat without signal.
+
+What this means in practice:
+
+- **Low-lift scenarios** (e.g. S23 Fitness Class Booking: 100% baseline, 100% with-context) — the base model already handles the convention. The matching skill is decorative for this case; keep it for edge-case coverage, not for lift.
+- **High-lift scenarios** (e.g. S32 ticket-planning: 30% → 100%, +70; S8 API client: 40% → 100%, +60) — the matching skill is doing real work. These skills are the library's load-bearing beams.
+- **Zero-baseline criteria** (e.g. S24 Task 0.0 feature branch, TDD run-spec-fail, YARD gate — all 0% at baseline) are **training-knowledge gaps**, not signal problems. They exist only in this library. The with-context score is the true measure.
+
+### Top-10 skills ranked by lift (what the library actually buys)
+
+| Scenario | Skill | Baseline | With ctx | Lift |
+|----------|-------|----------|----------|------|
+| S32 | ticket-planning | 30% | 100% | **+70** |
+| S8  | ruby-api-client-integration | 40% | 100% | **+60** |
+| S24 | generate-tasks | 43% | 100% | **+57** |
+| S13 | ruby-api-client-integration | 45% | 100% | **+55** |
+| S4  | refactor-safely | 60% | 100% | **+40** |
+| S14 | create-prd | 62% | 100% | **+38** |
+| S10 | rails-code-conventions (logging + backtrace) | 65% | 100% | **+35** |
+| S3  | ruby-service-objects | 71% | 100% | **+29** |
+| S12 | rails-graphql-best-practices | 71% | 100% | **+27** |
+| S27 | yard-documentation (inline tagged notes) | 76% | 100% | **+24** |
+
+### How to use this baseline in future optimization cycles
+
+1. **Regression guard:** if a future eval run drops any scenario below its 2026-04-20 with-context score, that scenario regressed — find the change that caused it.
+2. **Low-lift flag:** if a new scenario lands with <10 points of lift, either the skill is redundant for that case or the scenario isn't testing skill content. Fix the scenario or retire the skill's coverage of that case.
+3. **Model-bump recheck:** when a new Claude model ships, re-run baseline-only. If baseline creeps up significantly, some skills may become optional — candidates for slimming, not for new requirements.
+
 ## Prerequisites
 
 - Access to `tessl` CLI with eval capabilities
@@ -271,7 +310,7 @@ When you see this pattern, first determine if it's a **signal problem** or a **t
 
 ## Template for New Skills
 
-Use this structure to maximize eval scores from the start:
+Use this structure to maximize eval scores from the start. The same six sections are codified in [skill-structure.md](skill-structure.md) — that doc is the canonical SKILL.md shape the reinforcement pass enforces; this template is the fillable version.
 
 ```markdown
 ---

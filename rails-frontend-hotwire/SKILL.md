@@ -82,4 +82,4 @@ See [EXAMPLES.md](EXAMPLES.md) for complete examples including:
 - **ActionCable broadcasting** — Server-push streams with `broadcasts_to`. See [EXAMPLES.md](EXAMPLES.md#actioncable-broadcasting).
 - **Turbo Stream morphing** — DOM diffing (Turbo 8+). See [EXAMPLES.md](EXAMPLES.md#turbo-stream-morphing).
 - **Nested frames** — Scoped frame navigation. See [EXAMPLES.md](EXAMPLES.md#nested-frames).
-- **Stimulus values & classes API** — Configurable controllers. See [EXAMPLES.md](EXAMPLES.md#stimulus-values--classes-api).
+- **Stimulus values & classes API** — Configurable controllers. See [EXAMPLES.md](EXAMPLES.md#stimulus-values-classes-api).

@@ -13,6 +13,18 @@ Use this skill when the task is to review or harden Rails code from a security p
 
 **Core principle:** Prioritize exploitable issues over style. Assume any untrusted input can be abused.
 
+## HARD-GATE: Authorization Findings Lead the Report
+
+```
+BEFORE returning your security review, verify:
+  1. The FIRST finding section in your output is "Authentication & Authorization"
+  2. SQL injection, XSS, or other findings come AFTER auth/authz — even if
+     they feel more severe or were discovered first
+  3. If no auth/authz issue exists, the report still opens with an explicit
+     "Authentication & Authorization: no issues found" line BEFORE any other
+     finding category
+```
+
 ## Quick Reference
 
 | Area | Key Checks |
@@ -91,19 +103,21 @@ See [PITFALLS.md](./PITFALLS.md) for the full list. Critical anti-patterns: `per
 
 ## Output Style
 
-Write findings first. **Order findings by review area — auth/authz always first:**
+Section order per the HARD-GATE. Every heading appears even when empty (write "No issues found.").
 
-1. Authentication and authorization findings
-2. SQL/injection and parameter findings
-3. Secrets, logging, and output findings
+```
+## Authentication & Authorization
+## Parameter Handling & Mass Assignment
+## Query Safety (SQL / NoSQL / shell injection)
+## Output Encoding & Redirects
+## Secrets, Logging & Operational Exposure
+```
 
-Do not reorder based on which issue looks most obvious. Even if SQL injection is more apparent, authorization findings lead the report.
-
-For each finding include:
-- **Severity:** label it **High** or **Medium** (not "High-Severity" or "Critical")
-- Attack path or failure mode
-- Affected file (name the specific file, e.g. `app/controllers/documents_controller.rb`)
-- Smallest credible mitigation
+Each finding carries:
+- **Severity:** **High** or **Medium** (not "Critical")
+- **Attack path:** input → reach → impact
+- **Affected file:** path + line, e.g. `app/controllers/documents_controller.rb:42`
+- **Mitigation:** smallest credible fix
 
 ## Integration
 

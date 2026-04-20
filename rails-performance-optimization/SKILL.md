@@ -19,6 +19,19 @@ Identify and fix performance bottlenecks in Rails applications.
 NEVER optimize without a baseline measurement
 ALWAYS write a regression spec before optimizing (query count assertion)
 ALWAYS verify with EXPLAIN ANALYZE for database changes
+
+REPORT ORDER MUST MATCH WORK ORDER:
+  1. Baseline measurement
+  2. Bottleneck identification (Bullet / rack-mini-profiler / EXPLAIN)
+  3. Regression spec written + run + FAILS at the unoptimized count
+  4. Fix applied
+  5. Regression spec rerun + PASSES at the optimized count
+  6. EXPLAIN ANALYZE confirms plan change
+
+NEVER write the report as "I applied includes(:author), then wrote a spec
+to lock it in." The spec MUST be written and shown failing BEFORE the fix
+appears in your output. Reordering for narrative flow fails the audit even
+when the underlying work was correct.
 ```
 
 ## Tools Quick Reference
@@ -92,6 +105,18 @@ See [EXAMPLES.md](EXAMPLES.md) for complete examples including:
 - Fragment caching and Russian doll caching
 - Query optimization with `pluck` and `find_each`
 - Regression testing with custom matchers
+
+## Output Style
+
+Report sections, in the HARD-GATE order:
+
+1. **Baseline** — timing or query count with source (log line, profiler output, EXPLAIN row).
+2. **Bottleneck** — specific cause + the tool that surfaced it (`bullet`, `rack-mini-profiler`, or `EXPLAIN ANALYZE` — at least one named).
+3. **Regression spec — RED** — spec with `make_database_queries(count: <unoptimized>)`, shown failing.
+4. **Fix** — minimal code change (eager load, index, cache, scope rewrite).
+5. **Regression spec — GREEN** — rerun output at the new count.
+6. **EXPLAIN ANALYZE** — actual output rows for any DB-touching change; call out `Seq Scan → Index Scan` or `actual time` delta.
+7. **Quantified improvement** — `queries: N → M`, `p95: X ms → Y ms`. Numbers, not adjectives.
 
 ## Further Reading
 

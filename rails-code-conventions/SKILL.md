@@ -43,52 +43,56 @@ When reviewing or refactoring Rails code, follow this sequence:
 
 ## Design Principles
 
-| Principle | Apply as |
-|-----------|----------|
-| **DRY** | Extract when duplication carries real maintenance cost; avoid premature abstraction |
-| **YAGNI** | Build for current requirements; defer generalization until a second real use case |
-| **PORO** | Use plain Ruby objects when they clarify responsibility; do not wrap everything in a "pattern" |
-| **Convention over Configuration** | Prefer Rails defaults and file placement; document only intentional deviations |
-| **KISS** | Simplest design that meets acceptance criteria and **tests gate** |
+DRY, YAGNI, PORO, CoC, KISS — applied with judgment, not as rituals. Extract on real duplication; defer generalization until the second use case; prefer Rails defaults and document intentional deviations only.
 
 ## Comments and tagged notes
 
-Comment **why**, not **what**. When something is unfinished, risky, or assumption-heavy, use **`TODO:` / `FIXME:` / `HACK:` / `NOTE:` / `OPTIMIZE:`** — uppercase, trailing colon, then **actionable context** (owner, ticket, deadline, or decision needed). Never a naked tag.
+Comment **why**, not **what**. Tagged notes — `TODO:` / `FIXME:` / `HACK:` / `NOTE:` / `OPTIMIZE:` — are MANDATORY in these triggers; every tag carries actionable context (owner, ticket id, deadline, or next step). Naked tags (`# TODO: fix this`) fail review.
+
+| Trigger | Required tag |
+|---------|--------------|
+| Business-rule constant (rates, caps, thresholds) | `NOTE:` with the rule's source/owner |
+| Deferred work / known shortcut | `TODO:` with ticket or next step |
+| Workaround for a bug or external limitation | `HACK:` or `FIXME:` with the upstream issue |
+| Performance tradeoff or hot path | `OPTIMIZE:` with the measured concern |
 
 ```ruby
-# BAD — narrates the code
-# Finds the user by email
-def find_by_email(email)
-  User.find_by(email: email)
-end
-
-# GOOD — why `find_by` vs `find_by!` matters for callers
-# Uses find_by (not find_by!) so callers handle nil; auth layer may raise.
-def find_by_email(email)
-  User.find_by(email: email)
-end
-
-# BAD — unusable
+# BAD — naked tag, no context
 # TODO: fix this
 rate = TIER_RATES.fetch(tier, 0.0)
 
-# GOOD — next step + dependency visible
+# GOOD — business-rule constant with NOTE explaining the rule
+# NOTE: 50% cap set by Pricing policy v3 (PRI-118, owner: pricing-team).
+MAX_DISCOUNT = 0.50
+
+# GOOD — TODO with next step + dependency
 # TODO: replace TIER_RATES with DB-backed lookup (PRI-482; blocked on legal).
 rate = TIER_RATES.fetch(tier, 0.0)
 ```
 
 ## Structured Logging
 
-- **First argument:** static string (message key or human-readable template without interpolated values).
-- **Second argument:** hash with structured fields (`user_id:`, `order_id:`, etc.).
-- **Do not** build the primary message with string interpolation; put dynamic data in the hash.
-- **Always include `event:`** — the primary grouping dimension in log aggregators (Datadog, Loki, Kibana). Use dot-namespaced values like `"order.processing_started"`. No alternate key names (`:type`, `:action`, `:name`).
+**Required call shape — two positional args, always:**
+
+```text
+Rails.logger.<level>(static_string_message, { event: "...", ...domain_fields })
+```
+
+- **First arg:** a static string literal. No interpolation, no concatenation, no variables.
+- **Second arg:** a hash with `event:` (dot-namespaced, e.g. `"order.processing_started"`) plus domain fields (`order_id:`, `user_id:`, …). Do not use alternate keys like `:type`, `:action`, `:name`.
+- **Errors log the backtrace.** Every rescue for an unexpected error calls `Rails.logger.error` with BOTH `e.message` AND `e.backtrace.first(5).join("\n")`.
 
 ```ruby
-# BAD — interpolation loses structure; cannot filter by field in log aggregators
+# BAD — interpolation in the message; unfilterable in log aggregators
 Rails.logger.info("Processing order #{order.id} for user #{user.id}")
 
-# GOOD — static message, structured data, filterable fields
+# BAD — single hash arg; loses the static-message dimension
+Rails.logger.info(event: "order.processing_started", order_id: order.id)
+
+# BAD — semantic-logger-style tags inlined into the string
+Rails.logger.info("order.processing_started order_id=#{order.id} user_id=#{user.id}")
+
+# GOOD — static first arg, hash second arg with event: + domain fields
 Rails.logger.info("order.processing_started", {
   event: "order.processing_started",
   order_id: order.id,
@@ -138,6 +142,14 @@ No implementation code before a failing test. See **rspec-best-practices** and *
 | `let_it_be` in every project | Use only when `test-prof` is already a dependency |
 | New `app/repositories` for every query | ActiveRecord is the default data boundary unless there's a documented reason |
 
+## Output Style
+
+Every Rails-code task lands these:
+
+1. **Comments** follow the **Comments and tagged notes** section: no what-comments; tagged notes (`TODO:` / `FIXME:` / `HACK:` / `NOTE:` / `OPTIMIZE:`) on every assumption, deferred work, or business-rule constant; every tag carries actionable context (owner, ticket id, deadline).
+2. **Logging** follows **Structured Logging** above — static first arg, hash second arg with `event:`, and a backtrace line on every error rescue.
+3. **Linter detection noted** — when reviewing or refactoring, state which linter config you detected (or its absence) before any style claim.
+
 ## Integration
 
 | Skill | When to chain |
@@ -149,3 +161,8 @@ No implementation code before a failing test. See **rspec-best-practices** and *
 | **rspec-best-practices** | Spec style, **tests gate** (red/green/refactor), request vs controller specs |
 | **rails-security-review** | Controllers, params, IDOR, PII |
 | **rails-code-review** | Full PR pass before merge |
+
+## Assets
+
+- [assets/checklist.md](assets/checklist.md)
+- [assets/snippets.md](assets/snippets.md)
