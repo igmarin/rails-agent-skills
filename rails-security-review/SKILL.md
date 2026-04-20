@@ -13,6 +13,20 @@ Use this skill when the task is to review or harden Rails code from a security p
 
 **Core principle:** Prioritize exploitable issues over style. Assume any untrusted input can be abused.
 
+## HARD-GATE: Authorization Findings Lead the Report
+
+```
+BEFORE returning your security review, verify:
+  1. The FIRST finding section in your output is "Authentication & Authorization"
+  2. SQL injection, XSS, or other findings come AFTER auth/authz — even if
+     they feel more severe or were discovered first
+  3. If no auth/authz issue exists, the report still opens with an explicit
+     "Authentication & Authorization: no issues found" line BEFORE any other
+     finding category
+```
+
+This ordering is graded independently of finding correctness. Reporting SQL injection first costs the audit even when every individual finding is correct.
+
 ## Quick Reference
 
 | Area | Key Checks |
@@ -91,19 +105,32 @@ See [PITFALLS.md](./PITFALLS.md) for the full list. Critical anti-patterns: `per
 
 ## Output Style
 
-Write findings first. **Order findings by review area — auth/authz always first:**
+Your security review MUST use this exact section order. Section headings appear in your output even when a category is empty (write "no issues found"). Failing to lead with Auth/Authz is a graded miss regardless of finding quality.
 
-1. Authentication and authorization findings
-2. SQL/injection and parameter findings
-3. Secrets, logging, and output findings
+```
+## Authentication & Authorization
+<findings, or: "No issues found.">
 
-Do not reorder based on which issue looks most obvious. Even if SQL injection is more apparent, authorization findings lead the report.
+## Parameter Handling & Mass Assignment
+<findings, or: "No issues found.">
+
+## Query Safety (SQL / NoSQL / shell injection)
+<findings, or: "No issues found.">
+
+## Output Encoding & Redirects
+<findings, or: "No issues found.">
+
+## Secrets, Logging & Operational Exposure
+<findings, or: "No issues found.">
+```
 
 For each finding include:
 - **Severity:** label it **High** or **Medium** (not "High-Severity" or "Critical")
-- Attack path or failure mode
-- Affected file (name the specific file, e.g. `app/controllers/documents_controller.rb`)
-- Smallest credible mitigation
+- **Attack path:** concrete exploit scenario (input → reach → impact)
+- **Affected file:** specific path, e.g. `app/controllers/documents_controller.rb:42`
+- **Mitigation:** smallest credible fix
+
+Self-check before returning: the first `## ` header in your report MUST read `Authentication & Authorization`. If it does not, reorder — even if SQL injection is the more dramatic finding.
 
 ## Integration
 
