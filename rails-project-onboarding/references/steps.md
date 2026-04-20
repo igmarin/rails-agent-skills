@@ -34,9 +34,9 @@ The user edits `.env` with local values. If the project uses Rails encrypted cre
 rails secret             # user copies output into SECRET_KEY_BASE in .env
 ```
 
-The agent may suggest which keys need values but does **not** read filled-in `.env` content and never echoes secrets back.
+The agent never reads filled-in `.env` content and never echoes secret values back.
 
-## Step 3: Docker Setup (user runs)
+## Step 3: Docker (user runs)
 
 ```bash
 docker compose up -d
@@ -45,7 +45,7 @@ docker compose logs -f web
 docker compose logs -f db
 ```
 
-If any service is unhealthy, the user shares the log output with the agent so the agent can diagnose — without executing any recovery command itself.
+If any service is unhealthy, the user shares log output with the agent. The agent proposes the next command; the user decides whether to run it.
 
 ## Step 4: Dependencies (user runs)
 

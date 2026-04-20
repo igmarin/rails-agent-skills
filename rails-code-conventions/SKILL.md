@@ -41,10 +41,6 @@ When reviewing or refactoring Rails code, follow this sequence:
 3. **Verify tests gate** — confirm failing tests exist before any new behavior; run specs and checkpoints.
 4. **Chain to specialised skills** — use the Integration table to pull in deeper guidance (security, jobs, specs, etc.) as needed.
 
-## Design Principles
-
-DRY, YAGNI, PORO, CoC, KISS — applied with judgment, not as rituals. Extract on real duplication; defer generalization until the second use case; prefer Rails defaults and document intentional deviations only.
-
 ## Comments and tagged notes
 
 Comment **why**, not **what**. Tagged notes — `TODO:` / `FIXME:` / `HACK:` / `NOTE:` / `OPTIMIZE:` — are MANDATORY in these triggers; every tag carries actionable context (owner, ticket id, deadline, or next step). Naked tags (`# TODO: fix this`) fail review.
@@ -72,32 +68,20 @@ rate = TIER_RATES.fetch(tier, 0.0)
 
 ## Structured Logging
 
-**Required call shape — two positional args, always:**
-
-```text
-Rails.logger.<level>(static_string_message, { event: "...", ...domain_fields })
-```
-
-- **First arg:** a static string literal. No interpolation, no concatenation, no variables.
-- **Second arg:** a hash with `event:` (dot-namespaced, e.g. `"order.processing_started"`) plus domain fields (`order_id:`, `user_id:`, …). Do not use alternate keys like `:type`, `:action`, `:name`.
-- **Errors log the backtrace.** Every rescue for an unexpected error calls `Rails.logger.error` with BOTH `e.message` AND `e.backtrace.first(5).join("\n")`.
+Two positional args: static string first, hash second with `event:` (dot-namespaced) plus domain fields. No `:type`/`:action`/`:name` keys. Every `rescue` logs `e.message` AND `e.backtrace.first(5).join("\n")`.
 
 ```ruby
-# BAD — interpolation in the message; unfilterable in log aggregators
-Rails.logger.info("Processing order #{order.id} for user #{user.id}")
+# BAD — interpolation: unfilterable in log aggregators
+Rails.logger.info("Processing order #{order.id}")
 
-# BAD — single hash arg; loses the static-message dimension
+# BAD — single hash arg: loses the static-message dimension
 Rails.logger.info(event: "order.processing_started", order_id: order.id)
 
-# BAD — semantic-logger-style tags inlined into the string
-Rails.logger.info("order.processing_started order_id=#{order.id} user_id=#{user.id}")
-
-# GOOD — static first arg, hash second arg with event: + domain fields
+# GOOD
 Rails.logger.info("order.processing_started", {
   event: "order.processing_started",
   order_id: order.id,
-  user_id: user.id,
-  amount_cents: order.total_cents
+  user_id: user.id
 })
 ```
 
@@ -120,8 +104,7 @@ Rules below apply **when those paths exist** in the project. If a path is absent
 
 ## RSpec and `let_it_be` (test-prof)
 
-- **Only use `let_it_be` if the project already depends on the `test-prof` gem** (check `Gemfile` / `Gemfile.lock`). Search before recommending it.
-- If **`test-prof` is not present**, follow **rspec-best-practices** with **`let` as the default**; use **`let!` only when lazy evaluation would break the example** (e.g. callbacks, DB constraints that must exist before the action). Explicit setup is fine when clearer. Do **not** require adding `test-prof` / `let_it_be` unless the user asks to introduce it.
+Only recommend `let_it_be` if `test-prof` is already in `Gemfile.lock`. Otherwise default to `let`; reach for `let!` only when lazy evaluation would break the example. Don't introduce `test-prof` unless asked.
 
 ## HARD-GATE: Tests Gate Implementation
 
@@ -132,15 +115,6 @@ PRD → TASKS → TEST (write, run, fail) → IMPLEMENTATION → …
 ```
 
 No implementation code before a failing test. See **rspec-best-practices** and **rails-agent-skills**.
-
-## Common Mistakes
-
-| Mistake | Reality |
-|---------|---------|
-| Inventing style rules when a linter config exists | The project's configured linter is authoritative for style — do not add prose style rules |
-| Assuming RuboCop when no config is checked | Detect first; note the absence to the user if no config is found |
-| `let_it_be` in every project | Use only when `test-prof` is already a dependency |
-| New `app/repositories` for every query | ActiveRecord is the default data boundary unless there's a documented reason |
 
 ## Output Style
 
