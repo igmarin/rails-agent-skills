@@ -47,29 +47,52 @@ DRY, YAGNI, PORO, CoC, KISS — applied with judgment, not as rituals. Extract o
 
 ## Comments and tagged notes
 
-Comment **why**, not **what**. Tagged notes — `TODO:` / `FIXME:` / `HACK:` / `NOTE:` / `OPTIMIZE:` — are MANDATORY on assumptions, deferrals, business-rule constants, known limitations, and non-obvious tradeoffs. Each tag is followed by actionable context (owner, ticket id, deadline, or next step). Naked tags (`# TODO: fix this`) fail review.
+Comment **why**, not **what**. Tagged notes — `TODO:` / `FIXME:` / `HACK:` / `NOTE:` / `OPTIMIZE:` — are MANDATORY in these triggers; every tag carries actionable context (owner, ticket id, deadline, or next step). Naked tags (`# TODO: fix this`) fail review.
+
+| Trigger | Required tag |
+|---------|--------------|
+| Business-rule constant (rates, caps, thresholds) | `NOTE:` with the rule's source/owner |
+| Deferred work / known shortcut | `TODO:` with ticket or next step |
+| Workaround for a bug or external limitation | `HACK:` or `FIXME:` with the upstream issue |
+| Performance tradeoff or hot path | `OPTIMIZE:` with the measured concern |
 
 ```ruby
-# BAD — unusable
+# BAD — naked tag, no context
 # TODO: fix this
 rate = TIER_RATES.fetch(tier, 0.0)
 
-# GOOD — next step + dependency visible
+# GOOD — business-rule constant with NOTE explaining the rule
+# NOTE: 50% cap set by Pricing policy v3 (PRI-118, owner: pricing-team).
+MAX_DISCOUNT = 0.50
+
+# GOOD — TODO with next step + dependency
 # TODO: replace TIER_RATES with DB-backed lookup (PRI-482; blocked on legal).
 rate = TIER_RATES.fetch(tier, 0.0)
 ```
 
 ## Structured Logging
 
-- **First arg:** static string. **Second arg:** hash of structured fields (`user_id:`, `order_id:`, …). Never interpolate values into the message.
-- **Always include `event:`** — the grouping dimension in log aggregators. Use dot-namespaced values like `"order.processing_started"`. No alternate keys (`:type`, `:action`, `:name`).
+**Required call shape — two positional args, always:**
+
+```text
+Rails.logger.<level>(static_string_message, { event: "...", ...domain_fields })
+```
+
+- **First arg:** a static string literal. No interpolation, no concatenation, no variables.
+- **Second arg:** a hash with `event:` (dot-namespaced, e.g. `"order.processing_started"`) plus domain fields (`order_id:`, `user_id:`, …). Do not use alternate keys like `:type`, `:action`, `:name`.
 - **Errors log the backtrace.** Every rescue for an unexpected error calls `Rails.logger.error` with BOTH `e.message` AND `e.backtrace.first(5).join("\n")`.
 
 ```ruby
-# BAD — interpolation loses structure; cannot filter by field in log aggregators
+# BAD — interpolation in the message; unfilterable in log aggregators
 Rails.logger.info("Processing order #{order.id} for user #{user.id}")
 
-# GOOD — static message, structured data, filterable fields
+# BAD — single hash arg; loses the static-message dimension
+Rails.logger.info(event: "order.processing_started", order_id: order.id)
+
+# BAD — semantic-logger-style tags inlined into the string
+Rails.logger.info("order.processing_started order_id=#{order.id} user_id=#{user.id}")
+
+# GOOD — static first arg, hash second arg with event: + domain fields
 Rails.logger.info("order.processing_started", {
   event: "order.processing_started",
   order_id: order.id,
