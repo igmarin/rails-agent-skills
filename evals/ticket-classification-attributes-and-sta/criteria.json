@@ -1,0 +1,71 @@
+{
+  "context": "Tests whether the agent applies the ticket-planning skill correctly: classifying each ticket with all required attributes, applying correct area title prefixes (BE |, FE |, Mobile |) with a space after the pipe, using the standard five-section ticket structure in the right order, keeping sections business-facing without cross-repeating content, and sequencing foundation/api tickets before client tickets.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "All 8 classification attributes present",
+      "max_score": 10,
+      "description": "Every ticket in tickets.md lists all eight classification attributes: area, type, dependency_level, execution_order, coordination_need, external_dependency, urgency, target_bucket"
+    },
+    {
+      "name": "area values from allowed set",
+      "max_score": 6,
+      "description": "Every ticket's 'area' value is one of: backend, web, mobile, cross-platform, external — no other values used"
+    },
+    {
+      "name": "execution_order values from allowed set",
+      "max_score": 6,
+      "description": "Every ticket's 'execution_order' value is one of: foundation, api, client, follow-up"
+    },
+    {
+      "name": "BE | prefix on backend tickets",
+      "max_score": 8,
+      "description": "All backend-area tickets have titles starting with 'BE | ' (with a space after the pipe) — at least one such ticket exists"
+    },
+    {
+      "name": "FE | prefix on frontend tickets",
+      "max_score": 8,
+      "description": "All web-area tickets have titles starting with 'FE | ' (with a space after the pipe) — at least one such ticket exists"
+    },
+    {
+      "name": "No prefix on non-area tickets",
+      "max_score": 5,
+      "description": "Any ticket classified as cross-platform or external does NOT have a BE |, FE |, or Mobile | prefix unless the content clearly belongs to one of those areas"
+    },
+    {
+      "name": "Five sections present in each ticket",
+      "max_score": 12,
+      "description": "Every ticket body contains all five sections: Summary, Background, Acceptance Criteria, Dependencies, Technical Notes — in that order"
+    },
+    {
+      "name": "Summary states outcome only",
+      "max_score": 8,
+      "description": "The Summary section in each ticket is a single statement of the desired outcome — it does NOT restate the Background or repeat Acceptance Criteria verbatim"
+    },
+    {
+      "name": "Technical Notes scope correct",
+      "max_score": 7,
+      "description": "Technical Notes sections contain only implementation details relevant to sequencing or scoping — they do NOT repeat Acceptance Criteria items verbatim"
+    },
+    {
+      "name": "Foundation/API before client sequencing",
+      "max_score": 10,
+      "description": "sequencing_notes.md explains that backend/API tickets (foundation or api execution_order) should be started before web or mobile client tickets"
+    },
+    {
+      "name": "Draft-only output",
+      "max_score": 8,
+      "description": "tickets.md contains only markdown ticket drafts — there is no mention of creating issues in an external system, no issue keys, and no API calls described"
+    },
+    {
+      "name": "target_bucket values from allowed set",
+      "max_score": 6,
+      "description": "Every ticket's 'target_bucket' value is one of: ready-to-refine, next-dev-sprint, later"
+    },
+    {
+      "name": "type values from allowed set",
+      "max_score": 6,
+      "description": "Every ticket's 'type' value is either Story or Task"
+    }
+  ]
+}
