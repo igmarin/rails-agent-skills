@@ -53,7 +53,16 @@ When reviewing or refactoring Rails code, follow this sequence:
 
 ## Comments and tagged notes
 
-Comment **why**, not **what**. When something is unfinished, risky, or assumption-heavy, use **`TODO:` / `FIXME:` / `HACK:` / `NOTE:` / `OPTIMIZE:`** — uppercase, trailing colon, then **actionable context** (owner, ticket, deadline, or decision needed). Never a naked tag.
+Comment **why**, not **what**. **NEVER** write a comment that paraphrases the code (`# Finds the user by email`, `# Returns the total`, `# Loops through items`) — well-named identifiers already carry that information.
+
+**Tagged notes are MANDATORY** whenever any of the following is present in the code under review or being authored:
+
+- An assumption that may not hold forever (rate limits, magic numbers, business-rule constants like discount caps)
+- A deliberate deferral (placeholder data source, simplified logic awaiting a real implementation)
+- A known limitation, edge case, or risk the reader needs to see
+- A decision that has a non-obvious tradeoff (chose `find_by` over `find_by!`, swallowed an exception class on purpose)
+
+Use **`TODO:` / `FIXME:` / `HACK:` / `NOTE:` / `OPTIMIZE:`** — uppercase, trailing colon, then **actionable context**: owner, ticket id, decision deadline, or the next concrete step. Never a naked tag (`# TODO: fix this`) — that fails review.
 
 ```ruby
 # BAD — narrates the code
@@ -137,6 +146,27 @@ No implementation code before a failing test. See **rspec-best-practices** and *
 | Assuming RuboCop when no config is checked | Detect first; note the absence to the user if no config is found |
 | `let_it_be` in every project | Use only when `test-prof` is already a dependency |
 | New `app/repositories` for every query | ActiveRecord is the default data boundary unless there's a documented reason |
+
+## Output Style
+
+When asked to write, review, comment, or document Rails code, your output MUST satisfy each item below. They are graded independently — partial coverage drops the score.
+
+1. **No what-comments** — never paraphrase code in a comment. If a comment would just restate the method or line, delete it. Names carry the *what*; comments carry the *why*.
+2. **Tagged notes present** — any code that contains an assumption, deferred work, design tradeoff, business-rule constant, or known limitation MUST carry at least one tagged note (`TODO:` / `FIXME:` / `HACK:` / `NOTE:` / `OPTIMIZE:`). When commenting an existing file in this domain, surface at least one tagged note for the assumptions you find — silence is failure.
+3. **Tagged notes are actionable** — every tag is followed by a colon and concrete next-step context (owner, ticket id, deadline, or the precise decision pending). `# TODO: fix later` is rejected.
+4. **Why-comments on business rules** — constants like discount caps, rate limits, retry counts, magic numbers MUST have a comment explaining the *reason* for the value (regulation, contract, observed behavior).
+5. **Structured logging** — every `Rails.logger.{info,warn,error}` call uses a static first argument and a hash second argument that includes an `event:` key. No interpolation in the message.
+6. **Error logging includes backtrace** — every `rescue StandardError => e` block (or any `rescue` for an unexpected error) MUST log BOTH `e.message` AND `e.backtrace.first(5).join("\n")` (or the full backtrace) on `Rails.logger.error`. Logging only the message is graded as missing.
+7. **Linter detection noted** — if asked to review or refactor, state which linter config you detected (or note its absence) before making style claims.
+
+```ruby
+# Required shape for every unexpected-error rescue block
+rescue StandardError => e
+  Rails.logger.error("payment.unexpected_error", event: "payment.unexpected_error", error: e.message)
+  Rails.logger.error(e.backtrace.first(5).join("\n"))
+  { success: false, response: { error: { message: PAYMENT_FAILED } } }
+end
+```
 
 ## Integration
 
