@@ -2,13 +2,13 @@
 name: create-prd
 description: >
   Generates a clear, actionable Product Requirements Document (PRD) in Markdown
-  from a feature description and saves it to /tasks/prd-<feature-slug>.md. Use
-  when a user asks to plan a feature, define requirements, create a PRD, or
-  write a product spec. Covers goals, user stories, functional requirements,
-  non-goals, design and technical considerations, implementation surface, success
-  metrics, and open questions for Rails-oriented workflows. Trigger words: PRD,
-  product requirements, plan a feature, write a spec, requirements document,
-  /tasks/ folder.
+  from a feature description and saves it to /tasks/prd-FEATURE-SLUG.md following
+  PRD_TEMPLATE.md. Use when a user asks to plan a feature, define requirements,
+  create a PRD, or write a product spec. Covers goals, user stories, functional
+  requirements, non-goals, design and technical considerations, implementation
+  surface, success metrics, and open questions for Rails-oriented workflows.
+  Trigger words: PRD, product requirements, plan a feature, write a spec,
+  requirements document, /tasks/ folder.
 ---
 
 # Generating a Product Requirements Document (PRD)
