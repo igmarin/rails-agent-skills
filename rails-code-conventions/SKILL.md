@@ -57,7 +57,7 @@ Comment **why**, not **what**. Tagged notes — `TODO:` / `FIXME:` / `HACK:` / `
 # TODO: fix this
 rate = TIER_RATES.fetch(tier, 0.0)
 
-# GOOD — business-rule constant with NOTE explaining the rule
+# GOOD
 # NOTE: 50% cap set by Pricing policy v3 (PRI-118, owner: pricing-team).
 MAX_DISCOUNT = 0.50
 
