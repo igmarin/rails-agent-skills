@@ -32,3 +32,11 @@ This document outlines the core principles for designing and maintaining high-qu
   - **Structure over Prose**: Maximize readability and parseability by using tables, bulleted lists, numbered lists, and clear headings. Avoid long blocks of unstructured text.
   - **Consistent Terminology**: Use consistent terms across skills (e.g., "linter," "API collection") to reduce ambiguity for AI agents.
 
+---
+
+### See Also
+
+- [skill-structure.md](skill-structure.md) — the canonical 6-section SKILL.md shape every skill must converge on (Frontmatter → Quick Reference → HARD-GATE → Core Process → Output Style → Integration). Use this as the structural checklist when authoring or reinforcing a skill.
+- [skill-optimization-guide.md](skill-optimization-guide.md) — the eval-driven loop for lifting baseline-vs-context scores; tells you *which* skill to reinforce next.
+- [skill-template.md](skill-template.md) — fillable template that already follows `skill-structure.md`.
+

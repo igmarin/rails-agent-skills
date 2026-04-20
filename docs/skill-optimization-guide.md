@@ -271,7 +271,7 @@ When you see this pattern, first determine if it's a **signal problem** or a **t
 
 ## Template for New Skills
 
-Use this structure to maximize eval scores from the start:
+Use this structure to maximize eval scores from the start. The same six sections are codified in [skill-structure.md](skill-structure.md) — that doc is the canonical SKILL.md shape the reinforcement pass enforces; this template is the fillable version.
 
 ```markdown
 ---
