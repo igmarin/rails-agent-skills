@@ -42,7 +42,7 @@ Assign these planning attributes to each ticket:
 | `urgency` | `normal` \| `priority` |
 | `target_bucket` | `ready-to-refine` \| `next-dev-sprint` \| `later` |
 
-Use the classification to decide sequence and sprint placement. Backend/API enablers usually come before dependent web/mobile tickets.
+Backend/API enablers generally come before dependent web/mobile tickets.
 
 ### 3. Apply title conventions
 
@@ -58,7 +58,7 @@ Do **not** add those prefixes to tickets that are not owned by those areas unles
 
 ### 4. Draft tickets in the standard structure
 
-Use this section order — each section has one job:
+Use this section order:
 
 | Section | Job |
 |---------|-----|
@@ -91,7 +91,7 @@ Defaults unless the user overrides:
 - `foundation` or `api` tickets go **before** client tickets
 - `client` tickets depend on stable API behavior when applicable
 - `external` confirmation tickets usually stay **out** of active build sprints
-- `follow-up` tickets can stay in `ready-to-refine` or later until enabling work is clear
+- `follow-up` tickets stay in `ready-to-refine` or later until enabling work is clear
 
 For boards with a named future sprint such as **Ready to Refine**, treat it as a **planning bucket**, not an execution guarantee.
 

@@ -9,12 +9,10 @@ description: >
 
 Use this skill when the task is to create or improve test coverage for a Rails engine.
 
-Prefer integration confidence over isolated test quantity. The main goal is to prove the engine behaves correctly inside a host app.
-
 ## Quick Reference
 
 | Spec Type | Purpose |
-|-----------|---------|
+|-----------|---------||
 | Request | Proves mounted endpoints work; exercises real routing and controller |
 | Routing | Verifies engine route expectations and mount behavior |
 | Generator | Covers install commands, copied files, idempotency |
@@ -97,8 +95,8 @@ For generator and reload-safety spec examples, see [EXAMPLES.md](./EXAMPLES.md).
 
 | Pitfall | What to do |
 |---------|------------|
-| No dummy app | Use spec/dummy; unit tests alone cannot prove mount and integration |
-| Testing against real host | Use spec/dummy; real host apps are environment-specific and slow |
+| No dummy app | Unit tests alone cannot prove mount and integration; generate one at `spec/dummy` |
+| Testing against real host | Use `spec/dummy`; real host apps are environment-specific and slow |
 | Skipping reload-safety tests | Add regression coverage for decorators and patches in development |
 | Tests pass only with specific Rails version | Run a version matrix; pin nothing unless required |
 | Request specs use stubs instead of real wiring | Mount the engine in dummy and call through it |
