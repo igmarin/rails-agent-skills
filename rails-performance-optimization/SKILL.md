@@ -19,6 +19,19 @@ Identify and fix performance bottlenecks in Rails applications.
 NEVER optimize without a baseline measurement
 ALWAYS write a regression spec before optimizing (query count assertion)
 ALWAYS verify with EXPLAIN ANALYZE for database changes
+
+REPORT ORDER MUST MATCH WORK ORDER:
+  1. Baseline measurement
+  2. Bottleneck identification (Bullet / rack-mini-profiler / EXPLAIN)
+  3. Regression spec written + run + FAILS at the unoptimized count
+  4. Fix applied
+  5. Regression spec rerun + PASSES at the optimized count
+  6. EXPLAIN ANALYZE confirms plan change
+
+NEVER write the report as "I applied includes(:author), then wrote a spec
+to lock it in." The spec MUST be written and shown failing BEFORE the fix
+appears in your output. Reordering for narrative flow fails the audit even
+when the underlying work was correct.
 ```
 
 ## Tools Quick Reference
@@ -92,6 +105,20 @@ See [EXAMPLES.md](EXAMPLES.md) for complete examples including:
 - Fragment caching and Russian doll caching
 - Query optimization with `pluck` and `find_each`
 - Regression testing with custom matchers
+
+## Output Style
+
+When asked to investigate or fix a performance issue, your response MUST contain each section below in this order. Each section is graded — skip one and the audit deducts.
+
+1. **Baseline** — current timing or query count, with the source (log line, profiler output, EXPLAIN row).
+2. **Bottleneck** — name the specific cause (e.g. "N+1 between `Post#author` and the index loop"). Cite the profiling tool that surfaced it (`bullet`, `rack-mini-profiler`, `EXPLAIN ANALYZE` — at least one MUST be named).
+3. **Regression spec — RED** — show the spec file with `make_database_queries(count: <unoptimized_count>)` (or equivalent assertion at the unoptimized number) and explicitly state "spec FAILS at current count" with the failing output. This block appears in the report BEFORE any code change.
+4. **Fix** — the minimal code change (eager load, index migration, cache, scope rewrite). Comes AFTER the failing spec block.
+5. **Regression spec — GREEN** — update the assertion to the new count (or keep it if the count was the target), rerun, show "spec PASSES at <fixed_count>".
+6. **EXPLAIN ANALYZE** — paste the actual output (or relevant rows) for any DB-touching change. Call out `Seq Scan → Index Scan`, `actual time` improvement, or row-count interpretation.
+7. **Quantified improvement** — "queries: N → M", "p95: X ms → Y ms", or "rows scanned: A → B". Numbers, not adjectives.
+
+Self-check before sending: in your response, the line containing the regression spec MUST appear earlier in the document than the line containing the fix. If the order is reversed, rewrite the report — even if the underlying work was done correctly.
 
 ## Further Reading
 
