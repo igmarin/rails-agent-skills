@@ -45,7 +45,47 @@ written and validated BEFORE implementation.
 | **Builder** | `initialize(attributes:)`, whitelist output via `.slice(*@attributes)` |
 | **Domain Entity** | `ATTRIBUTES`, `DEFAULT_QUERY`, `.fetcher(client: Client.default)` |
 
-See [LAYERS.md](./LAYERS.md) for full templates (`self.default`, `MISSING_CONFIGURATION_ERROR`, Fetcher `data_builder:` / `default_query:`, Builder `dig`, FactoryBot hashes).
+**Copy-ready templates for every layer:** [LAYERS.md](./LAYERS.md) — use this before writing Auth, Client, Fetcher, Builder, or Entity code. **Full worked integration (ShelterApi):** [references/worked-example.md](references/worked-example.md).
+
+### Minimum signatures — copy these verbatim
+
+```ruby
+# Builder — initializer takes attributes: (required)
+class Builder
+  def initialize(attributes:)
+    @attributes = attributes
+  end
+end
+
+# Fetcher — constructor DI: positional client + keyword data_builder/default_query
+class Fetcher
+  def initialize(client, data_builder:, default_query:)
+    @client, @data_builder, @default_query = client, data_builder, default_query
+  end
+end
+
+# Domain Entity — ATTRIBUTES + DEFAULT_QUERY + SEARCH_QUERY + self.fetcher + sanitize_sql
+module ServiceName
+  class Entity
+    ATTRIBUTES    = %w[field_a field_b].freeze
+    DEFAULT_QUERY = 'SELECT * FROM schema.entities;'
+    SEARCH_QUERY  = 'SELECT * FROM schema.entities WHERE id = ?;'
+
+    def self.fetcher(client: Client.default)
+      Fetcher.new(client,
+        data_builder: Builder.new(attributes: ATTRIBUTES),
+        default_query: DEFAULT_QUERY)
+    end
+
+    def self.find(id:)
+      query = ActiveRecord::Base.sanitize_sql([SEARCH_QUERY, id])
+      fetcher.execute_query(query)
+    end
+  end
+end
+```
+
+**Never** string-interpolate API values or user input into SQL — always pass through `sanitize_sql([QUERY, bind])`.
 
 ## Key Patterns
 
