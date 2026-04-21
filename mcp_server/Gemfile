@@ -2,8 +2,9 @@
 
 source 'https://rubygems.org'
 
-gem 'minitest'
-# Minitest 6+ moved Minitest::Mock to a separate gem (was minitest/mock.rb).
-gem 'minitest-mock'
-gem 'rake'
-# Add any other development-only gems here if needed, e.g., for linters
+gem 'mcp'
+
+group :development, :test do
+  gem 'minitest'
+  gem 'rake'
+end
