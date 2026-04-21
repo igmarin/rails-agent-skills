@@ -75,12 +75,14 @@ Rails.logger.<level>(static_string_message, { event: "dot.namespaced", ...domain
 #                    └── 1st arg: STRING ──┘  └─────────── 2nd arg: HASH ───────────┘
 ```
 
-- **1st arg (string):** a static string literal — no interpolation, no variables. Log aggregators group on this dimension.
-- **2nd arg (hash):** first key is always `event:` with a dot-namespaced value (do NOT use `:type`, `:action`, or `:name`). All dynamic data goes here.
+- **1st arg:** static string literal — no interpolation, no variables (log aggregators group on this).
+- **2nd arg:** hash with `event:` as first key (dot-namespaced; do NOT use `:type`, `:action`, or `:name`). All dynamic data goes here.
 - **Errors:** every `rescue` logs both `e.message` and `e.backtrace.first(5).join("\n")` as hash fields — backtrace is non-optional.
 
+**Full worked service:** [references/logging.md](references/logging.md)
+
 ```ruby
-# BAD — interpolation destroys log aggregator grouping; single-arg call loses structured fields
+# BAD — interpolation destroys aggregator grouping; single-arg call loses structured fields
 Rails.logger.info("Processing order #{order.id}")
 Rails.logger.info(event: "order.processing_started", order_id: order.id)
 
@@ -136,11 +138,11 @@ No implementation code before a failing test. See **rspec-best-practices** and *
 
 ## Output Style
 
-Every Rails-code task lands these:
+Every Rails-code task produces output where:
 
-1. **Comments** follow the **Comments and tagged notes** section: no what-comments; tagged notes (`TODO:` / `FIXME:` / `HACK:` / `NOTE:` / `OPTIMIZE:`) on every assumption, deferred work, or business-rule constant; every tag carries actionable context (owner, ticket id, deadline).
-2. **Logging** follows **Structured Logging** above — static first arg, hash second arg with `event:`, and a backtrace line on every error rescue.
-3. **Linter detection noted** — when reviewing or refactoring, state which linter config you detected (or its absence) before any style claim.
+- **Comments** follow the Comments and tagged notes section above — no what-comments; every tagged note carries actionable context.
+- **Logging** follows Structured Logging above — static first arg, hash second arg with `event:`, backtrace on every error rescue.
+- **Linter detection is noted** — state which config was detected (or its absence) before making any style claim.
 
 ## Integration
 
