@@ -29,7 +29,7 @@ Detect → run → defer. Do not invent style rules.
 | Style/format | Project linter(s) — detect and run as above; do not invent style rules here |
 | Principles | DRY, YAGNI, PORO where it helps, CoC, KISS |
 | Comments / tags | Explain **why**; tagged notes need actionable context |
-| Logging | First arg string, second arg hash; no string interpolation; `event:` when useful for dashboards |
+| Logging | First arg: static string; second arg: hash with `event:` key; no interpolation; backtrace on errors |
 | Deep stacks | Chain **rails-stack-conventions** → domain skills (services, jobs, RSpec) |
 
 ## Code Review / Refactoring Workflow
@@ -46,7 +46,7 @@ When reviewing or refactoring Rails code, follow this sequence:
 Comment **why**, not **what**. Tagged notes — `TODO:` / `FIXME:` / `HACK:` / `NOTE:` / `OPTIMIZE:` — are MANDATORY in these triggers; every tag carries actionable context (owner, ticket id, deadline, or next step). Naked tags (`# TODO: fix this`) fail review.
 
 | Trigger | Required tag |
-|---------|--------------|
+|---------|-------------|
 | Business-rule constant (rates, caps, thresholds) | `NOTE:` with the rule's source/owner |
 | Deferred work / known shortcut | `TODO:` with ticket or next step |
 | Workaround for a bug or external limitation | `HACK:` or `FIXME:` with the upstream issue |
@@ -68,13 +68,20 @@ rate = TIER_RATES.fetch(tier, 0.0)
 
 ## Structured Logging
 
-Two positional args: static string first, hash second with `event:` (dot-namespaced) plus domain fields. No `:type`/`:action`/`:name` keys. Every `rescue` logs `e.message` AND `e.backtrace.first(5).join("\n")`.
+**MANDATORY SHAPE — every `Rails.logger.*` call uses exactly two positional arguments.**
+
+```text
+Rails.logger.<level>(static_string_message, { event: "dot.namespaced", ...domain_fields })
+#                    └── 1st arg: STRING ──┘  └─────────── 2nd arg: HASH ───────────┘
+```
+
+- **1st arg (string):** a static string literal — no interpolation, no variables. Log aggregators group on this dimension.
+- **2nd arg (hash):** first key is always `event:` with a dot-namespaced value (do NOT use `:type`, `:action`, or `:name`). All dynamic data goes here.
+- **Errors:** every `rescue` logs both `e.message` and `e.backtrace.first(5).join("\n")` as hash fields — backtrace is non-optional.
 
 ```ruby
-# BAD — interpolation: unfilterable in log aggregators
+# BAD — interpolation destroys log aggregator grouping; single-arg call loses structured fields
 Rails.logger.info("Processing order #{order.id}")
-
-# BAD — single hash arg: loses the static-message dimension
 Rails.logger.info(event: "order.processing_started", order_id: order.id)
 
 # GOOD
@@ -83,6 +90,17 @@ Rails.logger.info("order.processing_started", {
   order_id: order.id,
   user_id: user.id
 })
+
+# GOOD — error path with backtrace
+rescue StandardError => e
+  Rails.logger.error("order.processing_failed", {
+    event: "order.processing_failed",
+    order_id: order.id,
+    error: e.message,
+    backtrace: e.backtrace.first(5).join("\n")
+  })
+  raise
+end
 ```
 
 ## Apply by area (path patterns)
@@ -92,9 +110,9 @@ Rules below apply **when those paths exist** in the project. If a path is absent
 | Area | Path pattern | Guidance |
 |------|--------------|----------|
 | **ActiveRecord performance** | `app/models/**/*.rb` | Eager load in loops; prefer `pluck` / `exists?` / `find_each`. N+1: run `bullet` → fix eager loads → re-run clean |
-| **Background jobs** | `app/workers/**/*.rb`, `app/jobs/**/*.rb` | Clear job shape, queues, idempotency, structured errors — depth: **rails-background-jobs** |
-| **Error handling** | `app/services/**/*.rb`, `app/lib/**/*.rb`, `app/exceptions/**/*.rb` | Domain exceptions + layer `rescue_from` as the app does today; after changes, specs must cover rescue paths |
-| **Logging / tracing** | `app/services/**/*.rb`, `app/workers/**/*.rb`, `app/jobs/**/*.rb`, `app/controllers/**/*.rb`, `app/repositories/**/*.rb` | Structured logs; APM spans/tags on hot paths when the stack has APM |
+| **Background jobs** | `app/workers/**/*.rb`, `app/jobs/**/*.rb` | Depth: **rails-background-jobs** |
+| **Error handling** | `app/services/**/*.rb`, `app/lib/**/*.rb`, `app/exceptions/**/*.rb` | Domain exceptions + layer `rescue_from`; specs must cover rescue paths |
+| **Logging / tracing** | `app/services/**/*.rb`, `app/workers/**/*.rb`, `app/jobs/**/*.rb`, `app/controllers/**/*.rb`, `app/repositories/**/*.rb` | Structured logs (see above); APM spans/tags on hot paths when stack has APM |
 | **Controllers** | `app/controllers/**/*_controller.rb` | Strong params; thin actions → services; IDOR / PII → **rails-security-review** |
 | **Repositories** | `app/repositories/**/*.rb` | New repos only for SQL, caching, clear boundary, or external I/O — document **why** |
 | **RSpec** | `spec/**/*_spec.rb` | FactoryBot; request over controller specs; `env:` (or project pattern) for ENV; **`let` > `let!`** unless eager setup required; avoid heavy `before` when `let` is clearer |
