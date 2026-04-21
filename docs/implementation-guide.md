@@ -15,9 +15,9 @@ There are two primary methods for making skills available to your AI assistant:
 
 ## Claude Code
 
-Claude Code discovers skills from `~/.claude/skills/` and loads `~/.claude/CLAUDE.md` automatically in every session. Two symlinks are required.
+Claude Code discovers skills from `~/.claude/skills/` and loads `~/.claude/CLAUDE.md` automatically in every session. Two methods are available.
 
-### Installation
+### Method 1: Symlink (Quick Start)
 
 ```bash
 # 1. Clone the repo (once per machine)
@@ -35,7 +35,7 @@ done
 
 Open a new session and run `/skills` — all skills will appear.
 
-### Updating
+**Updating:**
 
 ```bash
 cd ~/skills/rails-agent-skills && git pull
@@ -46,9 +46,41 @@ for dir in ~/skills/rails-agent-skills/*/; do
 done
 ```
 
+### Method 2: MCP Server (Recommended)
+
+The MCP server gives Claude Code on-demand access to every skill, doc, and workflow without loading the full repo into context.
+
+Open `~/.claude/mcp.json` (global) or add to `.mcp.json` at the repo root (project-level, already populated if you cloned the repo). The project-level `.mcp.json` is auto-loaded by Claude Code when you open the repo as a project.
+
+**Global setup** (`~/.claude/mcp.json`):
+
+```json
+{
+  "mcpServers": {
+    "rails-agent-skills": {
+      "type": "stdio",
+      "command": "bundle",
+      "args": ["exec", "ruby", "mcp_server/server.rb"],
+      "cwd": "/YOUR/PATH/TO/rails-agent-skills",
+      "env": {
+        "BUNDLE_GEMFILE": "/YOUR/PATH/TO/rails-agent-skills/mcp_server/Gemfile"
+      }
+    }
+  }
+}
+```
+
+Replace `/YOUR/PATH/TO/rails-agent-skills` with your actual clone path, then install dependencies:
+
+```bash
+cd /YOUR/PATH/TO/rails-agent-skills/mcp_server && bundle install
+```
+
+Start a new Claude Code session. The `rails-agent-skills` MCP server will appear in your tools list.
+
 ### New machine
 
-Repeat the installation steps above.
+Repeat the installation steps for whichever method you prefer.
 
 ---
 
@@ -73,13 +105,54 @@ Restart your IDE for changes to take effect.
 
 ### Method 2: MCP Server (Recommended)
 
-1. Set up the Ruby MCP server — see [MCP Server README](../mcp_server/README.md).
-2. Open IDE settings (`Cmd+,`) → search "Model Context Protocol Servers".
-3. Add a new server with the command:
+1. Clone the repo and install dependencies:
+
    ```bash
-   ruby ~/skills/rails-agent-skills/mcp_server/server.rb
+   git clone git@github.com:igmarin/rails-agent-skills.git ~/skills/rails-agent-skills
+   cd ~/skills/rails-agent-skills/mcp_server && bundle install
    ```
-4. Restart your IDE.
+
+2. Add the server to the appropriate config file for your IDE:
+
+   **Windsurf** (`~/.codeium/windsurf/mcp_config.json`):
+
+   ```json
+   {
+     "mcpServers": {
+       "rails-agent-skills": {
+         "type": "stdio",
+         "command": "bundle",
+         "args": ["exec", "ruby", "mcp_server/server.rb"],
+         "cwd": "/YOUR/PATH/TO/rails-agent-skills",
+         "env": {
+           "BUNDLE_GEMFILE": "/YOUR/PATH/TO/rails-agent-skills/mcp_server/Gemfile"
+         }
+       }
+     }
+   }
+   ```
+
+   **Cursor** (`~/.cursor/mcp.json` or **Settings → MCP**):
+
+   ```json
+   {
+     "mcpServers": {
+       "rails-agent-skills": {
+         "type": "stdio",
+         "command": "bundle",
+         "args": ["exec", "ruby", "mcp_server/server.rb"],
+         "cwd": "/YOUR/PATH/TO/rails-agent-skills",
+         "env": {
+           "BUNDLE_GEMFILE": "/YOUR/PATH/TO/rails-agent-skills/mcp_server/Gemfile"
+         }
+       }
+     }
+   }
+   ```
+
+3. Reload or restart your IDE. The `rails-agent-skills` server will appear in the MCP panel.
+
+> **Why `BUNDLE_GEMFILE`?** The server's `Gemfile` lives inside `mcp_server/`, not at the repo root. This env var tells Bundler exactly which Gemfile to use regardless of working directory.
 
 ---
 

@@ -141,11 +141,32 @@ Here is the recommended, step-by-step workflow for building a new feature from s
 
 *For more detailed diagrams of these flows, see the **[Workflows Index](docs/workflows/)**.*
 
+## MCP Server
+
+The recommended way to use this library is via the included Ruby MCP server. It exposes every skill, doc, and workflow as a named MCP resource — the AI agent loads only what it needs, without reading the entire repository into context.
+
+```text
+tools/call use_skill { "skill_name": "rails-graphql-best-practices" }
+→ returns full SKILL.md instructions
+```
+
+Resources exposed:
+
+| Prefix | Source |
+|--------|--------|
+| `skill/<name>` | `SKILL.md` + support files for every skill |
+| `doc/<name>` | All files under `docs/` |
+| `workflow/<name>` | All workflow definitions |
+
+Adding a new skill directory automatically makes it available — no server changes needed.
+
+See **[mcp_server/README.md](mcp_server/README.md)** for setup instructions (Windsurf, Cursor, Claude Code, RubyMine, Docker).
+
 ## Platforms & Quick Start
 
-To integrate these skills with your preferred AI development environment (such as Gemini CLI, Cursor, Windsurf, Claude Code, Codex, or RubyMine), please refer to the **[Implementation Guide](docs/implementation-guide.md)**.
+To integrate these skills with your preferred AI development environment (Gemini CLI, Cursor, Windsurf, Claude Code, Codex, or RubyMine), refer to the **[Implementation Guide](docs/implementation-guide.md)**.
 
-This guide provides detailed, step-by-step instructions for both the symlink-based and the recommended Model Context Protocol (MCP) server approaches for each platform.
+The guide covers both the **MCP server** (recommended — on-demand, saves tokens) and **symlink** approaches for each platform.
 
 ## Skills Catalog
 
@@ -173,11 +194,11 @@ This guide provides detailed, step-by-step instructions for both the symlink-bas
 | [rails-code-conventions](rails-code-conventions/)             | Daily coding checklist: DRY/YAGNI/PORO/CoC/KISS; linter as style SoT; structured logging; per-path rules |
 | [rails-background-jobs](rails-background-jobs/)               | Design idempotent background jobs with Active Job / Solid Queue                                          |
 | [rails-graphql-best-practices](rails-graphql-best-practices/) | GraphQL schema design, N+1 prevention, authorization, error handling, and testing with graphql-ruby      |
-| [rails-authorization-policies](rails-authorization-policies/) *(NEW)* | Pundit/CanCanCan, roles, permissions, policy objects                                                  |
-| [rails-performance-optimization](rails-performance-optimization/) *(NEW)* | N+1 prevention, profiling, caching, query optimization                                                |
-| [rails-api-versioning](rails-api-versioning/) *(NEW)* | REST API versioning strategies and deprecation policies                                              |
-| [rails-database-seeding](rails-database-seeding/) *(NEW)* | Fixtures vs Seeds for dev/test data management                                                         |
-| [rails-frontend-hotwire](rails-frontend-hotwire/) *(NEW)* | Turbo/Stimulus integration patterns                                                                    |
+| [rails-authorization-policies](rails-authorization-policies/) | Pundit/CanCanCan, roles, permissions, policy objects                                                  |
+| [rails-performance-optimization](rails-performance-optimization/) | N+1 prevention, profiling, caching, query optimization                                                |
+| [rails-api-versioning](rails-api-versioning/) | REST API versioning strategies and deprecation policies                                              |
+| [rails-database-seeding](rails-database-seeding/) | Fixtures vs Seeds for dev/test data management                                                         |
+| [rails-frontend-hotwire](rails-frontend-hotwire/) | Turbo/Stimulus integration patterns                                                                    |
 | [api-rest-collection](api-rest-collection/)                   | Generate or update Postman Collection (JSON v2.1) for REST endpoints; use Insomnia for GraphQL           |
 
 
@@ -208,7 +229,7 @@ This guide provides detailed, step-by-step instructions for both the symlink-bas
 | Skill                                                       | Description                                                                                   |
 | ----------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
 | [rails-context-engineering](rails-context-engineering/)     | Load schema, routes, nearest patterns before any code/spec/PRD — surface ambiguity explicitly |
-| [rails-project-onboarding](rails-project-onboarding/) *(NEW)* | Complete dev environment setup (Docker, env vars, database)                               |
+| [rails-project-onboarding](rails-project-onboarding/) | Complete dev environment setup (Docker, env vars, database)                               |
 
 
 ### Testing

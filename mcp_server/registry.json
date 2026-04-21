@@ -1,0 +1,24 @@
+{
+  "name": "rails-agent-skills",
+  "display_name": "Rails Agent Skills",
+  "description": "40+ specialized Rails development skills via MCP — TDD, code review, DDD, engines, Hotwire, and more. Skills encode conventions and workflow patterns so AI assistants deliver higher-quality Rails code.",
+  "publisher": "igmarin",
+  "version": "3.0.6",
+  "license": "MIT",
+  "homepage": "https://github.com/igmarin/rails-agent-skills",
+  "repository": "https://github.com/igmarin/rails-agent-skills",
+  "tags": ["rails", "ruby", "tdd", "code-review", "ddd", "rspec", "hotwire", "graphql", "engines"],
+  "runtime": "ruby",
+  "transport": "stdio",
+  "tools": [
+    {
+      "name": "use_skill",
+      "description": "Load and return the full SKILL.md instructions for a named Rails development skill"
+    }
+  ],
+  "resources": [
+    { "prefix": "skill/*", "description": "SKILL.md + support files for each skill" },
+    { "prefix": "doc/*", "description": "Documentation files from docs/" },
+    { "prefix": "workflow/*", "description": "Workflow definition files" }
+  ]
+}

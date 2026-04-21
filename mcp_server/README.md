@@ -1,8 +1,18 @@
 # Rails Agent Skills — MCP Server
 
-A Ruby MCP server that exposes the `rails-agent-skills` skill library to AI tools (Windsurf, Cursor, Claude, etc.) via the [Model Context Protocol](https://modelcontextprotocol.io) official spec (JSON-RPC 2.0, stdio transport).
+A Ruby MCP server that exposes the `rails-agent-skills` skill library to AI tools (Windsurf, Cursor, Claude Code, RubyMine, etc.) via the [Model Context Protocol](https://modelcontextprotocol.io) official spec (JSON-RPC 2.0, stdio transport).
 
 Built on the [official Ruby MCP SDK](https://github.com/modelcontextprotocol/ruby-sdk) (`gem 'mcp'`).
+
+---
+
+## Compatibility
+
+| Requirement | Version |
+|-------------|---------|
+| Ruby | 3.1+ |
+| `mcp` gem | 0.13+ |
+| Bundler | 2.x |
 
 ---
 
@@ -26,6 +36,8 @@ mcp_server/
 ├── server.rb                          # Entry point: MCP::Server + StdioTransport
 ├── Gemfile                            # gem 'mcp' (official SDK), minitest, rake
 ├── Rakefile                           # bundle exec rake test
+├── Dockerfile                         # Container image for Docker-based deployment
+├── registry.json                      # Metadata for MCP registries (smithery.ai, glama.ai)
 ├── lib/
 │   └── mcp_skills/
 │       ├── resource_registry.rb       # Service: discovers all resources (skills + docs + workflows)
@@ -51,14 +63,13 @@ mcp_server/
 
 ## Getting started
 
-**Requirements:** Ruby 3.1+, Bundler.
-
 ```bash
-cd rails-agent-skills/mcp_server
+git clone https://github.com/igmarin/rails-agent-skills.git ~/rails-agent-skills
+cd ~/rails-agent-skills/mcp_server
 bundle install
 ```
 
-**Run the server manually** (stdio — mostly for debugging):
+**Run the server manually** (stdio — for debugging):
 
 ```bash
 bundle exec ruby server.rb
@@ -72,78 +83,126 @@ npx @modelcontextprotocol/inspector bundle exec ruby server.rb
 
 ---
 
+## Integration with Claude Code
+
+The repo includes a pre-populated `.mcp.json` at the root. When you open the cloned repo as a project in Claude Code, the server is registered automatically — no manual config needed.
+
+For **global** setup (available in every project), add to `~/.claude/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "rails-agent-skills": {
+      "type": "stdio",
+      "command": "bundle",
+      "args": ["exec", "ruby", "mcp_server/server.rb"],
+      "cwd": "/YOUR/PATH/TO/rails-agent-skills",
+      "env": {
+        "BUNDLE_GEMFILE": "/YOUR/PATH/TO/rails-agent-skills/mcp_server/Gemfile"
+      }
+    }
+  }
+}
+```
+
+Replace the path with your actual clone location, then start a new Claude Code session.
+
+---
+
 ## Integration with Windsurf
 
-The config goes in your **global** Windsurf MCP file (`~/.codeium/windsurf/mcp_config.json`), not in the repo — this way it works per machine with the correct absolute paths.
+The config goes in your **global** Windsurf MCP file (`~/.codeium/windsurf/mcp_config.json`):
 
-**Steps:**
+```json
+{
+  "mcpServers": {
+    "rails-agent-skills": {
+      "type": "stdio",
+      "command": "bundle",
+      "args": ["exec", "ruby", "mcp_server/server.rb"],
+      "cwd": "/YOUR/PATH/TO/rails-agent-skills",
+      "env": {
+        "BUNDLE_GEMFILE": "/YOUR/PATH/TO/rails-agent-skills/mcp_server/Gemfile"
+      }
+    }
+  }
+}
+```
 
-1. Clone the repo and install dependencies:
-
-   ```bash
-   git clone https://github.com/your-org/rails-agent-skills.git ~/Developer/rails-agent-skills
-   cd ~/Developer/rails-agent-skills/mcp_server
-   bundle install
-   ```
-
-2. Open `~/.codeium/windsurf/mcp_config.json` and add the `rails-agent-skills` entry (replace the path with your actual clone location):
-
-   ```json
-   {
-     "mcpServers": {
-       "rails-agent-skills": {
-         "type": "stdio",
-         "command": "bundle",
-         "args": ["exec", "ruby", "mcp_server/server.rb"],
-         "cwd": "/YOUR/PATH/TO/rails-agent-skills",
-         "env": {
-           "BUNDLE_GEMFILE": "/YOUR/PATH/TO/rails-agent-skills/mcp_server/Gemfile"
-         }
-       }
-     }
-   }
-   ```
-
-3. Reload Windsurf (`Cmd+Shift+P` → "Reload Window"). The server will appear in the MCP panel.
-
-The agent can then:
-
-- Browse all skills via `resources/list`
-- Read any skill, doc, or workflow via `resources/read`
-- Invoke `use_skill` tool to retrieve a skill's instructions by name
-
-## Integration with Cursor
-
-1. Clone the repo and install dependencies (same as above).
-
-2. Open Cursor **Settings → MCP** (or edit `~/.cursor/mcp.json`) and add:
-
-   ```json
-   {
-     "mcpServers": {
-       "rails-agent-skills": {
-         "type": "stdio",
-         "command": "bundle",
-         "args": ["exec", "ruby", "mcp_server/server.rb"],
-         "cwd": "/YOUR/PATH/TO/rails-agent-skills",
-         "env": {
-           "BUNDLE_GEMFILE": "/YOUR/PATH/TO/rails-agent-skills/mcp_server/Gemfile"
-         }
-       }
-     }
-   }
-   ```
-
-3. Restart Cursor.
+Reload Windsurf (`Cmd+Shift+P` → "Reload Window"). The server will appear in the MCP panel.
 
 > **Why `BUNDLE_GEMFILE`?** The server's `Gemfile` lives inside `mcp_server/`, not at the repo root. Setting this env var tells Bundler exactly which Gemfile to use regardless of working directory.
 
 ---
 
+## Integration with Cursor
+
+Open **Settings → MCP** (or edit `~/.cursor/mcp.json`) and add:
+
+```json
+{
+  "mcpServers": {
+    "rails-agent-skills": {
+      "type": "stdio",
+      "command": "bundle",
+      "args": ["exec", "ruby", "mcp_server/server.rb"],
+      "cwd": "/YOUR/PATH/TO/rails-agent-skills",
+      "env": {
+        "BUNDLE_GEMFILE": "/YOUR/PATH/TO/rails-agent-skills/mcp_server/Gemfile"
+      }
+    }
+  }
+}
+```
+
+Restart Cursor.
+
+---
+
+## Integration with RubyMine
+
+Open **Settings → Tools → AI Assistant → Model Context Protocol** and add a new server:
+
+- **Command:** `bundle exec ruby mcp_server/server.rb`
+- **Working directory:** `/YOUR/PATH/TO/rails-agent-skills`
+- **Environment:** `BUNDLE_GEMFILE=/YOUR/PATH/TO/rails-agent-skills/mcp_server/Gemfile`
+
+Restart RubyMine.
+
+---
+
+## Docker
+
+For environments without Ruby, or for containerized deployment:
+
+```bash
+cd mcp_server
+docker build -t rails-agent-skills-mcp .
+docker run --rm -i rails-agent-skills-mcp
+```
+
+The container uses stdio transport — wire it up the same way as the Ruby command, replacing `bundle exec ruby server.rb` with `docker run --rm -i rails-agent-skills-mcp`.
+
+**Docker Hub** (published image):
+
+```json
+{
+  "mcpServers": {
+    "rails-agent-skills": {
+      "type": "stdio",
+      "command": "docker",
+      "args": ["run", "--rm", "-i", "igmarin/rails-agent-skills-mcp"]
+    }
+  }
+}
+```
+
+---
+
 ## End-to-end use case
 
-1. You open Windsurf in any Rails project.
-2. Windsurf loads this MCP server from `~/.codeium/windsurf/mcp_config.json`.
+1. You open any Rails project in Windsurf (or Claude Code, Cursor, etc.).
+2. The IDE loads this MCP server from its config.
 3. You ask: *"I need to add a GraphQL mutation — which skill should I use?"*
 4. The agent calls `tools/call use_skill` with `skill_name: "rails-graphql-best-practices"`.
 5. The server reads `rails-graphql-best-practices/SKILL.md` and returns the full instructions.
@@ -157,7 +216,7 @@ The agent can then:
 bundle exec rake test
 ```
 
-Tests are written with Minitest using TDD: each test file validates real behavior of a service object, not just structure.
+Tests are written with Minitest: each file validates real behavior of a service object, not just structure.
 
 ---
 
@@ -167,8 +226,18 @@ Tests are written with Minitest using TDD: each test file validates real behavio
 
 ---
 
+## Public registries
+
+This server is listed on:
+
+- [smithery.ai](https://smithery.ai) — auto-indexed from GitHub
+- [glama.ai](https://glama.ai) — submit via their website
+- [modelcontextprotocol.io/registry](https://modelcontextprotocol.io) — community servers list
+
+---
+
 ## Contributing
 
 - Follow TDD: write the failing test first, then the implementation.
-- Service objects live in `lib/mcp_skills/` and must be independently testable (no MCP::Server dependency in unit tests).
+- Service objects live in `lib/mcp_skills/` and must be independently testable (no `MCP::Server` dependency in unit tests).
 - All MCP protocol behavior is handled by the `mcp` gem — do not reimplement wire format in service objects.
