@@ -1,5 +1,6 @@
 ---
 name: api-rest-collection
+license: MIT
 description: >
   Use when creating or modifying REST API endpoints (Rails controllers, engine routes,
   API actions). Requires generating or updating an API Collection file (e.g., Postman

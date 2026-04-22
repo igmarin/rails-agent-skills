@@ -1,5 +1,6 @@
 ---
 name: ruby-service-objects
+license: MIT
 description: >
   Use when creating or refactoring Ruby service classes in Rails. Covers the
   .call pattern, module namespacing, YARD on self.call AND every public method,

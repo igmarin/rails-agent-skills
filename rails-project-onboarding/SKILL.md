@@ -1,5 +1,6 @@
 ---
 name: rails-project-onboarding
+license: MIT
 description: >
   Emit a generic Rails development-environment setup runbook for the user to execute
   locally. Covers Docker, environment variables, database, test suite, linters, and IDE.

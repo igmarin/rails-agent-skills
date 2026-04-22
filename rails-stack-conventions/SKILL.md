@@ -1,5 +1,6 @@
 ---
 name: rails-stack-conventions
+license: MIT
 description: >
   Use when writing new Rails code for a project using the PostgreSQL + Hotwire +
   Tailwind CSS stack. Covers stack-specific patterns only: MVC structure,

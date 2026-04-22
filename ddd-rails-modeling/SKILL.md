@@ -1,5 +1,6 @@
 ---
 name: ddd-rails-modeling
+license: MIT
 description: >
   Use when modeling Domain-Driven Design concepts in a Ruby on Rails codebase.
   Covers Rails-first mapping of entities, aggregates, value objects, domain

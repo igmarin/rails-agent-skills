@@ -1,5 +1,6 @@
 ---
 name: ddd-boundaries-review
+license: MIT
 description: >
   Use when reviewing a Ruby on Rails app for Domain-Driven Design boundaries,
   bounded contexts, language leakage, cross-context orchestration, or unclear

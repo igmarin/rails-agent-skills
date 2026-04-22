@@ -1,5 +1,6 @@
 ---
 name: rails-security-review
+license: MIT
 description: >
   Performs security audits and vulnerability assessments on Ruby on Rails application
   code. Use when reviewing Rails code for security risks, assessing authentication or

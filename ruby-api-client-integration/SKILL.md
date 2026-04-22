@@ -1,5 +1,6 @@
 ---
 name: ruby-api-client-integration
+license: MIT
 description: >
   Use when integrating with external APIs in Ruby, creating HTTP clients,
   or building data pipelines in the user's Rails repo. This skill defines a

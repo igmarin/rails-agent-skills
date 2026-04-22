@@ -1,5 +1,6 @@
 ---
 name: rails-context-engineering
+license: MIT
 description: >
   Use before writing code, tests, or PRDs in a Rails project to load the minimum
   context needed to make correct decisions. Inspects `db/schema.rb`,

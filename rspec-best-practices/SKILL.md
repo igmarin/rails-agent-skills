@@ -1,5 +1,6 @@
 ---
 name: rspec-best-practices
+license: MIT
 description: >
   Use when writing, reviewing, or cleaning up RSpec tests for Ruby and Rails codebases.
   Covers spec type selection, factory design, flaky test fixes, shared examples, deterministic

@@ -1,5 +1,6 @@
 ---
 name: ticket-planning
+license: MIT
 description: >
   Drafts, classifies, and optionally creates tickets from an initiative plan.
   Use when the user provides a plan and wants ticket drafts, wants help shaping

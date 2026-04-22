@@ -1,5 +1,6 @@
 ---
 name: rails-engine-testing
+license: MIT
 description: >
   Use when creating or improving RSpec test coverage for Rails engines.
   Covers dummy app setup, request, routing, generator, and configuration

@@ -1,5 +1,6 @@
 ---
 name: rails-engine-author
+license: MIT
 description: >
   Use when creating, scaffolding, or refactoring a Rails engine. Covers engine
   types (Plain, Railtie, Engine, Mountable), namespace isolation, host-app

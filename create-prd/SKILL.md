@@ -1,5 +1,6 @@
 ---
 name: create-prd
+license: MIT
 description: >
   Generates a clear, actionable Product Requirements Document (PRD) in Markdown
   from a feature description and saves it to /tasks/prd-FEATURE-SLUG.md following

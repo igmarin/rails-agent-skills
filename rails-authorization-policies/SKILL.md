@@ -1,5 +1,6 @@
 ---
 name: rails-authorization-policies
+license: MIT
 description: >
   Implement and test authorization in Rails applications using Pundit or CanCanCan.
   Covers policy objects, role-based access control, permission checks, and testing

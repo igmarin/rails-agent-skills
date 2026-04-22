@@ -1,5 +1,6 @@
 ---
 name: rails-migration-safety
+license: MIT
 description: >
   Use when planning or reviewing production database migrations, adding columns, indexes,
   constraints, backfills, renames, table rewrites, or concurrent operations. Covers phased

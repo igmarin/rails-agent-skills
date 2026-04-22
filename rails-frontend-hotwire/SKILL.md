@@ -1,5 +1,6 @@
 ---
 name: rails-frontend-hotwire
+license: MIT
 description: >
   Creates Stimulus controllers, configures Turbo Frame lazy loading, sets up
   Turbo Stream broadcasts, and converts traditional Rails views to Hotwire

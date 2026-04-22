@@ -1,5 +1,6 @@
 ---
 name: rails-skills-orchestrator
+license: MIT
 description: >
   Use as the entry point when the task scope is unclear or spans multiple concerns —
   this skill routes and gates only; it does not implement anything itself. Identifies

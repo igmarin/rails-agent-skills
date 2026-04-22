@@ -1,5 +1,6 @@
 ---
 name: refactor-safely
+license: MIT
 description: >
   Use when the goal is to change code structure without changing behavior — this
   includes extracting a service object from a fat controller or model, splitting

@@ -1,5 +1,6 @@
 ---
 name: strategy-factory-null-calculator
+license: MIT
 description: >
   Use when building variant-based calculators with a single entry point that
   picks the right implementation (Strategy + Factory), or when adding a no-op

@@ -1,5 +1,6 @@
 ---
 name: ddd-ubiquitous-language
+license: MIT
 description: >
   Use when a Ruby on Rails feature, bug, or architecture discussion has fuzzy
   business terminology and you need shared vocabulary. Identifies canonical terms,
