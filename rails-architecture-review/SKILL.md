@@ -1,5 +1,6 @@
 ---
 name: rails-architecture-review
+license: MIT
 description: >
   Use when reviewing Rails application structure, identifying fat models or controllers,
   auditing callbacks, concerns, service extraction, domain boundaries, or general Rails

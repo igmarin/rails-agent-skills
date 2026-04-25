@@ -1,5 +1,6 @@
 ---
 name: rails-code-review
+license: MIT
 description: >
   Reviews Rails pull requests, focusing on controller/model conventions,
   migration safety, query performance, and Rails Way compliance. Covers

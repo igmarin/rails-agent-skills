@@ -1,5 +1,6 @@
 ---
 name: rails-engine-release
+license: MIT
 description: >
   Use when preparing a Rails engine gem release. Generates CHANGELOG.md entries,
   produces step-by-step upgrade notes for host apps, sets semantic version constants,

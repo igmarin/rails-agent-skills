@@ -1,5 +1,6 @@
 ---
 name: rails-performance-optimization
+license: MIT
 description: >
   Optimizes Rails application performance. Use when investigating slow endpoints,
   eliminating N+1 queries, implementing caching strategies, profiling with Bullet

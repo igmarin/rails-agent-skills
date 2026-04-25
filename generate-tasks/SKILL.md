@@ -1,5 +1,6 @@
 ---
 name: generate-tasks
+license: MIT
 description: >
   Use when breaking down a feature or generating an implementation task list from a PRD.
   Output MUST follow this exact structure: (1) Task 0.0: Create feature branch with git

@@ -1,5 +1,6 @@
 ---
 name: rails-tdd-slices
+license: MIT
 description: >
   Use when choosing the best first failing RSpec spec or vertical slice for a
   Ruby on Rails change. Covers request vs model vs service vs job vs engine spec

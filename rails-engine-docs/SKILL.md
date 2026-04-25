@@ -1,5 +1,6 @@
 ---
 name: rails-engine-docs
+license: MIT
 description: >
   Use when writing or maintaining documentation for Rails engines. Generates README
   templates, writes installation and configuration guides, documents mount points,

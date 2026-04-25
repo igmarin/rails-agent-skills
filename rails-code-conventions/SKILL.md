@@ -1,5 +1,6 @@
 ---
 name: rails-code-conventions
+license: MIT
 description: >
   A daily checklist for writing clean Rails code, covering design principles
   (DRY, YAGNI, PORO, CoC, KISS), per-path rules (models, services, workers,

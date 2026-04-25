@@ -1,5 +1,6 @@
 ---
 name: rails-api-versioning
+license: MIT
 description: >
   Implement REST API versioning strategies in Rails. Covers URL path versioning,
   header-based versioning, deprecation policies, and maintaining backward

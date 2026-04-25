@@ -1,5 +1,6 @@
 ---
 name: rails-engine-installers
+license: MIT
 description: >
   Use when creating install generators, copied migrations, or initializer
   installers for Rails engines. Covers idempotent setup tasks, host-app

@@ -1,5 +1,6 @@
 ---
 name: rails-bug-triage
+license: MIT
 description: >
   Use when investigating a bug, error, or regression in a Ruby on Rails codebase.
   Creates a failing RSpec reproduction test, isolates the broken code path, and

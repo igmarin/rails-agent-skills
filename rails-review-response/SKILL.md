@@ -1,5 +1,6 @@
 ---
 name: rails-review-response
+license: MIT
 description: >
   Use when you have received code review feedback on Rails code and need to decide
   what to implement, how to respond, and in what order. Covers evaluating reviewer

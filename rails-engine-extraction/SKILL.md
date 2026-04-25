@@ -1,5 +1,6 @@
 ---
 name: rails-engine-extraction
+license: MIT
 description: >
   Use when extracting existing Rails app code into a reusable engine. Scaffolds the
   engine structure, moves POROs/services/controllers incrementally, creates adapter

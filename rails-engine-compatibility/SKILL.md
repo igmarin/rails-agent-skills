@@ -1,5 +1,6 @@
 ---
 name: rails-engine-compatibility
+license: MIT
 description: >
   Use when making a Rails engine stable across Rails and Ruby versions. Configures
   Zeitwerk autoloading, updates gemspec dependency bounds, replaces Rails.version

@@ -1,5 +1,6 @@
 ---
 name: yard-documentation
+license: MIT
 description: >
   Use when writing or reviewing inline documentation for Ruby code. Every public method
   MUST include param, return, and raise tags. For self.call methods, the return tag MUST

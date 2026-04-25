@@ -1,5 +1,6 @@
 ---
 name: rails-database-seeding
+license: MIT
 description: >
   Manage development and test data in Rails. Covers fixtures vs seeds,
   seeding strategies for different environments, test data factories,

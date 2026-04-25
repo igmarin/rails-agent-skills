@@ -1,5 +1,6 @@
 ---
 name: rails-background-jobs
+license: MIT
 description: >
   Use when adding or reviewing background jobs in Rails. Configures Active Job
   workers, implements idempotency checks, sets up retry/discard strategies,

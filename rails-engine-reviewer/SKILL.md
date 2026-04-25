@@ -1,5 +1,6 @@
 ---
 name: rails-engine-reviewer
+license: MIT
 description: >
   Use when reviewing a Rails engine, mountable engine, or Railtie. Covers
   namespace boundaries, host-app integration, safe initialization, migrations,

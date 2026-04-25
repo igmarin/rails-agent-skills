@@ -162,6 +162,35 @@ Adding a new skill directory automatically makes it available — no server chan
 
 See **[mcp_server/README.md](mcp_server/README.md)** for setup instructions (Windsurf, Cursor, Claude Code, RubyMine, Docker).
 
+## Install via GitHub CLI
+
+Requires [GitHub CLI](https://cli.github.com/) v2.90.0+.
+
+```bash
+# Install all skills interactively
+gh skill install igmarin/rails-agent-skills
+
+# Install a specific skill
+gh skill install igmarin/rails-agent-skills rails-code-review
+
+# Install pinned to a release tag
+gh skill install igmarin/rails-agent-skills rails-code-review --pin v3.1.1
+
+# Search for skills in the registry
+gh skill search rails
+```
+
+Skills are installed to the correct directory for your active agent host automatically. To target a specific agent:
+
+```bash
+gh skill install igmarin/rails-agent-skills rails-tdd-slices --agent claude-code
+gh skill install igmarin/rails-agent-skills rails-tdd-slices --agent cursor
+gh skill install igmarin/rails-agent-skills rails-tdd-slices --agent codex
+gh skill install igmarin/rails-agent-skills rails-tdd-slices --agent gemini
+```
+
+> **Supply chain note:** Every release is tied to a git tag. Pinning to a tag or commit SHA (`--pin`) gives you reproducible, tamper-evident installs. Provenance metadata is written directly into each installed `SKILL.md` frontmatter so it travels with the skill.
+
 ## Platforms & Quick Start
 
 To integrate these skills with your preferred AI development environment (Gemini CLI, Cursor, Windsurf, Claude Code, Codex, or RubyMine), refer to the **[Implementation Guide](docs/implementation-guide.md)**.

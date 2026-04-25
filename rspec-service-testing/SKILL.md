@@ -1,5 +1,6 @@
 ---
 name: rspec-service-testing
+license: MIT
 description: >
   Use when writing RSpec tests for service objects, API clients, orchestrators, or
   business logic in spec/services/. Covers instance_double, FactoryBot hash factories,
