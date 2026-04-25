@@ -13,6 +13,7 @@ description: >
   conventions, where is this defined, ambiguous requirements, spec vs code
   drift, unclear spec, missing requirements, what does the codebase already
   use, match existing style.
+license: MIT
 ---
 
 # Rails Context Engineering

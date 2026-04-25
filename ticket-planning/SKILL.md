@@ -6,6 +6,7 @@ description: >
   Use when the user provides a plan and wants ticket drafts, wants help shaping
   a plan into tickets, wants sprint-placement guidance, or wants tickets created in
   an issue tracker after the plan is approved.
+license: MIT
 ---
 
 # Ticket Planning

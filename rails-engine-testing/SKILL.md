@@ -5,6 +5,7 @@ description: >
   Use when creating or improving RSpec test coverage for Rails engines.
   Covers dummy app setup, request, routing, generator, and configuration
   specs for proving engine behavior within a host application.
+license: MIT
 ---
 # Rails Engine Testing
 

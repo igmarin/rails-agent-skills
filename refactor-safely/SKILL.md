@@ -10,6 +10,7 @@ description: >
   every step. Do NOT use for bug fixes or new features — those follow the TDD gate
   in rspec-best-practices. Do NOT mix structural changes with behavior changes in
   the same step.
+license: MIT
 ---
 
 # Refactor Safely

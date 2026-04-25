@@ -7,6 +7,7 @@ description: >
   code pattern (not live agent browsing): layered Auth, Client, Fetcher,
   Builder, and Domain Entity with token caching, retry logic, and FactoryBot
   hash factories for test data.
+license: MIT
 ---
 
 # Ruby API Client Integration

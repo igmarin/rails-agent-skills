@@ -9,6 +9,7 @@ description: >
   or refactoring Ruby on Rails code, or when asked about Rails best practices,
   clean code, or code quality. Trigger words: code review, refactor, RoR,
   clean code, best practices, Ruby on Rails conventions.
+license: MIT
 ---
 
 # Rails Code Conventions

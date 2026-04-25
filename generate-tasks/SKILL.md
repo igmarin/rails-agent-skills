@@ -12,6 +12,7 @@ description: >
   implementation plan, feature breakdown, todo list, project tasks, work plan, break
   down this PRD, generate tasks, feature branch, TDD, write spec, run spec fail, run
   spec pass.
+license: MIT
 ---
 
 # Generating a Task List from Requirements

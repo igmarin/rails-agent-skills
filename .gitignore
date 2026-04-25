@@ -5,3 +5,4 @@
 evals/worst-cases/*
 tmp/
 .Gemfile.lock
+.agents/skills/

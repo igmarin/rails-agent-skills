@@ -8,6 +8,7 @@ description: >
   each extraction slice. Trigger words: extract to engine, move feature to engine,
   host coupling, adapters, extraction slices, preserve behavior, incremental extraction,
   bounded feature.
+license: MIT
 ---
 # Rails Engine Extraction
 

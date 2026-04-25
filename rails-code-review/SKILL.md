@@ -7,6 +7,7 @@ description: >
   routing, ActiveRecord, security, caching, and background jobs. Use when
   reviewing existing Rails code for quality, conducting a PR review, or
   doing a code review on Ruby on Rails (RoR) code.
+license: MIT
 ---
 
 # Rails Code Review (The Rails Way)

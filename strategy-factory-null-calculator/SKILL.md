@@ -8,6 +8,7 @@ description: >
   SERVICE_MAP routing, and scaffolds RSpec tests per variant. Trigger words:
   design pattern, Ruby, dispatch table, polymorphism, no-op default, variant
   calculator, strategy pattern, factory pattern, null object pattern.
+license: MIT
 ---
 
 # Strategy + Factory + Null Object Calculator Pattern

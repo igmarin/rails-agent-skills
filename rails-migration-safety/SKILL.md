@@ -6,6 +6,7 @@ description: >
   constraints, backfills, renames, table rewrites, or concurrent operations. Covers phased
   rollouts, lock behavior, rollback strategy, strong_migrations compliance, and deployment
   ordering for schema changes.
+license: MIT
 ---
 
 # Rails Migration Safety

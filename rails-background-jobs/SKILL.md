@@ -7,6 +7,7 @@ description: >
   selects Solid Queue (Rails 8+) or Sidekiq based on scale, and defines recurring
   jobs via recurring.yml or sidekiq-cron. Trigger words: background job, Active Job,
   Solid Queue, Sidekiq, idempotency, retry, discard, recurring job, queue.
+license: MIT
 ---
 
 # Rails Background Jobs

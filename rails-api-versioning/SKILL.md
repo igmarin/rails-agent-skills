@@ -6,6 +6,7 @@ description: >
   header-based versioning, deprecation policies, and maintaining backward
   compatibility. Trigger words: API versioning, version, deprecation,
   backward compatibility, v1, v2, API evolution.
+license: MIT
 ---
 
 # Rails API Versioning
