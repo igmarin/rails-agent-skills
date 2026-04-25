@@ -6,6 +6,7 @@ description: >
   selection, system spec escalation, smallest safe slice planning, and
   Rails-first TDD sequencing. Trigger words: where to start testing, what test
   to write first, RSpec, test-driven development, TDD, first failing test.
+license: MIT
 ---
 
 # Rails TDD Slices

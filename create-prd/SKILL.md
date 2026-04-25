@@ -9,6 +9,7 @@ description: >
   surface, success metrics, and open questions for Rails-oriented workflows.
   Trigger words: PRD, product requirements, plan a feature, write a spec,
   requirements document, /tasks/ folder.
+license: MIT
 ---
 
 # Generating a Product Requirements Document (PRD)

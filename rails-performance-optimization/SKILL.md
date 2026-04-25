@@ -5,6 +5,7 @@ description: >
   eliminating N+1 queries, implementing caching strategies, profiling with Bullet
   or rack-mini-profiler, or optimizing database queries with EXPLAIN ANALYZE.
   Trigger words: performance, optimize, N+1, slow query, caching, Bullet, profiling.
+license: MIT
 ---
 
 # Rails Performance Optimization

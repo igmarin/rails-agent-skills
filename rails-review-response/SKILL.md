@@ -5,6 +5,7 @@ description: >
   what to implement, how to respond, and in what order. Covers evaluating reviewer
   suggestions, pushing back with technical reasoning, avoiding performative agreement,
   implementing feedback safely one item at a time, and triggering a re-review when needed.
+license: MIT
 ---
 
 # Rails Review Response

@@ -5,6 +5,7 @@ description: >
   Creates a failing RSpec reproduction test, isolates the broken code path, and
   produces a minimal fix plan. Trigger words: debug, broken, error, regression,
   stack trace, failing test, RSpec, bug report, Rails app.
+license: MIT
 ---
 
 # Rails Bug Triage

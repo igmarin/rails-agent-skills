@@ -7,6 +7,7 @@ description: >
   orchestrator delegation, transaction wrapping, and error handling conventions.
   Trigger words: service object, .call pattern, app/services, service module,
   service README, response hash, success/response shape, YARD on self.call.
+license: MIT
 ---
 
 # Ruby Service Objects

@@ -6,6 +6,7 @@ description: >
   extension APIs, and migration notes for host-app adoption. Trigger words: engine
   README, installation guide, configuration docs, mount instructions, migration notes,
   extension points, host integration examples, setup documentation.
+license: MIT
 ---
 # Rails Engine Docs
 

@@ -8,6 +8,7 @@ description: >
   interactive Rails UIs without heavy JavaScript frameworks, or wiring up
   Stimulus behavior to existing HTML. Trigger words: Hotwire, Turbo, Stimulus,
   Turbo Frames, Turbo Streams, progressive enhancement, SPA without JS.
+license: MIT
 ---
 
 # Rails Frontend Hotwire

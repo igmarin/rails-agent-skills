@@ -5,6 +5,7 @@ description: >
   locally. Covers Docker, environment variables, database, test suite, linters, and IDE.
   The agent does not read the user's repository or execute setup commands. Trigger words:
   onboarding, new dev, setup project, Docker, development environment, getting started.
+license: MIT
 ---
 
 # Rails Project Onboarding

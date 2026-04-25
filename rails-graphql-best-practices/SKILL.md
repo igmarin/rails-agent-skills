@@ -4,6 +4,7 @@ description: >
   Use when building or reviewing GraphQL APIs in Rails with the graphql-ruby gem.
   Covers schema design, N+1 prevention with dataloaders, field-level auth, query
   limits, error handling, and testing resolvers/mutations with RSpec.
+license: MIT
 ---
 
 # Rails GraphQL Best Practices

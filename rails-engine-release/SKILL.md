@@ -7,6 +7,7 @@ description: >
   and publish commands. Trigger words: version bump, changelog, deprecation,
   gemspec, upgrade, migration guide, release, publish gem, ship gem, verify gemspec,
   test suite.
+license: MIT
 ---
 # Rails Engine Release
 
