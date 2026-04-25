@@ -170,23 +170,43 @@ Requires [GitHub CLI](https://cli.github.com/) v2.90.0+.
 # Install all skills interactively
 gh skill install igmarin/rails-agent-skills
 
-# Install a specific skill
-gh skill install igmarin/rails-agent-skills rails-code-review
+# Install a specific skill for the current project
+gh skill install igmarin/rails-agent-skills rails-code-review --scope project
+
+# Install a specific skill globally (available everywhere)
+gh skill install igmarin/rails-agent-skills rails-code-review --scope user
 
 # Install pinned to a release tag
-gh skill install igmarin/rails-agent-skills rails-code-review --pin v3.1.1
+gh skill install igmarin/rails-agent-skills rails-code-review --pin v3.1.3 --scope user
 
-# Search for skills in the registry
-gh skill search rails
+# Search this repository's skills
+gh skill search rails --owner igmarin
 ```
 
-Skills are installed to the correct directory for your active agent host automatically. To target a specific agent:
+The default scope is `project`; use `--scope user` for a global install in your home directory. Skills are installed to the correct directory for your selected agent host automatically. To target a specific agent:
 
 ```bash
-gh skill install igmarin/rails-agent-skills rails-tdd-slices --agent claude-code
-gh skill install igmarin/rails-agent-skills rails-tdd-slices --agent cursor
-gh skill install igmarin/rails-agent-skills rails-tdd-slices --agent codex
-gh skill install igmarin/rails-agent-skills rails-tdd-slices --agent gemini
+gh skill install igmarin/rails-agent-skills rails-tdd-slices --agent claude-code --scope user
+gh skill install igmarin/rails-agent-skills rails-tdd-slices --agent cursor --scope user
+gh skill install igmarin/rails-agent-skills rails-tdd-slices --agent codex --scope user
+gh skill install igmarin/rails-agent-skills rails-tdd-slices --agent gemini-cli --scope user
+gh skill install igmarin/rails-agent-skills rails-tdd-slices --agent windsurf --scope user
+```
+
+Update installed skills:
+
+```bash
+# Check for updates without changing files
+gh skill update --dry-run
+
+# Update all unpinned skills without prompting
+gh skill update --all
+
+# Re-download all skills, overwriting local edits
+gh skill update --force --all
+
+# Unpin pinned skills and update them to the latest release
+gh skill update --unpin
 ```
 
 > **Supply chain note:** Every release is tied to a git tag. Pinning to a tag or commit SHA (`--pin`) gives you reproducible, tamper-evident installs. Provenance metadata is written directly into each installed `SKILL.md` frontmatter so it travels with the skill.
