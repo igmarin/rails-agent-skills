@@ -7,7 +7,6 @@ description: >
   branching with feature detection patterns, and sets up CI matrices for cross-version
   testing. Trigger words: Zeitwerk, autoloading, Rails upgrade, gemspec, dependency
   bounds, CI matrix, feature detection, reload safety, deprecated APIs, cross-version.
-license: MIT
 ---
 # Rails Engine Compatibility
 

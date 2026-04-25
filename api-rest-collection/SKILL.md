@@ -6,7 +6,6 @@ description: >
   API actions). Requires generating or updating an API Collection file (e.g., Postman
   Collection v2.1) so the new or changed endpoints can be tested. Trigger words:
   endpoint, API route, controller action, API collection, request collection.
-license: MIT
 ---
 # REST API Collection
 

@@ -6,7 +6,6 @@ description: >
   business logic in spec/services/. Covers instance_double, FactoryBot hash factories,
   shared_examples, subject/let blocks, context/describe structure, aggregate_failures,
   change matchers, travel_to, and error scenario testing.
-license: MIT
 ---
 
 # RSpec Service Testing

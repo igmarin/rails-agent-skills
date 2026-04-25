@@ -8,7 +8,6 @@ description: >
   controllers, and Tailwind component patterns. Not for general Rails design
   principles — this skill is scoped to what changes based on this specific
   technology stack.
-license: MIT
 ---
 
 # Rails Stack Conventions

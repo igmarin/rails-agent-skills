@@ -7,7 +7,6 @@ description: >
   strategies. Use when the user needs to implement or troubleshoot authorization in
   a Rails app, set up user roles and permissions, or mentions Pundit, CanCanCan,
   policy objects, access control, roles, or permissions.
-license: MIT
 ---
 
 # Rails Authorization Policies

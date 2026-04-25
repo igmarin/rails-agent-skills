@@ -8,7 +8,6 @@ description: >
   for Rails-first workflows. Trigger words: DDD, shared vocabulary, define terms,
   bounded context naming, what should we call this, terminology alignment, DDD glossary,
   naming inconsistency.
-license: MIT
 ---
 
 # DDD Ubiquitous Language

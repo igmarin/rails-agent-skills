@@ -5,7 +5,6 @@ description: >
   Use when reviewing a Rails engine, mountable engine, or Railtie. Covers
   namespace boundaries, host-app integration, safe initialization, migrations,
   generators, and dummy app test coverage. Prioritizes architectural risks.
-license: MIT
 ---
 # Rails Engine Reviewer
 

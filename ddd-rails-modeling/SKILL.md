@@ -6,7 +6,6 @@ description: >
   Covers Rails-first mapping of entities, aggregates, value objects, domain
   services, application services, repositories, and domain events without
   over-engineering or fighting Rails conventions.
-license: MIT
 ---
 
 # DDD Rails Modeling

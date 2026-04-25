@@ -11,7 +11,6 @@ description: >
   specialist applies. Trigger words: where do I start, not sure how to approach this,
   don't know which skill to use, multi-step Rails task, unclear scope, spans multiple
   concerns, new complex Rails feature, how do I begin, what should I do first.
-license: MIT
 ---
 
 # Rails Skills Orchestrator

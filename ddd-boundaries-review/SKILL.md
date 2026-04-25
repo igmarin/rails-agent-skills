@@ -7,7 +7,6 @@ description: >
   ownership. Identifies misplaced domain models, detects cross-context coupling,
   names ownership conflicts, and recommends the smallest credible boundary
   improvement. Covers context mapping and leakage detection.
-license: MIT
 ---
 
 # DDD Boundaries Review

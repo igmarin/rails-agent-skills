@@ -8,7 +8,6 @@ description: >
   mountable engine setup, gem installation, engine onboarding,
   rails plugin installer, copy migrations, initializer generator,
   route mount setup, engine configuration generator.
-license: MIT
 ---
 
 # Rails Engine Installers

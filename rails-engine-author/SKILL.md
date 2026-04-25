@@ -5,7 +5,6 @@ description: >
   Use when creating, scaffolding, or refactoring a Rails engine. Covers engine
   types (Plain, Railtie, Engine, Mountable), namespace isolation, host-app
   contract definition, and recommended file structure.
-license: MIT
 ---
 # Rails Engine Author
 
