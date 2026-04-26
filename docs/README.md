@@ -1,10 +1,27 @@
-# Documentation — Rails Agent Skills
+
+# Rails Agent Skills — Documentation
+
+> This is not just documentation — it is the operating system behind AI-driven Rails development.
+>
+> Rails Agent Skills defines how AI agents should **think, plan, and execute** across the entire software lifecycle — from discovery to PR — with strict workflows and TDD as a non-negotiable quality gate.
 
 Master index for all project documentation.
 
 ---
 
+## What this gives you
+
+- A complete, structured workflow system (Discovery → PR)
+- 30+ production-grade skills with clear triggers and responsibilities
+- Enforced TDD workflows (tests as a hard gate, not a suggestion)
+- Context-aware orchestration across tasks and agents
+- A repeatable way to turn AI into a reliable engineering system
+
+This documentation is your entry point to understanding and applying that system.
+
 ## 🚀 Start Here
+
+Think of this as a decision map — not just docs. Pick your current stage and follow the workflow.
 
 | If you are... | Go to... |
 |---------------|----------|
@@ -16,6 +33,8 @@ Master index for all project documentation.
 ---
 
 ## Quick Start
+
+If you're using AI agents in Rails, start here. This gives you the fastest path to the right workflow without guessing.
 
 ### 30 Seconds: Which Skill to Use
 
@@ -62,6 +81,8 @@ flowchart TD
 
 ## Workflows by Stage
 
+Each workflow is designed to be executed by an AI agent (or human + AI) with clear steps, inputs, and expected outputs.
+
 Step-by-step workflows for each development phase:
 
 | Stage | Document | Description |
@@ -89,12 +110,12 @@ Complete catalog of 34+ skills organized by stage:
 
 ### Principles & Architecture
 
-| Document | Content |
-|----------|---------|
-| [skill-design-principles.md](skill-design-principles.md) | 6 skill design principles |
+| Document                                                   | Content                                                                                                 |
+| ------------------------------------------------------------| ---------------------------------------------------------------------------------------------------------|
+| [skill-design-principles.md](skill-design-principles.md)   | 6 skill design principles                                                                               |
 | [skill-optimization-guide.md](skill-optimization-guide.md) | Eval-driven loop: baseline-vs-context targets, per-skill scoring, what to change when a skill regresses |
-| [architecture.md](architecture.md) | SKILL.md structure, frontmatter, checkpoints |
-| [skill-template.md](skill-template.md) | Template for new skills |
+| [architecture.md](architecture.md)                         | SKILL.md structure, frontmatter, checkpoints                                                            |
+| [skill-template.md](skill-template.md)                     | Template for new skills                                                                                 |
 
 ---
 
@@ -113,7 +134,7 @@ In-depth guides by specific topic:
 
 ## Tests Gate Implementation
 
-Non-negotiable gate in all code workflows:
+Non-negotiable principle across all workflows:
 
 ```text
 Write test → Run test → Verify it FAILS → Implement → Verify it PASSES

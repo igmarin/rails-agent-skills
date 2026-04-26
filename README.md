@@ -1,6 +1,21 @@
 # Rails Agent Skills
 
-> **Rails Agent Skills** is a curated library of AI agent skills for **Ruby on Rails** development. Skills encode specialized knowledge, conventions, and workflow patterns so assistants deliver higher-quality code.
+> **Rails Agent Skills** turns AI coding assistants into reliable Rails engineers — not just autocomplete tools.
+>
+> It is a curated library of production-grade agent skills that encode conventions, workflows, and strict quality gates (TDD-first), so assistants generate code that actually holds up in real projects.
+
+---
+
+## Why this exists
+
+Most AI-generated code fails in real Rails apps because it lacks:
+- awareness of project conventions
+- disciplined workflows (especially TDD)
+- structured context across tasks
+
+This library fixes that by giving agents **explicit skills and workflows** — from PRD → tasks → implementation → review — with tests acting as a hard gate before any code is written.
+
+The goal is simple: **make AI outputs predictable, testable, and production-ready.**
 
 ---
 
@@ -23,7 +38,7 @@ This skill library is built on core principles that shape how every skill operat
 
 ### 1. Tests Gate Implementation
 
-The central methodology of this project. Tests are not a phase that happens "after" or "alongside" development — they are a **gate** that must be passed before any implementation code can be written.
+The core principle of this project. Tests are not a phase that happens "after" development — they are a **hard gate** that must be passed before any implementation code can be written.
 
 ```text
 PRD → Tasks → [GATE] → Implementation → YARD → Docs → Code review → PR
@@ -98,7 +113,7 @@ The rule of thumb is: **reuse patterns, not names**. If a broader skill maps cle
 
 *For a practical guide on how to talk to the AI and effectively invoke these workflows, please see our **[Workflows Index](docs/workflows/)**.*
 
-Here is the recommended, step-by-step workflow for building a new feature from scratch using this skill library. This ensures every feature is well-planned, robustly tested, and adheres to project quality standards.
+Here is the recommended, step-by-step workflow for building a new feature from scratch using this skill library. This ensures every feature is well-planned, test-driven, and meets production-quality standards.
 
 **Goal:** Build a new feature, e.g., "Feature A"
 
@@ -143,7 +158,7 @@ Here is the recommended, step-by-step workflow for building a new feature from s
 
 ## MCP Server
 
-The recommended way to use this library is via the included Ruby MCP server. It exposes every skill, doc, and workflow as a named MCP resource — the AI agent loads only what it needs, without reading the entire repository into context.
+The recommended way to use this library is via the included Ruby MCP server. It exposes every skill, doc, and workflow as a named MCP resource — allowing agents to load only what they need, reducing token usage while improving accuracy and relevance.
 
 ```text
 tools/call use_skill { "skill_name": "rails-graphql-best-practices" }
@@ -152,11 +167,11 @@ tools/call use_skill { "skill_name": "rails-graphql-best-practices" }
 
 Resources exposed:
 
-| Prefix | Source |
-|--------|--------|
-| `skill/<name>` | `SKILL.md` + support files for every skill |
-| `doc/<name>` | All files under `docs/` |
-| `workflow/<name>` | All workflow definitions |
+| Prefix            | Source                                     |
+| -------------------| --------------------------------------------|
+| `skill/<name>`    | `SKILL.md` + support files for every skill |
+| `doc/<name>`      | All files under `docs/`                    |
+| `workflow/<name>` | All workflow definitions                   |
 
 Adding a new skill directory automatically makes it available — no server changes needed.
 
@@ -406,21 +421,21 @@ Each skill is a `SKILL.md` file in its own directory. For detailed conventions a
 Tests are a **gate** between planning and implementation. See [docs/workflows/](docs/workflows/) for full diagrams.
 
 
-| Workflow                                        | Skill Chain                                                                                                                                                                                                               |
-| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Workflow                                        | Skill Chain                                                                                                                                                                                                                                           |
+| -------------------------------------------------| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **TDD Feature Loop** *(primary daily workflow)* | rails-context-engineering → rails-tdd-slices → **[Test Feedback checkpoint]** → **[Implementation Proposal checkpoint]** → implement → **[Linters + Suite gate]** → yard-documentation → rails-code-review → rails-review-response (on feedback) → PR |
-| **New feature**                                 | rails-context-engineering → create-prd → generate-tasks → (optional **ticket-planning**) → *TDD Feature Loop*                                                                                                             |
-| **DDD-first feature**                           | rails-context-engineering → create-prd → ddd-ubiquitous-language → ddd-boundaries-review → ddd-rails-modeling → generate-tasks → *TDD Feature Loop*                                                                       |
-| **Bug fix**                                     | rails-bug-triage → rails-tdd-slices → **[write reproduction spec, verify failure]** → fix → verify passes → rails-code-review                                                                                             |
-| **Code review + response**                      | rails-code-review → rails-review-response (on feedback) → re-review if Critical items addressed                                                                                                                           |
-| **Security audit**                              | rails-security-review → rails-code-review (verify fixes) → PR                                                                                                                                                             |
-| **Performance optimization**                    | rails-code-conventions (ActiveRecord rules) → **[regression spec]** → optimize → rails-code-review                                                                                                                        |
-| **Migration**                                   | rails-migration-safety → **[test up + down]** → implement → rails-code-review                                                                                                                                             |
-| **GraphQL feature**                             | ddd-ubiquitous-language → rails-graphql-best-practices → *TDD Feature Loop* → rails-security-review                                                                                                                       |
-| **New engine**                                  | rails-engine-author → **[write specs, verify failure]** → implement → rails-engine-docs                                                                                                                                   |
-| **Refactoring**                                 | refactor-safely → **[characterization tests]** → refactor → verify tests pass                                                                                                                                             |
-| **New service**                                 | rails-tdd-slices → **[write .call spec, verify failure]** → ruby-service-objects → verify passes                                                                                                                          |
-| **API integration**                             | rails-tdd-slices → **[write layer specs, verify failure]** → ruby-api-client-integration → verify passes                                                                                                                  |
+| **New feature**                                 | rails-context-engineering → create-prd → generate-tasks → (optional **ticket-planning**) → *TDD Feature Loop*                                                                                                                                         |
+| **DDD-first feature**                           | rails-context-engineering → create-prd → ddd-ubiquitous-language → ddd-boundaries-review → ddd-rails-modeling → generate-tasks → *TDD Feature Loop*                                                                                                   |
+| **Bug fix**                                     | rails-bug-triage → rails-tdd-slices → **[write reproduction spec, verify failure]** → fix → verify passes → rails-code-review                                                                                                                         |
+| **Code review + response**                      | rails-code-review → rails-review-response (on feedback) → re-review if Critical items addressed                                                                                                                                                       |
+| **Security audit**                              | rails-security-review → rails-code-review (verify fixes) → PR                                                                                                                                                                                         |
+| **Performance optimization**                    | rails-code-conventions (ActiveRecord rules) → **[regression spec]** → optimize → rails-code-review                                                                                                                                                    |
+| **Migration**                                   | rails-migration-safety → **[test up + down]** → implement → rails-code-review                                                                                                                                                                         |
+| **GraphQL feature**                             | ddd-ubiquitous-language → rails-graphql-best-practices → *TDD Feature Loop* → rails-security-review                                                                                                                                                   |
+| **New engine**                                  | rails-engine-author → **[write specs, verify failure]** → implement → rails-engine-docs                                                                                                                                                               |
+| **Refactoring**                                 | refactor-safely → **[characterization tests]** → refactor → verify tests pass                                                                                                                                                                         |
+| **New service**                                 | rails-tdd-slices → **[write .call spec, verify failure]** → ruby-service-objects → verify passes                                                                                                                                                      |
+| **API integration**                             | rails-tdd-slices → **[write layer specs, verify failure]** → ruby-api-client-integration → verify passes                                                                                                                                              |
 
 
 ## Creating New Skills
