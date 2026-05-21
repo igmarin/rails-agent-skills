@@ -27,9 +27,9 @@ class EvalContextBuilderTest < Minitest::Test
     end
     skill_dir.join('assets', 'schema.json').write('{"type":"object"}')
 
-    workflow_dir = @root.join('workflows', 'tdd-workflow')
-    workflow_dir.mkpath
-    workflow_dir.join('SKILL.md').write("# TDD Workflow\n")
+    agent_dir = @root.join('agents', 'tdd')
+    agent_dir.mkpath
+    agent_dir.join('SKILL.md').write("# TDD Agent\n")
   end
 
   def teardown
@@ -59,11 +59,19 @@ class EvalContextBuilderTest < Minitest::Test
     ], resource_paths
   end
 
-  def test_infers_workflow_target_type
-    xml = EvalContextBuilder.new(repo_root: @root).call(target_path: 'workflows/tdd-workflow')
+  def test_infers_agent_target_type
+    xml = EvalContextBuilder.new(repo_root: @root).call(target_path: 'agents/tdd')
     document = REXML::Document.new(xml)
 
-    assert_equal 'workflow', document.root.attributes['target_type']
-    assert_equal 'tdd-workflow', document.root.attributes['target_name']
+    assert_equal 'agent', document.root.attributes['target_type']
+    assert_equal 'tdd', document.root.attributes['target_name']
+  end
+
+  def test_infers_workflow_target_type
+    xml = EvalContextBuilder.new(repo_root: @root).call(target_path: 'agents/tdd')
+    document = REXML::Document.new(xml)
+
+    assert_equal 'agent', document.root.attributes['target_type']
+    assert_equal 'tdd', document.root.attributes['target_name']
   end
 end

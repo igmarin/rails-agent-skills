@@ -4,7 +4,7 @@
 
 **Rails Agent Skills turns AI coding assistants into disciplined Rails collaborators.**
 
-It is a curated library of **41 public Rails agent skills** and **9 callable workflows** that teach AI tools how to plan, test, implement, document, and review Rails work using production-minded conventions.
+It is a curated library of **41 public Rails agent skills** and **9 callable agents** that teach AI tools how to plan, test, implement, document, and review Rails work using production-minded conventions.
 
 The project is built around one non-negotiable rule:
 
@@ -53,9 +53,9 @@ That TDD gate is encoded directly into the skills and workflows, so agents do no
 | Area | Purpose |
 |------|---------|
 | `skills/` | 41 public atomic skills. Each skill has a `SKILL.md` entry point with task-specific instructions. |
-| `workflows/` | 9 callable workflows that chain skills into full development loops (tdd, quality, review, setup, engine, bug-fix, graphql, migration, background-job). |
+| `agents/` | 9 callable agents that chain skills into full development loops (tdd, quality, review, setup, engine, bug-fix, graphql, migration, background-job). |
 | `docs/` | Public documentation, architecture, workflow guides, skill catalog, and evaluation policy. |
-| `mcp_server/` | Official Ruby MCP server exposing docs, workflows, and `use_skill`. |
+| `mcp_server/` | Official Ruby MCP server exposing docs, agents, and skills via `list_skills`, `use_skill`, `list_agents`, `use_agent`. |
 | `tessl-evals/` | Tessl-native eval scenarios for publishable skills in `tile.json`. |
 | `personal-evals/` | Open examples for the upcoming `ruby-skill-bench` full-context evaluator. |
 
@@ -68,9 +68,9 @@ Rails Agent Skills can be invoked in three distinct ways depending on your envir
 2. **Chat Commands**: Explicitly forcing the agent to use a skill via `@skill-name` or `/skill-name`.
 3. **CLI (`gh skill` / `tessl`)**: Manual installation or evaluations in the terminal.
 
-**[Read the complete guide on Calling Skills and Workflows](docs/calling-skills.md)** for syntax examples and when to use each method.
+**[Read the complete guide on Calling Skills and Agents](docs/calling-skills.md)** for syntax examples and when to use each method.
 
-The recommended way for autonomous usage is through the MCP server. MCP keeps the agent context small: docs and workflows are exposed as resources, available skills are discoverable through `list_skills`, and individual skills are loaded on demand. The `use_skill` tool returns a specific skill's `SKILL.md` only when the agent needs it.
+The recommended way for autonomous usage is through the MCP server. MCP keeps the agent context small: docs are exposed as resources, available skills are discoverable through `list_skills`, agents through `list_agents`, and individual files are loaded on demand via `use_skill` / `use_agent`.
 
 | Path | Best for | Start here |
 |------|----------|------------|
@@ -124,27 +124,27 @@ See [mcp_server/README.md](mcp_server/README.md) for host-specific MCP configura
 
 When configuring MCP in external tools, use absolute paths for `cwd` and `BUNDLE_GEMFILE`. Relative paths and `~` are a common cause of gem-loading and timeout failures.
 
-### Using Workflows via MCP
+### Using Agents via MCP
 
-Workflows are the primary way to orchestrate multi-step Rails development tasks. When connected via MCP, agents can automatically discover and execute workflows using two tools:
+Agents are the primary way to orchestrate multi-step Rails development tasks. When connected via MCP, agents can automatically discover and execute them using two tools:
 
-**1. Discover available workflows:**
+**1. Discover available agents:**
 ```text
-Agent calls: list_workflows
-Returns: 9 workflows with metadata (tdd, quality, review, setup, engine, bug-fix, graphql, migration, background-job)
+Agent calls: list_agents
+Returns: 9 agents with metadata (tdd, quality, review, setup, engine, bug-fix, graphql, migration, background-job)
 ```
 
-**2. Load and execute a specific workflow:**
+**2. Load and execute a specific agent:**
 ```text
-Agent calls: use_workflow(workflow_name: "tdd")
-Returns: Full workflow instructions with phases, gates, and skill chaining
+Agent calls: use_agent(agent_name: "tdd")
+Returns: Full agent instructions with phases, gates, and skill chaining
 ```
 
 **Example usage in MCP:**
 - User: "I need to implement a new feature with TDD"
-- Agent: Calls `list_workflows` → discovers `tdd` workflow → calls `use_workflow("tdd")` → executes full TDD cycle
+- Agent: Calls `list_agents` → discovers `tdd` agent → calls `use_agent("tdd")` → executes full TDD cycle
 
-**Available workflows:**
+**Available agents:**
 - **tdd**: Full TDD feature cycle (test → implement → review → PR)
 - **quality**: Code quality sweep (conventions → refactor → docs)
 - **review**: Systematic PR review (review → deep dive → response)
@@ -155,7 +155,7 @@ Returns: Full workflow instructions with phases, gates, and skill chaining
 - **migration**: Safe database migration deployment
 - **background-job**: Robust background job implementation
 
-Workflows enforce hard gates (like "tests must pass before implementation") and include TDD enforcement, making them more reliable than ad-hoc skill chaining.
+Agents enforce hard gates (like "tests must pass before implementation") and include TDD enforcement, making them more reliable than ad-hoc skill chaining.
 
 ## Daily Workflow
 
@@ -203,7 +203,7 @@ background-job (design -> TDD -> retry config -> monitoring)
 create-engine -> test-engine -> document-engine -> review-engine -> release-engine
 ```
 
-See [docs/workflow-guide.md](docs/workflow-guide.md) and [docs/workflows/](docs/workflows/) for the full workflow guide containing detailed Mermaid diagrams of each phase.
+See [docs/workflow-guide.md](docs/workflow-guide.md) and [docs/workflows/](docs/workflows/) for the full process guide containing detailed Mermaid diagrams of each phase.
 
 ## Skill Catalog
 
@@ -229,8 +229,8 @@ This repo uses two complementary evaluation layers.
 
 | Layer | Status | What it validates |
 |-------|--------|-------------------|
-| Tessl | Public and active | Tessl-native scenarios in `tessl-evals/` validate the quality of publishable skills from `tile.json`. Tessl does not validate repository workflows today. |
-| `ruby-skill-bench` | Coming soon | The upcoming Ruby gem will run `personal-evals/` examples with full skill or workflow context, including `SKILL.md` plus companion resources bundled as XML. |
+| Tessl | Public and active | Tessl-native scenarios in `tessl-evals/` validate the quality of publishable skills from `tile.json`. Tessl does not validate repository agents today. |
+| `ruby-skill-bench` | Coming soon | The upcoming Ruby gem will run `personal-evals/` examples with full skill or agent context, including `SKILL.md` plus companion resources bundled as XML. |
 
 Root `evals/` is generated Tessl staging output and must stay untracked. `tessl-evals/` is the tracked Tessl source. `personal-evals/` is the tracked source for open custom-evaluator examples.
 
@@ -293,7 +293,7 @@ Pinning to a tag or commit SHA gives you reproducible installs. Provenance metad
 
 ## Contributing
 
-When contributing skills, workflows, docs, or MCP behavior:
+When contributing skills, agents, docs, or MCP behavior:
 
 - Keep generated artifacts in English unless a user explicitly asks for another language.
 - Preserve the tests-gate-implementation rule for every code-producing skill.

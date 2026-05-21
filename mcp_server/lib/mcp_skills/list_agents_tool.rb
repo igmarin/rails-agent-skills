@@ -5,12 +5,11 @@ require 'yaml'
 require_relative 'resource_discovery'
 
 module McpSkills
-  # MCP Tool that returns structured metadata for available Rails Agent Workflows.
-  class ListWorkflowsTool < MCP::Tool
-    tool_name 'list_workflows'
-    title 'List Rails Workflows'
-    description '@deprecated — use list_agents instead. Discover available Rails Agent Workflows before loading one with use_workflow. ' \
-                'Returns names (without -workflow suffix), paths, descriptions, and keywords only; it does not return full workflow bodies. ' \
+  class ListAgentsTool < MCP::Tool
+    tool_name 'list_agents'
+    title 'List Rails Agents'
+    description 'Discover available Rails Agent orchestrated workflows before loading one with use_agent. ' \
+                'Returns names (without -agent suffix), paths, descriptions, and keywords only; it does not return full agent bodies. ' \
                 'This tool is read-only and has no repository side effects.'
 
     input_schema(
@@ -23,15 +22,15 @@ module McpSkills
         count: {
           type: 'integer',
           minimum: 0,
-          description: 'Number of workflows returned.'
+          description: 'Number of agents returned.'
         },
-        workflows: {
+        agents: {
           type: 'array',
-          description: 'Rails Agent Workflows available through use_workflow.',
+          description: 'Rails Agents available through use_agent.',
           items: {
             type: 'object',
             properties: {
-              name: { type: 'string', description: 'Workflow directory name.' },
+              name: { type: 'string', description: 'Agent directory name.' },
               path: { type: 'string', description: 'Repository path to SKILL.md.' },
               description: { type: 'string', description: 'Short routing description.' },
               keywords: { type: 'string', description: 'Comma-separated discovery keywords.' }
@@ -41,12 +40,12 @@ module McpSkills
           }
         }
       },
-      required: %w[count workflows],
+      required: %w[count agents],
       additionalProperties: false
     )
 
     annotations(
-      title: 'List Rails Workflows',
+      title: 'List Rails Agents',
       read_only_hint: true,
       destructive_hint: false,
       idempotent_hint: true,
@@ -54,15 +53,12 @@ module McpSkills
     )
 
     class << self
-      # @param project_root [Pathname, String] Override for testing; defaults to repo root.
-      # @param server_context [Hash] MCP server context (unused but required by protocol).
-      # @return [MCP::Tool::Response]
       def call(server_context:, project_root: nil)
         root = resolve_root(project_root)
-        workflow_dirs = ResourceDiscovery.call(root).workflow_dirs
-        workflows = workflow_dirs.map { |dir| build_workflow_metadata(dir, root) }
-        structured_content = { count: workflows.length, workflows: workflows }
-        text = workflows.map { |w| "#{w[:name]}\t#{w[:description]}" }.join("\n")
+        agent_dirs = ResourceDiscovery.call(root).agent_dirs
+        agents = agent_dirs.map { |dir| build_agent_metadata(dir, root) }
+        structured_content = { count: agents.length, agents: agents }
+        text = agents.map { |a| "#{a[:name]}\t#{a[:description]}" }.join("\n")
 
         MCP::Tool::Response.new(
           [{ type: 'text', text: text }],
@@ -72,7 +68,7 @@ module McpSkills
 
       private
 
-      def build_workflow_metadata(dir, root)
+      def build_agent_metadata(dir, root)
         skill_md = dir.join('SKILL.md')
         content = skill_md.exist? ? skill_md.read : ''
         frontmatter = parse_frontmatter(content)

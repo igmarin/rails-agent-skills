@@ -4,13 +4,15 @@ import {
   categoryFromPath,
   extractSkillDescription,
   listSkills,
+  listAgents,
   listWorkflows,
   loadSkill,
+  loadAgent,
   loadWorkflow,
   normalizeSkillName,
   resolveSkillPath,
   type TileManifest,
-  type WorkflowManifest,
+  type AgentManifest,
 } from "../src/skill-content";
 
 const manifest: TileManifest = {
@@ -54,6 +56,10 @@ describe("buildRawUrl", () => {
 describe("categoryFromPath", () => {
   it("returns the nested skill category", () => {
     expect(categoryFromPath("skills/code-quality/code-review/SKILL.md")).toBe("code-quality");
+  });
+
+  it("returns agent for agent paths", () => {
+    expect(categoryFromPath("agents/tdd/SKILL.md")).toBe("agent");
   });
 });
 
@@ -114,62 +120,90 @@ describe("skill loading", () => {
   });
 });
 
-const workflowManifest: WorkflowManifest = {
-  workflows: {
-    "tdd": { path: "workflows/tdd/SKILL.md" },
-    "bug-fix": { path: "workflows/bug-fix/SKILL.md" },
+const agentManifest: AgentManifest = {
+  agents: {
+    "tdd": { path: "agents/tdd/SKILL.md" },
+    "bug-fix": { path: "agents/bug-fix/SKILL.md" },
   },
 };
 
-describe("workflow loading", () => {
-  const workflowBody = `---\nname: tdd\ndescription: >\n  Full TDD feature cycle: test, implement, review, PR.\nmetadata:\n  keywords: tdd, test-driven, red-green-refactor\n---\n# TDD Workflow\n`;
+describe("agent loading", () => {
+  const agentBody = `---\nname: tdd\ndescription: >\n  Full TDD feature cycle: test, implement, review, PR.\nmetadata:\n  keywords: tdd, test-driven, red-green-refactor\n---\n# TDD Agent\n`;
 
   function fetcher(url: string) {
-    if (url.endsWith("/workflows.json")) {
-      return Promise.resolve(new Response(JSON.stringify(workflowManifest)));
+    if (url.endsWith("/agents.json")) {
+      return Promise.resolve(new Response(JSON.stringify(agentManifest)));
     }
 
-    if (url.endsWith("/workflows/tdd/SKILL.md")) {
-      return Promise.resolve(new Response(workflowBody));
+    if (url.endsWith("/agents/tdd/SKILL.md")) {
+      return Promise.resolve(new Response(agentBody));
     }
 
     return Promise.resolve(new Response("not found", { status: 404 }));
   }
 
-  it("lists structured workflow metadata", async () => {
-    const workflows = await listWorkflows(fetcher as typeof fetch, "https://example.test");
-    expect(workflows).toHaveLength(1);
-    expect(workflows[0]).toEqual({
+  it("lists structured agent metadata", async () => {
+    const agents = await listAgents(fetcher as typeof fetch, "https://example.test");
+    expect(agents).toHaveLength(1);
+    expect(agents[0]).toEqual({
       name: "tdd",
-      path: "workflows/tdd/SKILL.md",
+      path: "agents/tdd/SKILL.md",
       description: "Full TDD feature cycle: test, implement, review, PR.",
       keywords: "tdd, test-driven, red-green-refactor",
     });
   });
 
-  it("skips unavailable workflows", async () => {
+  it("skips unavailable agents", async () => {
     function partialFetcher(url: string) {
-      if (url.endsWith("/workflows.json")) {
-        return Promise.resolve(new Response(JSON.stringify(workflowManifest)));
+      if (url.endsWith("/agents.json")) {
+        return Promise.resolve(new Response(JSON.stringify(agentManifest)));
       }
 
       return Promise.resolve(new Response("not found", { status: 404 }));
     }
 
-    await expect(listWorkflows(partialFetcher as typeof fetch, "https://example.test")).resolves.toEqual([]);
+    await expect(listAgents(partialFetcher as typeof fetch, "https://example.test")).resolves.toEqual([]);
   });
 
-  it("loads structured workflow content", async () => {
-    await expect(loadWorkflow("tdd", fetcher as typeof fetch, "https://example.test")).resolves.toMatchObject({
+  it("loads structured agent content", async () => {
+    await expect(loadAgent("tdd", fetcher as typeof fetch, "https://example.test")).resolves.toMatchObject({
       name: "tdd",
-      path: "workflows/tdd/SKILL.md",
+      path: "agents/tdd/SKILL.md",
       description: "Full TDD feature cycle: test, implement, review, PR.",
       keywords: "tdd, test-driven, red-green-refactor",
-      content: workflowBody,
+      content: agentBody,
     });
   });
 
-  it("returns null for unknown workflows", async () => {
-    await expect(loadWorkflow("missing", fetcher as typeof fetch, "https://example.test")).resolves.toBeNull();
+  it("returns null for unknown agents", async () => {
+    await expect(loadAgent("missing", fetcher as typeof fetch, "https://example.test")).resolves.toBeNull();
+  });
+});
+
+describe("workflow backward compat", () => {
+  const agentBody = `---\nname: tdd\ndescription: >\n  Full TDD feature cycle: test, implement, review, PR.\nmetadata:\n  keywords: tdd, test-driven, red-green-refactor\n---\n# TDD Agent\n`;
+
+  function fetcher(url: string) {
+    if (url.endsWith("/agents.json")) {
+      return Promise.resolve(new Response(JSON.stringify(agentManifest)));
+    }
+
+    if (url.endsWith("/agents/tdd/SKILL.md")) {
+      return Promise.resolve(new Response(agentBody));
+    }
+
+    return Promise.resolve(new Response("not found", { status: 404 }));
+  }
+
+  it("listWorkflows delegates to listAgents", async () => {
+    const workflows = await listWorkflows(fetcher as typeof fetch, "https://example.test");
+    expect(workflows).toHaveLength(1);
+    expect(workflows[0].name).toBe("tdd");
+  });
+
+  it("loadWorkflow delegates to loadAgent", async () => {
+    const result = await loadWorkflow("tdd", fetcher as typeof fetch, "https://example.test");
+    expect(result).not.toBeNull();
+    expect(result!.name).toBe("tdd");
   });
 });

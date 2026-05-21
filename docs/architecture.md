@@ -25,8 +25,8 @@ rails-agent-skills/
 │   ├── architecture.md
 │   ├── workflow-guide.md
 │   └── skill-template.md
-├── workflows/               # Orchestration skills
-│   └── tdd-workflow/
+├── agents/                  # Orchestrated agent skills
+│   └── tdd/
 │       └── SKILL.md
 ├── skills/                  # Categorized skills
 │   └── <category>/          # e.g., planning, testing, code-quality

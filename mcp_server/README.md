@@ -2,7 +2,7 @@
 
 A Ruby MCP server that exposes the `rails-agent-skills` library to AI tools (Windsurf, Cursor, Claude Code, RubyMine, OpenCode, etc.) via the [Model Context Protocol](https://modelcontextprotocol.io) official spec (JSON-RPC 2.0, stdio transport).
 
-This is the canonical setup guide for the official MCP distribution. It publishes repository docs and workflows as resources, lists available Rails skills through `list_skills`, then loads individual Rails skills on demand through the `use_skill` tool so agents do not need the full skill library in context at once.
+This is the canonical setup guide for the official MCP distribution. It publishes repository docs and agents as resources, discovers skills via `list_skills` and agents via `list_agents`, then loads individual skills/agents on demand through `use_skill` / `use_agent` so agents do not need the full library in context at once.
 
 Built on the [official Ruby MCP SDK](https://github.com/modelcontextprotocol/ruby-sdk) (`gem 'mcp'`).
 
@@ -23,9 +23,11 @@ Built on the [official Ruby MCP SDK](https://github.com/modelcontextprotocol/rub
 | Type | Prefix / Name | Source |
 |------|---------------|--------|
 | **Resources** | `doc/<name>` | All `*.md` files under `docs/`, including nested docs such as `docs/workflows/*.md` |
-| **Resources** | `workflow/<name>` | Every workflow directory under `workflows/<workflow>/`, exposed from its `SKILL.md` plus supported companion files |
+| **Resources** | `agent/<name>` | Every agent directory under `agents/<name>/`, exposed from its `SKILL.md` plus supported companion files |
 | **Tool** | `list_skills` | Invocable read-only discovery tool: returns public skill names, categories, paths, and frontmatter descriptions |
 | **Tool** | `use_skill` | Invocable read-only loader tool: given a `skill_name`, returns structured metadata plus the full `SKILL.md` content for a public skill |
+| **Tool** | `list_agents` | Invocable read-only discovery tool: returns available agents with names, paths, descriptions, and keywords |
+| **Tool** | `use_agent` | Invocable read-only loader tool: given an `agent_name`, returns structured metadata plus the full `SKILL.md` content for an agent |
 
 Individual **Skills** are no longer exposed as resources to prevent context bloat. Discover them with `list_skills`, then load one on demand with `use_skill`.
 
@@ -35,7 +37,7 @@ Adding a new public skill directory to the repo automatically makes it available
 
 ## Architecture
 
-The runtime code lives in `mcp_server/`, while the container build lives at [`../Dockerfile`](../Dockerfile) because the image needs the full repository checkout, including skills, workflows, and docs.
+The runtime code lives in `mcp_server/`, while the container build lives at [`../Dockerfile`](../Dockerfile) because the image needs the full repository checkout, including skills, agents, and docs.
 
 ```text
 mcp_server/
@@ -46,25 +48,30 @@ mcp_server/
 ├── lib/
 │   └── mcp_skills/
 │       ├── skill_catalog.rb           # Service: builds structured skill metadata
-│       ├── resource_registry.rb       # Service: discovers published docs and workflows
-│       ├── resource_discovery.rb      # Service: resolves published skill/workflow topology
-│       ├── skill_resource_builder.rb  # Service: builds MCP::Resource objects for workflow markdown
+│       ├── resource_registry.rb       # Service: discovers published docs and agents
+│       ├── resource_discovery.rb      # Service: resolves published skill/agent topology
+│       ├── skill_resource_builder.rb  # Service: builds MCP::Resource objects for agent markdown
 │       ├── doc_resource_builder.rb    # Service: builds MCP::Resource objects for docs
 │       ├── list_skills_tool.rb        # MCP::Tool: 'list_skills' discovery
-│       └── skill_tool.rb              # MCP::Tool: 'use_skill' loader
+│       ├── skill_tool.rb              # MCP::Tool: 'use_skill' loader
+│       ├── list_agents_tool.rb        # MCP::Tool: 'list_agents' discovery
+│       └── agent_tool.rb              # MCP::Tool: 'use_agent' loader
 └── test/
     ├── test_helper.rb
     ├── resource_registry_test.rb
     ├── skill_resource_builder_test.rb
     ├── doc_resource_builder_test.rb
-    └── skill_tool_test.rb
+    ├── skill_tool_test.rb
+    ├── list_skills_tool_test.rb
+    ├── list_agents_tool_test.rb
+    └── agent_tool_test.rb
 ```
 
 **Service objects:**
 
-- **`McpSkills::ResourceRegistry`** — scans the repo for published docs and workflows. Single source of truth for the resource set.
-- **`McpSkills::ResourceDiscovery`** — resolves the published topology for nested `skills/`, root `workflows/`, and `docs/`.
-- **`McpSkills::SkillResourceBuilder`** — maps a workflow directory path to `MCP::Resource` objects with `file://` URIs and a configurable name prefix.
+- **`McpSkills::ResourceRegistry`** — scans the repo for published docs and agents. Single source of truth for the resource set.
+- **`McpSkills::ResourceDiscovery`** — resolves the published topology for nested `skills/`, root `agents/`, and `docs/`.
+- **`McpSkills::SkillResourceBuilder`** — maps an agent directory path to `MCP::Resource` objects with `file://` URIs and a configurable name prefix.
 - **`McpSkills::DocResourceBuilder`** — builds `doc/` resources for markdown files anywhere under `docs/`.
 - **`McpSkills::SkillCatalog`** — builds structured skill metadata from discovered `SKILL.md` files.
 - **`McpSkills::ListSkillsTool`** — `MCP::Tool` subclass. `call` returns names, paths, categories, and descriptions as structured content.
@@ -420,7 +427,7 @@ Tests are written with Minitest: each file validates real behavior of a service 
 
 ## Auto-discovery of new skills
 
-`ResourceRegistry` uses explicit topology discovery for `skills/*/*/SKILL.md`, `workflows/*/SKILL.md`, supported Tessl tile mirrors, and `docs/**/*.md`. When you add a published workflow or doc file in those locations, it appears in `resources/list` on the next server start. Published skills become available through `list_skills` and `use_skill` without any server code changes.
+`ResourceRegistry` uses explicit topology discovery for `skills/*/*/SKILL.md`, `agents/*/SKILL.md`, supported Tessl tile mirrors, and `docs/**/*.md`. When you add a published agent or doc file in those locations, it appears in `resources/list` on the next server start. Published skills become available through `list_skills` and `use_skill` without any server code changes.
 
 ---
 

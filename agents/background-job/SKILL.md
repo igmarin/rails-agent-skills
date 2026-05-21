@@ -12,7 +12,7 @@ metadata:
   dependencies: "implement-background-job, write-tests"
   keywords: rails, background-job, async, sidekiq, solid-queue, active-job, retry, monitoring
 ---
-# Background Job Workflow
+# Background Job Agent
 
 Orchestrates robust background job implementation with TDD discipline, proper retry/discard strategies, comprehensive failure scenario testing, and production monitoring to ensure reliable async processing.
 
@@ -25,7 +25,7 @@ Orchestrates robust background job implementation with TDD discipline, proper re
 - Migrating from synchronous to asynchronous processing
 - Implementing retry logic for external API calls
 
-## Workflow Phases
+## Agent Phases
 
 ### Phase 1: Job Design
 

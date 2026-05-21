@@ -6,9 +6,12 @@ export type TileManifest = {
   skills: Record<string, SkillSpec>;
 };
 
-export type WorkflowManifest = {
-  workflows: Record<string, SkillSpec>;
+export type AgentManifest = {
+  agents: Record<string, SkillSpec>;
 };
+
+// @deprecated Use AgentManifest instead
+export type WorkflowManifest = AgentManifest;
 
 export type SkillMetadata = {
   name: string;
@@ -21,16 +24,22 @@ export type SkillContent = SkillMetadata & {
   content: string;
 };
 
-export type WorkflowMetadata = {
+export type AgentMetadata = {
   name: string;
   path: string;
   description: string;
   keywords: string;
 };
 
-export type WorkflowContent = WorkflowMetadata & {
+export type AgentContent = AgentMetadata & {
   content: string;
 };
+
+// @deprecated Use AgentMetadata instead
+export type WorkflowMetadata = AgentMetadata;
+
+// @deprecated Use AgentContent instead
+export type WorkflowContent = AgentContent;
 
 export const DEFAULT_RAW_BASE = "https://raw.githubusercontent.com/igmarin/rails-agent-skills/main";
 
@@ -62,6 +71,7 @@ export function buildRawUrl(rawBase: string, path: string): string {
 export function categoryFromPath(path: string): string {
   const parts = path.split("/");
   if (parts[0] === "skills" && parts[1]) return parts[1];
+  if (parts[0] === "agents") return "agent";
   if (parts[0] === "workflows") return "workflow";
 
   return "unknown";
@@ -188,26 +198,26 @@ function extractKeywords(markdown: string): string {
   return lines[keywordsIndex].replace(/^\s*keywords:\s*/, "").trim();
 }
 
-export async function loadWorkflowManifest(
+export async function loadAgentManifest(
   fetcher: Fetcher = fetch,
   rawBase = DEFAULT_RAW_BASE,
-): Promise<WorkflowManifest> {
-  const response = await fetcher(buildRawUrl(rawBase, "workflows.json"));
+): Promise<AgentManifest> {
+  const response = await fetcher(buildRawUrl(rawBase, "agents.json"));
   if (!response.ok) {
-    throw new Error(`Unable to load workflows.json: ${response.status}`);
+    throw new Error(`Unable to load agents.json: ${response.status}`);
   }
 
-  return (await response.json()) as WorkflowManifest;
+  return (await response.json()) as AgentManifest;
 }
 
-export async function listWorkflows(
+export async function listAgents(
   fetcher: Fetcher = fetch,
   rawBase = DEFAULT_RAW_BASE,
-): Promise<WorkflowMetadata[]> {
-  const manifest = await loadWorkflowManifest(fetcher, rawBase);
+): Promise<AgentMetadata[]> {
+  const manifest = await loadAgentManifest(fetcher, rawBase);
 
-  const workflows = await Promise.all(
-    Object.entries(manifest.workflows)
+  const agents = await Promise.all(
+    Object.entries(manifest.agents)
       .sort(([left], [right]) => left.localeCompare(right))
       .map(async ([name, spec]) => {
         try {
@@ -224,23 +234,23 @@ export async function listWorkflows(
             keywords: extractKeywords(text),
           };
         } catch (error) {
-          console.warn(`Skipping unavailable workflow '${name}':`, error);
+          console.warn(`Skipping unavailable agent '${name}':`, error);
           return null;
         }
       }),
   );
 
-  return workflows.filter((w): w is WorkflowMetadata => w !== null);
+  return agents.filter((a): a is AgentMetadata => a !== null);
 }
 
-export async function loadWorkflow(
-  workflowName: string,
+export async function loadAgent(
+  agentName: string,
   fetcher: Fetcher = fetch,
   rawBase = DEFAULT_RAW_BASE,
-): Promise<WorkflowContent | null> {
-  const manifest = await loadWorkflowManifest(fetcher, rawBase);
-  const normalized = normalizeSkillName(workflowName);
-  const spec = manifest.workflows[normalized];
+): Promise<AgentContent | null> {
+  const manifest = await loadAgentManifest(fetcher, rawBase);
+  const normalized = normalizeSkillName(agentName);
+  const spec = manifest.agents[normalized];
   if (!spec) return null;
 
   const response = await fetcher(buildRawUrl(rawBase, spec.path));
@@ -256,4 +266,29 @@ export async function loadWorkflow(
     keywords: extractKeywords(content),
     content,
   };
+}
+
+// @deprecated Use loadAgentManifest instead
+export async function loadWorkflowManifest(
+  fetcher: Fetcher = fetch,
+  rawBase = DEFAULT_RAW_BASE,
+): Promise<WorkflowManifest> {
+  return loadAgentManifest(fetcher, rawBase);
+}
+
+// @deprecated Use listAgents instead
+export async function listWorkflows(
+  fetcher: Fetcher = fetch,
+  rawBase = DEFAULT_RAW_BASE,
+): Promise<WorkflowMetadata[]> {
+  return listAgents(fetcher, rawBase);
+}
+
+// @deprecated Use loadAgent instead
+export async function loadWorkflow(
+  workflowName: string,
+  fetcher: Fetcher = fetch,
+  rawBase = DEFAULT_RAW_BASE,
+): Promise<WorkflowContent | null> {
+  return loadAgent(workflowName, fetcher, rawBase);
 }

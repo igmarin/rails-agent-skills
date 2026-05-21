@@ -10,13 +10,13 @@ metadata:
   phases: "Phase 1: Systematic Review, Phase 2: Deep Dive, Phase 3: Respond"
   hard_gates: "Security Check, Architecture Check, Findings Assessment, Re-review for Critical"
   dependencies: "code-review, security-check, review-architecture, respond-to-review"
-  keywords: rails, review, audit, security, architecture, workflow, pr, feedback
+  keywords: rails, review, audit, security, architecture, agent, pr, feedback
 ---
-# Review Workflow
+# Review Agent
 
 Orchestrates systematic code review with optional deep dives for security/architecture and response handling.
 
-## Workflow Phases
+## Agent Phases
 
 ### Phase 1: Systematic Review
 

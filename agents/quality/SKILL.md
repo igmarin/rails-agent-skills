@@ -17,7 +17,7 @@ metadata:
   dependencies: "apply-code-conventions, apply-stack-conventions, refactor-code, write-yard-docs"
   keywords: rails, quality, conventions, refactoring, documentation, yard, review
 ---
-# Quality Workflow
+# Quality Agent
 
 Orchestrates systematic code quality checks, safe refactoring, and documentation updates across three phases. Use this instead of individual refactoring or documentation skills when full production-readiness is required end-to-end.
 
@@ -29,7 +29,7 @@ Orchestrates systematic code quality checks, safe refactoring, and documentation
 - Reducing technical debt in existing Rails application
 - Enforcing coding standards across team
 
-## Workflow Phases
+## Agent Phases
 
 ### Phase 1: Conventions Review
 

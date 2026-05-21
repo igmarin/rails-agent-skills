@@ -5,34 +5,32 @@ require 'yaml'
 require_relative 'resource_discovery'
 
 module McpSkills
-  # MCP Tool that returns the content of a workflow SKILL.md given a workflow name.
-  # The agent invokes this tool by name ('use_workflow') with a workflow_name argument.
-  class WorkflowTool < MCP::Tool
-    tool_name 'use_workflow'
-    title 'Use Rails Workflow'
-    description '@deprecated — use use_agent instead. Read one Rails Agent Workflow by name after selecting it from list_workflows. ' \
+  class AgentTool < MCP::Tool
+    tool_name 'use_agent'
+    title 'Use Rails Agent'
+    description 'Read one Rails Agent by name after selecting it from list_agents. ' \
                 'Returns the full SKILL.md instructions plus structured metadata. ' \
                 'This tool is read-only and has no repository side effects.'
 
     input_schema(
       properties: {
-        'workflow_name' => {
+        'agent_name' => {
           type: 'string',
-          description: 'The directory name of the workflow (e.g. "tdd", "review", "bug-fix", "graphql")'
+          description: 'The directory name of the agent (e.g. "tdd", "review", "bug-fix", "graphql")'
         }
       },
-      required: ['workflow_name']
+      required: ['agent_name']
     )
 
     output_schema(
       properties: {
         found: {
           type: 'boolean',
-          description: 'Whether the requested workflow was found.'
+          description: 'Whether the requested agent was found.'
         },
         name: {
           type: %w[string null],
-          description: 'Normalized workflow name, or null when not found.'
+          description: 'Normalized agent name, or null when not found.'
         },
         path: {
           type: %w[string null],
@@ -48,7 +46,7 @@ module McpSkills
         },
         error: {
           type: %w[string null],
-          description: 'Error message when the workflow cannot be loaded.'
+          description: 'Error message when the agent cannot be loaded.'
         }
       },
       required: %w[found name path description content error],
@@ -56,7 +54,7 @@ module McpSkills
     )
 
     annotations(
-      title: 'Use Rails Workflow',
+      title: 'Use Rails Agent',
       read_only_hint: true,
       destructive_hint: false,
       idempotent_hint: true,
@@ -64,15 +62,11 @@ module McpSkills
     )
 
     class << self
-      # @param workflow_name [String] The workflow directory name.
-      # @param project_root [Pathname, String] Override for testing; defaults to repo root.
-      # @param server_context [Hash] MCP server context (unused but required by protocol).
-      # @return [MCP::Tool::Response]
-      def call(workflow_name:, server_context:, project_root: nil)
+      def call(agent_name:, server_context:, project_root: nil)
         root = resolve_root(project_root)
-        name = normalize_workflow_name(workflow_name)
-        workflow_dirs = ResourceDiscovery.call(root).workflow_dirs
-        dir = workflow_dirs.find { |d| d.basename.to_s == name }
+        name = normalize_agent_name(agent_name)
+        agent_dirs = ResourceDiscovery.call(root).agent_dirs
+        dir = agent_dirs.find { |d| d.basename.to_s == name }
 
         unless dir
           structured_content = not_found_content(name)
@@ -85,7 +79,7 @@ module McpSkills
 
         skill_md = dir.join('SKILL.md')
         unless skill_md.exist?
-          structured_content = not_found_content(name, "Workflow '#{name}' has no SKILL.md.")
+          structured_content = not_found_content(name, "Agent '#{name}' has no SKILL.md.")
           return MCP::Tool::Response.new(
             [{ type: 'text', text: structured_content[:error] }],
             error: true,
@@ -113,8 +107,8 @@ module McpSkills
         warn "[MCP] #{e.class}: #{e.message}"
         warn e.backtrace.first(5).join("\n") if e.backtrace
         structured_content = not_found_content(
-          name || workflow_name,
-          "Error reading workflow '#{name || workflow_name}': #{e.message}"
+          name || agent_name,
+          "Error reading agent '#{name || agent_name}': #{e.message}"
         )
         MCP::Tool::Response.new(
           [{ type: 'text', text: structured_content[:error] }],
@@ -125,15 +119,15 @@ module McpSkills
 
       private
 
-      def normalize_workflow_name(workflow_name)
-        parts = workflow_name.to_s.strip.split('/').reject(&:empty?)
+      def normalize_agent_name(agent_name)
+        parts = agent_name.to_s.strip.split('/').reject(&:empty?)
         return '' if parts.empty?
         return parts[-2].to_s if parts.last == 'SKILL.md'
 
         parts.last.to_s
       end
 
-      def not_found_content(name, message = "Workflow '#{name}' not found.")
+      def not_found_content(name, message = "Agent '#{name}' not found.")
         {
           found: false,
           name: nil,

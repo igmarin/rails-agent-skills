@@ -228,7 +228,7 @@ For workflows that can encounter errors:
 ## Naming Conventions
 
 - **Workflow names:** Use kebab-case (e.g., `tdd`, `quality`, `review`, `setup`, `engine`, `bug-fix`, `graphql`, `migration`, `background-job`)
-- **Directory names:** Match workflow name (e.g., `workflows/tdd/SKILL.md`)
+- **Directory names:** Match agent name (e.g., `agents/tdd/SKILL.md`)
 - **Skill references:** Use full skill path (e.g., `skills/testing/write-tests`)
 - **Phase names:** Use descriptive, action-oriented names (e.g., "Context & Test Design", not "Phase 1")
 

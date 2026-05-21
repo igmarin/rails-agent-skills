@@ -55,9 +55,9 @@ class SkillResourceBuilderTest < Minitest::Test
     end
   end
 
-  def test_builds_workflow_resources_with_custom_prefix
-    resources = McpSkills::SkillResourceBuilder.call(@skill_dir, prefix: 'workflow')
-    workflow_resource = resources.find { |r| r.name == 'workflow/code-review' }
-    refute_nil workflow_resource
+  def test_builds_agent_resources_with_custom_prefix
+    resources = McpSkills::SkillResourceBuilder.call(@skill_dir, prefix: 'agent')
+    agent_resource = resources.find { |r| r.name == 'agent/code-review' }
+    refute_nil agent_resource
   end
 end

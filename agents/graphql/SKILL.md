@@ -12,7 +12,7 @@ metadata:
   dependencies: "define-domain-language, implement-graphql, security-check, write-tests"
   keywords: rails, graphql, api, ddd, domain, security, tdd, schema
 ---
-# GraphQL Workflow
+# GraphQL Agent
 
 Orchestrates systematic GraphQL API development with Domain-Driven Design principles, ensuring proper domain boundaries, type-safe schemas, TDD implementation, and security best practices.
 
@@ -25,7 +25,7 @@ Orchestrates systematic GraphQL API development with Domain-Driven Design princi
 - Adding GraphQL features to Rails projects
 - Migrating REST APIs to GraphQL
 
-## Workflow Phases
+## Agent Phases
 
 ### Phase 1: Domain Modeling
 

@@ -1,0 +1,13 @@
+.git
+.gitignore
+.gitattributes
+.cloudflare
+.tessl
+tessl-evals/
+evals/
+personal-evals/
+plans/
+tmp/
+node_modules/
+package-lock.json
+cloudflare_mcp/

@@ -16,9 +16,9 @@ metadata:
   phases: "Phase 1: Context & Onboarding, Phase 2: CI/CD Configuration, Phase 3: Environment Validation"
   hard_gates: "Environment Check, CI/CD Configuration, Environment Validation"
   dependencies: "load-context, setup-environment"
-  keywords: rails, setup, onboarding, ci/cd, workflow, devops, configuration
+  keywords: rails, setup, onboarding, ci/cd, agent, devops, configuration
 ---
-# Setup Workflow
+# Setup Agent
 
 Orchestrates the full Rails project setup from context gathering through CI/CD configuration.
 
@@ -29,7 +29,7 @@ Orchestrates the full Rails project setup from context gathering through CI/CD c
 - Configuring CI/CD pipeline
 - Docker/environment setup
 
-## Workflow Phases
+## Agent Phases
 
 ### Phase 1: Context & Onboarding
 

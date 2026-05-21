@@ -34,10 +34,10 @@ def build_fixture_tree(base_dir)
   docs_dir.join('workflows').mkpath
   docs_dir.join('workflows', 'discovery.md').write('# Discovery Docs')
 
-  workflows_dir = base.join('workflows', 'review-workflow')
-  workflows_dir.mkpath
-  workflows_dir.join('SKILL.md').write('# review-workflow')
-  workflows_dir.join('EXAMPLES.md').write('# Workflow examples')
+  agent_dir = base.join('agents', 'review')
+  agent_dir.mkpath
+  agent_dir.join('SKILL.md').write('# review agent')
+  agent_dir.join('EXAMPLES.md').write('# Agent examples')
 
   tessl_dir = base.join('.tessl', 'tiles', 'owner', 'repo', 'code-review')
   tessl_dir.mkpath

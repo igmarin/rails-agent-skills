@@ -1,7 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { McpAgent } from "agents/mcp";
 import { z } from "zod";
-import { DEFAULT_RAW_BASE, listSkills, loadSkill, listWorkflows, loadWorkflow } from "./skill-content";
+import { DEFAULT_RAW_BASE, listSkills, loadSkill, listAgents, loadAgent, listWorkflows, loadWorkflow } from "./skill-content";
 
 export interface Env {
   RailsAgentSkillsMCP: DurableObjectNamespace<RailsAgentSkillsMCP>;
@@ -59,6 +59,27 @@ const useSkillOutputSchema = {
   description: z.string().nullable().describe("Short routing description, or null when not found."),
   content: z.string().nullable().describe("Full SKILL.md instructions, or null when not found."),
   error: z.string().nullable().describe("Error message when the skill cannot be loaded."),
+};
+
+const agentMetadataSchema = z.object({
+  name: z.string().describe("Agent directory name, for example tdd or bug-fix."),
+  path: z.string().describe("Repository path to the agent's SKILL.md file."),
+  description: z.string().describe("Short routing description from the agent frontmatter."),
+  keywords: z.string().describe("Comma-separated discovery keywords."),
+});
+
+const listAgentsOutputSchema = {
+  count: z.number().int().nonnegative().describe("Number of agents returned."),
+  agents: z.array(agentMetadataSchema).describe("Rails Agents available through use_agent."),
+};
+
+const useAgentOutputSchema = {
+  found: z.boolean().describe("Whether the requested agent was found."),
+  name: z.string().nullable().describe("Normalized agent name, or null when not found."),
+  path: z.string().nullable().describe("Repository path to SKILL.md, or null when not found."),
+  description: z.string().nullable().describe("Short routing description, or null when not found."),
+  content: z.string().nullable().describe("Full SKILL.md instructions, or null when not found."),
+  error: z.string().nullable().describe("Error message when the agent cannot be loaded."),
 };
 
 const workflowMetadataSchema = z.object({
@@ -162,10 +183,78 @@ const TOOL_REGISTRY = {
     },
     runtimeOutputSchema: listSkillsOutputSchema,
   },
-  use_workflow: {
-    title: "Use Rails Workflow",
+  use_agent: {
+    title: "Use Rails Agent",
     description:
-      "Read one Rails Agent Workflow by name after selecting it from list_workflows. Returns the full SKILL.md instructions plus structured metadata. This tool is read-only and has no repository side effects.",
+      "Read one Rails Agent by name after selecting it from list_agents. Returns the full SKILL.md instructions plus structured metadata. This tool is read-only and has no repository side effects.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        agent_name: {
+          type: "string",
+          description: 'The directory name of the agent (e.g. "tdd", "review", "bug-fix", "graphql").',
+        },
+      },
+      required: ["agent_name"],
+      additionalProperties: false,
+    },
+    runtimeInputSchema: {
+      agent_name: z.string().describe('Agent name, for example tdd, review, or bug-fix.'),
+    },
+    outputSchema: {
+      type: "object",
+      properties: {
+        found: { type: "boolean", description: "Whether the requested agent was found." },
+        name: { type: ["string", "null"], description: "Normalized agent name, or null when not found." },
+        path: { type: ["string", "null"], description: "Repository path to SKILL.md, or null when not found." },
+        description: { type: ["string", "null"], description: "Short routing description, or null when not found." },
+        content: { type: ["string", "null"], description: "Full SKILL.md instructions, or null when not found." },
+        error: { type: ["string", "null"], description: "Error message when the agent cannot be loaded." },
+      },
+      required: ["found", "name", "path", "description", "content", "error"],
+      additionalProperties: false,
+    },
+    runtimeOutputSchema: useAgentOutputSchema,
+  },
+  list_agents: {
+    title: "List Rails Agents",
+    description:
+      "Discover available Rails Agents before loading one with use_agent. Returns names, paths, descriptions, and keywords only; it does not return full agent bodies. This tool is read-only and has no repository side effects.",
+    inputSchema: {
+      type: "object",
+      properties: {},
+      additionalProperties: false,
+    },
+    runtimeInputSchema: {},
+    outputSchema: {
+      type: "object",
+      properties: {
+        count: { type: "integer", minimum: 0, description: "Number of agents returned." },
+        agents: {
+          type: "array",
+          description: "Rails Agents available through use_agent.",
+          items: {
+            type: "object",
+            properties: {
+              name: { type: "string", description: "Agent directory name." },
+              path: { type: "string", description: "Repository path to SKILL.md." },
+              description: { type: "string", description: "Short routing description." },
+              keywords: { type: "string", description: "Comma-separated discovery keywords." },
+            },
+            required: ["name", "path", "description", "keywords"],
+            additionalProperties: false,
+          },
+        },
+      },
+      required: ["count", "agents"],
+      additionalProperties: false,
+    },
+    runtimeOutputSchema: listAgentsOutputSchema,
+  },
+  use_workflow: {
+    title: "[deprecated] Use Rails Workflow",
+    description:
+      "@deprecated — use use_agent. Read one Rails Agent Workflow by name after selecting it from list_workflows. Returns the full SKILL.md instructions plus structured metadata. This tool is read-only and has no repository side effects.",
     inputSchema: {
       type: "object",
       properties: {
@@ -196,9 +285,9 @@ const TOOL_REGISTRY = {
     runtimeOutputSchema: useWorkflowOutputSchema,
   },
   list_workflows: {
-    title: "List Rails Workflows",
+    title: "[deprecated] List Rails Workflows",
     description:
-      "Discover available Rails Agent Workflows before loading one with use_workflow. Returns names, paths, descriptions, and keywords only; it does not return full workflow bodies. This tool is read-only and has no repository side effects.",
+      "@deprecated — use list_agents. Discover available Rails Agent Workflows before loading one with use_workflow. Returns names, paths, descriptions, and keywords only; it does not return full workflow bodies. This tool is read-only and has no repository side effects.",
     inputSchema: {
       type: "object",
       properties: {},
@@ -309,6 +398,67 @@ export class RailsAgentSkillsMCP extends McpAgent<Env> {
 
       return {
         content: [{ type: "text", text: skills.map((skill) => `${skill.name}\t${skill.category}\t${skill.description}`).join("\n") }],
+        structuredContent,
+      };
+    });
+
+    this.server.registerTool(
+      "use_agent",
+      {
+        title: TOOL_REGISTRY.use_agent.title,
+        description: TOOL_REGISTRY.use_agent.description,
+        inputSchema: TOOL_REGISTRY.use_agent.runtimeInputSchema,
+        outputSchema: TOOL_REGISTRY.use_agent.runtimeOutputSchema,
+        annotations: toolAnnotations(TOOL_REGISTRY.use_agent.title),
+      },
+      async ({ agent_name }) => {
+        const agent = await loadAgent(agent_name, fetch, rawBase(this.env));
+
+        if (!agent) {
+          const structuredContent = {
+            found: false,
+            name: null,
+            path: null,
+            description: null,
+            content: null,
+            error: `Agent '${agent_name}' not found.`,
+          };
+
+          return {
+            isError: true,
+            content: [{ type: "text", text: structuredContent.error }],
+            structuredContent,
+          };
+        }
+
+        const structuredContent = {
+          found: true,
+          name: agent.name,
+          path: agent.path,
+          description: agent.description,
+          content: agent.content,
+          error: null,
+        };
+
+        return {
+          content: [{ type: "text", text: agent.content }],
+          structuredContent,
+        };
+      },
+    );
+
+    this.server.registerTool("list_agents", {
+      title: TOOL_REGISTRY.list_agents.title,
+      description: TOOL_REGISTRY.list_agents.description,
+      inputSchema: TOOL_REGISTRY.list_agents.runtimeInputSchema,
+      outputSchema: TOOL_REGISTRY.list_agents.runtimeOutputSchema,
+      annotations: toolAnnotations(TOOL_REGISTRY.list_agents.title),
+    }, async () => {
+      const agents = await listAgents(fetch, rawBase(this.env));
+      const structuredContent = { count: agents.length, agents };
+
+      return {
+        content: [{ type: "text", text: agents.map((a) => `${a.name}\t${a.description}`).join("\n") }],
         structuredContent,
       };
     });

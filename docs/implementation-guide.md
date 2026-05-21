@@ -12,7 +12,7 @@ The recommended way to use this library is via the **MCP Server Approach**. The 
 
 ## MCP Server (Recommended)
 
-The MCP server exposes docs and workflows as resources and loads skills on demand through the `use_skill` tool.
+The MCP server exposes docs and agents as resources and loads skills on demand through the `use_skill` and `use_agent` tools.
 
 For complete MCP setup instructions, exact host-specific config snippets, Docker examples, official registry details, and troubleshooting, see [mcp_server/README.md](../mcp_server/README.md). That file is the canonical source of truth for MCP setup.
 

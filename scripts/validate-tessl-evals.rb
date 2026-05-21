@@ -25,7 +25,10 @@ end
 
 $failures = 0
 tile = read_json(TILE_PATH)
-publishable_skills = tile.fetch("skills").reject { |_name, spec| spec.fetch("path").start_with?("workflows/") }
+publishable_skills = tile.fetch("skills").reject { |_name, spec|
+  path = spec.fetch("path")
+  path.start_with?("workflows/") || path.start_with?("agents/")
+}
 expected_names = publishable_skills.keys.to_set
 
 unless Dir.exist?(EVAL_ROOT)

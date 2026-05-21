@@ -12,7 +12,7 @@ metadata:
   dependencies: "triage-bug, plan-tests, write-tests"
   keywords: rails, bug-fix, debugging, testing, tdd, production, regression
 ---
-# Bug Fix Workflow
+# Bug Fix Agent
 
 Orchestrates systematic bug resolution from initial report through verified fix, ensuring bugs are properly understood, reproduced with tests, fixed with TDD discipline, and verified without regressions.
 
@@ -25,7 +25,7 @@ Orchestrates systematic bug resolution from initial report through verified fix,
 - Debugging unexpected application behavior
 - Fixing security vulnerabilities
 
-## Workflow Phases
+## Agent Phases
 
 ### Phase 1: Bug Triage
 

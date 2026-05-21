@@ -13,15 +13,15 @@ metadata:
   phases: "Phase 1: Engine Authoring, Phase 2: Testing Setup, Phase 3: Implementation & Review, Phase 4: Documentation & Release"
   hard_gates: "Engine Structure Check, Tests Run, Isolation Before Integration"
   dependencies: "create-engine, test-engine, review-engine, upgrade-engine, document-engine, release-engine"
-  keywords: rails, engine, workflow, gem, release, testing, extraction
+  keywords: rails, engine, agent, gem, release, testing, extraction
 ---
-# Engine Workflow
+# Engine Agent
 
 Orchestrates the full lifecycle of Rails engine development from scaffolding to release.
 
 > **Note:** Sub-skills referenced below (`skills/engines/create-engine`, `test-engine`, `review-engine`, etc.) are expected to exist separately in the skill bundle.
 
-## Workflow Phases
+## Agent Phases
 
 ### Phase 1: Engine Authoring
 

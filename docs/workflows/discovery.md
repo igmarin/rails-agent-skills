@@ -94,7 +94,8 @@ spec/ or test/
 docs/
 ├── architecture.md  # System design
 ├── api/             # API documentation
-└── workflows/       # This directory
+└── agents/          # Callable agents
+    └── tdd/         # TDD agent
 ```
 
 ### Database Setup Commands

@@ -53,36 +53,36 @@ flowchart TD
 
 ---
 
-## Docs vs. Callable Workflow Skills
+## Docs vs. Callable Agent Skills
 
-This directory contains **reference guides** describing each stage. For **executable orchestration**, use the callable workflow skills in `workflows/`:
+This directory contains **reference guides** describing each stage. For **executable orchestration**, use the callable agents in `agents/`:
 
 | Stage Doc | Callable Skill | Status |
 |-----------|----------------|--------|
-| [development.md](development.md) | [`tdd`](../../workflows/tdd/SKILL.md) | Active |
-| [review.md](review.md) | [`review`](../../workflows/review/SKILL.md) | Active |
-| [setup.md](setup.md) | [`setup`](../../workflows/setup/SKILL.md) | Active |
-| [quality.md](quality.md) | [`quality`](../../workflows/quality/SKILL.md) | Active |
-| [engines.md](engines.md) | [`engine`](../../workflows/engine/SKILL.md) | Active |
+| [development.md](development.md) | [`tdd`](../../agents/tdd/SKILL.md) | Active |
+| [review.md](review.md) | [`review`](../../agents/review/SKILL.md) | Active |
+| [setup.md](setup.md) | [`setup`](../../agents/setup/SKILL.md) | Active |
+| [quality.md](quality.md) | [`quality`](../../agents/quality/SKILL.md) | Active |
+| [engines.md](engines.md) | [`engine`](../../agents/engine/SKILL.md) | Active |
 | [discovery.md](discovery.md) | *(none — linear, no orchestration needed)* | Doc only |
 | [planning.md](planning.md) | *(none — linear, no orchestration needed)* | Doc only |
 
-**When to use which:** Read the stage doc to understand the full context and rationale. Invoke the callable skill when you want the agent to execute the workflow automatically.
+**When to use which:** Read the stage doc to understand the full context and rationale. Invoke the callable agent when you want the agent to execute the orchestration automatically.
 
 ---
 
-## Specialized Workflows
+## Specialized Agents
 
-| Situation | Workflow | Quick Entry |
-|-----------|----------|-------------|
-| **Bug fix** | [`bug-fix`](../../workflows/bug-fix/SKILL.md) | `triage-bug` → reproduce test → fix → verify |
+| Situation | Agent | Quick Entry |
+|-----------|-------|-------------|
+| **Bug fix** | [`bug-fix`](../../agents/bug-fix/SKILL.md) | `triage-bug` → reproduce test → fix → verify |
 | **Refactoring** | [Refactor Safely](quality.md#refactor-code) | `refactor-code` → characterization tests → extract |
 | **Performance** | [Performance Optimization](development.md#performance) | `optimize-performance` |
-| **GraphQL** | [`graphql`](../../workflows/graphql/SKILL.md) | domain modeling → schema → TDD → security |
+| **GraphQL** | [`graphql`](../../agents/graphql/SKILL.md) | domain modeling → schema → TDD → security |
 | **Authorization** | [Authorization Setup](development.md#authorization) | `implement-authorization` |
 | **External API** | [API Integration](development.md#external-api-integration) | `integrate-api-client` |
-| **Database migration** | [`migration`](../../workflows/migration/SKILL.md) | plan → test → staging → production |
-| **Background job** | [`background-job`](../../workflows/background-job/SKILL.md) | design → TDD → retry config → monitoring |
+| **Database migration** | [`migration`](../../agents/migration/SKILL.md) | plan → test → staging → production |
+| **Background job** | [`background-job`](../../agents/background-job/SKILL.md) | design → TDD → retry config → monitoring |
 
 ---
 
@@ -121,13 +121,13 @@ New to the project?
 
 ## Cross-Cutting: Tests Gate Implementation
 
-All code-producing workflows include this gate:
+All code-producing agents include this gate:
 
 ```
 Write test → Run test → Verify it FAILS → Implement → Verify it PASSES
 ```
 
-See details in each specific workflow.
+See details in each specific agent.
 
 ---
 

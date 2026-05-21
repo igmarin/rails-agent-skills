@@ -58,14 +58,17 @@
     "orchestration": "skills/orchestration/",
     "patterns": "skills/patterns/",
     "planning": "skills/planning/",
-    "testing": "skills/testing/",
-    "workflows": "skills/workflows/"
+    "testing": "skills/testing/"
   },
-  "workflows": {
-    "tdd-loop": "skills/workflows/tdd-workflow",
-    "review-flow": "skills/workflows/review-workflow",
-    "setup-flow": "skills/workflows/setup-workflow",
-    "quality-flow": "skills/workflows/quality-workflow",
-    "engines-flow": "skills/workflows/engine-workflow"
+  "agents": {
+    "tdd-loop": "agents/tdd/SKILL.md",
+    "review-flow": "agents/review/SKILL.md",
+    "setup-flow": "agents/setup/SKILL.md",
+    "quality-flow": "agents/quality/SKILL.md",
+    "engines-flow": "agents/engine/SKILL.md",
+    "bug-fix": "agents/bug-fix/SKILL.md",
+    "graphql": "agents/graphql/SKILL.md",
+    "migration": "agents/migration/SKILL.md",
+    "background-job": "agents/background-job/SKILL.md"
   }
 }

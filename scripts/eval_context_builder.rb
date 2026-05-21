@@ -108,6 +108,7 @@ module McpSkills
 
     def infer_target_type(path)
       relative = relative_path(path)
+      return 'agent' if relative.start_with?('agents/')
       return 'workflow' if relative.start_with?('workflows/')
 
       'skill'

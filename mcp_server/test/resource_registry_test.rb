@@ -23,9 +23,9 @@ class ResourceRegistryTest < Minitest::Test
     assert names.any? { |n| n.start_with?('doc/') }, 'Should include doc resources'
   end
 
-  def test_all_resources_includes_workflow_resources
+  def test_all_resources_includes_agent_resources
     names = @registry.all_resources.map(&:name)
-    assert_includes names, 'workflow/review-workflow'
+    assert_includes names, 'agent/review'
   end
 
   def test_all_resources_excludes_skill_resources
@@ -55,14 +55,14 @@ class ResourceRegistryTest < Minitest::Test
     end
   end
 
-  def test_read_returns_workflow_content
-    workflow_uri = @registry.all_resources
-                            .find { |r| r.name == 'workflow/review-workflow' }
-                            &.uri
-    refute_nil workflow_uri, 'Expected to find workflow/review-workflow resource'
+  def test_read_returns_agent_content
+    agent_uri = @registry.all_resources
+                           .find { |r| r.name == 'agent/review' }
+                           &.uri
+    refute_nil agent_uri, 'Expected to find agent/review resource'
 
-    result = @registry.read(workflow_uri)
-    assert_includes result.first[:text], 'review-workflow'
+    result = @registry.read(agent_uri)
+    assert_includes result.first[:text], 'review agent'
   end
 
   def test_read_raises_for_unknown_uri

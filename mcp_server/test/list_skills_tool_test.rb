@@ -18,7 +18,7 @@ class ListSkillsToolTest < Minitest::Test
     result = McpSkills::ListSkillsTool.call(project_root: @base, server_context: {})
 
     assert_instance_of MCP::Tool::Response, result
-    assert_equal 4, result.structured_content[:count]
+    assert_equal 3, result.structured_content[:count]
     refute_includes result.structured_content[:skills].map { |skill| skill[:name] }, 'converting-skill-to-tessl-tile'
 
     code_review = result.structured_content[:skills].find { |skill| skill[:name] == 'code-review' }

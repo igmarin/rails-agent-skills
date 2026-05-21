@@ -184,7 +184,7 @@ FileUtils.mkdir_p(OUTPUT_ROOT)
 
 skills.each do |skill_name, spec|
   skill_path = spec.fetch("path")
-  next if skill_path.start_with?("workflows/")
+  next if skill_path.start_with?("workflows/") || skill_path.start_with?("agents/")
 
   write_skill_eval(skill_name, skill_path)
 end

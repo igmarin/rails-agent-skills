@@ -10,11 +10,11 @@ metadata:
   phases: "Phase 1: Context & Test Design, Phase 2: Implementation, Phase 3: Iterate, Phase 4: Finish"
   hard_gates: "Test Feedback, Proposal Checkpoint, Implementation Verification, Quality Check"
   dependencies: "load-context, plan-tests, write-tests, write-yard-docs, code-review"
-  keywords: rails, tdd, workflow, feature, implementation, testing, orchestration
+  keywords: rails, tdd, agent, feature, implementation, testing, orchestration
 ---
-# TDD Workflow
+# TDD Agent
 
-## Workflow Phases
+## Agent Phases
 
 ### Phase 1: Context & Test Design
 1. **context/load-context**: Load schema, routes, and patterns.

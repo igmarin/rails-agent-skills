@@ -12,7 +12,7 @@ metadata:
   dependencies: "review-migration"
   keywords: rails, migration, database, schema, postgresql, production, deployment
 ---
-# Migration Workflow
+# Migration Agent
 
 Orchestrates safe database migration development and deployment with comprehensive safety checks, testing at each stage, and production monitoring to ensure schema changes don't cause downtime or data loss.
 
@@ -25,7 +25,7 @@ Orchestrates safe database migration development and deployment with comprehensi
 - Any database schema changes requiring migration
 - Production database modifications
 
-## Workflow Phases
+## Agent Phases
 
 ### Phase 1: Migration Planning
 
