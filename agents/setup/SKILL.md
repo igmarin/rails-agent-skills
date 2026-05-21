@@ -2,7 +2,7 @@
 name: setup
 license: MIT
 description: >
-  Complete Rails project setup workflow. Installs dependencies via Bundler, configures database
+  Complete Rails project setup loop. Installs dependencies via Bundler, configures database
   connections, generates Rails app scaffold, validates the dev environment, and generates GitHub
   Actions or GitLab CI pipelines with linting, testing, and security scanning. Use when starting
   a new Rails project, running `rails new`, configuring a Gemfile or .ruby-version, setting up a
@@ -170,4 +170,4 @@ act push  # GitHub Actions local runner (optional)
 | None (entry point) | setup | tdd (start developing) |
 | None (entry point) | setup | create-prd (plan features first) |
 
-**From AGENTS.md:** This is the setup workflow. For development, chain to tdd.
+**From AGENTS.md:** This is the setup agent loop. For development, chain to tdd.

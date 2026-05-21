@@ -1,4 +1,4 @@
-# Workflow: Review & Validation (50)
+# Agent Stage: Review & Validation (50)
 
 **When to use:** Review your own or others' code, respond to feedback, or audit security/architecture.
 
@@ -126,7 +126,7 @@ graph TB
 
 ---
 
-## Skills in this Workflow
+## Skills in this Stage
 
 | Skill | Description | Trigger words |
 |-------|-------------|---------------|

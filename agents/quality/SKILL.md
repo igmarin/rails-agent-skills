@@ -2,9 +2,9 @@
 name: quality
 license: MIT
 description: >
-  Complete code quality workflow for Rails projects. Enforces naming conventions, reduces duplication,
+  Complete code quality loop for Rails projects. Enforces naming conventions, reduces duplication,
   extracts methods and service objects, reduces complexity, and generates YARD docstrings and inline
-  comments across the full codebase. Use this composite end-to-end workflow instead of individual
+  comments across the full codebase. Use this composite end-to-end loop instead of individual
   refactoring or documentation skills when the full three-phase production-readiness review is needed
   together in one pass. Use when: code review prep, before PR, full Rails quality sweep, quality audit,
   production-ready review, end-to-end quality check.
@@ -190,7 +190,7 @@ Document public APIs via **skills/patterns/write-yard-docs** (annotate all publi
 
 ## Integration
 
-| Predecessor | This Workflow | Successor |
+| Predecessor | This Agent | Successor |
 |-------------|---------------|-----------|
 | tdd | quality | review |
 | refactor-code | quality | write-yard-docs |
@@ -198,7 +198,7 @@ Document public APIs via **skills/patterns/write-yard-docs** (annotate all publi
 
 ## When to Use This vs. Individual Skills
 
-- **Full pre-PR sweep (all three phases):** Use this workflow
+- **Full pre-PR sweep (all three phases):** Use this agent
 - **Only fix linting / conventions:** Use `apply-code-conventions`
 - **Only refactor a specific file:** Use `refactor-code`
 - **Only add YARD docs:** Use `write-yard-docs`

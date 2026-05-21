@@ -22,7 +22,7 @@ Built on the [official Ruby MCP SDK](https://github.com/modelcontextprotocol/rub
 
 | Type | Prefix / Name | Source |
 |------|---------------|--------|
-| **Resources** | `doc/<name>` | All `*.md` files under `docs/`, including nested docs such as `docs/workflows/*.md` |
+| **Resources** | `doc/<name>` | All `*.md` files under `docs/`, including nested docs such as `docs/agents/*.md` |
 | **Resources** | `agent/<name>` | Every agent directory under `agents/<name>/`, exposed from its `SKILL.md` plus supported companion files |
 | **Tool** | `list_skills` | Invocable read-only discovery tool: returns public skill names, categories, paths, and frontmatter descriptions |
 | **Tool** | `use_skill` | Invocable read-only loader tool: given a `skill_name`, returns structured metadata plus the full `SKILL.md` content for a public skill |

@@ -2,7 +2,7 @@
 name: review
 license: MIT
 description: >
-  Multi-pass Rails code review workflow that identifies bugs, security vulnerabilities, and architectural issues; assigns severity levels (Critical, Suggestion, Nice-to-have); and generates actionable review comments with a mandatory re-review loop for Critical findings. Use for full PR review workflows, multi-pass security or architecture audits, or implementing and verifying responses to review feedback. Trigger: review this PR, full code review, multi-pass review, audit security vulnerabilities, review architecture, respond to review feedback, implement review fixes.
+  Multi-pass Rails code review loop that identifies bugs, security vulnerabilities, and architectural issues; assigns severity levels (Critical, Suggestion, Nice-to-have); and generates actionable review comments with a mandatory re-review loop for Critical findings. Use for full PR reviews, multi-pass security or architecture audits, or implementing and verifying responses to review feedback. Trigger: review this PR, full code review, multi-pass review, audit security vulnerabilities, review architecture, respond to review feedback, implement review fixes.
 metadata:
   version: 1.0.0
   user-invocable: "true"

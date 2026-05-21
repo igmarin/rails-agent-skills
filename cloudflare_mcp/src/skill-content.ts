@@ -10,9 +10,6 @@ export type AgentManifest = {
   agents: Record<string, SkillSpec>;
 };
 
-// @deprecated Use AgentManifest instead
-export type WorkflowManifest = AgentManifest;
-
 export type SkillMetadata = {
   name: string;
   path: string;
@@ -34,12 +31,6 @@ export type AgentMetadata = {
 export type AgentContent = AgentMetadata & {
   content: string;
 };
-
-// @deprecated Use AgentMetadata instead
-export type WorkflowMetadata = AgentMetadata;
-
-// @deprecated Use AgentContent instead
-export type WorkflowContent = AgentContent;
 
 export const DEFAULT_RAW_BASE = "https://raw.githubusercontent.com/igmarin/rails-agent-skills/main";
 
@@ -72,7 +63,6 @@ export function categoryFromPath(path: string): string {
   const parts = path.split("/");
   if (parts[0] === "skills" && parts[1]) return parts[1];
   if (parts[0] === "agents") return "agent";
-  if (parts[0] === "workflows") return "workflow";
 
   return "unknown";
 }
@@ -266,29 +256,4 @@ export async function loadAgent(
     keywords: extractKeywords(content),
     content,
   };
-}
-
-// @deprecated Use loadAgentManifest instead
-export async function loadWorkflowManifest(
-  fetcher: Fetcher = fetch,
-  rawBase = DEFAULT_RAW_BASE,
-): Promise<WorkflowManifest> {
-  return loadAgentManifest(fetcher, rawBase);
-}
-
-// @deprecated Use listAgents instead
-export async function listWorkflows(
-  fetcher: Fetcher = fetch,
-  rawBase = DEFAULT_RAW_BASE,
-): Promise<WorkflowMetadata[]> {
-  return listAgents(fetcher, rawBase);
-}
-
-// @deprecated Use loadAgent instead
-export async function loadWorkflow(
-  workflowName: string,
-  fetcher: Fetcher = fetch,
-  rawBase = DEFAULT_RAW_BASE,
-): Promise<WorkflowContent | null> {
-  return loadAgent(workflowName, fetcher, rawBase);
 }

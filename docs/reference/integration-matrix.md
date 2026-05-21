@@ -12,7 +12,7 @@ Integration matrix: which skill connects to which and in what order.
 
 ---
 
-## Complete Workflows
+## Complete Agent Loops
 
 ### TDD Feature Loop (Main)
 
@@ -240,7 +240,7 @@ Review?
 |------|------|------------|---------|
 | Test Feedback | checkpoint | plan-tests | Confirm correct test before implementing |
 | Implementation Proposal | checkpoint | write-tests | Approve approach before code |
-| Linters + Suite | gate | workflow-guide.md | All linters and tests pass |
+| Linters + Suite | gate | agent-guide.md | All linters and tests pass |
 | PRD Approved | gate | create-prd | Don't implement without approved PRD |
 | Characterization Tests | gate | refactor-code | Tests pass on current code before refactor |
 | Engine Specs | gate | create-engine | Specs fail before implementing engine |
@@ -250,4 +250,4 @@ Review?
 ## See also
 
 - [Skill Catalog](skill-catalog.md) — Complete skills list
-- [Workflows Index](../workflows/) — Step-by-step workflows
+- [Agent Guides Index](../agents/) — Step-by-step agent stages

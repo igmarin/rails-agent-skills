@@ -5,10 +5,8 @@ import {
   extractSkillDescription,
   listSkills,
   listAgents,
-  listWorkflows,
   loadSkill,
   loadAgent,
-  loadWorkflow,
   normalizeSkillName,
   resolveSkillPath,
   type TileManifest,
@@ -177,33 +175,5 @@ describe("agent loading", () => {
 
   it("returns null for unknown agents", async () => {
     await expect(loadAgent("missing", fetcher as typeof fetch, "https://example.test")).resolves.toBeNull();
-  });
-});
-
-describe("workflow backward compat", () => {
-  const agentBody = `---\nname: tdd\ndescription: >\n  Full TDD feature cycle: test, implement, review, PR.\nmetadata:\n  keywords: tdd, test-driven, red-green-refactor\n---\n# TDD Agent\n`;
-
-  function fetcher(url: string) {
-    if (url.endsWith("/agents.json")) {
-      return Promise.resolve(new Response(JSON.stringify(agentManifest)));
-    }
-
-    if (url.endsWith("/agents/tdd/SKILL.md")) {
-      return Promise.resolve(new Response(agentBody));
-    }
-
-    return Promise.resolve(new Response("not found", { status: 404 }));
-  }
-
-  it("listWorkflows delegates to listAgents", async () => {
-    const workflows = await listWorkflows(fetcher as typeof fetch, "https://example.test");
-    expect(workflows).toHaveLength(1);
-    expect(workflows[0].name).toBe("tdd");
-  });
-
-  it("loadWorkflow delegates to loadAgent", async () => {
-    const result = await loadWorkflow("tdd", fetcher as typeof fetch, "https://example.test");
-    expect(result).not.toBeNull();
-    expect(result!.name).toBe("tdd");
   });
 });

@@ -34,12 +34,29 @@ section "Validating personal eval scenarios"
 while IFS= read -r scenario_dir; do
   relative_dir="${scenario_dir#./}"
 
+  # Skip if it is a helper/fixture directory and not a scenario
+  if [[ ! -f "$scenario_dir/task.md" && ! -f "$scenario_dir/criteria.json" && ! -f "$scenario_dir/metadata.json" ]]; then
+    continue
+  fi
+
   [[ -f "$scenario_dir/task.md" ]] || fail "$relative_dir is missing task.md"
   [[ -f "$scenario_dir/criteria.json" ]] || fail "$relative_dir is missing criteria.json"
   [[ -f "$scenario_dir/metadata.json" ]] || fail "$relative_dir is missing metadata.json"
 
   if [[ -f "$scenario_dir/criteria.json" ]]; then
-    ruby -rjson -e 'data = JSON.parse(File.read(ARGV.fetch(0))); abort "missing weighted_checklist type" unless data["type"] == "weighted_checklist"; checklist = data.fetch("checklist"); total = checklist.sum { |item| item.fetch("max_score") }; abort "criteria total must be 100, got #{total}" unless total == 100' "$scenario_dir/criteria.json" \
+    ruby -rjson -e '
+      data = JSON.parse(File.read(ARGV.fetch(0)))
+      if data.key?("dimensions")
+        dimensions = data.fetch("dimensions")
+        total = dimensions.sum { |item| item.fetch("max_score") }
+        abort "criteria total must be 100, got #{total}" unless total == 100
+      else
+        abort "missing weighted_checklist type" unless data["type"] == "weighted_checklist"
+        checklist = data.fetch("checklist")
+        total = checklist.sum { |item| item.fetch("max_score") }
+        abort "criteria total must be 100, got #{total}" unless total == 100
+      end
+    ' "$scenario_dir/criteria.json" \
       && pass "$relative_dir criteria.json is valid" \
       || fail "$relative_dir criteria.json failed validation"
   fi
@@ -55,7 +72,7 @@ while IFS= read -r scenario_dir; do
       abort "missing required keys: #{missing.join(", ")}" unless missing.empty?
 
       abort "id must match directory name" unless data.fetch("id") == File.basename(scenario_dir)
-      abort "target_type must be skill or workflow" unless %w[skill workflow].include?(data.fetch("target_type"))
+      abort "target_type must be skill or agent" unless %w[skill agent].include?(data.fetch("target_type"))
       abort "context_mode must be skill_bundle_xml" unless data.fetch("context_mode") == "skill_bundle_xml"
       abort "requires_companion_resources must be boolean" unless [true, false].include?(data.fetch("requires_companion_resources"))
 
@@ -65,8 +82,8 @@ while IFS= read -r scenario_dir; do
 
       target_name = data.fetch("target_name")
       target_path =
-        if data.fetch("target_type") == "workflow"
-          File.join(root, "workflows", target_name, "SKILL.md")
+        if data.fetch("target_type") == "agent"
+          File.join(root, "agents", target_name, "SKILL.md")
         else
           Dir[File.join(root, "skills", "*", target_name, "SKILL.md")].first
         end

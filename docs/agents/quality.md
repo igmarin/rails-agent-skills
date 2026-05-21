@@ -1,4 +1,4 @@
-# Workflow: Code Quality (40)
+# Agent Stage: Code Quality (40)
 
 **When to use:** Apply conventions, refactor existing code, or maintain quality during development.
 
@@ -103,7 +103,7 @@ graph TB
 
 ---
 
-## Skills in this Workflow
+## Skills in this Stage
 
 | Skill | Description | Trigger words |
 |-------|-------------|---------------|

@@ -35,8 +35,7 @@ In environments that support explicit context injection (like Cursor, Windsurf, 
 - **Gemini CLI:** `/activate_skill skill-name` or `/skill-name`
 
 **When to use:**
-Use this when you know exactly which workflow you want to follow and want to bypass the autonomous discovery phase. It is highly effective for enforcing strict constraints (like the "Tests Gate Implementation" rule) on specific tasks.
-
+Use this when you know exactly which skill or agent you want to follow and want to bypass the autonomous discovery phase. It is highly effective for enforcing strict constraints (like the "Tests Gate Implementation" rule) on specific tasks.
 ---
 
 ### 3. CLI (`gh skill` / `tessl` / `skills.sh`)
@@ -102,7 +101,7 @@ In environments that support chat commands, you can invoke agents directly:
 
 **Gemini CLI:**
 ```text
-/activate_workflow tdd
+/activate_agent tdd
 ```
 
 ### Available Agents

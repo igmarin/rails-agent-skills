@@ -35,7 +35,7 @@ class ResourceRegistryTest < Minitest::Test
 
   def test_all_resources_includes_nested_doc_resources
     names = @registry.all_resources.map(&:name)
-    assert_includes names, 'doc/workflows/discovery'
+    assert_includes names, 'doc/agents/discovery'
   end
 
   def test_skill_template_is_excluded

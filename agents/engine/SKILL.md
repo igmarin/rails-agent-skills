@@ -2,7 +2,7 @@
 name: engine
 license: MIT
 description: >
-  Complete Rails engine development workflow. Orchestrates scaffolding engine structure and generating
+  Complete Rails engine development loop. Orchestrates scaffolding engine structure and generating
   mountable namespaces → testing → code review and dependency auditing → release.
   Use when creating, extracting, or maintaining Rails engines. Trigger: create engine,
   extract engine, engine release, engine testing, mountable engine, gem extraction.
@@ -93,7 +93,7 @@ bundle exec rspec --format progress 2>&1 | tail -5
 **Build engine features with quality gates:**
 
 1. **Implement features** using:
-   - tdd-workflow for complex features
+   - tdd agent for complex features
    - Individual skills for simple additions
 
 2. **skills/engines/review-engine** — Coupling assessment, API surface design, host app integration points
@@ -152,4 +152,4 @@ Not sure?          → skill-router
 | create-prd (engine requirements) | engine | tdd (engine features) |
 | None (extract existing) | engine | Host app integration |
 
-**From AGENTS.md:** This is the engine development workflow. Chain to tdd for feature development within the engine.
+**From AGENTS.md:** This is the engine development loop. Chain to tdd for feature development within the engine.

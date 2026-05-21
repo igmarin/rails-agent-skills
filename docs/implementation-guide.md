@@ -3,7 +3,7 @@
 Step-by-step install and verification for the **`rails-agent-skills`** repository on each supported platform.
 
 - **What this library is:** [README](../README.md)
-- **How to chain skills:** [workflow-guide.md](workflow-guide.md)
+- **How to chain skills:** [agent-guide.md](agent-guide.md)
 - **Skill file conventions:** [architecture.md](architecture.md)
 
 The recommended way to use this library is via the **MCP Server Approach**. The primary path for users is the official MCP distribution, with Docker available for repeatable installs and local Ruby/Bundler available for development or debugging.

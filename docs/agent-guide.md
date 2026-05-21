@@ -1,20 +1,20 @@
-# Workflow Guide — Rails Agent Skills
+# Agent Guide — Rails Agent Skills
 
-Companion to the [README](../README.md): **how to chain skills** in typical Rails workflows. For install paths and hooks, see [implementation-guide.md](implementation-guide.md). For `SKILL.md` structure and frontmatter rules, see [architecture.md](architecture.md).
+Companion to the [README](../README.md): **how to chain skills** using Rails agents. For install paths and hooks, see [implementation-guide.md](implementation-guide.md). For `SKILL.md` structure and frontmatter rules, see [architecture.md](architecture.md).
 
 ---
 
-## How to Invoke a Workflow: A Practical Guide
+## How to Invoke an Agent: A Practical Guide
 
-The key to using this skill library effectively is to guide the AI by **stating your goal** and then **explicitly referencing the workflow or skill** you want it to follow. This tells the AI *what* to do and *how* to do it according to the expert rules we've defined.
+The key to using this skill library effectively is to guide the AI by **stating your goal** and then **explicitly referencing the agent or skill** you want it to follow. This tells the AI *what* to do and *how* to do it according to the expert rules we've defined.
 
-### The Golden Rule: State the Goal, and Name the Workflow
+### The Golden Rule: State the Goal, and Name the Agent or Skill
 
-The most effective way to invoke a workflow is to follow this general formula:
+The most effective way to invoke a process is to follow this general formula:
 
-**`"[Your Goal]"`** + **`"following the [Skill Name / Workflow Name] process."`**
+**`"[Your Goal]"`** + **`"following the [Skill Name / Agent Name] process."`**
 
-By doing this, you turn a simple request into a robust, professional workflow, ensuring any AI—smart or not—is constrained to follow our best practices.
+By doing this, you turn a simple request into a robust, professional execution loop, ensuring any AI—smart or not—is constrained to follow our best practices.
 
 ### Example 1: A Safe Database Migration
 
@@ -33,7 +33,7 @@ By doing this, you turn a simple request into a robust, professional workflow, e
 This formula works for any task:
 
 *   **For a new feature:**
-    > *"Let's start building the 'user profile page' **following our TDD workflow**."*
+    > *"Let's start building the 'user profile page' **following our TDD agent loop**."*
 
 *   **For a bug fix:**
     > *"I've got a bug report about avatars. Let's use the **`triage-bug` skill** to create a failing test for it."*
@@ -45,9 +45,9 @@ You, the human, are the project lead. Your job is to set the direction and point
 
 ---
 
-## How to Invoke a Skill or Workflow (Claude Code)
+## How to Invoke a Skill or Agent (Claude Code)
 
-Skills and workflows are not slash commands or buttons — you invoke them through natural conversation. Claude reads `CLAUDE.md` at the start of each session and knows which skills exist and when to apply them. The key is to **describe what you want to do**, and Claude will load the right skill.
+Skills and agents are not slash commands or buttons — you invoke them through natural conversation. Claude reads `CLAUDE.md` at the start of each session and knows which skills and agents exist and when to apply them. The key is to **describe what you want to do**, and Claude will load the right skill or agent.
 
 ### Patterns that work
 
@@ -69,11 +69,11 @@ Skills and workflows are not slash commands or buttons — you invoke them throu
 → Claude loads triage-bug
 ```
 
-**Name the workflow directly** when you want the full chain:
+**Name the agent directly** when you want the full chain:
 ```
 "Run the TDD Feature Loop for this task"
 "Start with plan-tests, I need to add a new endpoint"
-"Follow the Bug Fix workflow for this issue"
+"Follow the Bug Fix agent loop for this issue"
 "Do a DDD-first design for this feature"
 ```
 
@@ -108,9 +108,9 @@ You respond with approval or redirections. Only then does Claude write the imple
 
 | Situation | What to say |
 |-----------|-------------|
-| You want a full workflow, not just one step | "Follow the TDD Feature Loop for this" |
+| You want a full agent loop, not just one step | "Follow the TDD Feature Loop for this" |
 | You want to start from planning | "Start with a PRD for this feature" |
-| You want only the review, not the full workflow | "Do a code review on this file / PR" |
+| You want only the review, not the full agent loop | "Do a code review on this file / PR" |
 | You want a security-focused review | "Run a security review on these changes" |
 | You received PR feedback and need help | "Help me respond to this review feedback" |
 | You want to check GraphQL conventions | "Review this resolver for best practices" |
@@ -146,9 +146,9 @@ See **`write-tests`** for the full gate cycle (red → green → refactor).
 
 ---
 
-## Primary Workflow: TDD Feature Loop
+## Primary Agent: TDD Feature Loop
 
-This is the most-used daily workflow. It covers everything from a task to a merged PR.
+This is the most-used daily agent loop. It covers everything from a task to a merged PR.
 
 ```mermaid
 flowchart TD
@@ -219,7 +219,7 @@ flowchart LR
 
 3. **plan-tests**: Choose the highest-value first failing spec before implementation starts.
 
-4. **TDD Feature Loop**: Follow the primary workflow above for each behavior in the task list.
+4. **TDD Feature Loop**: Follow the primary agent loop above for each behavior in the task list.
 
 5. **write-yard-docs**: Add or update YARD on every new or changed public class/method (English).
 
@@ -236,7 +236,7 @@ flowchart LR
 
 ## DDD-First Feature Design
 
-Use this workflow when the hard part is the **domain itself**: unclear business language, conflicting meanings, fuzzy ownership, or uncertainty about whether something belongs in a model, value object, or service.
+Use this design loop when the hard part is the **domain itself**: unclear business language, conflicting meanings, fuzzy ownership, or uncertainty about whether something belongs in a model, value object, or service.
 
 ```mermaid
 flowchart LR
@@ -255,7 +255,7 @@ flowchart LR
 4. **model-domain**: Decide the Rails-first tactical design: model, value object, service, repository, event, or simpler alternative.
 5. **generate-tasks**: Turn the design into an implementation plan or detailed checklist.
 6. **plan-tests**: Choose the best first failing spec before code is written.
-7. **TDD Feature Loop**: Follow the primary workflow for each behavior.
+7. **TDD Feature Loop**: Follow the primary agent loop for each behavior.
 
 **Key rules:**
 

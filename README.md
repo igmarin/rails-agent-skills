@@ -12,7 +12,7 @@ The project is built around one non-negotiable rule:
 Write test -> run test -> verify it fails for the right reason -> implement -> verify it passes
 ```
 
-That TDD gate is encoded directly into the skills and workflows, so agents do not just produce plausible Rails code. They follow a repeatable engineering process.
+That TDD gate is encoded directly into the skills and agents, so agents do not just produce plausible Rails code. They follow a repeatable engineering process.
 
 > Supported agent environments
 >
@@ -54,7 +54,7 @@ That TDD gate is encoded directly into the skills and workflows, so agents do no
 |------|---------|
 | `skills/` | 41 public atomic skills. Each skill has a `SKILL.md` entry point with task-specific instructions. |
 | `agents/` | 9 callable agents that chain skills into full development loops (tdd, quality, review, setup, engine, bug-fix, graphql, migration, background-job). |
-| `docs/` | Public documentation, architecture, workflow guides, skill catalog, and evaluation policy. |
+| `docs/` | Public documentation, architecture, agent guides, skill catalog, and evaluation policy. |
 | `mcp_server/` | Official Ruby MCP server exposing docs, agents, and skills via `list_skills`, `use_skill`, `list_agents`, `use_agent`. |
 | `tessl-evals/` | Tessl-native eval scenarios for publishable skills in `tile.json`. |
 | `personal-evals/` | Open examples for the upcoming `ruby-skill-bench` full-context evaluator. |
@@ -203,7 +203,7 @@ background-job (design -> TDD -> retry config -> monitoring)
 create-engine -> test-engine -> document-engine -> review-engine -> release-engine
 ```
 
-See [docs/workflow-guide.md](docs/workflow-guide.md) and [docs/workflows/](docs/workflows/) for the full process guide containing detailed Mermaid diagrams of each phase.
+See [docs/agent-guide.md](docs/agent-guide.md) and [docs/agents/](docs/agents/) for the full process guide containing detailed Mermaid diagrams of each phase.
 
 ## Skill Catalog
 
@@ -286,7 +286,7 @@ Pinning to a tag or commit SHA gives you reproducible installs. Provenance metad
 | Install and configure MCP | [mcp_server/README.md](mcp_server/README.md) |
 | Browse all skills | [docs/reference/skill-catalog.md](docs/reference/skill-catalog.md) |
 | Understand skill chaining | [docs/reference/integration-matrix.md](docs/reference/integration-matrix.md) |
-| Follow workflow guides | [docs/workflow-guide.md](docs/workflow-guide.md) |
+| Follow agent guides | [docs/agent-guide.md](docs/agent-guide.md) |
 | Understand repository structure | [docs/architecture.md](docs/architecture.md) |
 | Understand eval ownership | [docs/eval-provenance.md](docs/eval-provenance.md) |
 | Optimize skill eval quality | [docs/skill-optimization-guide.md](docs/skill-optimization-guide.md) |

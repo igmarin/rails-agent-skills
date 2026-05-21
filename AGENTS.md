@@ -86,7 +86,7 @@ skills/context/load-context
 
 For a full feature from scratch: `skills/context/load-context` → `skills/planning/create-prd` → `skills/planning/generate-tasks` → `agents/tdd`.
 
-See `docs/workflow-guide.md` for all workflow variants (bug fix, GraphQL, engine, migration, refactor, etc.).
+See `docs/agent-guide.md` for all workflow variants (bug fix, GraphQL, engine, migration, refactor, etc.).
 
 ## Workflow Chaining
 

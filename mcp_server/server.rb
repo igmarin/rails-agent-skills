@@ -3,11 +3,9 @@
 require 'mcp'
 require_relative 'lib/mcp_skills/list_skills_tool'
 require_relative 'lib/mcp_skills/list_agents_tool'
-require_relative 'lib/mcp_skills/list_workflows_tool'
 require_relative 'lib/mcp_skills/resource_registry'
 require_relative 'lib/mcp_skills/skill_tool'
 require_relative 'lib/mcp_skills/agent_tool'
-require_relative 'lib/mcp_skills/workflow_tool'
 
 PROJECT_ROOT = Pathname.new(__dir__).join('..').realpath
 
@@ -26,9 +24,7 @@ begin
       McpSkills::ListSkillsTool,
       McpSkills::SkillTool,
       McpSkills::ListAgentsTool,
-      McpSkills::AgentTool,
-      McpSkills::ListWorkflowsTool,
-      McpSkills::WorkflowTool
+      McpSkills::AgentTool
     ],
     resources: registry.all_resources
   )

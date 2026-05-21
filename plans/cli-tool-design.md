@@ -10,6 +10,7 @@ Turn this repository into a Ruby gem that doubles as a CLI tool.
 - `rails-agent show code-review` — read a skill's instructions
 - `rails-agent test write-tests` — run skill evals
 - `rails-agent lint` / `rails-agent validate` — CI-ready quality checks
+- `rails-agent server` / `rails-agent mcp` — start the embedded MCP server directly
 
 ## Architecture
 
@@ -97,15 +98,23 @@ rails-agent install
   --hooks
   --project
   --user
+
+rails-agent server           (starts the embedded MCP server)
+rails-agent mcp              (alias for rails-agent server)
 ```
 
 ## Core New Modules
 
-### AgentRunner
+### AgentRunner (ReAct Tool-Execution Loop & Interactive Pause)
 
 The execution engine. Reads an agent's SKILL.md, extracts phases from
-frontmatter, iterates phases sequentially, prompts an LLM backend per
-phase, enforces hard-gate checks between phases.
+frontmatter, and runs a ReAct (Reasoning and Acting) execution loop.
+Instead of treating LLM output as static text, the AgentRunner executes tool calls
+(such as reading files or running shell commands) locally on behalf of the agent,
+respecting safety approvals, and feeds results back to the LLM.
+
+It also supports an interactive pause/resume mechanism when gates fail
+or user inputs are required, prompting the developer using interactive UI libraries (like `tty-prompt`).
 
 ```ruby
 module RailsAgentSkills
@@ -122,21 +131,37 @@ module RailsAgentSkills
     def call
       agent_md = load_agent_skill_md
       phases  = Frontmatter.phases(agent_md)
-      context = ContextLoader.call(@project_root)
+      
+      # JIT/Lazy Context: Initialize with lazy handlers, not a full dump
+      context = ContextLoader.new(@project_root)
 
       phases.each_with_object(
         Result.new(phases_completed: [], artifacts: [], logs: [], passed: true)
       ) do |phase, result|
         break result unless result.passed
 
-        skill = resolve_skill(phase.dependency)
-        prompt = build_prompt(phase: phase, skill: skill, context: context)
-        output = @backend.call(prompt: prompt, system_prompt: SYSTEM_PROMPT)
-        result.passed = evaluate_gate(phase.gate) if phase.gate
+        # ReAct execution loop for the current phase (runs tools JIT)
+        loop_result = run_react_loop(phase: phase, context: context)
+        
+        if loop_result.gate_failed?
+          result.passed = handle_interactive_pause(phase)
+          break result unless result.passed
+        end
+
         result.phases_completed << phase.name
-        result.artifacts << output
-        result.logs << output
+        result.artifacts << loop_result.artifacts
       end
+    end
+
+    private
+
+    def run_react_loop(phase:, context:)
+      # Prompts LLM, handles tool calls (e.g. read_file, run_command),
+      # enforces confirmation permissions for destructive commands.
+    end
+
+    def handle_interactive_pause(phase)
+      # Invokes tty-prompt to ask user: "Gate failed (e.g. specs failed). Resume/Abort/Retry?"
     end
   end
 end
@@ -184,22 +209,36 @@ module RailsAgentSkills
 end
 ```
 
-### ContextLoader
+### ContextLoader (Lazy / JIT Context)
 
-Reads the user's Rails project for context injection into LLM prompts.
+Avoids dumping the entire codebase schema and routes into the initial system prompt,
+which would blow out token usage. Instead, context loading is lazy and JIT. The
+ContextLoader exposes tools to the AgentRunner (e.g., `get_db_schema`, `get_routes`,
+`find_models`) that the LLM backend calls dynamically only when needed.
 
 ```ruby
 module RailsAgentSkills
   class ContextLoader
-    def self.call(project_root)
+    def initialize(project_root)
+      @project_root = project_root
+    end
+
+    # Fast, high-level metadata loaded initially
+    def initial_summary
       {
-        schema:       read_if_exists("db/schema.rb"),
-        routes:       read_if_exists("config/routes.rb"),
-        gemfile:      read_if_exists("Gemfile"),
         ruby_version: read_if_exists(".ruby-version"),
-        models:       discover_models,
-        specs:        discover_specs
+        gemfile_summary: summarize_gemfile
       }
+    end
+
+    # Called JIT when the LLM triggers a schema query tool
+    def db_schema
+      @db_schema ||= read_if_exists("db/schema.rb")
+    end
+
+    # Called JIT when the LLM triggers a routes query tool
+    def routes
+      @routes ||= read_if_exists("config/routes.rb")
     end
   end
 end
@@ -250,7 +289,11 @@ Integration tests and CI pipeline.
 | Config storage | `~/.rails-agent/config.yml` | Simple, no database |
 | Agent phase parsing | Frontmatter `metadata.phases` | Already present in all 9 agents |
 | Skill resolution | Reuse `SkillCatalog` + `ResourceDiscovery` | No new discovery logic needed |
-| Error handling | Pause-and-retry on gate failure | User fixes failing tests, agent continues |
+| Error handling / Gate | Pause via `tty-prompt` on gate failure | Prompts user interactively to resolve or abort in place |
+| Tool-Execution Loop | ReAct active tool execution loop | Agent actively invokes tools dynamically during phases |
+| Context Loading | Lazy / JIT context loading | Exposes specialized tools instead of dumping whole files upfront |
+| Embedded Server | Ship MCP server in CLI gem | Allows running server via `rails-agent server` directly |
+| Safe Executions | Interactive command confirmation | Protects user's filesystem from unapproved destructive commands |
 | Output format | Plain text stdout, optional `--json` | Pipe-friendly for CI |
 | LLM streaming | Via `--verbose` flag | See agent thinking in real-time |
 
@@ -259,9 +302,10 @@ Integration tests and CI pipeline.
 ```ruby
 spec.add_dependency "thor", "~> 1.3"
 spec.add_dependency "json", "~> 2.19"
+spec.add_dependency "tty-prompt", "~> 0.23"
 spec.add_development_dependency "minitest"
 spec.add_development_dependency "webmock"
 spec.add_development_dependency "vcr"
 ```
 
-No MCP gem dependency in the CLI — `mcp_server/` keeps that.
+No external MCP server binary wrapper needed — packaged inside the gem.

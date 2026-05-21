@@ -43,14 +43,13 @@ Every `SKILL.md` file must start with YAML frontmatter:
 ---
 name: skill-name
 description: One-line description
-type: workflow | skill
 ---
 ```
 
 Required fields in frontmatter:
 - `name` — Skill identifier (kebab-case)
 - `description` — Short one-line description
-- `type` — Either `workflow` or `skill`
+
 
 ## Local Validation
 

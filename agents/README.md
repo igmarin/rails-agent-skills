@@ -20,4 +20,4 @@ This directory contains callable **Rails Agent Skills**. Unlike atomic skills, a
 
 Agents are exposed as **MCP Tools**. Use `list_agents` to discover them, then `use_agent` to load the full `SKILL.md`. Agents orchestrate skills from `skills/` to complete a development task.
 
-For detailed process guides (development stages, TDD flow, etc.), see **[docs/workflows/](../docs/workflows/README.md)**.
+For detailed process guides (development stages, TDD flow, etc.), see **[docs/agents/](../docs/agents/README.md)**.

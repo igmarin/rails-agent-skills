@@ -2,7 +2,7 @@
 name: migration
 license: MIT
 description: >
-  Orchestrates safe database migration workflow: plan migration for safety → create migration with rollback → test in development → deploy to staging → deploy to production with monitoring. Use when adding columns, creating tables, modifying indexes, or any database schema changes. Trigger: database migration, schema change, add column, create table, modify index, rails migration.
+  Orchestrates safe database migration loop: plan migration for safety → create migration with rollback → test in development → deploy to staging → deploy to production with monitoring. Use when adding columns, creating tables, modifying indexes, or any database schema changes. Trigger: database migration, schema change, add column, create table, modify index, rails migration.
 metadata:
   version: 1.0.0
   user-invocable: "true"
@@ -254,7 +254,7 @@ curl https://api.example.com/api/users
 
 ## Integration
 
-| Predecessor | This Workflow | Successor |
+| Predecessor | This Agent | Successor |
 |-------------|---------------|-----------|
 | review-migration | migration | deployment |
 | create-prd | migration | production-monitoring |
@@ -262,7 +262,7 @@ curl https://api.example.com/api/users
 
 ## When to Use This vs. Individual Skills
 
-- **Full migration lifecycle (all phases):** Use this workflow
+- **Full migration lifecycle (all phases):** Use this agent
 - **Only review migration safety:** Use `review-migration`
 - **Only create migration:** Use `rails generate migration`
 - **Not sure about migration safety:** Use `review-migration` first
@@ -286,7 +286,7 @@ curl https://api.example.com/api/users
 2. **Rollback Decision** — If critical, rollback immediately
 3. **Investigation** — Analyze failure root cause
 4. **Fix Migration** — Redesign migration to address failure
-5. **Re-deploy** — Go through full workflow again
+5. **Re-deploy** — Go through full agent cycle again
 
 **If rollback fails:**
 1. **Emergency Response** — Engage DBA immediately

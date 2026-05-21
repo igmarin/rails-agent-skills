@@ -2,7 +2,7 @@
 name: bug-fix
 license: MIT
 description: >
-  Orchestrates systematic bug fixing workflow: triage bug report → create failing reproduction test → implement minimal fix → verify resolution and no regressions. Use when fixing reported bugs, addressing production issues, resolving test failures, or implementing fixes for code review findings. Trigger: bug report, production issue, failing test, fix bug, resolve issue, address critical finding.
+  Orchestrates systematic bug fixing loop: triage bug report → create failing reproduction test → implement minimal fix → verify resolution and no regressions. Use when fixing reported bugs, addressing production issues, resolving test failures, or implementing fixes for code review findings. Trigger: bug report, production issue, failing test, fix bug, resolve issue, address critical finding.
 metadata:
   version: 1.0.0
   user-invocable: "true"
@@ -179,8 +179,8 @@ bundle exec rspec  # Full test suite must pass
 
 ## Integration
 
-| Predecessor | This Workflow | Successor |
-|-------------|---------------|-----------|
+| Predecessor | This Agent | Successor |
+|-------------|------------|-----------|
 | triage-bug | bug-fix | quality |
 | code-review (Critical findings) | bug-fix | respond-to-review |
 | production incident | bug-fix | deployment |
@@ -188,7 +188,7 @@ bundle exec rspec  # Full test suite must pass
 
 ## When to Use This vs. Individual Skills
 
-- **Full bug fix cycle (all phases):** Use this workflow
+- **Full bug fix cycle (all phases):** Use this agent
 - **Only triage bug report:** Use `triage-bug`
 - **Only write reproduction test:** Use `write-tests`
 - **Not sure if it's a bug:** Use `skill-router`

@@ -234,7 +234,7 @@ end
 
 ## Integration
 
-| Predecessor | This Workflow | Successor |
+| Predecessor | This Agent | Successor |
 |-------------|---------------|-----------|
 | create-prd | graphql | tdd |
 | define-domain-language | graphql | security-check |
@@ -242,7 +242,7 @@ end
 
 ## When to Use This vs. Individual Skills
 
-- **Full GraphQL API development (all phases):** Use this workflow
+- **Full GraphQL API development (all phases):** Use this agent
 - **Only design schema:** Use `implement-graphql`
 - **Only define domain language:** Use `define-domain-language`
 - **Only security review:** Use `security-check`

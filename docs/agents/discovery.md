@@ -1,4 +1,4 @@
-# Workflow: Discovery & Context (00)
+# Agent Stage: Discovery & Context (00)
 
 **When to use:** New to a project, need to understand the codebase, or setting up development environment.
 
@@ -147,7 +147,7 @@ ALWAYS post the Context Summary and resolve any ambiguities first.
 
 ---
 
-## Skills in this Workflow
+## Skills in this Stage
 
 | Skill | Description | Trigger words |
 |-------|-------------|---------------|

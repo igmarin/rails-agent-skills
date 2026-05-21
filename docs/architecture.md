@@ -4,7 +4,7 @@ Conventions and structure for every `SKILL.md` in this library.
 
 - **Overview and catalog:** [README](../README.md)
 - **Install and hooks:** [implementation-guide.md](implementation-guide.md)
-- **Workflow chains:** [workflow-guide.md](workflow-guide.md)
+- **Agent chains:** [agent-guide.md](agent-guide.md)
 
 ## Directory Structure
 
@@ -23,7 +23,7 @@ rails-agent-skills/
 ├── docs/                    # Documentation
 │   ├── implementation-guide.md
 │   ├── architecture.md
-│   ├── workflow-guide.md
+│   ├── agent-guide.md
 │   └── skill-template.md
 ├── agents/                  # Orchestrated agent skills
 │   └── tdd/
@@ -192,7 +192,7 @@ Produce findings with severity levels.
 - `review-engine`
 - `review-domain-boundaries`
 
-## Workflow Checkpoints
+## Agent Checkpoints
 
 Beyond HARD-GATEs (which block entirely), some skills use **checkpoints** — explicit pause-and-confirm steps that require user approval before continuing. Checkpoints differ from gates in that they pause for collaboration, not to enforce a rule.
 
@@ -220,7 +220,7 @@ Wait for confirmation before writing code. This prevents surprise implementation
 
 ### Linters + Full Test Suite Gate
 
-Defined in: `docs/workflow-guide.md` (TDD Feature Loop), `code-review`.
+Defined in: `docs/agent-guide.md` (TDD Feature Loop), `code-review`.
 
 Purpose: Run linters (`bundle exec rubocop` or project equivalent) and the full test suite before proceeding to YARD documentation or PR. Fix all failures before continuing.
 

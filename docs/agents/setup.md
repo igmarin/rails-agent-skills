@@ -1,6 +1,6 @@
-# Workflow: Setup & Configuration (20)
+# Agent Stage: Setup & Configuration (20)
 
-> **Roadmap notice:** the `setup-ci-cd` skill referenced below is **not yet implemented** (see [skill-catalog Roadmap](../reference/skill-catalog.md#proposed-new-skills-roadmap)). The templates on this page are kept as reference material so a maintainer can lift them when the skill ships. Until then, treat this workflow as informational, not as an active skill chain.
+> **Roadmap notice:** the `setup-ci-cd` skill referenced below is **not yet implemented** (see [skill-catalog Roadmap](../reference/skill-catalog.md#proposed-new-skills-roadmap)). The templates on this page are kept as reference material so a maintainer can lift them when the skill ships. Until then, treat this stage as informational, not as an active skill chain.
 
 **When to use:** Configure CI/CD, deploy environment, or development infrastructure.
 
@@ -153,7 +153,7 @@ security:
 
 ---
 
-## Skills in this Workflow
+## Skills in this Stage
 
 | Skill | Description | Trigger words |
 |-------|-------------|---------------|

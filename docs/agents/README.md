@@ -1,10 +1,10 @@
-# Workflows — Rails Agent Skills
+# Agent Guides — Rails Agent Skills
 
-Step-by-step guides for each stage of Rails development. Each workflow is a chain of skills executed in order.
+Step-by-step guides for each stage of Rails development. Each stage defines a chain of skills executed in order.
 
 ---
 
-## Master Workflow Diagram
+## Master Stage Diagram
 
 ```mermaid
 flowchart TD
@@ -39,10 +39,10 @@ flowchart TD
 
 ---
 
-## Workflow Index by Stage
+## Agent Stages Index
 
-| Stage | Workflow | Description | Primary Skills |
-|-------|----------|-------------|----------------|
+| Stage | Guide | Description | Primary Skills |
+|-------|-------|-------------|----------------|
 | **Discovery** | [Discovery & Context](discovery.md) | Understand codebase, project onboarding | `load-context`, `setup-environment` |
 | **Planning** | [Planning & Design](planning.md) | Plan features, PRD, tasks, DDD | `create-prd`, `generate-tasks`, `ddd skills` |
 | **Setup** | [Setup & Configuration](setup.md) | Configure CI/CD, environment, deploy | `setup-environment` *(plus roadmap `setup-ci-cd`)* |

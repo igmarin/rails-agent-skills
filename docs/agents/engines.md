@@ -1,4 +1,4 @@
-# Workflow: Engine Development (60)
+# Agent Stage: Engine Development (60)
 
 **When to use:** Create, extract, or maintain Rails engines.
 
@@ -140,7 +140,7 @@ Generate or update Postman Collection for testing.
 
 ---
 
-## Skills in this Workflow
+## Skills in this Stage
 
 | Skill | Description | Trigger words |
 |-------|-------------|---------------|

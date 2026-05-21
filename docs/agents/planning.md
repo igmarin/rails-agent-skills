@@ -1,4 +1,4 @@
-# Workflow: Planning & Design (10)
+# Agent Stage: Planning & Design (10)
 
 **When to use:** You are building a new feature and need to plan before coding.
 
@@ -119,7 +119,7 @@ When the team uses an issue tracker (Jira, Linear, GitHub Issues).
 
 ---
 
-## Skills in this Workflow
+## Skills in this Stage
 
 | Skill | Description | Trigger words |
 |-------|-------------|---------------|

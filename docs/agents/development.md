@@ -1,4 +1,4 @@
-# Workflow: Development (30)
+# Agent Stage: Development (30)
 
 **When to use:** Write code, implement features, fix bugs, or build APIs/services.
 
@@ -232,7 +232,7 @@ graph TB
 
 ---
 
-## Skills in this Workflow
+## Skills in this Stage
 
 | Skill | Description | Trigger words |
 |-------|-------------|---------------|

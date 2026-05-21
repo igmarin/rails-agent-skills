@@ -362,15 +362,15 @@ end
 
 ## Integration
 
-| Predecessor | This Workflow | Successor |
-|-------------|---------------|-----------|
+| Predecessor | This Agent | Successor |
+|-------------|------------|-----------|
 | implement-background-job | background-job | production-monitoring |
 | tdd | background-job | quality |
 | None (standalone) | background-job | deployment |
 
 ## When to Use This vs. Individual Skills
 
-- **Full background job lifecycle (all phases):** Use this workflow
+- **Full background job lifecycle (all phases):** Use this agent
 - **Only configure job infrastructure:** Use `implement-background-job`
 - **Only implement job logic:** Use TDD approach directly
 - **Not sure about job requirements:** Use `implement-background-job` first

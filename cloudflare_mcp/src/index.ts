@@ -1,7 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { McpAgent } from "agents/mcp";
 import { z } from "zod";
-import { DEFAULT_RAW_BASE, listSkills, loadSkill, listAgents, loadAgent, listWorkflows, loadWorkflow } from "./skill-content";
+import { DEFAULT_RAW_BASE, listSkills, loadSkill, listAgents, loadAgent } from "./skill-content";
 
 export interface Env {
   RailsAgentSkillsMCP: DurableObjectNamespace<RailsAgentSkillsMCP>;
@@ -80,27 +80,6 @@ const useAgentOutputSchema = {
   description: z.string().nullable().describe("Short routing description, or null when not found."),
   content: z.string().nullable().describe("Full SKILL.md instructions, or null when not found."),
   error: z.string().nullable().describe("Error message when the agent cannot be loaded."),
-};
-
-const workflowMetadataSchema = z.object({
-  name: z.string().describe("Workflow directory name, for example tdd or bug-fix."),
-  path: z.string().describe("Repository path to the workflow's SKILL.md file."),
-  description: z.string().describe("Short routing description from the workflow frontmatter."),
-  keywords: z.string().describe("Comma-separated discovery keywords."),
-});
-
-const listWorkflowsOutputSchema = {
-  count: z.number().int().nonnegative().describe("Number of workflows returned."),
-  workflows: z.array(workflowMetadataSchema).describe("Rails Agent Workflows available through use_workflow."),
-};
-
-const useWorkflowOutputSchema = {
-  found: z.boolean().describe("Whether the requested workflow was found."),
-  name: z.string().nullable().describe("Normalized workflow name, or null when not found."),
-  path: z.string().nullable().describe("Repository path to SKILL.md, or null when not found."),
-  description: z.string().nullable().describe("Short routing description, or null when not found."),
-  content: z.string().nullable().describe("Full SKILL.md instructions, or null when not found."),
-  error: z.string().nullable().describe("Error message when the workflow cannot be loaded."),
 };
 
 function toolAnnotations(title: string) {
@@ -251,74 +230,6 @@ const TOOL_REGISTRY = {
     },
     runtimeOutputSchema: listAgentsOutputSchema,
   },
-  use_workflow: {
-    title: "[deprecated] Use Rails Workflow",
-    description:
-      "@deprecated — use use_agent. Read one Rails Agent Workflow by name after selecting it from list_workflows. Returns the full SKILL.md instructions plus structured metadata. This tool is read-only and has no repository side effects.",
-    inputSchema: {
-      type: "object",
-      properties: {
-        workflow_name: {
-          type: "string",
-          description: 'The directory name of the workflow (e.g. "tdd", "review", "bug-fix", "graphql").',
-        },
-      },
-      required: ["workflow_name"],
-      additionalProperties: false,
-    },
-    runtimeInputSchema: {
-      workflow_name: z.string().describe('Workflow name, for example tdd, review, or bug-fix.'),
-    },
-    outputSchema: {
-      type: "object",
-      properties: {
-        found: { type: "boolean", description: "Whether the requested workflow was found." },
-        name: { type: ["string", "null"], description: "Normalized workflow name, or null when not found." },
-        path: { type: ["string", "null"], description: "Repository path to SKILL.md, or null when not found." },
-        description: { type: ["string", "null"], description: "Short routing description, or null when not found." },
-        content: { type: ["string", "null"], description: "Full SKILL.md instructions, or null when not found." },
-        error: { type: ["string", "null"], description: "Error message when the workflow cannot be loaded." },
-      },
-      required: ["found", "name", "path", "description", "content", "error"],
-      additionalProperties: false,
-    },
-    runtimeOutputSchema: useWorkflowOutputSchema,
-  },
-  list_workflows: {
-    title: "[deprecated] List Rails Workflows",
-    description:
-      "@deprecated — use list_agents. Discover available Rails Agent Workflows before loading one with use_workflow. Returns names, paths, descriptions, and keywords only; it does not return full workflow bodies. This tool is read-only and has no repository side effects.",
-    inputSchema: {
-      type: "object",
-      properties: {},
-      additionalProperties: false,
-    },
-    runtimeInputSchema: {},
-    outputSchema: {
-      type: "object",
-      properties: {
-        count: { type: "integer", minimum: 0, description: "Number of workflows returned." },
-        workflows: {
-          type: "array",
-          description: "Rails Agent Workflows available through use_workflow.",
-          items: {
-            type: "object",
-            properties: {
-              name: { type: "string", description: "Workflow directory name." },
-              path: { type: "string", description: "Repository path to SKILL.md." },
-              description: { type: "string", description: "Short routing description." },
-              keywords: { type: "string", description: "Comma-separated discovery keywords." },
-            },
-            required: ["name", "path", "description", "keywords"],
-            additionalProperties: false,
-          },
-        },
-      },
-      required: ["count", "workflows"],
-      additionalProperties: false,
-    },
-    runtimeOutputSchema: listWorkflowsOutputSchema,
-  },
 } as const;
 
 function toolDefinitions() {
@@ -459,67 +370,6 @@ export class RailsAgentSkillsMCP extends McpAgent<Env> {
 
       return {
         content: [{ type: "text", text: agents.map((a) => `${a.name}\t${a.description}`).join("\n") }],
-        structuredContent,
-      };
-    });
-
-    this.server.registerTool(
-      "use_workflow",
-      {
-        title: TOOL_REGISTRY.use_workflow.title,
-        description: TOOL_REGISTRY.use_workflow.description,
-        inputSchema: TOOL_REGISTRY.use_workflow.runtimeInputSchema,
-        outputSchema: TOOL_REGISTRY.use_workflow.runtimeOutputSchema,
-        annotations: toolAnnotations(TOOL_REGISTRY.use_workflow.title),
-      },
-      async ({ workflow_name }) => {
-        const workflow = await loadWorkflow(workflow_name, fetch, rawBase(this.env));
-
-        if (!workflow) {
-          const structuredContent = {
-            found: false,
-            name: null,
-            path: null,
-            description: null,
-            content: null,
-            error: `Workflow '${workflow_name}' not found.`,
-          };
-
-          return {
-            isError: true,
-            content: [{ type: "text", text: structuredContent.error }],
-            structuredContent,
-          };
-        }
-
-        const structuredContent = {
-          found: true,
-          name: workflow.name,
-          path: workflow.path,
-          description: workflow.description,
-          content: workflow.content,
-          error: null,
-        };
-
-        return {
-          content: [{ type: "text", text: workflow.content }],
-          structuredContent,
-        };
-      },
-    );
-
-    this.server.registerTool("list_workflows", {
-      title: TOOL_REGISTRY.list_workflows.title,
-      description: TOOL_REGISTRY.list_workflows.description,
-      inputSchema: TOOL_REGISTRY.list_workflows.runtimeInputSchema,
-      outputSchema: TOOL_REGISTRY.list_workflows.runtimeOutputSchema,
-      annotations: toolAnnotations(TOOL_REGISTRY.list_workflows.title),
-    }, async () => {
-      const workflows = await listWorkflows(fetch, rawBase(this.env));
-      const structuredContent = { count: workflows.length, workflows };
-
-      return {
-        content: [{ type: "text", text: workflows.map((w) => `${w.name}\t${w.description}`).join("\n") }],
         structuredContent,
       };
     });

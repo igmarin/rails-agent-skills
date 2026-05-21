@@ -1,21 +1,21 @@
-# Rails Agent Workflow Template
+# Rails Agent Template
 
-This template defines the standard structure for all Rails Agent Skills workflows. Use this when creating new workflows or refactoring existing ones.
+This template defines the standard structure for all Rails Agent Skills agents. Use this when creating new agents or refactoring existing ones.
 
 ## Frontmatter Template
 
 ```yaml
 ---
-name: workflow-name
+name: agent-name
 license: MIT
 description: >
-  Clear one-sentence summary of what this workflow orchestrates.
+  Clear one-sentence summary of what this agent orchestrates.
   Use when [specific trigger scenarios or user intents].
 keywords: comma, separated, discovery, terms, for, mcp, tools
 metadata:
   version: 1.0.0
   user-invocable: "true"
-  entry_point: "Description of when to invoke this workflow"
+  entry_point: "Description of when to invoke this agent"
   phases: "Phase 1: Name, Phase 2: Name, Phase 3: Name"
   hard_gates: "Gate 1: Name, Gate 2: Name"
   dependencies: "skill-name-1, skill-name-2, skill-name-3"
@@ -25,9 +25,9 @@ metadata:
 ## Body Structure Template
 
 ```markdown
-# Workflow Name
+# Agent Name
 
-Brief paragraph (2-3 sentences) explaining what this workflow orchestrates and its primary value proposition.
+Brief paragraph (2-3 sentences) explaining what this agent orchestrates and its primary value proposition.
 
 ## When to Use
 
@@ -35,7 +35,7 @@ Brief paragraph (2-3 sentences) explaining what this workflow orchestrates and i
 - Trigger scenario 2 with specific context
 - Trigger scenario 3 with specific context
 
-## Workflow Phases
+## Agent Phases
 
 ### Phase 1: Name
 
@@ -85,16 +85,16 @@ Brief paragraph (2-3 sentences) explaining what this workflow orchestrates and i
 
 ## Integration
 
-| Predecessor | This Workflow | Successor |
-|-------------|---------------|-----------|
-| skill-name  | workflow-name | skill-name |
-| None        | workflow-name | skill-name |
+| Predecessor | This Agent | Successor |
+|-------------|------------|-----------|
+| skill-name  | agent-name | skill-name |
+| None        | agent-name | skill-name |
 
 ## Output Style
 
 **Expected output format:**
 ```markdown
-# Workflow Report — [Date]
+# Agent Report — [Date]
 
 ## Phase 1 Results
 - [x] Checkpoint 1: PASSED
@@ -105,10 +105,10 @@ Brief paragraph (2-3 sentences) explaining what this workflow orchestrates and i
 - Findings: 3 Critical, 2 Suggestions
 
 ## Next Steps
-Proceed to successor-workflow or manual next action
+Proceed to successor-agent or manual next action
 ```
 
-## Complexity Metrics (For Refactoring/Quality Workflows)
+## Complexity Metrics (For Refactoring/Quality Agents)
 
 When evaluating code complexity, use these concrete metrics:
 
@@ -118,7 +118,7 @@ When evaluating code complexity, use these concrete metrics:
 - **Nesting Depth:** > 3 levels indicates potential extraction need
 - **Duplication:** > 3 similar code blocks indicate DRY violation
 
-## Example Violations (For Refactoring/Quality Workflows)
+## Example Violations (For Refactoring/Quality Agents)
 
 Include concrete before/after examples for common violations:
 
@@ -183,7 +183,7 @@ end
 
 ## TDD Enforcement Guidelines
 
-For workflows that involve code changes, include explicit TDD steps:
+For agents that involve code changes, include explicit TDD steps:
 
 ```markdown
 ### TDD Enforcement
@@ -206,7 +206,7 @@ For workflows that involve code changes, include explicit TDD steps:
 
 ## Error Handling Guidelines
 
-For workflows that can encounter errors:
+For agents that can encounter errors:
 
 ```markdown
 ### Error Recovery
@@ -227,7 +227,7 @@ For workflows that can encounter errors:
 
 ## Naming Conventions
 
-- **Workflow names:** Use kebab-case (e.g., `tdd`, `quality`, `review`, `setup`, `engine`, `bug-fix`, `graphql`, `migration`, `background-job`)
+- **Agent names:** Use kebab-case (e.g., `tdd`, `quality`, `review`, `setup`, `engine`, `bug-fix`, `graphql`, `migration`, `background-job`)
 - **Directory names:** Match agent name (e.g., `agents/tdd/SKILL.md`)
 - **Skill references:** Use full skill path (e.g., `skills/testing/write-tests`)
 - **Phase names:** Use descriptive, action-oriented names (e.g., "Context & Test Design", not "Phase 1")
@@ -245,4 +245,4 @@ For workflows that can encounter errors:
 - [ ] Integration table shows predecessor/successor
 - [ ] Output style is clearly defined
 - [ ] Anti-patterns section included if applicable
-- [ ] TDD enforcement included for code-changing workflows
+- [ ] TDD enforcement included for code-changing agents

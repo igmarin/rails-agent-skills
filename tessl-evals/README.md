@@ -2,7 +2,7 @@
 
 This directory contains tracked, Tessl-native eval scenario source for the publishable skills listed in `tile.json`.
 
-Tessl currently validates skills, not repository workflows. Do not add `workflows/**` scenarios here.
+Tessl currently validates skills, not repository agents. Do not add `agents/**` scenarios here.
 
 ## Directory Roles
 

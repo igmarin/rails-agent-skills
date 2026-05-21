@@ -29,10 +29,10 @@ def build_fixture_tree(base_dir)
 
   docs_dir = base.join('docs')
   docs_dir.mkpath
-  docs_dir.join('workflow-guide.md').write('# Workflow Guide')
+  docs_dir.join('agent-guide.md').write('# Agent Guide')
   docs_dir.join('overview.md').write('# Overview')
-  docs_dir.join('workflows').mkpath
-  docs_dir.join('workflows', 'discovery.md').write('# Discovery Docs')
+  docs_dir.join('agents').mkpath
+  docs_dir.join('agents', 'discovery.md').write('# Discovery Docs')
 
   agent_dir = base.join('agents', 'review')
   agent_dir.mkpath
