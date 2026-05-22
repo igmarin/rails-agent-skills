@@ -1,5 +1,5 @@
 IMAGE_NAME      ?= igmarin/rails-agent-skills-mcp
-GHCR_IMAGE      ?= ghcr.io/igmarin/$(IMAGE_NAME)
+GHCR_IMAGE      ?= ghcr.io/$(IMAGE_NAME)
 DOCKER_HUB_IMAGE ?= docker.io/$(IMAGE_NAME)
 VERSION         ?= latest
 
