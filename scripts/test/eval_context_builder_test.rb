@@ -66,12 +66,4 @@ class EvalContextBuilderTest < Minitest::Test
     assert_equal 'agent', document.root.attributes['target_type']
     assert_equal 'tdd', document.root.attributes['target_name']
   end
-
-  def test_infers_workflow_target_type
-    xml = EvalContextBuilder.new(repo_root: @root).call(target_path: 'agents/tdd')
-    document = REXML::Document.new(xml)
-
-    assert_equal 'agent', document.root.attributes['target_type']
-    assert_equal 'tdd', document.root.attributes['target_name']
-  end
 end

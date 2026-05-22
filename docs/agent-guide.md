@@ -70,7 +70,8 @@ Skills and agents are not slash commands or buttons — you invoke them through 
 ```
 
 **Name the agent directly** when you want the full chain:
-```
+
+```text
 "Run the TDD Feature Loop for this task"
 "Start with plan-tests, I need to add a new endpoint"
 "Follow the Bug Fix agent loop for this issue"

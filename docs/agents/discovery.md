@@ -91,11 +91,13 @@ spec/ or test/
 ├── services/        # Service tests
 └── system/          # E2E tests
 
+agents/              # Callable agents
+├── tdd/             # TDD agent
+└── ...
+
 docs/
 ├── architecture.md  # System design
-├── api/             # API documentation
-└── agents/          # Callable agents
-    └── tdd/         # TDD agent
+└── api/             # API documentation
 ```
 
 ### Database Setup Commands

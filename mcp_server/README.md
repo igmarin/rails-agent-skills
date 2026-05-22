@@ -50,7 +50,7 @@ mcp_server/
 │       ├── skill_catalog.rb           # Service: builds structured skill metadata
 │       ├── resource_registry.rb       # Service: discovers published docs and agents
 │       ├── resource_discovery.rb      # Service: resolves published skill/agent topology
-│       ├── skill_resource_builder.rb  # Service: builds MCP::Resource objects for agent markdown
+│       ├── skill_resource_builder.rb  # Service: builds MCP::Resource objects for skills/skill markdown
 │       ├── doc_resource_builder.rb    # Service: builds MCP::Resource objects for docs
 │       ├── list_skills_tool.rb        # MCP::Tool: 'list_skills' discovery
 │       ├── skill_tool.rb              # MCP::Tool: 'use_skill' loader

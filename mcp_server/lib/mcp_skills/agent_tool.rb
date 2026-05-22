@@ -62,6 +62,9 @@ module McpSkills
     )
 
     class << self
+      # @raise [Errno::ENOENT] when the project root is not found
+      # @raise [Errno::EACCES] when the agent directory or SKILL.md is not readable
+      # @raise [StandardError] when agent discovery or file read fails
       def call(agent_name:, server_context:, project_root: nil)
         root = resolve_root(project_root)
         name = normalize_agent_name(agent_name)

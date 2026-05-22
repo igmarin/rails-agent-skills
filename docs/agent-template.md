@@ -93,6 +93,7 @@ Brief paragraph (2-3 sentences) explaining what this agent orchestrates and its 
 ## Output Style
 
 **Expected output format:**
+
 ```markdown
 # Agent Report — [Date]
 

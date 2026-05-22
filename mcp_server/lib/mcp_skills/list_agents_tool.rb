@@ -53,6 +53,9 @@ module McpSkills
     )
 
     class << self
+      # @raise [Errno::ENOENT] when the project root is not found or SKILL.md is missing
+      # @raise [Errno::EACCES] when the agent directory or SKILL.md is not readable
+      # @raise [StandardError] when agent discovery or metadata parsing fails
       def call(server_context:, project_root: nil)
         root = resolve_root(project_root)
         agent_dirs = ResourceDiscovery.call(root).agent_dirs

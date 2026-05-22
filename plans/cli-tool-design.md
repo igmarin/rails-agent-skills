@@ -14,7 +14,7 @@ Turn this repository into a Ruby gem that doubles as a CLI tool.
 
 ## Architecture
 
-```
+```text
 rails-agent-skills/
 ├── lib/
 │   └── rails_agent_skills/           # Shared core (extracted from mcp_server/)
@@ -69,7 +69,7 @@ rails-agent-skills/
 
 ## CLI Commands
 
-```
+```text
 rails-agent run <agent> [task]
   --backend anthropic|openai|mcp|ollama
   --model <model-id>

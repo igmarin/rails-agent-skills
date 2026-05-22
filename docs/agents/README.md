@@ -123,7 +123,7 @@ New to the project?
 
 All code-producing agents include this gate:
 
-```
+```text
 Write test → Run test → Verify it FAILS → Implement → Verify it PASSES
 ```
 

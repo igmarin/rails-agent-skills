@@ -3,7 +3,15 @@ GHCR_IMAGE      ?= ghcr.io/$(IMAGE_NAME)
 DOCKER_HUB_IMAGE ?= docker.io/$(IMAGE_NAME)
 VERSION         ?= latest
 
-.PHONY: docker-build docker-publish-dockerhub docker-publish-ghcr docker-publish-all docker-login-ghcr help
+.PHONY: all test clean docker-build docker-publish-dockerhub docker-publish-ghcr docker-publish-all docker-login-ghcr help
+
+all: docker-build
+
+test:
+	cd mcp_server && bundle exec rake test
+
+clean:
+	@echo "nothing to clean"
 
 docker-build:
 	docker build -t $(IMAGE_NAME):$(VERSION) .

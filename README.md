@@ -129,12 +129,14 @@ When configuring MCP in external tools, use absolute paths for `cwd` and `BUNDLE
 Agents are the primary way to orchestrate multi-step Rails development tasks. When connected via MCP, agents can automatically discover and execute them using two tools:
 
 **1. Discover available agents:**
+
 ```text
 Agent calls: list_agents
 Returns: 9 agents with metadata (tdd, quality, review, setup, engine, bug-fix, graphql, migration, background-job)
 ```
 
 **2. Load and execute a specific agent:**
+
 ```text
 Agent calls: use_agent(agent_name: "tdd")
 Returns: Full agent instructions with phases, gates, and skill chaining

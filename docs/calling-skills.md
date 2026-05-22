@@ -75,12 +75,14 @@ Agents are orchestrated multi-step processes that chain multiple skills together
 When connected via MCP, agents are discovered and executed using two dedicated tools:
 
 **Discover available agents:**
+
 ```text
 list_agents
 ```
 Returns metadata for all 9 agents: tdd, quality, review, setup, engine, bug-fix, graphql, migration, background-job
 
 **Load and execute a specific agent:**
+
 ```text
 use_agent(agent_name: "tdd")
 ```

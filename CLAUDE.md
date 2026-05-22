@@ -113,6 +113,7 @@ Skills are located in subdirectories of this plugin. Read the relevant `SKILL.md
 | `refactor-code` | Restructuring code while preserving behavior |
 
 ### Primary Agents
+
 | Agent | Use when... |
 |-------|-------------|
 | `tdd` | Full TDD feature cycle: test → implement → review → PR |

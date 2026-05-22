@@ -6,7 +6,7 @@
       "args": [
         "run", "--rm", "-i",
         "--pull", "always",
-        "igmarin/rails-agent-skills-mcp:latest"
+        "igmarin/rails-agent-skills-mcp:5.2.1"
       ]
     },
     "rails-agent-skills-dev": {
