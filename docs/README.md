@@ -2,7 +2,7 @@
 
 This documentation is the public map for the Rails Agent Skills library: 41 public Rails skills, 9 callable agents, an MCP distribution, and the evaluation process used to keep the skills useful.
 
-For the high-level project value proposition, start with the [root README](../README.md). For installation and runtime setup, use the [MCP server README](../mcp_server/README.md).
+For the high-level project value proposition, start with the [root README](../README.md).
 
 ## Quick Start Decision Map
 
@@ -19,7 +19,7 @@ For the high-level project value proposition, start with the [root README](../RE
 
 The repository uses a hybrid model to keep agent context focused:
 
-1. **Skills** are atomic expert instructions such as `code-review`, `plan-tests`, or `create-service-object`. Agents load them on demand through the MCP `use_skill` tool or through an installed skill host.
+1. **Skills** are atomic expert instructions such as `code-review`, `plan-tests`, or `create-service-object`. Agents load them on demand through an installed skill host.
 2. **Agents** are orchestrated multi-step processes that chain multiple skills together into a complete development loop, such as TDD feature work, code review, setup, quality checks, or engine development.
 
 ## Master Stage Index
@@ -54,7 +54,7 @@ Tessl validates publishable skills from `tile.json` using `tessl-evals/`. The up
 - [Calling Skills Guide](calling-skills.md) - Syntax and execution contexts (MCP, CLI, Chat).
 - [Integration Matrix](reference/integration-matrix.md) - How skills connect.
 - [Agent Guide](agent-guide.md) - Narrative guide for daily use.
-- [Implementation Guide](implementation-guide.md) - IDE and MCP setup overview.
+- [Implementation Guide](implementation-guide.md) - Installation setup overview.
 - [Architecture](architecture.md) - Repository layout and `SKILL.md` conventions.
 - [Eval Provenance](eval-provenance.md) - Canonical eval ownership policy.
 - [Skill Template](skill-template.md) - Template for creating new skills.

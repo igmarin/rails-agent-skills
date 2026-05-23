@@ -32,6 +32,16 @@ That TDD gate is encoded directly into the skills and agents, so agents do not j
 > [![tessl](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.tessl.io%2Fv1%2Fbadges%2Figmarin%2Frails-agent-skills)](https://tessl.io/registry/igmarin/rails-agent-skills)
 > [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
+## What are Agent Skills?
+
+Agent Skills are a lightweight, open format for extending AI agent capabilities with specialized knowledge and workflows. At its core, a skill is a folder containing a `SKILL.md` file. This file includes metadata (`name` and `description`, at minimum) and instructions that tell an agent how to perform a specific task.
+
+This repository follows the Agent Skills standard, meaning you can install the entire catalog of Rails skills atomically into any compatible agent (e.g., Cursor, Claude Code, Goose, OpenCode, Gemini CLI) using:
+
+```bash
+npx skills add igmarin/rails-agent-skills
+```
+
 ## Who This Is For
 
 | Reader | What you get |

@@ -1,13 +1,12 @@
 # Rails Agent Skills Documentation Index
 
-Master index for the Rails Agent Skills library. Start here to navigate the public documentation for the 41 skills, 9 callable agents, MCP distribution, and evaluation policy.
+Master index for the Rails Agent Skills library. Start here to navigate the public documentation for the 41 skills, 9 callable agents, and evaluation policy.
 
 ## Quick Start
 
 - [Root README](../README.md) - Project value, audience, install paths, and documentation map.
-- [Implementation Guide](implementation-guide.md) - Installation overview for MCP and legacy alternatives.
-- [MCP Server README](../mcp_server/README.md) - Canonical MCP setup, Docker, and official registry details.
-- [Calling Skills Guide](calling-skills.md) - Syntax and execution contexts (MCP, CLI, Chat).
+- [Implementation Guide](implementation-guide.md) - Installation overview.
+- [Calling Skills Guide](calling-skills.md) - Syntax and execution contexts (CLI, Chat).
 - [Agent Guide](agent-guide.md) — How to chain skills in real Rails work.
 - [Skill Catalog](reference/skill-catalog.md) - Complete list of 41 public skills and 9 callable agents.
 
@@ -36,4 +35,3 @@ Master index for the Rails Agent Skills library. Start here to navigate the publ
 - [Implementation Guide](implementation-guide.md)
 - [VS Code Setup](vs-code-setup.md)
 - [Plugin Validation](plugin-validation.md)
-- [MCP Server README](../mcp_server/README.md)
