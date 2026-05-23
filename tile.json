@@ -1,6 +1,6 @@
 {
   "name": "igmarin/rails-agent-skills",
-  "version": "5.1.16",
+  "version": "5.1.17",
   "summary": "Curated library of 38 public AI agent skills for Ruby on Rails development. Organized by category: testing, code-quality, ddd, engines, infrastructure, api, patterns, context, and orchestration. Covers code review, architecture, security, testing (RSpec), engines, service objects, DDD patterns, and TDD automation. Repository agents remain documented in GitHub but are intentionally excluded from the Tessl tile.",
   "docs": "docs/index.md",
   "skills": {
