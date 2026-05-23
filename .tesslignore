@@ -11,3 +11,4 @@ docs/agent-template.md
 
 # Local scratch output from validation and packaging checks.
 tmp/
+agents/README.md
