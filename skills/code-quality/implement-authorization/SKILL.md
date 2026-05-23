@@ -30,8 +30,6 @@ ALWAYS use policy objects, never inline authorization logic in controllers
 
 ## Core Process
 
-Implement and test authorization patterns in Rails applications.
-
 ### Implementation Workflow
 
 1. **Add gem** — add `pundit` or `cancancan` to Gemfile and run `bundle install`
@@ -41,8 +39,6 @@ Implement and test authorization patterns in Rails applications.
 5. **Verify authorization** — attempt an unauthorized action in the browser or console and confirm it raises `Pundit::NotAuthorizedError` or `CanCan::AccessDenied` as expected
 6. **Scope queries** — use `policy_scope(Model)` or `accessible_by(current_ability)` for index actions
 7. **Test all roles** — write policy specs and request specs covering admin, owner, and guest
-
-See [references/workflow.md](references/workflow.md) for the complete implementation guide with additional detail.
 
 ### Patterns
 
@@ -106,27 +102,6 @@ RSpec.describe PostPolicy do
   end
 end
 ```
-
-## Extended Resources
-
-- [EXAMPLES.md](EXAMPLES.md) includes complete testing examples including:
-  - Policy specs with `permit_action` matchers (admin, owner, and guest contexts)
-  - Request specs with role matrix
-  - Manual verification examples that call `Pundit.authorize` or `authorize!` and show the denied exception
-  - Shared examples for reusable patterns
-- [references/workflow.md](./references/workflow.md)
-
-## Output Style
-
-When implementing or reviewing authorization, your output MUST include:
-
-1. **Authorization surface** — Name the protected controller actions, policy/ability methods, and scoped queries being changed.
-2. **Role matrix** — Cover admin, owner/member, unauthorized signed-in user, and guest/anonymous behavior.
-3. **Automated tests** — Show policy specs and request specs proving allowed and denied paths for every relevant role.
-4. **Unauthorized manual verification** — Include a browser or Rails console check that attempts a denied action and confirms `Pundit::NotAuthorizedError` or `CanCan::AccessDenied` is raised or translated to the expected `403`.
-5. **Controller wiring** — Show where `authorize`, `authorize!`, `policy_scope`, or `accessible_by` is called; do not rely on presence checks alone.
-6. **Verification commands** — List the focused policy/request spec commands and the broader suite command when available.
-7. **Language** — Must be in English unless explicitly requested otherwise.
 
 ## Integration
 

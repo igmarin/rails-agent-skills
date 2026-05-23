@@ -16,13 +16,13 @@ Use this skill when the task is to create or improve test coverage for a Rails e
 
 ## Quick Reference
 
-| Spec Type | Purpose |
-|-----------|---------|
-| Request | Proves mounted endpoints work; exercises real routing and controller |
-| Routing | Verifies engine route expectations and mount behavior |
-| Generator | Covers install commands, copied files, idempotency |
-| Config | Verifies engine respects host configuration overrides |
-| Reload-safety | Regression tests for decorators, patches, and `to_prepare` hooks |
+| Spec Type | Engine-Specific Nuance |
+|-----------|------------------------|
+| Request | Test via engine's named route helper (e.g., `my_engine.root_path`) to verify correct mounting in the host |
+| Routing | Assert routes are scoped to the engine namespace; test with and without a custom mount point |
+| Generator | Assert idempotency (safe to run twice); verify files are copied to expected host app paths |
+| Config | Override default in `around` block; assert the engine uses the host-provided value, not its own default |
+| Reload-safety | Cover `to_prepare` hooks and decorator re-application across code reloads in development mode |
 
 ## HARD-GATE
 
@@ -80,16 +80,6 @@ end
 
 ## Extended Resources
 
-**Minimum Baseline**
-For a non-trivial engine, aim for:
-- one dummy-app boot or integration spec
-- one request or routing spec for mounted endpoints
-- one configuration spec for host customization
-- unit tests for public services or POROs
-If generators exist, add generator specs. If decorators or reload hooks exist, add reload-focused coverage.
-
-For generator and reload-safety spec examples, see [assets/examples.md](assets/examples.md).
-
 **Pitfalls**
 | Pitfall | What to do |
 |---------|------------|
@@ -98,15 +88,11 @@ For generator and reload-safety spec examples, see [assets/examples.md](assets/e
 | Request specs use stubs instead of real wiring | Mount the engine in dummy and call through it |
 | Install generators without file assertions | Assert copied files and idempotency in generator specs |
 
+For generator and reload-safety spec examples, see [assets/examples.md](assets/examples.md).
+
 - [assets/dummy_app_instructions.md](assets/dummy_app_instructions.md)
 - [assets/examples.md](assets/examples.md)
 - [EXAMPLES.md](EXAMPLES.md)
-
-## Output Style
-
-1. Ensure the dummy app is set up and booting.
-2. Structure specs logically, starting with the simplest integration test.
-3. Language — Must be in English unless explicitly requested otherwise.
 
 ## Integration
 

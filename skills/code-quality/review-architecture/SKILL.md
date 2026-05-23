@@ -24,7 +24,7 @@ metadata:
 | Concerns | One coherent capability per concern |
 | External integrations | Behind dedicated collaborators |
 
-## HARD-GATE
+## HARD-GATE (Authoritative Verification Rule)
 
 ```text
 DO NOT list findings that do not survive code-level confirmation.
@@ -54,7 +54,7 @@ Use this skill when the task is to review or improve the structure of a Rails ap
 4. Inspect controller size and orchestration.
 5. Read every concern, helper, and presenter: does it do one coherent thing, or does it mix auditing + notifications + emails + external API calls? Mixed concerns are High or Medium severity depending on blast radius. **Treat any concern used by only one class as a candidate for deletion — inline it instead.**
 6. Check whether abstractions clarify the design or only move code around.
-7. **Verify each High-severity finding** by reading the actual code — confirm it is a real structural problem, not just a pattern match on file size or line count. Redact any credential-like values found during verification.
+7. **Verify each High-severity finding** per the HARD-GATE above — confirm real structural problem, redact any credential-like values found.
 
 ### Severity Levels
 
@@ -74,39 +74,6 @@ Use this skill when the task is to review or improve the structure of a Rails ap
 - Service objects wrapping trivial one-liners
 - Concerns combining unrelated responsibilities — check EVERY concern in the app
 
-### High-severity callback example:
-
-```ruby
-# Bad — hidden side effects on every save
-module Auditable
-  included do
-    after_create :log_creation
-  end
-  def log_creation
-    AuditLog.create!(...)
-    Slack.notify(...)                          # external API in callback
-    UserMailer.admin_alert(...).deliver_later  # mailer in callback
-  end
-end
-```
-
-Fix: keep only `AuditLog.create!` in the callback; move Slack/mailer to an explicit service call at the call site.
-
-### Pitfalls
-
-| Pitfall | What to do |
-|---------|------------|
-| Flagging large files as High severity without reading them | Check whether size reflects legitimate domain complexity before assigning severity; downgrade or remove if no structural problem exists |
-| Recommending a service object for every action | Only extract when it creates a real boundary — wrapping a single ActiveRecord call in a service adds indirection without benefit |
-| Treating all callbacks as problematic | Callbacks are fine for persistence-scoped side effects (e.g., setting a default value); flag only those with external calls, cross-model orchestration, or hidden branching logic |
-| Conflating "concern used in one place" with "concern is bad" | The issue is single-use concerns that add indirection — the fix is inlining, not rewriting |
-| Proposing rewrites instead of smallest credible improvements | Each finding should recommend the minimal change that resolves the structural risk, not a full refactor |
-| Missing cross-layer constant reach | Check for models referencing controller constants or jobs referencing view helpers — these are High-severity coupling issues that are easy to overlook |
-
-## Extended Resources
-
-- [EXAMPLES.md](EXAMPLES.md)
-
 ## Output Style
 
 1. **Scope**: State that the task is an architecture/structure review, not style review, and identify the Rails entry points inspected.
@@ -119,7 +86,7 @@ Fix: keep only `AuditLog.create!` in the callback; move Slack/mailer to an expli
    **Risk:** Controller runs a 5-step domain workflow. Partial state on failure; untestable without HTTP.
    **Improvement:** Extract to Orders::CreateOrder.call(params). Controller handles response/redirect only.
    ```
-5. **High-severity verification**: For every High finding, state the concrete code-level evidence read, but redact any secret-like literal before writing the finding. Use evidence like `app/services/payments/client.rb references ENV["PAYMENT_API_KEY"] inside a model callback`; never quote the actual key, token, password, cookie, private key, or credential value. If code-level confirmation is missing, downgrade or remove the finding. Never use representative file paths or fabricated line numbers as evidence.
+5. **High-severity verification**: For every High finding, state the concrete code-level evidence read (per HARD-GATE). Redact any secret-like literal. Never use representative file paths or fabricated line numbers as evidence.
 6. **Completeness**: For each finding include severity, affected files or area, why the structure is risky, and the smallest credible improvement. Then list open assumptions and recommended next refactor steps.
 7. **Language**: Must be in English unless explicitly requested otherwise.
 

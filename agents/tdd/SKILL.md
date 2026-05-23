@@ -43,5 +43,41 @@ Return to Phase 1 for next behavior or proceed to Phase 4.
 3. **code-quality/code-review**: Self-review PR diff.
 4. **Open PR**: Feature complete.
 
-## Documentation & Examples
-See [assets/example.md](assets/example.md) for a complete end-to-end walkthrough.
+## Concrete Example
+
+Below is an abbreviated end-to-end walkthrough for adding a `full_name` method to a `User` model.
+
+**Step 1 — Write the failing spec** (`spec/models/user_spec.rb`):
+```ruby
+RSpec.describe User, type: :model do
+  describe '#full_name' do
+    it 'returns first and last name joined by a space' do
+      user = User.new(first_name: 'Jane', last_name: 'Doe')
+      expect(user.full_name).to eq('Jane Doe')
+    end
+  end
+end
+```
+Run: `bundle exec rspec spec/models/user_spec.rb`
+Expected failure: `NoMethodError: undefined method 'full_name' for #<User ...>` ✅
+
+**Step 2 — Propose & confirm implementation**
+> Proposal: Add `def full_name = "#{first_name} #{last_name}"` to `app/models/user.rb`. Proceed?
+
+**Step 3 — Minimal implementation** (`app/models/user.rb`):
+```ruby
+class User < ApplicationRecord
+  # @return [String] the user's full name
+  def full_name
+    "#{first_name} #{last_name}"
+  end
+end
+```
+Run: `bundle exec rspec spec/models/user_spec.rb`
+Expected: `1 example, 0 failures` ✅
+
+**Step 4 — Quality check**:
+```bash
+bundle exec rubocop && bundle exec brakeman && bundle exec rspec
+```
+All green → write YARD docs → self-review → open PR.

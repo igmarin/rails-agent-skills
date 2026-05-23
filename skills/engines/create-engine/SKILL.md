@@ -57,18 +57,18 @@ VERIFICATION COMMANDS:
    rails plugin new my_engine --full        # full engine (non-isolated)
    rails plugin new my_engine               # plain Railtie/gem
    ```
-2. Define the host-app contract.
+2. Define the host-app contract (what the host must provide, what the engine exposes, which extension points are supported). See [reference.md](reference.md) for the full contract template.
 3. Create the minimal engine structure. **Checkpoint:** `bundle exec rake` inside the engine must pass.
 4. Implement features behind the namespace. **Checkpoint:** mount engine in dummy app routes and verify with `bundle exec rails routes`.
-5. Plan and write minimum integration coverage through the dummy app.
+5. Write minimum integration coverage through the dummy app. See [TESTING.md](TESTING.md) for coverage requirements.
 6. Document the host-app contract clearly enough for follow-on work.
 
 If the user does not specify the engine type, infer it from the requested behavior and say which type you chose.
 
 ## Extended Resources
 
-**Recommended Structure**
-Use a structure close to this:
+### Recommended Structure
+
 ```text
 my_engine/
   lib/
@@ -89,30 +89,11 @@ my_engine/
   spec/ or test/
     dummy/
 ```
+
 Keep the root module small.
 
-**Host App Contract**
-Define it before implementation and keep it updated throughout.
-- **What the host app must add:** mount route, initializer, migrations, credentials, background jobs, or assets.
-- **What the engine exposes:** models, controllers, helpers, configuration, rake tasks, generators, middleware, or events.
-- **Which extension points are supported:** config block, adapter interface, callbacks, or service objects.
+### Code Examples
 
-Prefer one explicit configuration surface, for example:
-```ruby
-MyEngine.configure do |config|
-  config.user_class = "User"
-  config.audit_events = true
-end
-```
-
-**Testing Expectations**
-Minimum coverage through the dummy app (not just isolated classes):
-- Engine integration tests through the mounted dummy app.
-- Routing/request tests for all mountable engine endpoints.
-- Configuration tests for each supported host customization option.
-- Generator tests when install/setup generators exist.
-
-**Examples**
 **Minimal root module:**
 ```ruby
 # lib/my_engine.rb
@@ -157,20 +138,13 @@ MyEngine::Engine.routes.draw do
 end
 ```
 
-- [reference.md](reference.md)
-- [EXAMPLES.md](EXAMPLES.md)
-- [TESTING.md](TESTING.md)
+### Reference Files
+
+- [reference.md](reference.md) — full host-app contract template
+- [EXAMPLES.md](EXAMPLES.md) — extended engine examples
+- [TESTING.md](TESTING.md) — coverage requirements and dummy app setup
 - [assets/examples.md](assets/examples.md)
 - [assets/release-checklist.md](assets/release-checklist.md)
-
-## Output Style
-
-1. **Narrow purpose** — State the engine's narrow purpose, chosen engine type, and small public API before listing files.
-2. **Structure** — Use idiomatic Rails engine patterns and include the recommended `lib/`, `app/`, `config/`, `db/`, and `spec/dummy` or `test/dummy` shape.
-3. **Host-app contract** — Outline mount route, initializer, migrations, credentials, background jobs, and assets. Mark any item "not applicable" instead of omitting it.
-4. **Configuration surface** — Ensure configuration points are documented and centralized in one `.configure` block or equivalent adapter surface.
-5. **Verification checkpoints** — Include `ls spec/dummy` or `ls test/dummy`, `bundle exec rake` inside the engine, integration specs, routes check inside the dummy app, and grep checks for hard-coded host constants and migration auto-apply patterns.
-6. Language — Must be in English unless explicitly requested otherwise.
 
 ## Integration
 

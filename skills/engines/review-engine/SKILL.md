@@ -71,21 +71,6 @@ class MyEngine::SomeService
 end
 ```
 
-## Extended Resources
-
-**Severity Tiers**
-- **High** — causes production failures or breaks host integration (e.g., direct host constant coupling, unsafe boot-time side effects, irreversible migrations without a `down` method).
-- **Medium** — degrades maintainability or makes the engine fragile across host apps (e.g., undocumented configuration seams, missing install generator, no dummy app).
-- **Low** — style or minor clarity issues; do not surface before architecture findings.
-
-**Common Mistakes**
-- Reviewing code style before architecture.
-- Missing dummy app coverage check (dummy app must exist and be used).
-- Ignoring `engine.rb` (often contains boot-time side effects).
-
-- [FINDINGS.md](./FINDINGS.md)
-- [assets/examples.md](assets/examples.md)
-
 ## Output Style
 
 1. Write findings first. For each finding include severity, affected file/area, risk, and smallest credible fix.
@@ -101,3 +86,19 @@ end
 | create-engine | When implementing suggested fixes or refactoring the engine |
 | test-engine | When adding missing dummy-app or integration coverage |
 | upgrade-engine | When assessing Rails/Ruby version support or deprecation impact |
+
+---
+
+## Extended Reference
+
+> Supplementary detail — consult after completing the Core Process.
+
+**Severity Tiers**
+- **High** — causes production failures or breaks host integration (e.g., direct host constant coupling, unsafe boot-time side effects, irreversible migrations without a `down` method).
+- **Medium** — degrades maintainability or makes the engine fragile across host apps (e.g., undocumented configuration seams, missing install generator, no dummy app).
+- **Low** — style or minor clarity issues; do not surface before architecture findings.
+
+**Common Mistakes**
+- Reviewing code style before architecture.
+- Missing dummy app coverage check (dummy app must exist and be used).
+- Ignoring `engine.rb` (often contains boot-time side effects).

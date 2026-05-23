@@ -25,6 +25,10 @@ Use this skill when documenting Ruby classes and public methods with YARD.
 | Public methods | All tags required unless explicitly inapplicable: `@param`, `@option` (for hash params), `@return`, `@raise` |
 | Public `initialize` | Add `@param` for constructor inputs when initialization is part of the public contract |
 | Private methods | Document only if behavior is non-obvious; same tag rules |
+| `@raise` tags | One `@raise` tag per exception class — never group multiple exceptions |
+| `.call` / complex returns | `@return` MUST specify exact structure (e.g., `[Hash] Result with :success and :response keys`) |
+| Tagged notes | `TODO:`, `FIXME:`, `HACK:`, `NOTE:`, `OPTIMIZE:` must carry actionable context (owner, ticket, next step); no naked tags |
+| Language | English unless user explicitly requests otherwise |
 
 ## HARD-GATE
 
@@ -40,10 +44,10 @@ Task lists MUST include explicit YARD sub-tasks after implementation.
 
 1. **Identify Public Surfaces:** Locate all new or modified public classes, modules, and methods.
 2. **Add Class-Level Docs:** Provide a one-line summary describing the responsibility of the class or module.
-3. **Add Method-Level Docs:** For every public method, add `@param` (and `@option` for hash arguments), `@return`, and `@raise` tags.
+3. **Add Method-Level Docs:** For every public method, add `@param` (and `@option` for hash arguments), `@return`, and `@raise` tags. For `.call` methods or complex returns, the `@return` tag MUST specify the exact structure.
 4. **Document Exceptions:** List each exception separately with its own `@raise` tag, even if the method rescues it internally.
 5. **Verify Completeness:** Run `yard stats --list-undoc` and `yard doc` to ensure no public surfaces are missing documentation.
-6. **Task-list handoff:** When producing or reviewing tasks, add explicit YARD sub-tasks after implementation for every new or changed public Ruby API.
+6. **Task-list handoff:** When producing or reviewing tasks, add explicit YARD sub-tasks after implementation for every new or changed public Ruby API. If the output is only a documentation artifact (not a task list), state that future task lists must include those YARD sub-tasks.
 
 ## Tag Examples
 
@@ -76,18 +80,6 @@ Load these files only when their specific content is needed:
 - **[EXAMPLES.md](./EXAMPLES.md)** — Canonical examples for common tags, including `@param`, `@return`, and `@raise` tag usage.
 - **[references/tagged-notes.md](references/tagged-notes.md)** — Guidelines on tagged notes (`TODO:`, `FIXME:`).
 - **[ADVANCED_TAGS.md](./ADVANCED_TAGS.md)** — Guidance for advanced tags (`@abstract`, `@deprecated`, `@api private`, `@yield`, `@overload`).
-
-## Output Style
-
-When writing or reviewing YARD docs, your output MUST satisfy:
-
-1. **Class/Module Summary** — Every new or modified public class/module has a descriptive summary.
-2. **Method Tags** — Every public method must have `@param` (or `@option`), `@return`, and `@raise` tags.
-3. **Discrete `@raise` Tags** — One `@raise` tag per exception class. Do not group multiple exceptions into a single tag.
-4. **Explicit Return Structures** — For `.call` methods or complex returns, the `@return` tag MUST specify the exact structure (e.g., `[Hash] Result with :success and :response keys`).
-5. **Tagged Notes Context** — Inline tagged notes (`TODO:`, `FIXME:`, `HACK:`, `NOTE:`, `OPTIMIZE:`) must carry actionable context (owner, ticket, next step). No naked tags.
-6. **Task-list handoff** — If the output is a task list, include YARD documentation sub-tasks after implementation tasks. If the output is only a documentation artifact, state that future task lists must include those YARD sub-tasks.
-7. **Language** — Must be in English unless explicitly requested otherwise.
 
 ## Integration
 

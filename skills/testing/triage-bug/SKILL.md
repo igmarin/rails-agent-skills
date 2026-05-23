@@ -32,12 +32,6 @@ DO NOT guess at fixes without a reproduction path.
 
 ## Core Process
 
-Use this skill when a bug report exists but the right reproduction path and fix sequence are not yet clear.
-
-**Core principle:** Do not guess at fixes. Reproduce the bug, choose the right failing spec, then plan the smallest safe repair.
-
-### Process
-
 1. **Capture the report:** Restate the expected behavior, actual behavior, and reproduction steps.
 2. **Bound the scope:** Identify whether the issue appears in request handling, domain logic, jobs, engine integration, or an external dependency.
 3. **Gather current evidence:** Logs, error messages, edge-case inputs, recent changes, or missing guards.

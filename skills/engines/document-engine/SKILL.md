@@ -26,22 +26,15 @@ Use this skill when writing or maintaining documentation for Rails engines.
 | Usage | copyable code for typical workflows |
 | Migrations | install generator, one-time setup |
 
-## HARD-GATE
+## Core Process & Constraints
 
-```text
-All generated documentation (README, guides, examples) MUST explicitly document:
-1. Required host-app steps before optional customization.
-2. Minimum working install path first.
-3. Any assumptions about host models, job backends, or auth integrations.
-```
-
-## Core Process
-
-1. Document required host-app steps before optional customization.
+1. Show the minimum working install path first — before any optional customization.
 2. Keep examples copyable and close to real code.
-3. Show the minimum working install path first.
-4. If the engine assumes any host model, job backend, or auth integration, say so explicitly.
+3. If the engine assumes any host model, job backend, or auth integration, state it explicitly.
+4. Document all configuration options with defaults (required vs optional).
 5. Document upgrade-impacting changes when setup evolves.
+
+> **Hard gate:** All generated documentation MUST satisfy points 1, 3, and 4 above before proceeding to optional sections.
 
 **README snippet (install + mount):**
 
@@ -77,22 +70,11 @@ In `config/initializers/my_engine.rb`:
 
 ## Extended Resources
 
-**Recommended README Shape**
-1. Purpose — what the engine does and when to use it
-2. Installation — gem add, bundle, run install generator
-3. Mounting — explicit `mount MyEngine::Engine, at: '/path'` in routes
-4. Configuration — all options with defaults, required vs optional
-5. Usage examples — copyable code for typical workflows
-6. Migrations / operational steps — install generator, one-time setup
-7. Extension points — adapters, callbacks, config blocks
-8. Development and testing — how to run tests or contribute
+See [CHECKLIST.md](./CHECKLIST.md) for the full recommended README shape and documentation gap checklist. Critical gaps tracked there: installation steps, all config options with defaults, explicit mount path, migration timing, host model/auth assumptions.
 
-**Documentation Gaps to Check**
-See [CHECKLIST.md](./CHECKLIST.md) for the full gap checklist. Critical gaps: installation steps, all config options with defaults, explicit mount path, migration timing, host model/auth assumptions.
-
-- [assets/configuration.md](assets/configuration.md)
-- [assets/examples.md](assets/examples.md)
-- [assets/installation.md](assets/installation.md)
+- [assets/configuration.md](assets/configuration.md) — detailed config option catalog with type info, validation rules, and all supported defaults
+- [assets/examples.md](assets/examples.md) — realistic end-to-end usage examples covering common host-app integration workflows
+- [assets/installation.md](assets/installation.md) — step-by-step install and generator reference including post-install setup tasks
 
 ## Output Style
 
@@ -100,7 +82,7 @@ See [CHECKLIST.md](./CHECKLIST.md) for the full gap checklist. Critical gaps: in
 2. Show one realistic configuration example.
 3. Document operational steps explicitly.
 4. Keep sections short and task-oriented.
-5. Check each row in the Documentation Gaps checklist against the draft. A checklist item **passes** when the docs contain a corresponding section with at least one copyable code example or explicit prose statement. A checklist item **fails** when the section is absent, incomplete, or lacks a concrete example. For each failing item: add the missing section or example, then re-run the checklist from the top. Do not finalize until all critical items pass.
+5. Validate against CHECKLIST.md: a checklist item **passes** when the docs contain a corresponding section with at least one copyable code example or explicit prose statement. A checklist item **fails** when the section is absent, incomplete, or lacks a concrete example. For each failing item: add the missing section or example, then re-run the checklist from the top. Do not finalize until all critical items pass.
 6. Language — Must be in English unless explicitly requested otherwise.
 
 ## Integration

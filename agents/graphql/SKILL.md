@@ -16,87 +16,59 @@ metadata:
 
 Orchestrates systematic GraphQL API development with Domain-Driven Design principles, ensuring proper domain boundaries, type-safe schemas, TDD implementation, and security best practices.
 
-## When to Use
-
-- Building new GraphQL APIs from scratch
-- Adding GraphQL endpoints to existing Rails application
-- Implementing GraphQL mutations or queries
-- Designing GraphQL schemas with domain modeling
-- Adding GraphQL features to Rails projects
-- Migrating REST APIs to GraphQL
-
 ## Agent Phases
 
 ### Phase 1: Domain Modeling
 
-**Objective:** Establish clear domain language and boundaries before designing GraphQL schema.
-
 **Steps:**
-1. **skills/ddd/define-domain-language** — Define ubiquitous language for the GraphQL domain
-2. **Domain Boundaries** — Identify bounded contexts and aggregate boundaries
-3. **Entity Mapping** — Map domain entities to GraphQL types and relationships
+1. Define ubiquitous language for the GraphQL domain (bounded contexts, aggregates, entity relationships)
+2. Map domain entities to GraphQL types and relationships
 
 **HARD GATE — Domain Language:**
 - Core domain terms defined and documented
-- Bounded contexts identified
-- Entity relationships mapped
+- Bounded contexts identified with entity relationships mapped
 - Language consistent across team
 
-**If gate fails:** Return to domain discovery. GraphQL schema without clear domain model will be inconsistent.
-
-**Example Domain Language:**
-```markdown
-# GraphQL API Domain Language
-
-## Core Terms
-- **Order:** Represents a customer's purchase request
-- **LineItem:** Individual product within an order
-- **Customer:** User who places orders
-- **Product:** Catalog item available for purchase
-
-## Relationships
-- Order has_many LineItems
-- Order belongs_to Customer
-- LineItem belongs_to Product
-- Customer has_many Orders
-
-## Bounded Contexts
-- Order Context (orders, line items)
-- Catalog Context (products)
-- Customer Context (customers, authentication)
-```
+**If gate fails:** Return to domain discovery. A schema without a clear domain model will be inconsistent.
 
 ---
 
 ### Phase 2: Schema Design
 
-**Objective:** Design GraphQL schema that reflects domain model and follows best practices.
-
 **Steps:**
-1. **Schema Planning** — Design types, queries, mutations based on domain model
-2. **skills/api/implement-graphql** — Implement GraphQL schema with graphql-ruby
-3. **Schema Validation** — Ensure schema is valid, non-circular, and follows conventions
+1. Design types, queries, and mutations based on the domain model
+2. Implement schema with graphql-ruby
+3. Validate schema correctness
 
 **Schema Design Guidelines:**
-- Use GraphQL type system to enforce domain boundaries
-- Design queries for read operations, mutations for write operations
-- Implement proper authorization at field level
-- Use pagination for list fields (cursor-based or offset-based)
-- Include error handling in mutation responses
+- Use the GraphQL type system to enforce domain boundaries
+- Implement authorization at field level
+- Use cursor-based or offset pagination for list fields
+- Include structured error handling in mutation responses
 
 **HARD GATE — Schema Validation:**
+
+Verify schema validity using graphql-ruby's built-in tools:
+```ruby
+# lib/tasks/graphql.rake
+namespace :graphql do
+  task validate: :environment do
+    puts MySchema.to_definition
+    puts "Schema valid."
+  end
+end
+```
 ```bash
-bundle exec rails graphql:validate
+bundle exec rake graphql:validate
 ```
 
-- Schema is valid GraphQL
 - No circular type references
 - All types have proper fields and arguments
 - Authorization rules defined for sensitive fields
 
-**If gate fails:** Fix schema validation errors before proceeding to implementation.
+**If gate fails:** Fix schema validation errors before proceeding.
 
-**Example Schema Structure:**
+**Example Type:**
 ```ruby
 # app/graphql/types/order_type.rb
 module Types
@@ -107,7 +79,6 @@ module Types
     field :total, Float, null: false
     field :status, String, null: false
 
-    # Authorization
     def self.authorized?(object, context)
       context[:current_user].can_read?(object)
     end
@@ -119,30 +90,21 @@ end
 
 ### Phase 3: TDD Implementation
 
-**Objective:** Implement resolvers and mutations using TDD discipline.
-
-### TDD Enforcement for GraphQL
-
-**Before implementing any resolver/mutation:**
-1. **testing/plan-tests** — Choose test type:
-   - Resolver specs for individual field resolution
-   - Mutation specs for write operations
-   - Integration specs for end-to-end queries
-2. **testing/write-tests** — Write failing test for resolver/mutation
-3. **Test Verification** — Confirm test FAILS for right reason (functionality missing, not syntax error)
-4. **Implementation Proposal** — Propose resolver/mutation implementation
-5. **User Approval** — Wait for explicit confirmation
-6. **Implement** — Write resolver/mutation code
-7. **Verify PASS** — Run test to confirm it passes
-8. **Regression Check** — Run full test suite
+**For every resolver or mutation:**
+1. Choose test type: resolver spec, mutation spec, or integration spec
+2. Write a failing test
+3. Confirm the test FAILS for the right reason (missing functionality, not syntax error)
+4. Propose implementation and wait for explicit user approval
+5. Implement resolver/mutation code
+6. Confirm test PASSES, then run full suite to check for regressions
 
 **HARD GATE — Test Verification:**
 - Test EXISTS and RUNS
-- Test FAILS for correct reason before implementation
+- Test FAILS before implementation (correct reason)
 - Test PASSES after implementation
 - Full test suite PASSES (no regressions)
 
-**If test fails for wrong reason:** Fix test (not implementation) to accurately test intended behavior.
+**If test fails for wrong reason:** Fix the test (not the implementation) to accurately reflect intended behavior.
 
 **Example Resolver Test:**
 ```ruby
@@ -185,121 +147,37 @@ end
 
 ### Phase 4: Security Review
 
-**Objective:** Ensure GraphQL API follows security best practices.
-
 **Steps:**
-1. **skills/code-quality/security-check** — Security audit focused on GraphQL concerns:
-   - Authorization at field level
-   - Query depth limiting
-   - Query complexity analysis
-   - Rate limiting
-   - Input validation and sanitization
-2. **N+1 Query Prevention** — Use dataloaders or batch loading
-3. **Error Handling** — Ensure proper error messages without information leakage
+1. Audit authorization at field level — every sensitive field must have an `authorized?` guard
+2. Configure query depth and complexity limits
+3. Implement rate limiting
+4. Eliminate N+1 queries using `GraphQL::Batch` or `dataloader`
+5. Verify error messages do not leak sensitive information
 
 **HARD GATE — Security Check:**
-- Authorization implemented on all sensitive fields
-- Query depth limits configured (recommended: < 10 levels)
-- Query complexity limits configured
+- Authorization on all sensitive fields
+- Query depth limit configured (recommended: ≤ 10)
+- Query complexity limit configured
 - Rate limiting implemented
 - No N+1 queries in resolvers
-- Error messages don't leak sensitive information
+- Error messages sanitized
 
-**If gate fails:** Address security vulnerabilities before deploying GraphQL API.
+**If gate fails:** Address all security issues before deploying. Never ship a GraphQL API without passing this gate.
 
 **Example Security Configuration:**
 ```ruby
 # app/graphql/schema.rb
 class MySchema < GraphQL::Schema
   use GraphQL::Batch
-  use GraphQL::Guard
 
   query Types::QueryType
   mutation Types::MutationType
 
-  # Query depth limiting
   max_depth 10
-
-  # Query complexity
   max_complexity 100
 
-  # Error handling
   rescue_from(StandardError) do |err|
     raise GraphQL::ExecutionError, "An error occurred"
   end
 end
 ```
-
----
-
-## Integration
-
-| Predecessor | This Agent | Successor |
-|-------------|---------------|-----------|
-| load-context | graphql | tdd |
-| define-domain-language | graphql | security-check |
-| None (standalone) | graphql | quality |
-
-## When to Use This vs. Individual Skills
-
-- **Full GraphQL API development (all phases):** Use this agent
-- **Only design schema:** Use `implement-graphql`
-- **Only define domain language:** Use `define-domain-language`
-- **Only security review:** Use `security-check`
-- **Not sure if GraphQL is right choice:** Use `skill-router`
-
-## HARD-GATE: Security Before Deployment
-
-**NEVER deploy GraphQL API before:**
-- Domain language clearly defined
-- Schema validated and documented
-- All resolvers/mutations have passing tests
-- Authorization implemented on sensitive fields
-- Query depth and complexity limits configured
-- N+1 queries eliminated
-- Error handling properly configured
-
-**If gate fails:** GraphQL API is not production-ready. Address security issues.
-
-## Output Style
-
-```markdown
-# GraphQL API Report — [Date]
-
-## Domain Model
-- **Core Terms:** Order, LineItem, Customer, Product
-- **Bounded Contexts:** Order, Catalog, Customer
-- **Relationships:** Mapped and documented
-
-## Schema
-- **Types:** 12 types defined
-- **Queries:** 8 queries implemented
-- **Mutations:** 5 mutations implemented
-- **Validation:** ✓ PASS
-
-## Implementation
-- **Resolver Tests:** 8/8 passing
-- **Mutation Tests:** 5/5 passing
-- **Integration Tests:** 3/3 passing
-- **Total Coverage:** 94%
-
-## Security Review
-- **Authorization:** ✓ Implemented on all sensitive fields
-- **Query Depth Limit:** ✓ Configured (max 10)
-- **Query Complexity:** ✓ Configured (max 100)
-- **Rate Limiting:** ✓ Implemented
-- **N+1 Queries:** ✓ None detected
-- **Error Handling:** ✓ Properly configured
-
-## Status
-**PRODUCTION READY** — All security checks passed
-```
-
-## Anti-Patterns to Avoid
-
-- **Schema without domain:** Never design GraphQL schema without clear domain model
-- **Authorization bypass:** Never implement GraphQL without field-level authorization
-- **Unlimited queries:** Always configure query depth and complexity limits
-- **N+1 queries:** Use dataloaders or batch loading to avoid N+1 in resolvers
-- **Information leakage:** Ensure error messages don't expose sensitive information
-- **Skipping security:** Never deploy GraphQL API without security review

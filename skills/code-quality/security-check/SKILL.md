@@ -28,20 +28,16 @@ metadata:
 
 ```text
 BEFORE returning your security review, verify:
-  1. The FIRST finding section in your output is "Authentication & Authorization"
-  2. SQL injection, XSS, or other findings come AFTER auth/authz — even if
-     they feel more severe or were discovered first
-  3. If no auth/authz issue exists, the report still opens with an explicit
-     "Authentication & Authorization: no issues found" line BEFORE any other
-     finding category
+  1. The FIRST finding section is "Authentication & Authorization"
+  2. All other findings follow auth/authz
+  3. If no auth/authz issue exists, open with "Authentication & Authorization:
+     no issues found" before any other category
 ```
 If no source files were provided or read, do not fabricate affected files,
 line numbers, or exploitable findings. Return a security review checklist and
 mark findings as requiring code-level verification.
 
 ## Core Process
-
-Use this skill when the task is to review or harden Rails code from a security perspective.
 
 **Core principle:** Prioritize exploitable issues over style. Assume any untrusted input can be abused.
 
@@ -115,7 +111,7 @@ Critical anti-patterns: `permit!` on any parameter set, `html_safe` on user cont
 
 ## Output Style
 
-1. **Format**: Section order per the HARD-GATE. Every heading appears even when empty (write "No issues found.").
+1. **Format**: Sections must appear in the order below, even when empty — write "No issues found" and state what evidence would be needed to verify the category.
    ```text
    ## Authentication & Authorization
    ## Parameter Handling & Mass Assignment
@@ -124,8 +120,6 @@ Critical anti-patterns: `permit!` on any parameter set, `html_safe` on user cont
    ## File Handling, Network Calls & Background Job Inputs
    ## Secrets, Logging & Operational Exposure
    ```
-
-   Do not omit a category because the prompt is brief. If a category has no reproduced issue, write "No issues found" and state what evidence would be needed to verify it.
 2. **Finding details**: Each finding carries:
    - **Severity:** **High** or **Medium** (not "Critical")
    - **Attack path:** input → reach → impact

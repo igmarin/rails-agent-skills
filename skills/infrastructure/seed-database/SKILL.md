@@ -7,7 +7,7 @@ description: >
   and production-like data generation. Use when the user asks about setting
   up seed data, creating test fixtures, or generating development data in a
   Rails application. Trigger words: seeds, fixtures, seeding, database seed,
-  test data, development data, db:seed.
+  test data, development data, db:seed, FactoryBot, factory_bot.
 metadata:
   version: 1.0.0
   user-invocable: "true"
@@ -46,8 +46,10 @@ NEVER hardcode credentials (passwords, API keys, secrets) in seeds, factories, o
 
 ## Extended Resources
 
-**Environment-Specific Seeds**
-Use `find_or_create_by!` to keep seeds idempotent — safe to run multiple times.
+### Environment-Specific Seeds
+
+Split seed logic across environment files to keep `db/seeds.rb` clean:
+
 ```ruby
 # db/seeds.rb
 if Rails.env.development?
@@ -55,7 +57,9 @@ if Rails.env.development?
 elsif Rails.env.test?
   require Rails.root.join('db/seeds/test')
 end
+```
 
+```ruby
 # db/seeds/development.rb
 10.times do |i|
   email = "dev_user_#{i + 1}@example.com"
@@ -66,7 +70,10 @@ end
 end
 ```
 
-**FactoryBot Factory Example**
+### FactoryBot Factory
+
+Place factories under `spec/factories/` and use traits for role variants:
+
 ```ruby
 # spec/factories/users.rb
 FactoryBot.define do
@@ -81,9 +88,8 @@ FactoryBot.define do
 end
 ```
 
-- [SKILL.md](./SKILL.md)
-- [EXAMPLES.md](./EXAMPLES.md)
-- [references/workflow.md](./references/workflow.md)
+### Reference Links
+
 - [FactoryBot documentation](https://github.com/thoughtbot/factory_bot/blob/main/GETTING_STARTED.md)
 - [Faker gem](https://github.com/faker-ruby/faker)
 - [Rails Seeding Guide](https://guides.rubyonrails.org/active_record_migrations.html#migrations-and-seed-data)
@@ -92,10 +98,9 @@ end
 
 1. Use idiomatic Rails seeding patterns.
 2. Structure factories clearly.
-3. Ensure no credentials are leaked.
-4. Include a production-secret note: use `rails credentials:edit` for production secrets and never commit them in seeds, factories, examples, logs, or docs.
-5. Include verification commands: `rails db:seed`, a second idempotency run, and a `rails console` spot-check.
-6. Language — Must be in English unless explicitly requested otherwise.
+3. Follow the credential and idempotency rules in HARD-GATE without exception.
+4. Include verification commands: `rails db:seed`, a second idempotency run, and a `rails console` spot-check.
+5. Language — Must be in English unless explicitly requested otherwise.
 
 ## Integration
 

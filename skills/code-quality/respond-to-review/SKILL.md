@@ -42,23 +42,11 @@ DO NOT start implementing before completing steps 1-4.
 
 ## Core Process
 
-Use this skill when **you have received review feedback** on your own Rails code (PR comments, pair review, async review). This is the counterpart to **code-review**, which covers *giving* a review.
-
-**Core principle:** Verify before implementing. Technical acknowledgment over performative agreement. Re-review after significant changes.
-
 ### Forbidden Responses
 
-These responses skip verification and add zero signal:
+Never respond with performative agreement that skips verification. See [assets/response_templates.md](assets/response_templates.md) for copy-ready patterns and a full list of forbidden phrases.
 
-| Forbidden | Why |
-|-----------|-----|
-| "You're absolutely right!" | Performative — nothing was verified |
-| "Great point!" / "Excellent feedback!" | Signals compliance, not understanding |
-| "Let me implement that now" | Skips verification — reviewer may lack codebase context |
-| "I'll fix all of these" | Batch commitment before evaluating each item individually |
-| "Fixed!" with no technical explanation | Always state what was checked and why the fix is correct |
-
-**Instead:** Restate the technical requirement, ask clarifying questions, push back with reasoning if wrong, or just start implementing one item after reading all feedback.
+The key rule: restate the technical requirement, ask clarifying questions, push back with reasoning if wrong, or start implementing one item after reading all feedback — never commit without verifying first.
 
 ### Evaluating Feedback
 
@@ -104,15 +92,12 @@ After implementing feedback, decide whether to request a re-review:
 
 | Mistake / Red Flag | Reality |
 |--------------------|----------|
-| Treating all feedback as equally urgent | Classify by severity — Critical before cosmetic |
 | Closing review comments without verifying | Comment what you checked and why you agree or disagree |
 | All review comments closed without any pushback | May indicate blind compliance — verify each item independently |
-| Skipping re-review after Critical fixes | A fix can introduce new issues — re-review is mandatory |
-| Asking for re-review after cosmetic changes | Wastes reviewer time — only request when logic changed |
 
 ## Extended Resources
 
-- [assets/response_templates.md](assets/response_templates.md) provide copy-ready response patterns for common review outcomes.
+- [assets/response_templates.md](assets/response_templates.md) provide copy-ready response patterns for common review outcomes, including the full list of forbidden response phrases.
 
 ## Output Style
 

@@ -43,46 +43,15 @@ DO NOT drop columns before all code references are removed.
 4. Plan deployment order between app code and migration code.
 5. Plan rollback or forward-fix strategy.
 
-## Extended Resources
+## Safe Patterns
 
-**Safe Patterns**
-- Add nullable column first, backfill later, enforce `NOT NULL` last.
+- Deploy code that tolerates both old and new schemas during transitions.
 - Add indexes concurrently when supported.
 - Backfill in batches outside a long transaction when volume is high.
-- Deploy code that tolerates both old and new schemas during transitions.
 - Use multi-step rollouts for renames, type changes, and unique constraints.
 - For every step, state the expected lock or table-rewrite risk explicitly; if negligible, say why.
+
 If the project uses `strong_migrations`, follow it. If it does not, apply the same safety rules manually.
-
-**Common Mistakes**
-| Mistake | Reality |
-|---------|---------|
-| "Table is small, no need for phased migration" | Tables grow. Build the habit for all migrations. |
-| Schema change + backfill in one migration | Long transaction, long lock. Always separate them. |
-| Column rename with immediate app cutover | App will crash during deploy. Use add-copy-migrate-drop. |
-| `add_index` without `algorithm: :concurrent` | Exclusive lock on large PostgreSQL tables blocks writes. |
-| Adding NOT NULL before backfill completes | Migration fails or locks table waiting for backfill. |
-| Removing column before removing code references | App crashes when accessing the missing column. |
-
-**Examples**
-**Risky (avoid):**
-```ruby
-add_column :orders, :status, :string, default: 'pending', null: false
-Order.update_all("status = 'pending'")
-```
-*Risk: Long lock; table rewrite if default is applied on large table.*
-
-**Safe pattern:**
-```ruby
-# Step 1: add nullable column
-add_column :orders, :status, :string
-
-# Step 2 (separate deploy): backfill in batches outside migration
-
-# Step 3 (after backfill): add constraint
-change_column_null :orders, :status, false
-change_column_default :orders, :status, from: nil, to: 'pending'
-```
 
 **Type change rollout pattern:**
 
@@ -94,7 +63,67 @@ change_column_default :orders, :status, from: nil, to: 'pending'
 5. Stop writing the old column, then drop it in a later deploy.
 ```
 
-- [PATTERNS.md](./PATTERNS.md)
+## Code Examples
+
+**Concurrent index (Rails / PostgreSQL):**
+
+```ruby
+# Migration file
+class AddIndexOnUsersEmail < ActiveRecord::Migration[7.1]
+  disable_ddl_transaction!
+
+  def change
+    add_index :users, :email, algorithm: :concurrently
+  end
+end
+```
+
+> `disable_ddl_transaction!` is required — concurrent index creation cannot run inside a transaction.
+
+**Nullable-first column with deferred NOT NULL (Rails):**
+
+```ruby
+# Step 1 — Deploy: add nullable column
+class AddConfirmedAtToUsers < ActiveRecord::Migration[7.1]
+  def change
+    add_column :users, :confirmed_at, :datetime
+  end
+end
+
+# Step 2 — Backfill outside migration (background job or script)
+User.in_batches(of: 1_000) do |batch|
+  batch.update_all(confirmed_at: Time.current)
+end
+
+# Step 3 — Deploy: enforce NOT NULL only after all rows are filled
+class ChangeConfirmedAtNotNull < ActiveRecord::Migration[7.1]
+  def change
+    change_column_null :users, :confirmed_at, false
+  end
+end
+```
+
+**Batch backfill snippet (safe for large tables):**
+
+```ruby
+# Run this as a Rake task or background job, never inside a migration transaction
+BATCH_SIZE = 1_000
+
+User.where(confirmed_at: nil).in_batches(of: BATCH_SIZE) do |batch|
+  batch.update_all(confirmed_at: Time.current)
+  sleep(0.05) # throttle to reduce replication lag
+end
+```
+
+## Common Mistakes
+
+| Mistake | Why It Fails | Fix |
+|---------|-------------|-----|
+| `add_column :t, :col, :string, null: false, default: "x"` on large table | Full table rewrite + lock (PG < 11) | Add nullable, backfill, then add NOT NULL |
+| `add_index :users, :email` without `algorithm: :concurrently` | Acquires share lock; blocks writes | Add `algorithm: :concurrently` + `disable_ddl_transaction!` |
+| Backfill inside migration with `User.update_all(...)` | Holds transaction lock for full duration | Move backfill to a separate job |
+| Rename column directly | Breaks running app during deploy | Add new column, dual-write, migrate callers, drop old |
+| Drop column while code still reads it | Runtime `unknown attribute` errors | Remove code references first, deploy, then drop |
 
 ## Output Style
 

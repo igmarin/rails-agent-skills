@@ -19,16 +19,6 @@ metadata:
 ---
 # Load Context
 
-## Quick Reference
-
-| Area | What to check |
-|------|---------------|
-| Schema | `db/schema.rb` for tables and columns |
-| Routes | `config/routes.rb` for surrounding paths |
-| Deps | `Gemfile.lock` for Rails version and gems |
-| Neighbors | Closest existing sibling file to match style |
-| Specs | Closest existing test for behavior drift |
-
 ## HARD-GATE
 
 ```text
@@ -66,46 +56,35 @@ Load minimum context before any code, spec, or PRD in an existing Rails codebase
 Do not pick silently.
 7. **Hand off:** With context loaded, proceed to the next skill (`plan-tests`, `apply-stack-conventions`, etc.). The Context Summary travels with the task.
 
-### Pitfalls
+## Output Style
+
+### Context Summary Template
+
+Post this block before proposing any code, spec, or PRD:
+
+```text
+### Context Summary
+**Rails layer:** <controller | model | service | job | engine | view/Turbo | migration | API | GraphQL>
+**Files read:**
+  - <path>:<line-range> — <one-line finding>
+  - <path>:<line-range> — <one-line finding>
+  - (repeat for each file)
+**Neighbor patterns found:**
+  - <layer>: <file path> — <key convention or pattern observed>
+  - (repeat per layer)
+**Gemfile notes:** Rails <version>; relevant gems: <list>
+**Drift detected:** <none | description of spec-vs-code mismatch>
+**Ambiguities:** <none | list any unresolved conflicts — triggers a Confusion Block>
+**Next step:** <plan-tests | apply-stack-conventions | write migration | etc.>
+```
+
+## Pitfalls
 
 | Pitfall | What to do |
 |---------|------------|
-| Generic "the model, the controller" language | Name the class and file — generic language is the symptom of skipped context |
-| Citing paths without line numbers | Use `path:line` when referencing a method, class, or association |
-| Ignoring engine boundaries | Name the engine and its host integration points when a mounted engine is touched |
-| Ignoring spec/code drift | A passing stale spec is worse than a missing spec — call it out in Confusion |
-
-## Extended Resources
-
-- [EXAMPLES.md](EXAMPLES.md)
-- [references/confusion-management.md](references/confusion-management.md)
-- [references/context-sources.md](references/context-sources.md)
-
-## Output Style
-
-1. **Context Summary**: Every invocation MUST produce a Context Summary in this exact shape:
-   ```text
-   ### Context Summary
-   - Scope: <one line — Rails layer and nearest class/file area>
-   - Rails version: <from Gemfile.lock>
-   - Relevant tables: <table names from db/schema.rb, columns that matter>
-   - Relevant routes: <resource/member routes from config/routes.rb>
-   - Nearest pattern: <path:line — one existing file that solves a similar problem>
-   - Nearest spec: <path:line — existing spec for this area (or NONE)>
-   - Engine boundary: <engine name or N/A>
-   - Gotchas: <domain gem quirks, enum mappings, polymorphic edges, counter caches, soft-delete, single-table inheritance — only list if present>
-   - Confusion: <NONE, or a one-line pointer to the Confusion Block below>
-   ```
-2. **One neighbor per layer**: Do not dump 5 similar files; pick the closest match and name it.
-3. **Discovery commands**: List the grep/rg commands used to find the nearest controller, service, spec, factory, or sibling file. If a command was not run, state why.
-4. **Facts only, no code**: The summary lists facts about the codebase, not proposed implementation.
-5. **Hand-off line**: End the reply with: `Context loaded. Next: <skill-name> — <one-line reason>.`
-6. **Language**: Must be in English unless explicitly requested otherwise.
-
-## Integration
-
-| Skill | When to chain |
-|-------|---------------|
-| **plan-tests** | Nearest spec in the summary usually reveals the right first failing spec |
-| **triage-bug** / **refactor-code** | Context precedes reproduction or characterization tests |
-| **review-architecture** / **define-domain-language** | When context reveals boundary or naming drift |
+| Grep returns hundreds of matches | Narrow by subdirectory or add a more specific class-name prefix; never read more than one representative neighbor per layer |
+| `db/schema.rb` is absent | Check for `db/structure.sql` (used when `config.active_record.schema_format = :sql`); parse the relevant CREATE TABLE block instead |
+| Multiple engines present | Scope all reads to the engine directory that owns the change; note the engine boundary explicitly in the Context Summary |
+| No specs exist for the area | Document "no spec coverage" in the Context Summary; treat the code as the sole source of truth and flag the gap |
+| Neighbor file is the file being changed | Skip self-reference; pick the next closest sibling that is not the target file |
+| Requirements change mid-conversation | Re-run steps 1–4 for the new scope and post a fresh Context Summary before continuing |

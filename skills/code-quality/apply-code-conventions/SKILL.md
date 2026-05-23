@@ -21,7 +21,6 @@ metadata:
 
 | Topic | Rule |
 |-------|------|
-| Style/format | Detect → run → defer to project linter(s); do not invent style rules here |
 | Principles | DRY, YAGNI, PORO where it helps, CoC, KISS |
 | Comments / tags | Explain **why**; tagged notes need actionable context |
 | Logging | First arg: static string; second arg: hash with `event:` key; no interpolation; backtrace on errors |
@@ -38,14 +37,16 @@ No implementation code before a failing test. See write-tests.
 
 ## Core Process
 
-When reviewing or refactoring Rails code, follow this sequence:
+When reviewing or refactoring Rails code, follow this sequence. Each step maps to a required checkpoint in your output.
 
-1. **Run linter** — Detect config (for example `.rubocop.yml` or `.standard.yml`), run the appropriate tool, note absence if none found. Do not invent style rules.
-2. **Apply area-specific rules** — Check path patterns (e.g., models, background jobs, controllers) and apply targeted guidance.
-3. **Verify tests gate** — Confirm failing tests exist before any new behavior; run specs and checkpoints.
-4. **Enforce structured logging** — Ensure all `Rails.logger` calls use static strings + structured hashes with an `event:` key, plus backtrace for errors.
-5. **Enforce comment discipline** — Ensure all tags (`TODO:`, `FIXME:`) have actionable context (owner, ticket).
+1. **Run linter** — Detect config (for example `.rubocop.yml` or `.standard.yml`), run the appropriate tool, note absence if none found. Do not invent style rules; all style/formatting defers to the detected config. *Output: state which linter was detected (or absent) and that style defers to it.*
+2. **Apply area-specific rules** — Check path patterns (e.g., models, background jobs, controllers) and apply targeted guidance from the Apply by area table below. *Output: concrete per-path recommendations for every relevant changed file.*
+3. **Verify tests gate** — Confirm failing tests exist before any new behavior; run specs and checkpoints. *Output: state the failing spec, run command, expected failure, minimal implementation step, and passing rerun.*
+4. **Enforce structured logging** — Ensure all `Rails.logger` calls use static strings + structured hashes with an `event:` key, plus backtrace for errors. *Output: apply structured logging rules from Sub-Rules below.*
+5. **Enforce comment discipline** — Ensure all tags (`TODO:`, `FIXME:`) have actionable context (owner, ticket). *Output: apply comment discipline rules from Sub-Rules below.*
 6. **Chain to specialised skills** — Use the Integration table to pull in deeper guidance (security, jobs, specs) as needed.
+
+> **Language:** English unless explicitly requested otherwise.
 
 ## Sub-Rules
 
@@ -95,18 +96,6 @@ Load these files only when their specific content is needed:
 
 - **[assets/checklist.md](assets/checklist.md)** — Use for detailed code review checklists.
 - **[assets/snippets.md](assets/snippets.md)** — Use for quick code snippets of common patterns.
-
-## Output Style
-
-When applying conventions, your output MUST include:
-
-1. **Detect → run → defer plan** — Before any style claim, show how to detect `.rubocop.yml` / `.standard.yml`, run the matching linter, and explicitly state that style/formatting defers to the detected config. If no config exists, say so instead of inventing style rules.
-2. **Per-path convention artifact** — Cover every relevant changed path using the Apply by area table: models, controllers, specs, services, and background jobs/workers. Include concrete Rails-oriented recommendations or examples for each matched area.
-3. **Tests gate verification** — For any new behavior, state the failing spec to write, the command to run first, the expected failure, the minimal implementation step, and the passing rerun. Include a manual confirmation that the spec was red before implementation.
-4. **RSpec setup assumption** — Default to `let`; use `let!` only when lazy evaluation would break the example; recommend `let_it_be` only after confirming `test-prof` already exists in `Gemfile.lock`; do not introduce `test-prof` unless asked.
-5. **Comments** — No what-comments; tagged notes (`TODO:` / `FIXME:` / `HACK:` / `NOTE:` / `OPTIMIZE:`) on every assumption, deferred work, or business-rule constant; every tag carries actionable context (owner, ticket id, deadline).
-6. **Logging** — Follow Structured Logging rules: static first arg, hash second arg with `event:`, and a backtrace line on every error rescue.
-7. **Language** — Must be in English unless explicitly requested otherwise.
 
 ## Integration
 

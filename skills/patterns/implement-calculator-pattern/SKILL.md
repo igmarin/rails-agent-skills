@@ -41,6 +41,11 @@ the next component starts. Do not collapse NullService and concrete services
 into a single verification step.
 ```
 
+**Output requirements per component:**
+- Spec coverage: Factory, NullService, and every concrete service must cover named variants, inactive plan, nil plan, and unknown variant contexts (or explicitly explain why a context does not apply).
+- End with the calculator spec directory command and the broader service/spec suite command when available.
+- Language — English unless explicitly requested otherwise.
+
 ## Core Process
 
 1. Create the **Factory**. No qualifying context or unknown variant → `NullService`.
@@ -50,9 +55,8 @@ into a single verification step.
 5. Run the full test suite.
 6. Verify the **Single entry point rule:** `Factory.for(entity)` is the **only** permitted access path.
 
-## Extended Resources
+## File Structure
 
-**File Structure**
 ```
 app/services/<calculator_name>/
 ├── factory.rb
@@ -62,102 +66,68 @@ app/services/<calculator_name>/
 ├── premium_service.rb
 ```
 
-**1. Factory**
-```ruby
-# frozen_string_literal: true
+## Minimal Inline Implementation
 
+```ruby
+# factory.rb
 module PricingCalculator
   class Factory
     SERVICE_MAP = {
-      'standard' => StandardPricingService,
-      'premium'  => PremiumPricingService
+      "standard" => StandardService,
+      "premium"  => PremiumService
     }.freeze
 
-    def self.for(order)
-      plan = order.plan
-      return NullService.new(order) unless plan&.active?
-
-      service_class = SERVICE_MAP[plan.name] || NullService
-      service_class.new(order)
+    def self.for(entity)
+      SERVICE_MAP.fetch(entity.plan_variant, NullService).new(entity)
     end
   end
 end
 ```
 
-**2. BaseService**
 ```ruby
-# frozen_string_literal: true
+# null_service.rb
+module PricingCalculator
+  class NullService < BaseService
+    def should_calculate? = false
+    def compute_result    = nil
+  end
+end
+```
 
+```ruby
+# base_service.rb
 module PricingCalculator
   class BaseService
-    def initialize(order)
-      @order = order
+    def initialize(entity)
+      @entity = entity
     end
 
     def calculate
       return nil unless should_calculate?
-
       compute_result
     end
 
     private
 
     def should_calculate?
-      @order.present?
+      @entity.present?
     end
 
     def compute_result
-      raise NotImplementedError, "#{self.class}#compute_result must be implemented"
+      raise NotImplementedError
     end
   end
 end
 ```
 
-**3. NullService**
+## Minimal Usage Example
+
 ```ruby
-# frozen_string_literal: true
-
-module PricingCalculator
-  class NullService < BaseService
-    private
-
-    def should_calculate?
-      false
-    end
-
-    def compute_result
-      nil
-    end
-  end
-end
-```
-
-**4. Concrete Service Example**
-```ruby
-# frozen_string_literal: true
-
-module PricingCalculator
-  class StandardPricingService < BaseService
-    private
-
-    def should_calculate?
-      super && @order.plan.name == 'standard'
-    end
-
-    def compute_result
-      @order.base_price * 1.0
-    end
-  end
-end
-```
-
-**5. Usage**
-```ruby
+# Single public entry point — never instantiate service classes directly
 price = PricingCalculator::Factory.for(order).calculate
 ```
 
-**6. Tests (RSpec)**
-Each spec suite must cover: inactive plan, nil plan, each named variant, and unknown variant. Mirror the same context structure across Factory, NullService, and every concrete service. If a concrete service should not handle an unknown variant, assert that it returns nil through the guard rather than calculating.
+Full implementations for all components including multi-variant expansion are in [IMPLEMENTATION.md](IMPLEMENTATION.md). Full RSpec examples are in [TESTING.md](TESTING.md).
 
 **Pitfalls**
 | Pitfall | Fix |
@@ -167,27 +137,9 @@ Each spec suite must cover: inactive plan, nil plan, each named variant, and unk
 | Direct service instantiation (`ServiceClass.new(entity)`) | Route through `Factory.for(entity)` — it is the sole public entry point; direct instantiation bypasses the NullService safety net |
 | Forgetting `super` in concrete `should_calculate?` | Always call `super` — skipping it removes the base nil/presence guard |
 
-- [assets/examples.md](assets/examples.md)
-- [IMPLEMENTATION.md](IMPLEMENTATION.md)
-- [TESTING.md](TESTING.md)
-
-## Output Style
-
-1. **Single entry point** — Show `Calculator::Factory.for(entity).calculate` as the only public access path.
-2. **Component list** — Factory, BaseService, NullService, and every concrete strategy class.
-3. **Dispatch map** — `SERVICE_MAP` keys, concrete classes, and unknown/nil fallback to NullService.
-4. **Guard behavior** — Base guard, concrete `super` call, and NullService no-op behavior.
-5. **Tests-first proof** — For each component, show the spec file, exact command, and expected RED failure before implementation:
-   - Factory: missing dispatch/fallback behavior
-   - BaseService: missing `calculate`, `should_calculate?`, or `compute_result` contract
-   - NullService: missing no-op fallback behavior
-   - Concrete services: missing variant-specific strategy behavior
-6. **Green checkpoint per component** — After each component implementation, show the focused rerun and confirm it passes before moving to the next component.
-7. **Variant coverage** — Factory, NullService, and every concrete service spec must show named variants, inactive plan, nil plan, and unknown variant contexts, or explicitly explain why a context does not apply.
-   - NullService specs must include nil plan, inactive plan, and unknown variant contexts.
-   - Every concrete service spec must include its matching named variant, inactive plan, nil plan, and unknown variant contexts.
-8. **Full verification** — End with the calculator spec directory command and the broader service/spec suite command when available.
-9. Language — Must be in English unless explicitly requested otherwise.
+- [assets/examples.md](assets/examples.md) — Additional worked examples showing alternative domain contexts (e.g., discount calculators, shipping calculators) using the same pattern.
+- [IMPLEMENTATION.md](IMPLEMENTATION.md) — Full Ruby implementations for every component (Factory, BaseService, NullService, Concrete Service), module naming conventions, and multi-variant expansion guidance.
+- [TESTING.md](TESTING.md) — Full RSpec examples covering all variant contexts (named variants, inactive plan, nil plan, unknown variant) for Factory, NullService, and concrete services.
 
 ## Integration
 
