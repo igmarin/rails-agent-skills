@@ -2,6 +2,15 @@
   "mcpServers": {
     "rails-agent-skills": {
       "type": "stdio",
+      "command": "docker",
+      "args": [
+        "run", "--rm", "-i",
+        "--pull", "always",
+        "igmarin/rails-agent-skills-mcp:5.2.1"
+      ]
+    },
+    "rails-agent-skills-dev": {
+      "type": "stdio",
       "command": "bundle",
       "args": [
         "exec",
@@ -11,14 +20,6 @@
       "env": {
         "BUNDLE_GEMFILE": "mcp_server/Gemfile"
       }
-    },
-    "tessl": {
-      "type": "stdio",
-      "command": "tessl",
-      "args": [
-        "mcp",
-        "start"
-      ]
     }
   }
 }

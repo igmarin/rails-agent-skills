@@ -18,10 +18,18 @@
     {
       "name": "use_skill",
       "description": "Load and return the full SKILL.md instructions plus structured metadata for a named Rails development skill"
+    },
+    {
+      "name": "list_agents",
+      "description": "Discover available Rails Agents (orchestrated workflows) before loading one with use_agent"
+    },
+    {
+      "name": "use_agent",
+      "description": "Load and return the full SKILL.md instructions for a named Rails Agent (orchestrated workflow)"
     }
   ],
-  "resources": [
-    { "prefix": "doc/*", "description": "Documentation files from docs/" },
-    { "prefix": "workflow/*", "description": "Workflow definition files" }
-  ]
+    "resources": [
+      { "prefix": "doc/*", "description": "Documentation files from docs/" },
+      { "prefix": "agent/*", "description": "Agent (orchestrated workflow) definition files" }
+    ]
 }

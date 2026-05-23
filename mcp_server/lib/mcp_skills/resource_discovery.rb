@@ -8,14 +8,18 @@ module McpSkills
       'skills/*/*/SKILL.md',
       '.tessl/tiles/*/*/*/SKILL.md'
     ].freeze
-    WORKFLOW_PATTERN = 'workflows/*/SKILL.md'
+    AGENT_PATTERN = 'agents/*/SKILL.md'
 
-    Result = Struct.new(:skill_dirs, :workflow_dirs, :docs_dir, keyword_init: true)
+    Result = Struct.new(:skill_dirs, :agent_dirs, :workflow_dirs, :docs_dir, keyword_init: true) do
+      def workflow_dirs
+        agent_dirs
+      end
+    end
 
     # Resolves the current resource topology for the repository.
     #
     # @param project_root [String, Pathname] Root of the repository to scan.
-    # @return [Result] The discovered skill directories, workflow directories, and docs directory.
+    # @return [Result] The discovered skill directories, agent directories, and docs directory.
     # @raise [TypeError] when `project_root` cannot be converted into a pathname.
     def self.call(project_root)
       new(project_root).call
@@ -30,11 +34,12 @@ module McpSkills
 
     # Performs path discovery for MCP resources.
     #
-    # @return [Result] The discovered skill directories, workflow directories, and docs directory.
+    # @return [Result] The discovered skill directories, agent directories, and docs directory.
     def call
+      agent_dirs = discover_agent_dirs
       Result.new(
         skill_dirs: discover_skill_dirs,
-        workflow_dirs: discover_workflow_dirs,
+        agent_dirs: agent_dirs,
         docs_dir: @project_root.join('docs')
       )
     end
@@ -66,8 +71,8 @@ module McpSkills
       warn "Duplicate published skill names detected: #{non_tessl_dirs.map(&:to_s).join(', ')}"
     end
 
-    def discover_workflow_dirs
-      @project_root.glob(WORKFLOW_PATTERN).sort.map(&:dirname)
+    def discover_agent_dirs
+      @project_root.glob(AGENT_PATTERN).sort.map(&:dirname)
     end
 
     def sort_weight(path)

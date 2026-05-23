@@ -10,10 +10,10 @@ class DocResourceBuilderTest < Minitest::Test
 
     @docs_dir = base.join('docs')
     @docs_dir.mkpath
-    @docs_dir.join('workflow-guide.md').write('# Workflow Guide')
+    @docs_dir.join('agent-guide.md').write('# Agent Guide')
     @docs_dir.join('overview.md').write('# Overview')
-    @docs_dir.join('workflows').mkpath
-    @docs_dir.join('workflows', 'discovery.md').write('# Discovery Docs')
+    @docs_dir.join('agents').mkpath
+    @docs_dir.join('agents', 'discovery.md').write('# Discovery Docs')
   end
 
   def teardown
@@ -23,9 +23,9 @@ class DocResourceBuilderTest < Minitest::Test
   def test_builds_doc_resources_from_docs_dir
     resources = McpSkills::DocResourceBuilder.call(@docs_dir, prefix: 'doc')
     names = resources.map(&:name)
-    assert_includes names, 'doc/workflow-guide'
+    assert_includes names, 'doc/agent-guide'
     assert_includes names, 'doc/overview'
-    assert_includes names, 'doc/workflows/discovery'
+    assert_includes names, 'doc/agents/discovery'
   end
 
   def test_resources_have_file_uris

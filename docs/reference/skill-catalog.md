@@ -1,6 +1,6 @@
 # Skill Catalog — Rails Agent Skills
 
-Complete catalog of 41 public skills and 5 callable workflows organized by development lifecycle stage and by category.
+Complete catalog of 41 public skills and 9 callable agents organized by development lifecycle stage and by category.
 
 ---
 
@@ -8,7 +8,7 @@ Complete catalog of 41 public skills and 5 callable workflows organized by devel
 
 **By Stage:** [00 — Discovery](#00--discovery--context) · [10 — Planning](#10--planning--design) · [30 — Development](#30--development) · [40 — Quality](#40--code-quality) · [50 — Review](#50--review--validation) · [60 — Engines](#60--engines)
 
-**By Category:** [API](#api) · [Context](#context) · [Code Quality](#code-quality) · [DDD](#ddd) · [Engines](#engines) · [Infrastructure](#infrastructure) · [Orchestration](#orchestration) · [Patterns](#patterns) · [Planning](#planning) · [Testing](#testing) · [Workflows](#workflows)
+**By Category:** [API](#api) · [Context](#context) · [Code Quality](#code-quality) · [DDD](#ddd) · [Engines](#engines) · [Infrastructure](#infrastructure) · [Orchestration](#orchestration) · [Patterns](#patterns) · [Planning](#planning) · [Testing](#testing) · [Agents](#agents)
 
 ---
 
@@ -147,7 +147,7 @@ Complete catalog of 41 public skills and 5 callable workflows organized by devel
 ## See also
 
 - [Integration Matrix](integration-matrix.md) — Which skill connects to which
-- [Workflows Index](../workflows/) — Complete step-by-step flows
+- [Agents Index](../../agents/) — Complete orchestrated step-by-step flows
 - [Orchestrator](../../skills/orchestration/skill-router/) — Entry skill when you don't know which to use
 
 ---
@@ -247,12 +247,16 @@ Skills are organized in category folders (`skills/<category>/`) with frequent en
 | **plan-tests** | `skills/testing/plan-tests/` | Choose the best first failing spec |
 | **triage-bug** | `skills/testing/triage-bug/` | Bug diagnosis and reproduction |
 
-### Workflows
+### Agents
 
-| Skill | Path | Description |
+| Agent | Path | Description |
 |-------|------|-------------|
-| **tdd-workflow** | `workflows/tdd-workflow/` | TDD feature loop: test → implement → review → PR |
-| **review-workflow** | `workflows/review-workflow/` | Systematic PR review: review → deep dive → response |
-| **setup-workflow** | `workflows/setup-workflow/` | Project setup: context → onboarding → CI/CD |
-| **quality-workflow** | `workflows/quality-workflow/` | Quality check: conventions → refactor → docs |
-| **engine-workflow** | `workflows/engine-workflow/` | Engine development: author → test → review → release |
+| **tdd** | `agents/tdd/` | TDD feature loop: test → implement → review → PR |
+| **review** | `agents/review/` | Systematic PR review: review → deep dive → response |
+| **setup** | `agents/setup/` | Project setup: context → onboarding → CI/CD |
+| **quality** | `agents/quality/` | Quality check: conventions → refactor → docs |
+| **engine** | `agents/engine/` | Engine development: author → test → review → release |
+| **bug-fix** | `agents/bug-fix/` | Bug resolution: triage → reproduce → fix → verify |
+| **graphql** | `agents/graphql/` | GraphQL API: domain → schema → TDD → security |
+| **migration** | `agents/migration/` | Database migration: plan → test → deploy |
+| **background-job** | `agents/background-job/` | Background job: design → TDD → retry → monitor |

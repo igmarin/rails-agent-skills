@@ -1,6 +1,6 @@
 # Rails Agent Skills Documentation Index
 
-Master index for the Rails Agent Skills library. Start here to navigate the public documentation for the 41 skills, 5 callable workflows, MCP distribution, and evaluation policy.
+Master index for the Rails Agent Skills library. Start here to navigate the public documentation for the 41 skills, 9 callable agents, MCP distribution, and evaluation policy.
 
 ## Quick Start
 
@@ -8,19 +8,19 @@ Master index for the Rails Agent Skills library. Start here to navigate the publ
 - [Implementation Guide](implementation-guide.md) - Installation overview for MCP and legacy alternatives.
 - [MCP Server README](../mcp_server/README.md) - Canonical MCP setup, Docker, and official registry details.
 - [Calling Skills Guide](calling-skills.md) - Syntax and execution contexts (MCP, CLI, Chat).
-- [Workflow Guide](workflow-guide.md) - How to chain skills in real Rails work.
-- [Skill Catalog](reference/skill-catalog.md) - Complete list of 41 public skills and 5 callable workflows.
+- [Agent Guide](agent-guide.md) — How to chain skills in real Rails work.
+- [Skill Catalog](reference/skill-catalog.md) - Complete list of 41 public skills and 9 callable agents.
 
-## Workflows By Stage
+## Agent Stages & Guides
 
-- [Discovery & Context](workflows/discovery.md)
-- [Workflows Index](workflows/README.md)
-- [Planning & Design](workflows/planning.md)
-- [Development (TDD)](workflows/development.md)
-- [Code Quality & Refactoring](workflows/quality.md)
-- [Review & Security](workflows/review.md)
-- [Engine Development](workflows/engines.md)
-- [Setup & CI/CD](workflows/setup.md)
+- [Discovery & Context](agents/discovery.md)
+- [Agent Guides Index](agents/README.md)
+- [Planning & Design](agents/planning.md)
+- [Development (TDD)](agents/development.md)
+- [Code Quality & Refactoring](agents/quality.md)
+- [Review & Security](agents/review.md)
+- [Engine Development](agents/engines.md)
+- [Setup & CI/CD](agents/setup.md)
 
 ## Architecture & Principles
 

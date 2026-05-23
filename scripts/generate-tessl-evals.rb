@@ -180,13 +180,12 @@ end
 
 tile = read_json(TILE_PATH)
 skills = tile.fetch("skills")
+filtered_skills = skills.reject { |_name, spec| spec.fetch("path").start_with?("workflows/") || spec.fetch("path").start_with?("agents/") }
 FileUtils.mkdir_p(OUTPUT_ROOT)
 
-skills.each do |skill_name, spec|
+filtered_skills.each do |skill_name, spec|
   skill_path = spec.fetch("path")
-  next if skill_path.start_with?("workflows/")
-
   write_skill_eval(skill_name, skill_path)
 end
 
-puts "Generated Tessl eval source for #{skills.length} publishable skills in tessl-evals/"
+puts "Generated Tessl eval source for #{filtered_skills.length} publishable skills in tessl-evals/"

@@ -5,7 +5,7 @@ lean-ctx/
 plans/
 for-openai.md
 docs/lessons-learned-from-tessl.md
-docs/workflow-template.md
+docs/agent-template.md
 /SKILL.md
 /CONTEXT.md
 

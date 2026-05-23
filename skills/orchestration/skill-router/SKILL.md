@@ -87,14 +87,14 @@ Start with `load-context` for an existing PR or unfamiliar codebase, then run th
 
 ### Typical Workflows
 
-Sub-skills are invoked by stating their name as the next skill to apply, e.g. *"Next skill: skills/workflows/tdd-workflow"*, before proceeding with that skill's instructions.
+Sub-skills or agents are invoked by stating their name as the next skill/agent to apply, e.g. *"Next skill: agents/tdd"*, before proceeding with that agent's instructions.
 
-**TDD Feature Loop** *(primary daily workflow)* — use `skills/workflows/tdd-workflow`:
-skills/context/load-context → **[CHECK: context loaded]** → skills/workflows/tdd-workflow → PR
+**TDD Feature Loop** *(primary daily workflow)* — use `agents/tdd`:
+skills/context/load-context → **[CHECK: context loaded]** → agents/tdd → PR
 
-**Feature (standard):** skills/context/load-context → **[CHECK: context loaded]** → skills/planning/create-prd → **[CHECK: PRD approved]** → skills/planning/generate-tasks → **[CHECK: tasks complete]** → skills/workflows/tdd-workflow
+**Feature (standard):** skills/context/load-context → **[CHECK: context loaded]** → skills/planning/create-prd → **[CHECK: PRD approved]** → skills/planning/generate-tasks → **[CHECK: tasks complete]** → agents/tdd
 
-**Bug fix:** skills/testing/triage-bug → **[GATE: reproduction spec fails]** → skills/workflows/tdd-workflow → fix → verify passes
+**Bug fix:** skills/testing/triage-bug → **[GATE: reproduction spec fails]** → agents/tdd → fix → verify passes
 
 **Multi-concern PR review:** skills/context/load-context → skills/code-quality/security-check *(if auth/input/secrets touched)* → skills/infrastructure/review-migration *(if schema touched)* → skills/engines/review-engine *(if engine touched)* → skills/code-quality/review-architecture *(if boundaries touched)* → skills/code-quality/code-review
 

@@ -105,12 +105,12 @@ while IFS= read -r skill_file; do
   if [ -n "$fm_name" ] && [ "$fm_name" != "$skill_name" ]; then
     check_fail "$skill_name: frontmatter name ('$fm_name') does not match directory name"
   fi
-done < <(find skills workflows -name "SKILL.md" -not -path "*/.tessl/*" | sort)
+done < <(find skills agents -name "SKILL.md" -not -path "*/.tessl/*" | sort)
 
 info "Total SKILL.md files found: $skill_count"
 
 # Cross-check: every public publishable skill dir with SKILL.md must be in tile.json.skills.
-# Root workflows are repo-local orchestrations and are intentionally excluded from the Tessl tile.
+# Root agents are repo-local orchestrations and are intentionally excluded from the Tessl tile.
 section "tile.json ↔ Disk Sync"
 
 if [ -f "tile.json" ]; then
@@ -125,14 +125,14 @@ if [ -f "tile.json" ]; then
     fi
   done <<< "$DISK_SKILL_PATHS"
 
-  WORKFLOW_PATHS=$(find workflows -name "SKILL.md" -not -path "*/.tessl/*" | sed 's#^\./##' | sort)
+  AGENT_PATHS=$(find agents -name "SKILL.md" -not -path "*/.tessl/*" | sed 's#^\./##' | sort)
   while IFS= read -r path; do
     if printf '%s\n' "$TILE_SKILL_PATHS" | grep -qx "$path"; then
-      check_fail "tile.json should not include workflow: $path"
+      check_fail "tile.json should not include agent: $path"
     else
-      check_pass "workflow excluded from Tessl tile: $path"
+      check_pass "agent excluded from Tessl tile: $path"
     fi
-  done <<< "$WORKFLOW_PATHS"
+  done <<< "$AGENT_PATHS"
 fi
 
 # Summary

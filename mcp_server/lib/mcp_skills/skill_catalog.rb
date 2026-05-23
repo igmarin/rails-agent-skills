@@ -83,6 +83,7 @@ module McpSkills
     def category_from_path(path)
       parts = path.split('/')
       return parts[1] if parts[0] == 'skills' && parts[1]
+      return 'agent' if parts[0] == 'agents'
       return 'workflow' if parts[0] == 'workflows'
 
       'unknown'

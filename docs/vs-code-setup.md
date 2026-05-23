@@ -55,15 +55,15 @@ Cline reads skill definitions from the workspace. Create `.vscode/cline.config.j
 {
   "skillsPath": "./",
   "skillPattern": "**/SKILL.md",
-  "workflowsPath": "./docs/",
-  "workflowPattern": "workflow-*.md",
+  "agentsPath": "./docs/agents/",
+  "agentPattern": "*.md",
   "customTools": []
 }
 ```
 
 Alternatively, you can manually invoke skills by name in Cline's chat:
 - `/create-prd` — Start a new feature with PRD
-- `/plan-tests` — Begin TDD workflow
+- `/plan-tests` — Begin TDD loop
 - `/code-review` — Self-review Rails code
 - `/write-yard-docs` — Generate YARD docs
 
@@ -137,7 +137,7 @@ In VS Code, open the Continue panel and add your skills directory:
 
 ## Installation: Aider (Terminal-based)
 
-Aider is git-aware and perfect for Rails development workflows.
+Aider is git-aware and perfect for Rails agent cycles.
 
 ### Step 1: Install Aider
 
@@ -162,7 +162,7 @@ custom-instructions: |
   Use these patterns when relevant:
   - /write-tests for testing
   - /code-review for code quality
-  - /plan-tests for TDD workflows
+  - /plan-tests for TDD loops
 ```
 
 ### Step 3: Invoke Skills
@@ -176,7 +176,7 @@ aider
 # /code-review review the authentication controller
 ```
 
-## Workflow Example: Cline + Rails Agent Skills
+## Execution Example: Cline + Rails Agent Skills
 
 ### Scenario: Implement User Authentication
 
@@ -252,7 +252,7 @@ Create `.vscode/settings.json` in your project:
    ---
    name: skill-name
    description: Brief description
-   type: workflow
+   type: skill
    ---
    ```
 
@@ -299,7 +299,7 @@ For Rails development with Rails Agent Skills:
 - Terminal-native (no GUI overhead)
 - Git-aware context (includes diffs, staged changes)
 - Auto-commit after fixes
-- Excellent for TDD workflows
+- Excellent for TDD loops
 
 ## Next Steps
 
@@ -309,6 +309,6 @@ For Rails development with Rails Agent Skills:
    ```
    /plan-tests What's our first failing test?
    ```
-4. **Follow the skill workflows** as suggested by the AI
+4. **Follow the skill/agent guidelines** as suggested by the AI
 
-See [docs/workflow-guide.md](workflow-guide.md) for full workflow chains and checkpoints.
+See [docs/agent-guide.md](agent-guide.md) for full agent loops and checkpoints.

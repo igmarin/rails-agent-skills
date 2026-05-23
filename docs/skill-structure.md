@@ -97,7 +97,7 @@ Closes the loop with the rest of the library:
 | **Comes after** | The skill(s) typically invoked before this one. |
 | **Comes before** | The next skill in the chain (named, not described). |
 | **See also** | Related skills the model should consider but not auto-load. |
-| **Workflow refs** | Links to `docs/workflow-guide.md` and the relevant `docs/workflows/NN-*.md` page. |
+| **Agent Stage refs** | Links to `docs/agent-guide.md` and the relevant `docs/agents/<stage>.md` page. |
 
 ---
 

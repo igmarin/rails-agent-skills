@@ -2,7 +2,7 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.igmarin/rails-agent-skills-mcp",
   "title": "Rails Agent Skills",
-  "description": "Rails development skills, docs, and workflows exposed through MCP stdio.",
+  "description": "Rails development skills, docs, and agents exposed through MCP stdio.",
   "repository": {
     "url": "https://github.com/igmarin/rails-agent-skills",
     "source": "github",

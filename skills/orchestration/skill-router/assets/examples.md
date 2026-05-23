@@ -24,7 +24,7 @@ Active responses must put `Next skill: ...` first. When multiple skills may appl
 >
 > **Match:** Concrete bug with reproduction path. Do not reach for `optimize-performance` or `code-review` until the bug is isolated.
 >
-> **Chain:** `triage-bug` → `skills/workflows/tdd-workflow`
+> **Chain:** `triage-bug` → `agents/tdd`
 >
 > **Next skill: skills/testing/triage-bug**
 
@@ -68,7 +68,7 @@ Active responses must put `Next skill: ...` first. When multiple skills may appl
 >
 > **Match:** Scope unclear, no existing PRD, vague starting point.
 >
-> **Chain:** `load-context` → `create-prd` → `generate-tasks` → `plan-tests` → `skills/workflows/tdd-workflow`
+> **Chain:** `load-context` → `create-prd` → `generate-tasks` → `plan-tests` → `agents/tdd`
 >
 > **Next skill: skills/context/load-context**
 
@@ -100,7 +100,7 @@ Active responses must put `Next skill: ...` first. When multiple skills may appl
 >
 > **Match:** Domain modeling before implementation.
 >
-> **Chain:** `load-context` → `define-domain-language` → `review-domain-boundaries` → `model-domain` → `create-prd` → `generate-tasks` → `skills/workflows/tdd-workflow`
+> **Chain:** `load-context` → `define-domain-language` → `review-domain-boundaries` → `model-domain` → `create-prd` → `generate-tasks` → `agents/tdd`
 >
 > **Next skill: skills/context/load-context**
 
@@ -110,7 +110,7 @@ Active responses must put `Next skill: ...` first. When multiple skills may appl
 >
 > **Match:** GraphQL-specific, not REST. Do not use `generate-api-collection`.
 >
-> **Chain:** `define-domain-language` → `implement-graphql` → `skills/workflows/tdd-workflow` → `security-check`
+> **Chain:** `define-domain-language` → `implement-graphql` → `agents/tdd` → `security-check`
 >
 > **Next skill: skills/ddd/define-domain-language**
 
@@ -228,6 +228,6 @@ Active responses must put `Next skill: ...` first. When multiple skills may appl
 >
 > **Match:** Frontend-specific, Hotwire/Turbo integration.
 >
-> **Chain:** `load-context` → `implement-hotwire` → `skills/workflows/tdd-workflow` (system specs)
+> **Chain:** `load-context` → `implement-hotwire` → `agents/tdd` (system specs)
 >
 > **Next skill: skills/context/load-context**

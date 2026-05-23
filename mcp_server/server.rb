@@ -2,10 +2,10 @@
 
 require 'mcp'
 require_relative 'lib/mcp_skills/list_skills_tool'
-require_relative 'lib/mcp_skills/list_workflows_tool'
+require_relative 'lib/mcp_skills/list_agents_tool'
 require_relative 'lib/mcp_skills/resource_registry'
 require_relative 'lib/mcp_skills/skill_tool'
-require_relative 'lib/mcp_skills/workflow_tool'
+require_relative 'lib/mcp_skills/agent_tool'
 
 PROJECT_ROOT = Pathname.new(__dir__).join('..').realpath
 
@@ -20,7 +20,12 @@ begin
   server = MCP::Server.new(
     name: 'rails-agent-skills',
     version: '1.0.0',
-    tools: [McpSkills::ListSkillsTool, McpSkills::SkillTool, McpSkills::ListWorkflowsTool, McpSkills::WorkflowTool],
+    tools: [
+      McpSkills::ListSkillsTool,
+      McpSkills::SkillTool,
+      McpSkills::ListAgentsTool,
+      McpSkills::AgentTool
+    ],
     resources: registry.all_resources
   )
   warn '[MCP] Server created'

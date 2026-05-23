@@ -34,7 +34,7 @@ plan-tests → write failing test
   → PR
 ```
 
-See [docs/workflow-guide.md](docs/workflow-guide.md) for all workflow diagrams.
+See [docs/agent-guide.md](docs/agent-guide.md) for all workflow diagrams.
 
 ## Available Skills
 
@@ -112,8 +112,9 @@ Skills are located in subdirectories of this plugin. Read the relevant `SKILL.md
 |-------|-------------|
 | `refactor-code` | Restructuring code while preserving behavior |
 
-### Workflow Skills (Orchestrators)
-| Skill | Use when... |
+### Primary Agents
+
+| Agent | Use when... |
 |-------|-------------|
 | `tdd` | Full TDD feature cycle: test → implement → review → PR |
 | `review` | Systematic PR review: review → deep dive → response |

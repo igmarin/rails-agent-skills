@@ -1,4 +1,4 @@
-# Calling Skills and Workflows
+# Calling Skills and Agents
 
 Rails Agent Skills can be invoked in three distinct ways depending on the environment, the user's intent, and the level of autonomy desired. Understanding the syntax and context for each method ensures you get the most out of your AI coding assistant.
 
@@ -35,8 +35,7 @@ In environments that support explicit context injection (like Cursor, Windsurf, 
 - **Gemini CLI:** `/activate_skill skill-name` or `/skill-name`
 
 **When to use:**
-Use this when you know exactly which workflow you want to follow and want to bypass the autonomous discovery phase. It is highly effective for enforcing strict constraints (like the "Tests Gate Implementation" rule) on specific tasks.
-
+Use this when you know exactly which skill or agent you want to follow and want to bypass the autonomous discovery phase. It is highly effective for enforcing strict constraints (like the "Tests Gate Implementation" rule) on specific tasks.
 ---
 
 ### 3. CLI (`gh skill` / `tessl` / `skills.sh`)
@@ -67,33 +66,35 @@ Use the CLI method when setting up a new project, configuring CI/CD pipelines, o
 
 ---
 
-## Using Workflows
+## Using Agents
 
-Workflows are orchestrated multi-step processes that chain multiple skills together. They are the primary way to execute complex Rails development tasks with built-in quality gates and TDD enforcement.
+Agents are orchestrated multi-step processes that chain multiple skills together. They are the primary way to execute complex Rails development tasks with built-in quality gates and TDD enforcement.
 
-### MCP Workflow Usage
+### MCP Agent Usage
 
-When connected via MCP, workflows are discovered and executed using two dedicated tools:
+When connected via MCP, agents are discovered and executed using two dedicated tools:
 
-**Discover available workflows:**
+**Discover available agents:**
+
 ```text
-list_workflows
+list_agents
 ```
-Returns metadata for all 9 workflows: tdd, quality, review, setup, engine, bug-fix, graphql, migration, background-job
+Returns metadata for all 9 agents: tdd, quality, review, setup, engine, bug-fix, graphql, migration, background-job
 
-**Load and execute a specific workflow:**
+**Load and execute a specific agent:**
+
 ```text
-use_workflow(workflow_name: "tdd")
+use_agent(agent_name: "tdd")
 ```
-Returns the full workflow instructions with phases, hard gates, and skill chaining
+Returns the full agent instructions with phases, hard gates, and skill chaining
 
 **Example MCP interaction:**
 - User: "I need to implement a new feature following TDD best practices"
-- Agent: Calls `list_workflows` → identifies `tdd` workflow → calls `use_workflow("tdd")` → executes the full TDD cycle with gates
+- Agent: Calls `list_agents` → identifies `tdd` agent → calls `use_agent("tdd")` → executes the full TDD cycle with gates
 
-### Chat Command Workflow Usage
+### Chat Command Agent Usage
 
-In environments that support chat commands, you can invoke workflows directly:
+In environments that support chat commands, you can invoke agents directly:
 
 **Cursor / Windsurf:**
 ```text
@@ -102,13 +103,13 @@ In environments that support chat commands, you can invoke workflows directly:
 
 **Gemini CLI:**
 ```text
-/activate_workflow tdd
+/activate_agent tdd
 ```
 
-### Available Workflows
+### Available Agents
 
-| Workflow | Purpose | When to Use |
-|----------|---------|-------------|
+| Agent | Purpose | When to Use |
+|-------|---------|-------------|
 | **tdd** | Full TDD feature cycle | Implementing new features with test-first discipline |
 | **quality** | Code quality sweep | Pre-PR quality checks, refactoring, documentation |
 | **review** | Systematic PR review | Code review, security audits, architecture review |
@@ -119,9 +120,9 @@ In environments that support chat commands, you can invoke workflows directly:
 | **migration** | Database migration | Safe database schema changes and deployment |
 | **background-job** | Background job implementation | Robust async processing with retry strategies |
 
-### Workflow Advantages
+### Agent Advantages
 
-Compared to ad-hoc skill chaining, workflows provide:
+Compared to ad-hoc skill chaining, agents provide:
 
 - **Hard Gates:** Enforced checkpoints (e.g., "tests must pass before implementation")
 - **TDD Enforcement:** Built-in test-first discipline for code changes

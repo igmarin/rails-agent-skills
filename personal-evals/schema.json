@@ -11,7 +11,7 @@
     },
     "target_type": {
       "type": "string",
-      "enum": ["skill", "workflow"]
+      "enum": ["skill", "agent"]
     },
     "target_name": {
       "type": "string",

@@ -6,7 +6,7 @@ Extended workflow definitions for specialized scenarios. See SKILL.md for the pr
 
 ## Feature (DDD-first)
 
-skills/context/load-context → skills/planning/create-prd → skills/ddd/define-domain-language → skills/ddd/review-domain-boundaries → skills/ddd/model-domain → skills/planning/generate-tasks → skills/workflows/tdd-workflow
+skills/context/load-context → skills/planning/create-prd → skills/ddd/define-domain-language → skills/ddd/review-domain-boundaries → skills/ddd/model-domain → skills/planning/generate-tasks → agents/tdd
 
 Use when: Domain modeling is required before implementation, or the feature involves complex bounded contexts.
 
@@ -14,8 +14,8 @@ Use when: Domain modeling is required before implementation, or the feature invo
 
 ## Code review + response
 
-Use `skills/workflows/review-workflow`:
-skills/workflows/review-workflow → (orchestrates review → deep dive → response → merge)
+Use `agents/review`:
+agents/review → (orchestrates review → deep dive → response → merge)
 
 ---
 
@@ -33,4 +33,4 @@ skills/code-quality/refactor-code → **[GATE: characterization tests pass on cu
 
 ## GraphQL
 
-skills/ddd/define-domain-language → skills/api/implement-graphql → skills/workflows/tdd-workflow → skills/code-quality/security-check
+skills/ddd/define-domain-language → skills/api/implement-graphql → agents/tdd → skills/code-quality/security-check

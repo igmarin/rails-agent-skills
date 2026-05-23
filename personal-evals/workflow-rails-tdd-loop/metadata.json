@@ -1,11 +1,11 @@
 {
   "id": "workflow-rails-tdd-loop",
-  "target_type": "workflow",
-  "target_name": "tdd-workflow",
+  "target_type": "agent",
+  "target_name": "tdd",
   "context_mode": "skill_bundle_xml",
   "requires_companion_resources": true,
   "tessl_export": {
     "supported": false,
-    "reason": "Requires workflow context as an XML bundle with companion resources; Tessl currently consumes only SKILL.md."
+    "reason": "Requires agent context as an XML bundle with companion resources; Tessl currently consumes only SKILL.md."
   }
 }

@@ -1,0 +1,13 @@
+{
+  "agents": {
+    "background-job":    { "path": "agents/background-job/SKILL.md" },
+    "bug-fix":           { "path": "agents/bug-fix/SKILL.md" },
+    "engine":            { "path": "agents/engine/SKILL.md" },
+    "graphql":           { "path": "agents/graphql/SKILL.md" },
+    "migration":         { "path": "agents/migration/SKILL.md" },
+    "quality":           { "path": "agents/quality/SKILL.md" },
+    "review":            { "path": "agents/review/SKILL.md" },
+    "setup":             { "path": "agents/setup/SKILL.md" },
+    "tdd":               { "path": "agents/tdd/SKILL.md" }
+  }
+}

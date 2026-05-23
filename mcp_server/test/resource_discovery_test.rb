@@ -22,10 +22,16 @@ class ResourceDiscoveryTest < Minitest::Test
     assert_includes skill_dirs, 'skills/patterns/create-service-object'
   end
 
-  def test_discovers_root_workflows
+  def test_discovers_root_agents
+    agent_dirs = @discovery.agent_dirs.map { |dir| dir.relative_path_from(Pathname.new(@tmpdir)).to_s }
+
+    assert_equal ['agents/review'], agent_dirs
+  end
+
+  def test_workflow_dirs_compat_returns_agents
     workflow_dirs = @discovery.workflow_dirs.map { |dir| dir.relative_path_from(Pathname.new(@tmpdir)).to_s }
 
-    assert_equal ['workflows/review-workflow'], workflow_dirs
+    assert_equal ['agents/review'], workflow_dirs
   end
 
   def test_deduplicates_tessl_skill_duplicates_by_name

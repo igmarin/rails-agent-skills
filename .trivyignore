@@ -13,3 +13,15 @@ CVE-2026-33210
 # CVE-2026-42246: net-imap 0.6.2 (Ruby 4.0.4 default gem) - STARTTLS stripping
 # Fixed in: >= 0.6.4 | App uses: 0.6.4 via Gemfile | Base image not yet patched
 CVE-2026-42246
+
+# CVE-2026-42257: net-imap 0.6.2 (Ruby 4.0.4 default gem) - Arbitrary IMAP command injection
+# Fixed in: >= 0.6.4 | App uses: 0.6.4 via Gemfile | Base image not yet patched
+CVE-2026-42257
+
+# CVE-2026-42258: net-imap 0.6.2 (Ruby 4.0.4 default gem) - Arbitrary IMAP command injection
+# Fixed in: >= 0.6.4 | App uses: 0.6.4 via Gemfile | Base image not yet patched
+CVE-2026-42258
+
+# CVE-2026-42245: net-imap 0.6.2 (Ruby 4.0.4 default gem) - Denial of Service
+# Fixed in: >= 0.6.4 | App uses: 0.6.4 via Gemfile | Base image not yet patched
+CVE-2026-42245

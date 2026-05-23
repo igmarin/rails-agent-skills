@@ -43,14 +43,13 @@ Every `SKILL.md` file must start with YAML frontmatter:
 ---
 name: skill-name
 description: One-line description
-type: workflow | skill
 ---
 ```
 
 Required fields in frontmatter:
 - `name` — Skill identifier (kebab-case)
 - `description` — Short one-line description
-- `type` — Either `workflow` or `skill`
+
 
 ## Local Validation
 
@@ -224,7 +223,6 @@ jq '.displayName = "Rails Agent Skills"' .claude-plugin/plugin.json > .claude-pl
 ---
 name: my-skill
 description: Brief description of what this skill does
-type: skill
 ---
 
 # Skill Name
@@ -321,11 +319,10 @@ chmod +x .git/hooks/pre-commit
 1. Create the skill directory and `SKILL.md` (place it in an appropriate category under `skills/`):
    ```bash
    mkdir -p skills/planning/my-new-skill
-   echo "---
-   name: my-new-skill
-   description: What this skill does
-   type: skill
-   ---" > skills/planning/my-new-skill/SKILL.md
+    echo "---
+    name: my-new-skill
+    description: What this skill does
+    ---" > skills/planning/my-new-skill/SKILL.md
    ```
 
 2. Run validation to ensure frontmatter is correct:

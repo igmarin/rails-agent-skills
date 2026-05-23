@@ -25,7 +25,7 @@ RUN apk add --no-cache --virtual .build-deps build-base && \
     apk del .build-deps && \
     rm -rf /tmp/* /var/tmp/*
 
-# Copy the entire repository so skills, docs, and workflows are available to the MCP server
+# Copy the entire repository so skills, docs, and agents are available to the MCP server
 COPY --chown=mcp:mcp . .
 
 # Ensure the server uses the correct Gemfile regardless of the current directory
