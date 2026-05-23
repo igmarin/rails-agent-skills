@@ -1,14 +1,11 @@
 {
   "name": "igmarin/rails-agent-skills",
   "version": "5.1.15",
-  "summary": "Curated library of 41 public AI agent skills for Ruby on Rails development. Organized by category: planning, testing, code-quality, ddd, engines, infrastructure, api, patterns, context, and orchestration. Covers code review, architecture, security, testing (RSpec), engines, service objects, DDD patterns, and TDD automation. Repository agents remain documented in GitHub but are intentionally excluded from the Tessl tile.",
+  "summary": "Curated library of 38 public AI agent skills for Ruby on Rails development. Organized by category: testing, code-quality, ddd, engines, infrastructure, api, patterns, context, and orchestration. Covers code review, architecture, security, testing (RSpec), engines, service objects, DDD patterns, and TDD automation. Repository agents remain documented in GitHub but are intentionally excluded from the Tessl tile.",
   "docs": "docs/index.md",
   "skills": {
     "generate-api-collection": {
       "path": "skills/api/generate-api-collection/SKILL.md"
-    },
-    "create-prd": {
-      "path": "skills/planning/create-prd/SKILL.md"
     },
     "review-domain-boundaries": {
       "path": "skills/ddd/review-domain-boundaries/SKILL.md"
@@ -18,9 +15,6 @@
     },
     "define-domain-language": {
       "path": "skills/ddd/define-domain-language/SKILL.md"
-    },
-    "generate-tasks": {
-      "path": "skills/planning/generate-tasks/SKILL.md"
     },
     "skill-router": {
       "path": "skills/orchestration/skill-router/SKILL.md"
@@ -120,9 +114,6 @@
     },
     "implement-calculator-pattern": {
       "path": "skills/patterns/implement-calculator-pattern/SKILL.md"
-    },
-    "plan-tickets": {
-      "path": "skills/planning/plan-tickets/SKILL.md"
     },
     "write-yard-docs": {
       "path": "skills/patterns/write-yard-docs/SKILL.md"

@@ -29,7 +29,7 @@ rails-agent-skills/
 │   └── tdd/
 │       └── SKILL.md
 ├── skills/                  # Categorized skills
-│   └── <category>/          # e.g., planning, testing, code-quality
+│   └── <category>/          # e.g., ddd, testing, code-quality
 │       └── <skill-name>/    # One directory per skill
 │           ├── SKILL.md     # Main skill file (required)
 │           └── reference.md # Optional reference material
@@ -176,7 +176,7 @@ Adapt principles to context.
 
 - `apply-stack-conventions`
 - `apply-code-conventions`
-- `plan-tickets`
+
 - `create-service-object`
 - `implement-background-job`
 - `model-domain`

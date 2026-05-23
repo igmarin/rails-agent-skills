@@ -64,7 +64,7 @@ Load minimum context before any code, spec, or PRD in an existing Rails codebase
 ```
 
 Do not pick silently.
-7. **Hand off:** With context loaded, proceed to the next skill (`create-prd`, `generate-tasks`, `plan-tests`, `apply-stack-conventions`, etc.). The Context Summary travels with the task.
+7. **Hand off:** With context loaded, proceed to the next skill (`plan-tests`, `apply-stack-conventions`, etc.). The Context Summary travels with the task.
 
 ### Pitfalls
 
@@ -106,7 +106,6 @@ Do not pick silently.
 
 | Skill | When to chain |
 |-------|---------------|
-| **create-prd** / **generate-tasks** | Before scoping a PRD or breaking down tasks on an existing feature area |
 | **plan-tests** | Nearest spec in the summary usually reveals the right first failing spec |
 | **triage-bug** / **refactor-code** | Context precedes reproduction or characterization tests |
 | **review-architecture** / **define-domain-language** | When context reveals boundary or naming drift |

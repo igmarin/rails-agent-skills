@@ -1,8 +1,8 @@
 # Rails Agent Skills Documentation
 
-This documentation is the public map for the Rails Agent Skills library: 41 public Rails skills, 9 callable agents, an MCP distribution, and the evaluation process used to keep the skills useful.
+This documentation is the public map for the Rails Agent Skills library: 38 public Rails skills, 9 callable agents, an MCP distribution, and the evaluation process used to keep the skills useful.
 
-For the high-level project value proposition, start with the [root README](../README.md). For installation and runtime setup, use the [MCP server README](../mcp_server/README.md).
+For the high-level project value proposition, start with the [root README](../README.md).
 
 ## Quick Start Decision Map
 
@@ -19,7 +19,7 @@ For the high-level project value proposition, start with the [root README](../RE
 
 The repository uses a hybrid model to keep agent context focused:
 
-1. **Skills** are atomic expert instructions such as `code-review`, `plan-tests`, or `create-service-object`. Agents load them on demand through the MCP `use_skill` tool or through an installed skill host.
+1. **Skills** are atomic expert instructions such as `code-review`, `plan-tests`, or `create-service-object`. Agents load them on demand through an installed skill host.
 2. **Agents** are orchestrated multi-step processes that chain multiple skills together into a complete development loop, such as TDD feature work, code review, setup, quality checks, or engine development.
 
 ## Master Stage Index
@@ -27,7 +27,7 @@ The repository uses a hybrid model to keep agent context focused:
 | Stage | Guide | Description | Primary skills |
 |-------|-------|-------------|----------------|
 | Discovery | [Discovery & Context](agents/discovery.md) | Understand codebase and onboarding context | `load-context`, `setup-environment` |
-| Planning | [Planning & Design](agents/planning.md) | PRDs, tasks, and domain language | `create-prd`, `generate-tasks`, `define-domain-language` |
+
 | Setup | [Setup & Configuration](agents/setup.md) | CI/CD and infrastructure references | `setup-environment` |
 | Development | [Development](agents/development.md) | TDD and implementation | `plan-tests`, `write-tests`, `triage-bug` |
 | Quality | [Code Quality](agents/quality.md) | Conventions, refactoring, and docs | `apply-code-conventions`, `refactor-code`, `write-yard-docs` |
@@ -50,11 +50,11 @@ Tessl validates publishable skills from `tile.json` using `tessl-evals/`. The up
 
 ## Reference & Authoring
 
-- [Skill Catalog](reference/skill-catalog.md) - Complete list of 41 public skills and 9 callable agents.
+- [Skill Catalog](reference/skill-catalog.md) - Complete list of 38 public skills and 9 callable agents.
 - [Calling Skills Guide](calling-skills.md) - Syntax and execution contexts (MCP, CLI, Chat).
 - [Integration Matrix](reference/integration-matrix.md) - How skills connect.
 - [Agent Guide](agent-guide.md) - Narrative guide for daily use.
-- [Implementation Guide](implementation-guide.md) - IDE and MCP setup overview.
+- [Implementation Guide](implementation-guide.md) - Installation setup overview.
 - [Architecture](architecture.md) - Repository layout and `SKILL.md` conventions.
 - [Eval Provenance](eval-provenance.md) - Canonical eval ownership policy.
 - [Skill Template](skill-template.md) - Template for creating new skills.

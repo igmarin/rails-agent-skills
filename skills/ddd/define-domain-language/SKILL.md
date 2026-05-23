@@ -87,7 +87,6 @@ Load only when the task needs examples or a reusable glossary schema:
 
 | Skill | When to chain |
 |-------|---------------|
-| **create-prd** | When a PRD needs cleaner business language before approval |
 | **review-domain-boundaries** | When the glossary suggests multiple bounded contexts or language leakage |
 | **model-domain** | When the terms are clear enough to decide entities, value objects, and services |
 | **review-architecture** | When naming confusion already appears in the code structure |

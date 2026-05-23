@@ -11,7 +11,6 @@ flowchart TD
     START([What do you need to do?]) --> DECISION{What stage are you at?}
 
     DECISION -->|New project or setup| DISCOVERY[discovery]
-    DECISION -->|Plan feature| PLANNING[planning]
     DECISION -->|Configure CI/CD or environment| SETUP[setup]
     DECISION -->|Develop code| DEV[development]
     DECISION -->|Review quality| QUALITY[quality]
@@ -19,7 +18,6 @@ flowchart TD
     DECISION -->|Build engine| ENGINES[engines]
 
     DISCOVERY --> NEXT{What next?}
-    PLANNING --> NEXT
     SETUP --> DEV
 
     NEXT -->|Implement| DEV
@@ -44,7 +42,6 @@ flowchart TD
 | Stage | Guide | Description | Primary Skills |
 |-------|-------|-------------|----------------|
 | **Discovery** | [Discovery & Context](discovery.md) | Understand codebase, project onboarding | `load-context`, `setup-environment` |
-| **Planning** | [Planning & Design](planning.md) | Plan features, PRD, tasks, DDD | `create-prd`, `generate-tasks`, `ddd skills` |
 | **Setup** | [Setup & Configuration](setup.md) | Configure CI/CD, environment, deploy | `setup-environment` *(plus roadmap `setup-ci-cd`)* |
 | **Development** | [Development](development.md) | TDD development, implementation | `plan-tests`, `testing skills`, implementation |
 | **Quality** | [Code Quality](quality.md) | Conventions, refactoring, documentation | `apply-code-conventions`, `refactor-code`, `write-yard-docs` |
@@ -65,7 +62,6 @@ This directory contains **reference guides** describing each stage. For **execut
 | [quality.md](quality.md) | [`quality`](../../agents/quality/SKILL.md) | Active |
 | [engines.md](engines.md) | [`engine`](../../agents/engine/SKILL.md) | Active |
 | [discovery.md](discovery.md) | *(none — linear, no orchestration needed)* | Doc only |
-| [planning.md](planning.md) | *(none — linear, no orchestration needed)* | Doc only |
 
 **When to use which:** Read the stage doc to understand the full context and rationale. Invoke the callable agent when you want the agent to execute the orchestration automatically.
 
@@ -93,10 +89,7 @@ New to the project?
   ├─ Yes → load-context → setup-environment
   └─ No → What do you need to do?
 
-       Plan a feature?
-       ├─ Yes → create-prd → generate-tasks → (plan-tickets optional)
-       └─ No → Implement?
-
+       Implement?
             Bug or refactor?
             ├─ Bug → triage-bug
             ├─ Refactor → refactor-code

@@ -74,7 +74,7 @@ For each domain concept, return a compact entry covering:
 4. **Invariant or ownership reason** — the rule that must stay true and the exact object responsible for enforcing it
 5. **Patterns to avoid** — what not to reach for
 6. **Test handoff** — first behavior to verify, likely spec type, and that implementation is deferred until `plan-tests` and `write-tests` complete
-7. **Next skill to chain** — e.g. `generate-tasks`, `plan-tests`
+7. **Next skill to chain** — e.g. `plan-tests`
 
 ### Inline Example — Order aggregate
 
@@ -94,6 +94,5 @@ For each domain concept, return a compact entry covering:
 |-------|---------------|
 | **define-domain-language** | When the terms are not clear enough to model yet |
 | **review-domain-boundaries** | When the modeling problem is really a context boundary problem |
-| **generate-tasks** | After the tactical design is clear and ready for implementation planning |
 | **plan-tests** | When the next step is choosing the best first failing spec |
 | **apply-code-conventions** | When validating the modeling choice against Rails simplicity and repo conventions |

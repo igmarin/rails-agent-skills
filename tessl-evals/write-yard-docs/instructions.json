@@ -14,12 +14,7 @@
       "relevant_when": "When a user asks for Rails work that should trigger write-yard-docs.",
       "why_given": "preference"
     },
-    {
-      "instruction": "Task lists from generate-tasks MUST include explicit YARD sub-tasks after implementation.",
-      "original_snippets": "Task lists from generate-tasks MUST include explicit YARD sub-tasks after implementation.",
-      "relevant_when": "When a user asks for Rails work that should trigger write-yard-docs.",
-      "why_given": "preference"
-    },
+
     {
       "instruction": "Use `@option` for every valid key in hash params. Include at least one `@example` on `.call` or the main public entry point.",
       "original_snippets": "Use `@option` for every valid key in hash params. Include at least one `@example` on `.call` or the main public entry point.",

@@ -4,7 +4,7 @@ This file tells AI agents how to use this repository effectively.
 
 ## What This Repository Is
 
-A curated library of 41 public atomic skills for Ruby on Rails development, plus 9 callable agents. Each skill encodes specialized workflow knowledge, conventions, and hard gates for a specific Rails domain. Skills are not documentation — they are executable instructions that guide agents through structured workflows.
+A curated library of 38 public atomic skills for Ruby on Rails development, plus 9 callable agents. Each skill encodes specialized workflow knowledge, conventions, and hard gates for a specific Rails domain. Skills are not documentation — they are executable instructions that guide agents through structured workflows.
 
 ## How Skills Are Organized
 
@@ -28,7 +28,6 @@ Load the skill that best matches the current task. The bootstrap skill `skill-ro
 
 | Category | Path | Skills |
 |----------|------|--------|
-| **Planning** | `skills/planning/` | `create-prd`, `generate-tasks`, `plan-tickets` |
 | **Testing** | `skills/testing/` | `write-tests`, `test-service`, `plan-tests`, `triage-bug` |
 | **Code Quality** | `skills/code-quality/` | `code-review`, `respond-to-review`, `review-architecture`, `security-check`, `apply-stack-conventions`, `apply-code-conventions`, `implement-authorization`, `refactor-code` |
 | **DDD** | `skills/ddd/` | `define-domain-language`, `review-domain-boundaries`, `model-domain` |
@@ -65,7 +64,6 @@ Do not write implementation code before the test exists and fails. Every skill t
 | Build GraphQL API | `agents/graphql` | Domain modeling → schema → TDD → security |
 | Database migration | `agents/migration` | Plan → test → staging → production |
 | Background job | `agents/background-job` | Design → TDD → retry config → monitoring |
-| Plan new feature | `skills/planning/create-prd` → `skills/planning/generate-tasks` | Planning only |
 
 ### TDD Feature Loop (Recommended)
 
@@ -84,7 +82,7 @@ skills/context/load-context
     → PR
 ```
 
-For a full feature from scratch: `skills/context/load-context` → `skills/planning/create-prd` → `skills/planning/generate-tasks` → `agents/tdd`.
+For a full feature from scratch: `skills/context/load-context` → `agents/tdd`.
 
 See `docs/agent-guide.md` for all workflow variants (bug fix, GraphQL, engine, migration, refactor, etc.).
 
@@ -94,7 +92,7 @@ Each skill's **Integration** table names the next skill to load. Follow it. Skil
 
 ## Output Language
 
-All generated artifacts (YARD docs, Postman collections, task lists, PRDs, READMEs, examples) must be in **English** unless the user explicitly requests another language.
+All generated artifacts (YARD docs, Postman collections, READMEs, examples) must be in **English** unless the user explicitly requests another language.
 
 ## Eval Strategy
 
@@ -103,7 +101,6 @@ Skills are scored on two axes: **skill-specific criteria** AND **model performan
 ## Key Constraints
 
 - **The `evals/` directory is READ-ONLY.** These files contain intentional bugs, missing documentation, or non-standard patterns used to evaluate agent performance. Never "fix" or "improve" files in `evals/` unless explicitly instructed to update a test case scenario.
-- Do not generate tickets unless the user asks explicitly — `plan-tickets` is optional.
 - Do not skip the verify-failure step in the TDD gate.
 - Do not add repositories, aggregates, or domain events just because a task looks "DDD" — see `model-domain`.
 - Do not use `implement-graphql` for REST endpoints or `generate-api-collection` for GraphQL endpoints.
@@ -111,6 +108,6 @@ Skills are scored on two axes: **skill-specific criteria** AND **model performan
 <!-- lean-ctx -->
 ## lean-ctx
 
-Prefer lean-ctx MCP tools over native equivalents for token savings.
+Prefer lean-ctx tools over native equivalents for token savings.
 Full rules: @LEAN-CTX.md
 <!-- /lean-ctx -->

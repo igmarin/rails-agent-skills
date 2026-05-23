@@ -39,23 +39,7 @@ code-review → skills/code-quality/respond-to-review (if feedback) → PR
 ```text
 skills/context/load-context
     ↓
-create-prd → [gate: PRD approved]
-    ↓
-generate-tasks
-    ↓
-[TDD Feature Loop for each task]
-```
-
-### Feature DDD-First
-
-```text
-skills/context/load-context
-    ↓
-create-prd
-    ↓
 skills/ddd/define-domain-language → skills/ddd/review-domain-boundaries → skills/ddd/model-domain
-    ↓
-generate-tasks
     ↓
 [TDD Feature Loop]
 ```
@@ -143,10 +127,6 @@ security-check
 ### External API Integration
 
 ```text
-create-prd
-    ↓
-generate-tasks
-    ↓
 plan-tests
     ↓
 integrate-api-client
@@ -160,17 +140,7 @@ code-review
 
 ## Integrations by Skill
 
-### create-prd
-| Next | When |
-|------|------|
-| generate-tasks | Always after PRD approved |
-| plan-tickets | Optional — if tickets needed in tracker |
 
-### generate-tasks
-| Next | When |
-|------|------|
-| plan-tests | To start development |
-| plan-tickets | If tickets needed on board |
 
 ### plan-tests
 | Next | When |
@@ -208,15 +178,9 @@ New to project?
   ├─ Yes → load-context → setup-environment
   └─ No → What do you need?
 
-       Plan?
-       ├─ Yes → create-prd → generate-tasks
-       └─ No → Implement?
-
-            Bug?
-            ├─ Yes → triage-bug
-            └─ No → Refactor?
-                 ├─ Yes → refactor-code
-                 └─ No → plan-tests → write-tests
+       Refactor?
+            ├─ Yes → refactor-code
+            └─ No → plan-tests → write-tests
 
                       Type?
                       ├─ Service → create-service-object → test-service
@@ -241,7 +205,6 @@ Review?
 | Test Feedback | checkpoint | plan-tests | Confirm correct test before implementing |
 | Implementation Proposal | checkpoint | write-tests | Approve approach before code |
 | Linters + Suite | gate | agent-guide.md | All linters and tests pass |
-| PRD Approved | gate | create-prd | Don't implement without approved PRD |
 | Characterization Tests | gate | refactor-code | Tests pass on current code before refactor |
 | Engine Specs | gate | create-engine | Specs fail before implementing engine |
 

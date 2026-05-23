@@ -6,7 +6,7 @@ Extended workflow definitions for specialized scenarios. See SKILL.md for the pr
 
 ## Feature (DDD-first)
 
-skills/context/load-context → skills/planning/create-prd → skills/ddd/define-domain-language → skills/ddd/review-domain-boundaries → skills/ddd/model-domain → skills/planning/generate-tasks → agents/tdd
+skills/context/load-context → skills/ddd/define-domain-language → skills/ddd/review-domain-boundaries → skills/ddd/model-domain → agents/tdd
 
 Use when: Domain modeling is required before implementation, or the feature involves complex bounded contexts.
 

@@ -20,7 +20,6 @@ metadata:
 | Scenario | Primary Skill |
 |----------|---------------|
 | Fallback: unfamiliar codebase / ambiguity | `load-context` |
-| Planning a feature | `create-prd` then `generate-tasks` |
 | Choosing where to start testing | `plan-tests` |
 | Reviewing code | `code-review` |
 | Fixing a bug | `triage-bug` |
@@ -51,8 +50,6 @@ In an active response, make the routing statement, such as `Next skill: skills/c
 | **review-architecture** | Reviewing structure, boundaries, fat models/controllers — the question is about design or system shape, not a specific PR |
 | **apply-stack-conventions** | Writing Rails code for PostgreSQL + Hotwire + Tailwind stack |
 | **refactor-code** | Restructuring code while preserving behavior |
-| **create-prd** | Planning a feature or writing requirements |
-| **generate-tasks** | Breaking a PRD into implementation tasks |
 
 ### Skill Priority
 
@@ -92,7 +89,7 @@ Sub-skills or agents are invoked by stating their name as the next skill/agent t
 **TDD Feature Loop** *(primary daily workflow)* — use `agents/tdd`:
 skills/context/load-context → **[CHECK: context loaded]** → agents/tdd → PR
 
-**Feature (standard):** skills/context/load-context → **[CHECK: context loaded]** → skills/planning/create-prd → **[CHECK: PRD approved]** → skills/planning/generate-tasks → **[CHECK: tasks complete]** → agents/tdd
+**Feature (standard):** skills/context/load-context → **[CHECK: context loaded]** → skills/testing/plan-tests → agents/tdd
 
 **Bug fix:** skills/testing/triage-bug → **[GATE: reproduction spec fails]** → agents/tdd → fix → verify passes
 
@@ -130,4 +127,3 @@ skills/context/load-context → **[CHECK: context loaded]** → agents/tdd → P
 | Skill | When to chain |
 |-------|---------------|
 | **load-context** | Default for ambiguous requests |
-| **create-prd** | For new features |

@@ -62,7 +62,7 @@ Cline reads skill definitions from the workspace. Create `.vscode/cline.config.j
 ```
 
 Alternatively, you can manually invoke skills by name in Cline's chat:
-- `/create-prd` — Start a new feature with PRD
+
 - `/plan-tests` — Begin TDD loop
 - `/code-review` — Self-review Rails code
 - `/write-yard-docs` — Generate YARD docs
@@ -108,13 +108,7 @@ Edit `~/.continue/config.json`:
       "contextLength": 200000
     }
   ],
-  "slashCommands": [
-    {
-      "name": "create-prd",
-      "description": "Plan a feature with PRD",
-      "prompt": "Use the create-prd skill to outline feature requirements"
-    }
-  ],
+
   "customTools": []
 }
 ```
@@ -182,17 +176,7 @@ aider
 
 1. **Open Cline** in VS Code (Cmd+L)
 
-2. **Start with PRD**:
-   ```
-   /create-prd Implement JWT-based authentication for API endpoints
-   ```
 
-3. **Get implementation plan**:
-   ```
-   /generate-tasks Based on the PRD above
-   ```
-
-4. **Begin TDD loop**:
    ```
    /plan-tests What's the first failing spec for JWT auth?
    ```

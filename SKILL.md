@@ -1,15 +1,15 @@
 ---
 name: rails-agent-skills
 description: >
-  Master orchestrator for the Rails Agent Skills library. Use to discover and activate 41 atomic
+  Master orchestrator for the Rails Agent Skills library. Use to discover and activate 38 atomic
   Rails development skills as listed in tile.json. Covers TDD (RSpec), Service Objects, DDD,
   GraphQL, Engines, and Code Quality. Enforces strict engineering discipline.
-  rails, rspec, tdd, mcp, service objects, graphql, ddd, ruby on rails.
+  rails, rspec, tdd, service objects, graphql, ddd, ruby on rails.
 ---
 
 # Rails Agent Skills
 
-Master entry point for the library. This skill helps you navigate and activate the 41 atomic skills required for disciplined Rails development.
+Master entry point for the library. This skill helps you navigate and activate the 38 atomic skills required for disciplined Rails development.
 
 **Core principle:** Atomic, task-specific instructions that turn AI coding assistants into reliable Rails collaborators through TDD and idiomatic patterns.
 
@@ -17,7 +17,6 @@ Master entry point for the library. This skill helps you navigate and activate t
 
 | Task | Primary Atomic Skill |
 |------|----------------------|
-| **Planning** | `create-prd`, `generate-tasks` |
 | **Testing** | `plan-tests`, `write-tests`, `test-service` |
 | **Quality** | `code-review`, `security-check`, `refactor-code` |
 | **Patterns** | `create-service-object`, `write-yard-docs` |
@@ -44,9 +43,9 @@ Implementation code CANNOT be written until:
 ## Core Process
 
 1. **Context Initialization:** (CRITICAL) Start every session by activating `load-context`.
-2. **Discovery:** Use this skill to identify which atomic skills from the 41-skill catalog match the current task.
+2. **Discovery:** Use this skill to identify which atomic skills from the 38-skill catalog match the current task.
 3. **Execution Loop:**
-   - **Plan:** Activate `create-prd` or `plan-tests`.
+   - **Plan:** Activate `plan-tests`.
    - **Act:** Activate `write-tests` -> `implement` -> `apply-code-conventions`.
    - **Polish:** Activate `write-yard-docs` and `code-review`.
 4. **Validation:** Ensure all atomic outputs adhere to the `Output Style` of the activated skill.
@@ -55,18 +54,17 @@ Implementation code CANNOT be written until:
 
 | Category | Skills |
 |----------|--------|
-| **Planning** | `create-prd`, `generate-tasks`, `plan-tickets` |
 | **Testing** | `plan-tests`, `write-tests`, `test-service`, `triage-bug` |
 | **DDD** | `define-domain-language`, `model-domain`, `review-domain-boundaries` |
 | **Quality** | `code-review`, `security-check`, `apply-code-conventions`, `refactor-code` |
 | **API/Infra** | `implement-graphql`, `integrate-api-client`, `implement-background-job`, `review-migration` |
 | **Engines** | `create-engine`, `test-engine`, `release-engine`, `document-engine` |
 
-*See `tile.json` for the complete list of 41 skills.*
+*See `tile.json` for the complete list of 38 skills.*
 
 ## Integration
 
-- **Source of Truth:** `tile.json` (List of all 41 atomic skills)
+- **Source of Truth:** `tile.json` (List of all 38 atomic skills)
 - **Manual Discovery:** `docs/reference/skill-catalog.md`
 - **Orchestration:** `skill-router`
 

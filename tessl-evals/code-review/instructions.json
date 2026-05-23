@@ -14,12 +14,7 @@
       "relevant_when": "When a user asks for Rails work that should trigger code-review.",
       "why_given": "new knowledge"
     },
-    {
-      "instruction": "generate-tasks must include a \"Code review before merge\" task.",
-      "original_snippets": "generate-tasks must include a \"Code review before merge\" task.",
-      "relevant_when": "When a user asks for Rails work that should trigger code-review.",
-      "why_given": "preference"
-    },
+
     {
       "instruction": "Use **only** these labels:",
       "original_snippets": "Use **only** these labels:",

@@ -63,7 +63,7 @@ Implementation code CANNOT be written until:
   3. The test FAILS for the right reason (feature missing, not a typo)
 ```
 
-Non-code-producing skills (review skills, planning skills, doc skills) still have a HARD-GATE — usually "do not skip the prior context skill" or "do not output until the deliverable matches Output Style exactly."
+Non-code-producing skills (review skills, doc skills) still have a HARD-GATE — usually "do not skip the prior context skill" or "do not output until the deliverable matches Output Style exactly."
 
 The HARD-GATE section must be **scannable**: a 3–6 line block, fenced or quoted, that the model cannot miss while skimming.
 

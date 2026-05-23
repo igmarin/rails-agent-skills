@@ -149,7 +149,7 @@ security:
 | If setup is done... | Next step |
 |---------------------|-----------|
 | CI/CD ready | `plan-tests` → [development](development.md) |
-| Need new feature | `create-prd` → [planning](planning.md) |
+
 
 ---
 

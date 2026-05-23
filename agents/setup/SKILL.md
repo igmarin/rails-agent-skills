@@ -168,6 +168,5 @@ act push  # GitHub Actions local runner (optional)
 | Predecessor | This Skill | Successor |
 |-------------|------------|-----------|
 | None (entry point) | setup | tdd (start developing) |
-| None (entry point) | setup | create-prd (plan features first) |
 
 **From AGENTS.md:** This is the setup agent loop. For development, chain to tdd.

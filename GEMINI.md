@@ -7,7 +7,7 @@ This plugin provides a library of specialized Rails development skills. When a t
 ```text
 THIS IS NON-NEGOTIABLE AND APPLIES TO EVERY SKILL THAT PRODUCES CODE.
 
-WORKFLOW: PRD → TASKS → TESTS → IMPLEMENTATION → YARD → DOCS → CODE REVIEW → PR
+WORKFLOW: TASK/FEATURE → TESTS → IMPLEMENTATION → YARD → DOCS → CODE REVIEW → PR
 
 Tests are a GATE. Implementation code CANNOT be written until:
 1. The test EXISTS
@@ -39,13 +39,6 @@ See [docs/agent-guide.md](docs/agent-guide.md) for all workflow diagrams.
 ## Available Skills
 
 Skills are located in subdirectories of this plugin. Read the relevant `SKILL.md` before responding to any task that matches.
-
-### Planning & Tasks
-| Skill | Use when... |
-|-------|-------------|
-| `create-prd` | User asks to plan a feature or write requirements |
-| `generate-tasks` | User asks for implementation steps or task breakdown |
-| `plan-tickets` | User wants tickets from a plan |
 
 ### Rails Code Quality
 | Skill | Use when... |
@@ -83,7 +76,7 @@ Skills are located in subdirectories of this plugin. Read the relevant `SKILL.md
 ### Context & Setup
 | Skill | Use when... |
 |-------|-------------|
-| `load-context` | Before any code/spec/PRD in an existing Rails codebase — loads schema, routes, nearest patterns, surfaces ambiguity |
+| `load-context` | Before any code/spec in an existing Rails codebase — loads schema, routes, nearest patterns, surfaces ambiguity |
 | `setup-environment` | First-time dev environment setup — Docker, env vars, database, test suite |
 
 ### Testing
@@ -129,21 +122,17 @@ Skills are located in subdirectories of this plugin. Read the relevant `SKILL.md
 ## Skill Priority
 
 1. **TDD always** — `write-tests` applies whenever code is produced
-2. **Planning first** — `create-prd`, `generate-tasks` (optionally `plan-tickets`)
-3. **Domain discovery next** — `ddd-*` skills when domain is the hard part
-4. **Process skills** — `refactor-code`
-5. **Domain skills** — `rails-*`, `ruby-*` for specific implementation
+2. **Domain discovery next** — `ddd-*` skills when domain is the hard part
+3. **Process skills** — `refactor-code`
+4. **Domain skills** — `rails-*`, `ruby-*` for specific implementation
 
 ## Typical Workflows
 
 **TDD Feature Loop** *(primary)*:
 `plan-tests` → **[Test Feedback checkpoint]** → **[Implementation Proposal checkpoint]** → implement → **[Linters + Suite gate]** → `write-yard-docs` → `code-review` → `respond-to-review` (on feedback) → PR
 
-**New feature:**
-`create-prd` → `generate-tasks` → *TDD Feature Loop*
-
 **DDD-first:**
-`create-prd` → `define-domain-language` → `review-domain-boundaries` → `model-domain` → `generate-tasks` → *TDD Feature Loop*
+`define-domain-language` → `review-domain-boundaries` → `model-domain` → *TDD Feature Loop*
 
 **Code review + response:**
 `code-review` → `respond-to-review` (on feedback) → re-review if Critical items addressed
@@ -181,11 +170,11 @@ Skills are located in subdirectories of this plugin. Read the relevant `SKILL.md
 
 **Background jobs:** Always include `retry_on ExceptionClass, wait: :polynomially_longer, attempts: N` for transient errors and `discard_on` for permanent errors (e.g. `ActiveRecord::RecordNotFound`).
 
-**Task lists (generate-tasks):** Task 0.0 ALWAYS creates the feature branch. Each implementation task MUST have four sub-tasks: (a) write spec, (b) run spec — verify fails, (c) implement, (d) run spec — verify passes. Always include a Relevant Files section.
+
 
 ## Output Language
 
-Generated artifacts (YARD docs, Postman collections, READMEs, task descriptions) must be in **English** unless the user explicitly requests another language.
+Generated artifacts (YARD docs, Postman collections, READMEs) must be in **English** unless the user explicitly requests another language.
 
 ## Eval Strategy
 

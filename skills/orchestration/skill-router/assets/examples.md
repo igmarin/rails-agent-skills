@@ -8,16 +8,6 @@ Active responses must put `Next skill: ...` first. When multiple skills may appl
 
 ## Single-Skill Routes (Clear Intent)
 
-### 1. Write PRD
-
-> **User:** "Write a PRD for adding multi-tenant support to the billing service."
->
-> **Match:** Explicit planning request with clear scope.
->
-> **Chain:** `load-context` → `create-prd`
->
-> **Next skill: skills/context/load-context**
-
 ### 2. Triage Bug
 
 > **User:** "Triage a 500 error observed in orders#create when item_id is nil."
@@ -68,7 +58,7 @@ Active responses must put `Next skill: ...` first. When multiple skills may appl
 >
 > **Match:** Scope unclear, no existing PRD, vague starting point.
 >
-> **Chain:** `load-context` → `create-prd` → `generate-tasks` → `plan-tests` → `agents/tdd`
+> **Chain:** `load-context` → `plan-tests` → `agents/tdd`
 >
 > **Next skill: skills/context/load-context**
 
@@ -100,7 +90,7 @@ Active responses must put `Next skill: ...` first. When multiple skills may appl
 >
 > **Match:** Domain modeling before implementation.
 >
-> **Chain:** `load-context` → `define-domain-language` → `review-domain-boundaries` → `model-domain` → `create-prd` → `generate-tasks` → `agents/tdd`
+> **Chain:** `load-context` → `define-domain-language` → `review-domain-boundaries` → `model-domain` → `agents/tdd`
 >
 > **Next skill: skills/context/load-context**
 
@@ -181,16 +171,6 @@ Active responses must put `Next skill: ...` first. When multiple skills may appl
 ---
 
 ## Edge Cases
-
-### 16. User Asks for Tickets Explicitly
-
-> **User:** "Create Jira tickets from this task list."
->
-> **Match:** Explicit ticket request. Do not generate tickets unless explicitly asked.
->
-> **Chain:** `plan-tickets`
->
-> **Next skill: skills/planning/plan-tickets**
 
 ### 17. Security Concern Mid-Feature
 

@@ -4,6 +4,14 @@ All notable changes to this repository will be documented in this file.
 
 This project uses semantic versioning for published skill-library releases.
 
+## [Unreleased]
+
+### Changed
+
+- Converted repository to a pure Agent Skills registry.
+- Removed MCP server, Docker, Cloudflare, and CI files to focus strictly on skill distribution via `npx skills`.
+- Evicted language-agnostic planning skills (`create-prd`, `generate-tasks`, `plan-tickets`).
+
 ## [5.1.5] - 2026-05-11
 
 ### Added
