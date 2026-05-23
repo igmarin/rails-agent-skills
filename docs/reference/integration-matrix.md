@@ -205,7 +205,6 @@ Review?
 | Test Feedback | checkpoint | plan-tests | Confirm correct test before implementing |
 | Implementation Proposal | checkpoint | write-tests | Approve approach before code |
 | Linters + Suite | gate | agent-guide.md | All linters and tests pass |
-| Linters + Suite | gate | agent-guide.md | All linters and tests pass |
 | Characterization Tests | gate | refactor-code | Tests pass on current code before refactor |
 | Engine Specs | gate | create-engine | Specs fail before implementing engine |
 
