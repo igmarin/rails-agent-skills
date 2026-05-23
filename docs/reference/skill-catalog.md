@@ -1,6 +1,6 @@
 # Skill Catalog — Rails Agent Skills
 
-Complete catalog of 41 public skills and 9 callable agents organized by development lifecycle stage and by category.
+Complete catalog of 38 public skills and 9 callable agents organized by development lifecycle stage and by category.
 
 ---
 

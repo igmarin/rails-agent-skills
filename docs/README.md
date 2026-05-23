@@ -1,6 +1,6 @@
 # Rails Agent Skills Documentation
 
-This documentation is the public map for the Rails Agent Skills library: 41 public Rails skills, 9 callable agents, an MCP distribution, and the evaluation process used to keep the skills useful.
+This documentation is the public map for the Rails Agent Skills library: 38 public Rails skills, 9 callable agents, an MCP distribution, and the evaluation process used to keep the skills useful.
 
 For the high-level project value proposition, start with the [root README](../README.md).
 
@@ -50,7 +50,7 @@ Tessl validates publishable skills from `tile.json` using `tessl-evals/`. The up
 
 ## Reference & Authoring
 
-- [Skill Catalog](reference/skill-catalog.md) - Complete list of 41 public skills and 9 callable agents.
+- [Skill Catalog](reference/skill-catalog.md) - Complete list of 38 public skills and 9 callable agents.
 - [Calling Skills Guide](calling-skills.md) - Syntax and execution contexts (MCP, CLI, Chat).
 - [Integration Matrix](reference/integration-matrix.md) - How skills connect.
 - [Agent Guide](agent-guide.md) - Narrative guide for daily use.

@@ -4,7 +4,7 @@
 The non-negotiable rule that implementation code cannot be written until a test exists, has been run, and has failed for the right reason. This is the foundational discipline of the library.
 
 ## Skill
-An atomic unit of agent instructions stored in `SKILL.md` files. There are 41 public skills in this library, categorized by Rails development concern.
+An atomic unit of agent instructions stored in `SKILL.md` files. There are 38 public skills in this library, categorized by Rails development concern.
 
 ## Agent
 
