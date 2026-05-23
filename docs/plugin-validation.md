@@ -318,11 +318,12 @@ chmod +x .git/hooks/pre-commit
 
 1. Create the skill directory and `SKILL.md` (place it in an appropriate category under `skills/`):
    ```bash
-   mkdir -p skills/planning/my-new-skill
-    echo "---
-    name: my-new-skill
-    description: What this skill does
-    ---" > skills/planning/my-new-skill/SKILL.md
+   mkdir -p skills/patterns/my-new-skill
+   echo "---
+   name: my-new-skill
+   description: Use when X happens
+   type: skill
+   ---" > skills/patterns/my-new-skill/SKILL.md
    ```
 
 2. Run validation to ensure frontmatter is correct:

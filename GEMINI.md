@@ -7,7 +7,7 @@ This plugin provides a library of specialized Rails development skills. When a t
 ```text
 THIS IS NON-NEGOTIABLE AND APPLIES TO EVERY SKILL THAT PRODUCES CODE.
 
-WORKFLOW: PRD → TASKS → TESTS → IMPLEMENTATION → YARD → DOCS → CODE REVIEW → PR
+WORKFLOW: TASK/FEATURE → TESTS → IMPLEMENTATION → YARD → DOCS → CODE REVIEW → PR
 
 Tests are a GATE. Implementation code CANNOT be written until:
 1. The test EXISTS
@@ -76,7 +76,7 @@ Skills are located in subdirectories of this plugin. Read the relevant `SKILL.md
 ### Context & Setup
 | Skill | Use when... |
 |-------|-------------|
-| `load-context` | Before any code/spec/PRD in an existing Rails codebase — loads schema, routes, nearest patterns, surfaces ambiguity |
+| `load-context` | Before any code/spec in an existing Rails codebase — loads schema, routes, nearest patterns, surfaces ambiguity |
 | `setup-environment` | First-time dev environment setup — Docker, env vars, database, test suite |
 
 ### Testing
@@ -170,11 +170,11 @@ Skills are located in subdirectories of this plugin. Read the relevant `SKILL.md
 
 **Background jobs:** Always include `retry_on ExceptionClass, wait: :polynomially_longer, attempts: N` for transient errors and `discard_on` for permanent errors (e.g. `ActiveRecord::RecordNotFound`).
 
-**Task lists:** Task 0.0 ALWAYS creates the feature branch. Each implementation task MUST have four sub-tasks: (a) write spec, (b) run spec — verify fails, (c) implement, (d) run spec — verify passes. Always include a Relevant Files section.
+
 
 ## Output Language
 
-Generated artifacts (YARD docs, Postman collections, READMEs, task descriptions) must be in **English** unless the user explicitly requests another language.
+Generated artifacts (YARD docs, Postman collections, READMEs) must be in **English** unless the user explicitly requests another language.
 
 ## Eval Strategy
 

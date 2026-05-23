@@ -32,7 +32,6 @@ After green tests + linters pass + YARD + doc updates:
 1. Self-review the actual full branch diff using the Review Order below.
 2. Fix Critical items; resolve or ticket Suggestion items.
 3. Only then open the PR.
-generate-tasks must include a "Code review before merge" task.
 ```
 
 ## Core Process
@@ -100,7 +99,7 @@ Group findings by severity. See [assets/examples.md](./assets/examples.md) for J
    ```
    Findings must come from an actual diff or provided file contents. Do not present a simulated PR review as if it were a completed review of real code.
 2. **Tagging**: Tag (Area) from Controllers, Routing, Views, Models, Queries, Migrations, Validations, Security, Caching, Jobs, Tests. Cover **≥4** distinct areas if applicable.
-3. **Generate-tasks handoff** — Always include a `Code review before merge` task or task-list line, even when the user did not ask for a full task breakdown. If a full task list is out of scope, add a short handoff note with that exact task title.
+3. **Task-list handoff** — Always include a `Code review before merge` task or task-list line.
 4. **Re-review trigger** — State whether Critical fixes, more than three Suggestion fixes, architecture changes, query changes, auth changes, or migration changes require a re-diff before PR approval.
 5. **Language**: Must be in English unless explicitly requested otherwise.
 

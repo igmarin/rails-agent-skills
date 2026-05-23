@@ -92,7 +92,7 @@ Each skill's **Integration** table names the next skill to load. Follow it. Skil
 
 ## Output Language
 
-All generated artifacts (YARD docs, Postman collections, task lists, PRDs, READMEs, examples) must be in **English** unless the user explicitly requests another language.
+All generated artifacts (YARD docs, Postman collections, READMEs, examples) must be in **English** unless the user explicitly requests another language.
 
 ## Eval Strategy
 

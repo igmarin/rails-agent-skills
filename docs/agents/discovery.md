@@ -133,7 +133,6 @@ docker-compose run web bin/rails db:create db:migrate db:seed
 
 | If you need... | Next skill |
 |----------------|------------|
-| To plan a feature | `create-prd` → [planning](planning.md) |
 | To start coding | `plan-tests` → [development](development.md) |
 | To fix a bug | `triage-bug` → [development#bug-fix](development.md) |
 | To configure CI/CD | *(roadmap — `setup-ci-cd`, see [setup](setup.md))* |

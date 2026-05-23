@@ -1,8 +1,5 @@
 {
   "mappings": [
-    {"intent": "write PRD", "skill": "create-prd", "path": "skills/planning/create-prd/SKILL.md", "examples": ["Create a product requirements document for a new feature to import CSVs"]},
-    {"intent": "generate tasks", "skill": "generate-tasks", "path": "skills/planning/generate-tasks/SKILL.md", "examples": ["Break down PRD into implementation tasks for backend and frontend"]},
-    {"intent": "create tickets", "skill": "plan-tickets", "path": "skills/planning/plan-tickets/SKILL.md", "examples": ["Create tickets from task list", "Create Jira tickets from this plan"]},
     {"intent": "triage bug", "skill": "triage-bug", "path": "skills/testing/triage-bug/SKILL.md", "examples": ["Triage a production 500 error for orders#create", "Debug why checkout fails at midnight"]},
     {"intent": "start TDD slice", "skill": "plan-tests", "path": "skills/testing/plan-tests/SKILL.md", "examples": ["Choose first failing spec for authentication flow", "Where do I start testing this feature?"]},
     {"intent": "write tests", "skill": "write-tests", "path": "skills/testing/write-tests/SKILL.md", "examples": ["Write specs for the billing service", "How should I structure this test?"]},
@@ -57,7 +54,6 @@
     "infrastructure": "skills/infrastructure/",
     "orchestration": "skills/orchestration/",
     "patterns": "skills/patterns/",
-    "planning": "skills/planning/",
     "testing": "skills/testing/"
   },
   "agents": {

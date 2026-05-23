@@ -6,16 +6,16 @@ Complete catalog of 41 public skills and 9 callable agents organized by developm
 
 ## Quick Navigation
 
-**By Stage:** [00 — Discovery](#00--discovery--context) · [10 — Planning](#10--planning--design) · [30 — Development](#30--development) · [40 — Quality](#40--code-quality) · [50 — Review](#50--review--validation) · [60 — Engines](#60--engines)
+**By Stage:** [00 — Discovery](#00--discovery--context) · [30 — Development](#30--development) · [40 — Quality](#40--code-quality) · [50 — Review](#50--review--validation) · [60 — Engines](#60--engines)
 
-**By Category:** [API](#api) · [Context](#context) · [Code Quality](#code-quality) · [DDD](#ddd) · [Engines](#engines) · [Infrastructure](#infrastructure) · [Orchestration](#orchestration) · [Patterns](#patterns) · [Planning](#planning) · [Testing](#testing) · [Agents](#agents)
+**By Category:** [API](#api) · [Context](#context) · [Code Quality](#code-quality) · [DDD](#ddd) · [Engines](#engines) · [Infrastructure](#infrastructure) · [Orchestration](#orchestration) · [Patterns](#patterns) · [Testing](#testing) · [Agents](#agents)
 
 ---
 
 ## Index by Stage
 
 - [00 — Discovery & Context](#00--discovery--context)
-- [10 — Planning & Design](#10--planning--design)
+
 - [20 — Setup & Configuration](#20--setup--configuration)
 - [30 — Development](#30--development)
 - [40 — Code Quality](#40--code-quality)
@@ -37,9 +37,6 @@ Complete catalog of 41 public skills and 9 callable agents organized by developm
 
 | Skill | Description | Trigger Words |
 |-------|-------------|---------------|
-| **create-prd** | Generate PRD with goals, user stories, requirements | "plan feature", "create PRD", "requirements", "feature spec" |
-| **generate-tasks** | Convert PRD into TDD-ready tasks with exact paths | "break into tasks", "implementation plan", "task list", "generate tasks" |
-| **plan-tickets** | Create tickets in issue tracker from plan | "create tickets", "Jira", "Linear", "GitHub Issues" |
 | **define-domain-language** | Domain terms glossary | "domain terms", "ubiquitous language", "what should we call this", "naming" |
 | **review-domain-boundaries** | Review bounded contexts and language leakage | "context boundaries", "language leakage", "ownership", "cross-context" |
 | **model-domain** | Map DDD to Rails (models, services, VO) | "aggregate", "value object", "domain event", "repository", "DDD" |
@@ -120,7 +117,7 @@ Complete catalog of 41 public skills and 9 callable agents organized by developm
 |-------------|----------------------|
 | **Understand codebase** | `load-context` |
 | **New project setup** | `setup-environment` |
-| **Plan feature** | `create-prd` → `generate-tasks` |
+| **Start coding** | `plan-tests` → `write-tests` |
 | **Start coding** | `plan-tests` → `write-tests` |
 | **Fix bug** | `triage-bug` |
 | **Refactor** | `refactor-code` |
@@ -230,13 +227,7 @@ Skills are organized in category folders (`skills/<category>/`) with frequent en
 | **implement-calculator-pattern** | `skills/patterns/implement-calculator-pattern/` | Variant-based calculators |
 | **write-yard-docs** | `skills/patterns/write-yard-docs/` | Inline documentation with YARD |
 
-### Planning
 
-| Skill | Path | Description |
-|-------|------|-------------|
-| **create-prd** | `skills/planning/create-prd/` | Generate PRD with goals, user stories |
-| **generate-tasks** | `skills/planning/generate-tasks/` | Convert PRD into TDD-ready tasks |
-| **plan-tickets** | `skills/planning/plan-tickets/` | Create tickets in issue tracker |
 
 ### Testing
 

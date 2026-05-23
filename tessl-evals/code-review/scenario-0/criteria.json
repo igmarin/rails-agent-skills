@@ -5,27 +5,22 @@
     {
       "name": "instruction-1",
       "description": "The submitted artifact follows this skill instruction: **Core principle:** Review early, review often. Self-review before PR. Re-review after significant changes.",
-      "max_score": 20
+      "max_score": 25
     },
     {
       "name": "instruction-2",
       "description": "The submitted artifact follows this skill instruction: Self-review the full branch diff using the Review Order below.",
-      "max_score": 20
-    },
-    {
-      "name": "instruction-3",
-      "description": "The submitted artifact follows this skill instruction: generate-tasks must include a \"Code review before merge\" task.",
-      "max_score": 20
+      "max_score": 25
     },
     {
       "name": "instruction-4",
       "description": "The submitted artifact follows this skill instruction: Use **only** these labels:",
-      "max_score": 20
+      "max_score": 25
     },
     {
       "name": "instruction-5",
       "description": "The submitted artifact follows this skill instruction: **`Critical`** — security, data loss, crash, or **Always Critical** (see below). Block merge.",
-      "max_score": 20
+      "max_score": 25
     }
   ]
 }

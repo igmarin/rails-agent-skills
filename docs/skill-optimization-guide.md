@@ -21,19 +21,16 @@ Per the library's eval strategy: *a skill that only beats baseline marginally is
 What this means in practice:
 
 - **Low-lift scenarios** (e.g. S23 Fitness Class Booking: 100% baseline, 100% with-context) — the base model already handles the convention. The matching skill is decorative for this case; keep it for edge-case coverage, not for lift.
-- **High-lift scenarios** (e.g. S32 plan-tickets: 30% → 100%, +70; S8 API client: 40% → 100%, +60) — the matching skill is doing real work. These skills are the library's load-bearing beams.
-- **Zero-baseline criteria** (e.g. S24 Task 0.0 feature branch, TDD run-spec-fail, YARD gate — all 0% at baseline) are **training-knowledge gaps**, not signal problems. They exist only in this library. The with-context score is the true measure.
+- **High-lift scenarios** (e.g. S8 API client: 40% → 100%, +60) — the matching skill is doing real work. These skills are the library's load-bearing beams.
+- **Zero-baseline criteria** (e.g. TDD run-spec-fail, YARD gate — all 0% at baseline) are **training-knowledge gaps**, not signal problems. They exist only in this library. The with-context score is the true measure.
 
 ### Top-10 skills ranked by lift (what the library actually buys)
 
 | Scenario | Skill | Baseline | With ctx | Lift |
 |----------|-------|----------|----------|------|
-| S32 | plan-tickets | 30% | 100% | **+70** |
 | S8  | integrate-api-client | 40% | 100% | **+60** |
-| S24 | generate-tasks | 43% | 100% | **+57** |
 | S13 | integrate-api-client | 45% | 100% | **+55** |
 | S4  | refactor-code | 60% | 100% | **+40** |
-| S14 | create-prd | 62% | 100% | **+38** |
 | S10 | apply-code-conventions (logging + backtrace) | 65% | 100% | **+35** |
 | S3  | create-service-object | 71% | 100% | **+29** |
 | S12 | implement-graphql | 71% | 100% | **+27** |
@@ -247,66 +244,7 @@ Iterate if needed: return to Step 1 with new scores.
 - Baseline improved: 86% → 100%
 - With context maintained: 97% → 100%
 
-## Case Study: generate-tasks
 
-### Initial State
-
-| Check | Baseline | With Context |
-|-------|----------|--------------|
-| Feature branch task 0.0 | 0/10 (0%) | 10/10 (100%) |
-| TDD write-spec sub-task | 3/10 (30%) | 10/10 (100%) |
-| TDD run-spec-fail sub-task | 0/10 (0%) | 10/10 (100%) |
-| TDD run-spec-pass sub-task | 0/8 (0%) | 8/8 (100%) |
-| YARD post-implementation gate | 0/10 (0%) | 10/10 (100%) |
-| Relevant Files section | 0/8 (0%) | 8/8 (100%) |
-| **Total** | **43/100** | **100/100** |
-
-### Root Causes Identified
-
-1. **Missing Output Style section** — All requirements were in HARD-GATE code block, but no explicit "output MUST include" list
-2. **Weak frontmatter signals** — Description didn't include "feature branch", "TDD", "write spec", "run spec" as trigger words
-3. **Rules present but not prioritized** — The TDD quadruplet structure existed but wasn't surfaced for baseline performance
-
-### Fixes Applied
-
-1. Added **Output Style** section with 7 explicit requirements mapping directly to evaluation criteria:
-   - Task 0.0 with feature branch command
-   - Relevant Files section requirement
-   - TDD quadruplets (write spec → run fail → implement → run pass)
-   - YARD parent task
-   - Documentation update task
-   - Code review gate
-   - Save location specification
-
-2. Rewrote **frontmatter description** to include explicit trigger words:
-   - "Task 0.0 Create feature branch"
-   - "TDD quadruplets: write spec → run spec (fail) → implement → run spec (pass)"
-   - Added trigger words: feature branch, TDD, write spec, run spec
-
-### Result
-
-- Baseline improved: 43% → 100% (target)
-- With context maintained: 100% → 100%
-
-### Pattern: Baseline Low, With-Context High
-
-When you see this pattern, first determine if it's a **signal problem** or a **training knowledge gap**:
-
-**Signal Problem** (fixable):
-- Baseline scores are partial (30-70%) on criteria
-- Agent attempts the requirement but incorrectly
-- **Fix**: Add **Output Style** section with MUST requirements, strengthen **frontmatter description**
-
-**Training Knowledge Gap** (inherent limitation):
-- Baseline scores are 0% on highly specific conventions
-- Agent has no concept of the requirement (e.g., Task 0.0, TDD quadruplets, YARD gates)
-- These conventions exist only in this skill library, not in general training data
-- **Reality**: Some baseline scores cannot be improved - the skill's value IS the context it provides
-
-**For generate-tasks:**
-- 0% on Task 0.0, TDD run-spec-fail/pass, YARD gate, Relevant Files = training gap
-- 100% on file paths, save location, code review = general knowledge
-- **With-context score (100%) is the true measure of skill quality**
 
 ## Template for New Skills
 

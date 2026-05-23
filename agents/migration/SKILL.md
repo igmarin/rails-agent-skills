@@ -257,7 +257,7 @@ curl https://api.example.com/api/users
 | Predecessor | This Agent | Successor |
 |-------------|---------------|-----------|
 | review-migration | migration | deployment |
-| create-prd | migration | production-monitoring |
+| load-context | migration | production-monitoring |
 | None (standalone) | migration | quality |
 
 ## When to Use This vs. Individual Skills

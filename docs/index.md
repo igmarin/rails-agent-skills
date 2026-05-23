@@ -14,7 +14,7 @@ Master index for the Rails Agent Skills library. Start here to navigate the publ
 
 - [Discovery & Context](agents/discovery.md)
 - [Agent Guides Index](agents/README.md)
-- [Planning & Design](agents/planning.md)
+
 - [Development (TDD)](agents/development.md)
 - [Code Quality & Refactoring](agents/quality.md)
 - [Review & Security](agents/review.md)

@@ -78,12 +78,7 @@ Skills and agents are not slash commands or buttons — you invoke them through 
 "Do a DDD-first design for this feature"
 ```
 
-**Start a planning session:**
-```
-"Create a PRD for [feature]"           → create-prd
-"Break this PRD into tasks"            → generate-tasks
-"Turn these tasks into tracker tickets" → plan-tickets
-```
+
 
 ### What the checkpoints look like in practice
 
@@ -110,7 +105,7 @@ You respond with approval or redirections. Only then does Claude write the imple
 | Situation | What to say |
 |-----------|-------------|
 | You want a full agent loop, not just one step | "Follow the TDD Feature Loop for this" |
-| You want to start from planning | "Start with a PRD for this feature" |
+
 | You want only the review, not the full agent loop | "Do a code review on this file / PR" |
 | You want a security-focused review | "Run a security review on these changes" |
 | You received PR feedback and need help | "Help me respond to this review feedback" |
@@ -126,10 +121,10 @@ These skills work the same way in **Cursor**, **Codex**, and **Claude Code** —
 
 ## Cross-Cutting Rule: Tests Gate Implementation
 
-**Tests are a gate between planning and code.** Once a PRD and tasks exist, the test for each behavior must be written, run, and validated as failing BEFORE any implementation code is written.
+**Tests are a gate between definition and code.** Once a feature or task is defined, the test for each behavior must be written, run, and validated as failing BEFORE any implementation code is written.
 
 ```text
-PRD → Tasks → Choose first slice → [GATE: Write test → Run test → Verify it fails]
+Task/Feature → Choose first slice → [GATE: Write test → Run test → Verify it fails]
   → [CHECKPOINT: Test Design Review]
   → [CHECKPOINT: Implementation Proposal]
   → Implementation → Verify passes
@@ -204,36 +199,26 @@ flowchart TD
 ```mermaid
 flowchart LR
     A[Feature idea] --> CE[load-context]
-    CE --> B[create-prd]
-    B --> C[User reviews PRD]
-    C --> D[generate-tasks]
-    D --> E[plan-tests]
+    CE --> E[plan-tests]
     E --> F[TDD Feature Loop]
     F --> G[write-yard-docs]
     G --> H[README diagrams docs]
     H --> I[code-review then PR]
 ```
 
-1. **create-prd**: Describe the feature. The skill generates a PRD with goals, user stories, functional requirements, and success metrics. Saved to `/tasks/prd-[feature-name].md`.
+1. **plan-tests**: Choose the highest-value first failing spec before implementation starts.
 
-2. **generate-tasks**: Point to the PRD. The skill breaks it into parent tasks and sub-tasks with exact file paths, including **YARD**, **documentation updates**, and **code review before PR**. It can also produce a phased plan when the user wants strategy first. Saved to `/tasks/tasks-[feature-name].md`.
+2. **TDD Feature Loop**: Follow the primary agent loop above for each behavior.
 
-3. **plan-tests**: Choose the highest-value first failing spec before implementation starts.
+3. **write-yard-docs**: Add or update YARD on every new or changed public class/method (English).
 
-4. **TDD Feature Loop**: Follow the primary agent loop above for each behavior in the task list.
+4. **Docs**: Update README, architecture diagrams, and any domain docs affected by the change.
 
-5. **write-yard-docs**: Add or update YARD on every new or changed public class/method (English).
-
-6. **Docs**: Update README, architecture diagrams, and any domain docs affected by the change.
-
-7. **code-review**: Self-review the full diff, then open the PR (use security/architecture skills when needed).
+5. **code-review**: Self-review the full diff, then open the PR (use security/architecture skills when needed).
 
 **Key rules:**
 
-- Do NOT implement until the PRD is approved
-- Each sub-task should take 2-5 minutes
-- Task 0.0 is always "Create feature branch"
-- Do not skip YARD, doc updates, or self-review — they are explicit task parents, not optional polish
+- Do not skip YARD, doc updates, or self-review — they are explicit tasks, not optional polish
 
 ## DDD-First Feature Design
 
@@ -241,22 +226,18 @@ Use this design loop when the hard part is the **domain itself**: unclear busine
 
 ```mermaid
 flowchart LR
-    A[Feature or domain problem] --> B[create-prd]
-    B --> C[define-domain-language]
+    A[Feature or domain problem] --> C[define-domain-language]
     C --> D[review-domain-boundaries]
     D --> E[model-domain]
-    E --> F[generate-tasks]
-    F --> G[plan-tests]
+    E --> G[plan-tests]
     G --> H[TDD Feature Loop]
 ```
 
-1. **create-prd**: Capture the feature outcome, goals, non-goals, and business rules first.
-2. **define-domain-language**: Build the glossary, choose canonical terms, and surface overloaded words.
-3. **review-domain-boundaries**: Check whether the feature crosses bounded contexts, leaks language, or hides ownership problems.
-4. **model-domain**: Decide the Rails-first tactical design: model, value object, service, repository, event, or simpler alternative.
-5. **generate-tasks**: Turn the design into an implementation plan or detailed checklist.
-6. **plan-tests**: Choose the best first failing spec before code is written.
-7. **TDD Feature Loop**: Follow the primary agent loop for each behavior.
+1. **define-domain-language**: Build the glossary, choose canonical terms, and surface overloaded words.
+2. **review-domain-boundaries**: Check whether the feature crosses bounded contexts, leaks language, or hides ownership problems.
+3. **model-domain**: Decide the Rails-first tactical design: model, value object, service, repository, event, or simpler alternative.
+4. **plan-tests**: Choose the best first failing spec before code is written.
+5. **TDD Feature Loop**: Follow the primary agent loop for each behavior.
 
 **Key rules:**
 
@@ -265,19 +246,7 @@ flowchart LR
 - Prefer the smallest credible boundary improvement over a DDD rewrite
 - Chain back to `review-architecture` or `refactor-code` when the domain problem lives in existing code structure
 
-### Optional: tickets from the plan (tool-agnostic)
 
-When the team tracks work in **any issue tracker** (Jira, Linear, GitHub Issues, Azure DevOps, etc.), run **plan-tickets** after **generate-tasks** (or from any approved initiative plan):
-
-```mermaid
-flowchart LR
-    D[generate-tasks] --> J[plan-tickets]
-    J --> K[Draft markdown tickets]
-    J --> L[Create in tracker when approved]
-```
-
-- Use it for **draft-only** output (markdown tickets, classification, sprint buckets) or **create in your tracker** after the user confirms project/workspace, issue types, and fields for that tool.
-- It does not replace the PRD/tasks artifacts; it **maps** planning output to board-ready tickets.
 
 ---
 
@@ -296,7 +265,7 @@ When the main issue is domain language or ownership, run `define-domain-language
 
 ## Code Review and Feedback Loop
 
-**Before opening a PR:** run **code-review** on your own branch (same checklist as reviewing others). Task lists from **generate-tasks** end with this step.
+**Before opening a PR:** run **code-review** on your own branch (same checklist as reviewing others).
 
 ```mermaid
 flowchart LR
@@ -568,8 +537,7 @@ Use when adding or modifying GraphQL queries, mutations, types, or resolvers.
 
 ```mermaid
 flowchart LR
-    A[GraphQL feature] --> B[create-prd]
-    B --> C[define-domain-language\nType / field naming]
+    A[GraphQL feature] --> C[define-domain-language\nType / field naming]
     C --> D[implement-graphql\nSchema design]
     D --> E[plan-tests\nChoose first spec]
     E --> F[TDD Feature Loop]
@@ -666,9 +634,7 @@ For variant-based calculators, add **implement-calculator-pattern** (Factory + S
 
 ```mermaid
 flowchart LR
-    A[Integration need] --> B[create-prd]
-    B --> C[generate-tasks]
-    C --> D[plan-tests]
+    A[Integration need] --> D[plan-tests]
     D --> E["Write failing layer specs"]
     E --> F[integrate-api-client]
     F --> G[write-yard-docs]
@@ -676,13 +642,11 @@ flowchart LR
     H --> I[code-review]
 ```
 
-1. **create-prd**: Capture the business need, external dependency, side effects, and success criteria.
-2. **generate-tasks**: Break the integration into layers and explicit verification steps.
-3. **plan-tests**: Decide the strongest first failing spec, usually at the auth, client, fetcher, builder, or mapping boundary.
-4. **integrate-api-client**: Implement the layered Rails-first client structure with retries, pagination, token handling, and domain mapping where needed.
-5. **write-yard-docs**: Document public Ruby API exposed by the integration layer.
-6. **Docs**: Update README and any operator or integration docs affected by setup, credentials flow, or usage.
-7. **code-review**: Review reliability, layering, and failure handling before PR.
+1. **plan-tests**: Decide the strongest first failing spec, usually at the auth, client, fetcher, builder, or mapping boundary.
+2. **integrate-api-client**: Implement the layered Rails-first client structure with retries, pagination, token handling, and domain mapping where needed.
+3. **write-yard-docs**: Document public Ruby API exposed by the integration layer.
+4. **Docs**: Update README and any operator or integration docs affected by setup, credentials flow, or usage.
+5. **code-review**: Review reliability, layering, and failure handling before PR.
 
 **Key rules:**
 

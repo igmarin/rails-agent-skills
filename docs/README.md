@@ -27,7 +27,7 @@ The repository uses a hybrid model to keep agent context focused:
 | Stage | Guide | Description | Primary skills |
 |-------|-------|-------------|----------------|
 | Discovery | [Discovery & Context](agents/discovery.md) | Understand codebase and onboarding context | `load-context`, `setup-environment` |
-| Planning | [Planning & Design](agents/planning.md) | PRDs, tasks, and domain language | `create-prd`, `generate-tasks`, `define-domain-language` |
+
 | Setup | [Setup & Configuration](agents/setup.md) | CI/CD and infrastructure references | `setup-environment` |
 | Development | [Development](agents/development.md) | TDD and implementation | `plan-tests`, `write-tests`, `triage-bug` |
 | Quality | [Code Quality](agents/quality.md) | Conventions, refactoring, and docs | `apply-code-conventions`, `refactor-code`, `write-yard-docs` |

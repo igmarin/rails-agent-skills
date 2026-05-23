@@ -236,7 +236,7 @@ end
 
 | Predecessor | This Agent | Successor |
 |-------------|---------------|-----------|
-| create-prd | graphql | tdd |
+| load-context | graphql | tdd |
 | define-domain-language | graphql | security-check |
 | None (standalone) | graphql | quality |
 

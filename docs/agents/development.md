@@ -196,15 +196,9 @@ graph TB
 
 ```mermaid
 graph TB
-    subgraph Plan [📝 Phase 1: Plan]
-        direction TB
-        A[Need API integration] --> B[create-prd]
-        B --> C[generate-tasks]
-    end
-
     subgraph Build [💻 Phase 2: Build]
         direction TB
-        C --> D[plan-tests]
+        A[Need API integration] --> D[plan-tests]
         D --> E[integrate-api-client]
     end
 
@@ -215,7 +209,6 @@ graph TB
     end
 
     %% Styling
-    style Plan fill:#f5f5f5,stroke:#333,stroke-dasharray: 5 5
     style Build fill:#e1f5fe,stroke:#01579b
     style Document fill:#e8f5e9,stroke:#1b5e20
 ```

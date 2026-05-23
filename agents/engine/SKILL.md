@@ -149,7 +149,7 @@ Not sure?          → skill-router
 
 | Predecessor | This Skill | Successor |
 |-------------|------------|-----------|
-| create-prd (engine requirements) | engine | tdd (engine features) |
+| load-context | engine | tdd (engine features) |
 | None (extract existing) | engine | Host app integration |
 
 **From AGENTS.md:** This is the engine development loop. Chain to tdd for feature development within the engine.
