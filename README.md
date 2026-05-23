@@ -4,7 +4,7 @@
 
 **Rails Agent Skills turns AI coding assistants into disciplined Rails collaborators.**
 
-It is a curated library of **41 public Rails agent skills** and **9 callable agents** that teach AI tools how to plan, test, implement, document, and review Rails work using production-minded conventions.
+It is a curated library of **public Rails agent skills** and **callable agents** that teach AI tools how to test, implement, document, and review Rails work using production-minded conventions. This repository acts as a pure **Domain Knowledge Registry** and asset catalog of specialized Rails & Ruby AI Skills/Agents, consumable by external MCP or CLI runtimes.
 
 The project is built around one non-negotiable rule:
 
@@ -28,14 +28,8 @@ That TDD gate is encoded directly into the skills and agents, so agents do not j
 
 > Official distribution
 >
-> [![Official MCP Registry](https://img.shields.io/badge/MCP%20Registry-Official-1f6feb)](https://registry.modelcontextprotocol.io/?q=io.github.igmarin%2Frails-agent-skills-mcp)
-> [![Docker Hub](https://img.shields.io/badge/Docker%20Hub-igmarin%2Frails--agent--skills--mcp-2496ED?logo=docker&logoColor=white)](https://hub.docker.com/r/igmarin/rails-agent-skills-mcp)
-> [![Cloudflare Worker](https://img.shields.io/badge/Cloudflare%20Worker-Streamable%20HTTP-F38020?logo=cloudflare&logoColor=white)](https://rails-agent-skills-mcp.ismael-marin.workers.dev/health)
-> [![skills.sh](https://img.shields.io/badge/skills.sh-igmarin-black)](https://www.skills.sh/igmarin/rails-agent-skills)
-> [![Glama](https://img.shields.io/badge/Glama-Connect-000?logo=glama&logoColor=fff)](https://glama.ai/mcp/connectors/dev.workers.ismael-marin.rails-agent-skills-mcp/ruby-on-rails-mcp-skills)
 > [![GitHub tag](https://img.shields.io/github/v/tag/igmarin/rails-agent-skills?label=release)](https://github.com/igmarin/rails-agent-skills/tags)
 > [![tessl](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.tessl.io%2Fv1%2Fbadges%2Figmarin%2Frails-agent-skills)](https://tessl.io/registry/igmarin/rails-agent-skills)
-> [![smithery badge](https://smithery.ai/badge/ismael-marin/rails-agent-skills)](https://smithery.ai/servers/ismael-marin/rails-agent-skills)
 > [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 ## Who This Is For
@@ -52,116 +46,17 @@ That TDD gate is encoded directly into the skills and agents, so agents do not j
 
 | Area | Purpose |
 |------|---------|
-| `skills/` | 41 public atomic skills. Each skill has a `SKILL.md` entry point with task-specific instructions. |
-| `agents/` | 9 callable agents that chain skills into full development loops (tdd, quality, review, setup, engine, bug-fix, graphql, migration, background-job). |
+| `skills/` | Public atomic skills. Each skill has a `SKILL.md` entry point with task-specific instructions. |
+| `agents/` | Callable agents that chain skills into full development loops (tdd, quality, review, setup, engine, bug-fix, graphql, migration, background-job). |
 | `docs/` | Public documentation, architecture, agent guides, skill catalog, and evaluation policy. |
-| `mcp_server/` | Official Ruby MCP server exposing docs, agents, and skills via `list_skills`, `use_skill`, `list_agents`, `use_agent`. |
 | `tessl-evals/` | Tessl-native eval scenarios for publishable skills in `tile.json`. |
 | `personal-evals/` | Open examples for the upcoming `ruby-skill-bench` full-context evaluator. |
 
 The skills are not long-form tutorials. They are executable instructions for AI agents: when to gather context, when to stop for a checkpoint, how to write the first failing test, what Rails conventions to apply, and how to review the result.
 
-## Start Here
-
-Rails Agent Skills can be invoked in three distinct ways depending on your environment and desired level of autonomy:
-1. **MCP (`use_skill`)**: Autonomous tool calls by the agent (e.g., Claude Desktop, Cursor).
-2. **Chat Commands**: Explicitly forcing the agent to use a skill via `@skill-name` or `/skill-name`.
-3. **CLI (`gh skill` / `tessl`)**: Manual installation or evaluations in the terminal.
-
-**[Read the complete guide on Calling Skills and Agents](docs/calling-skills.md)** for syntax examples and when to use each method.
-
-The recommended way for autonomous usage is through the MCP server. MCP keeps the agent context small: docs are exposed as resources, available skills are discoverable through `list_skills`, agents through `list_agents`, and individual files are loaded on demand via `use_skill` / `use_agent`.
-
-| Path | Best for | Start here |
-|------|----------|------------|
-| Official MCP Registry | Finding the verified MCP server metadata and latest published version | [MCP registry entry](https://registry.modelcontextprotocol.io/?q=io.github.igmarin%2Frails-agent-skills-mcp) |
-| Docker Hub image | Running without a local Ruby toolchain | [Docker image](https://hub.docker.com/r/igmarin/rails-agent-skills-mcp) |
-| Cloudflare Worker | Hosted Streamable HTTP MCP for registries and hosted clients | [health check](https://rails-agent-skills-mcp.ismael-marin.workers.dev/health) |
-| Smithery | Discovering and connecting through Smithery's MCP gateway | [Smithery listing](https://smithery.ai/servers/ismael-marin/rails-agent-skills) |
-| Local Ruby/Bundler | Local development, debugging, and repository checkout workflows | [mcp_server/README.md](mcp_server/README.md) |
-| GitHub CLI skills | Installing selected skills into a specific agent host | [GitHub CLI install](#install-selected-skills-with-github-cli) |
-| skills.sh | Registering and adding the entire library to your workspace | [skills.sh install](#install-with-skillssh) |
-
-### MCP Quick Start
-
-For hosted MCP clients and registries that support Streamable HTTP, use the Cloudflare Worker endpoint:
-
-```text
-https://rails-agent-skills-mcp.ismael-marin.workers.dev/mcp
-```
-
-Useful public checks:
-
-```text
-Health: https://rails-agent-skills-mcp.ismael-marin.workers.dev/health
-Server card: https://rails-agent-skills-mcp.ismael-marin.workers.dev/.well-known/mcp/server-card.json
-```
-
-For repeatable team installs, prefer the versioned Docker image published from a Git release tag:
-
-```json
-{
-  "mcpServers": {
-    "rails-agent-skills": {
-      "type": "stdio",
-      "command": "docker",
-      "args": ["run", "--rm", "-i", "igmarin/rails-agent-skills-mcp:5.1.5"]
-    }
-  }
-}
-```
-
-For local development, clone the repo and run the Ruby server:
-
-```bash
-git clone https://github.com/igmarin/rails-agent-skills.git ~/rails-agent-skills
-cd ~/rails-agent-skills/mcp_server
-bundle install
-bundle exec ruby server.rb
-```
-
-See [mcp_server/README.md](mcp_server/README.md) for host-specific MCP configuration for Claude Code, Cursor, Windsurf, RubyMine, OpenCode, and other stdio MCP clients.
-
-When configuring MCP in external tools, use absolute paths for `cwd` and `BUNDLE_GEMFILE`. Relative paths and `~` are a common cause of gem-loading and timeout failures.
-
-### Using Agents via MCP
-
-Agents are the primary way to orchestrate multi-step Rails development tasks. When connected via MCP, agents can automatically discover and execute them using two tools:
-
-**1. Discover available agents:**
-
-```text
-Agent calls: list_agents
-Returns: 9 agents with metadata (tdd, quality, review, setup, engine, bug-fix, graphql, migration, background-job)
-```
-
-**2. Load and execute a specific agent:**
-
-```text
-Agent calls: use_agent(agent_name: "tdd")
-Returns: Full agent instructions with phases, gates, and skill chaining
-```
-
-**Example usage in MCP:**
-- User: "I need to implement a new feature with TDD"
-- Agent: Calls `list_agents` → discovers `tdd` agent → calls `use_agent("tdd")` → executes full TDD cycle
-
-**Available agents:**
-- **tdd**: Full TDD feature cycle (test → implement → review → PR)
-- **quality**: Code quality sweep (conventions → refactor → docs)
-- **review**: Systematic PR review (review → deep dive → response)
-- **setup**: Project setup and CI/CD configuration
-- **engine**: Rails engine development lifecycle
-- **bug-fix**: Bug triage and resolution with TDD
-- **graphql**: GraphQL API development with domain modeling
-- **migration**: Safe database migration deployment
-- **background-job**: Robust background job implementation
-
-Agents enforce hard gates (like "tests must pass before implementation") and include TDD enforcement, making them more reliable than ad-hoc skill chaining.
-
 ## Daily Workflow
 
-Depending on your environment (MCP vs. Chat Commands), you can orchestrate your daily Rails work using these common loops. For explicit control in Cursor or Windsurf, prepend these with `@` (e.g., `@load-context`). In MCP, simply describe the goal and the agent will load them automatically.
+Depending on your environment, you can orchestrate your daily Rails work using these common loops. For explicit control in Cursor or Windsurf, prepend these with `@` (e.g., `@load-context`). 
 
 **The core TDD feature loop:**
 ```text
@@ -173,11 +68,6 @@ load-context
   -> [verify passing test]
   -> write-yard-docs
   -> code-review
-```
-
-**For a new feature from scratch:**
-```text
-create-prd -> generate-tasks -> TDD feature loop
 ```
 
 **For a bug:**
@@ -209,11 +99,10 @@ See [docs/agent-guide.md](docs/agent-guide.md) and [docs/agents/](docs/agents/) 
 
 ## Skill Catalog
 
-The library contains 41 public skills organized by Rails development concern.
+The library contains public skills organized by Rails development concern.
 
 | Category | Examples |
 |----------|----------|
-| Planning | `create-prd`, `generate-tasks`, `plan-tickets` |
 | Testing | `plan-tests`, `write-tests`, `test-service`, `triage-bug` |
 | Code quality | `code-review`, `respond-to-review`, `security-check`, `refactor-code` |
 | Architecture and DDD | `define-domain-language`, `review-domain-boundaries`, `model-domain`, `review-architecture` |
@@ -285,7 +174,6 @@ Pinning to a tag or commit SHA gives you reproducible installs. Provenance metad
 | Need | Document |
 |------|----------|
 | Understand the docs system | [docs/README.md](docs/README.md) |
-| Install and configure MCP | [mcp_server/README.md](mcp_server/README.md) |
 | Browse all skills | [docs/reference/skill-catalog.md](docs/reference/skill-catalog.md) |
 | Understand skill chaining | [docs/reference/integration-matrix.md](docs/reference/integration-matrix.md) |
 | Follow agent guides | [docs/agent-guide.md](docs/agent-guide.md) |
@@ -295,22 +183,13 @@ Pinning to a tag or commit SHA gives you reproducible installs. Provenance metad
 
 ## Contributing
 
-When contributing skills, agents, docs, or MCP behavior:
+When contributing skills, agents, or docs:
 
 - Keep generated artifacts in English unless a user explicitly asks for another language.
 - Preserve the tests-gate-implementation rule for every code-producing skill.
 - Do not add tickets unless the user asks for ticket generation.
 - Do not commit generated root `evals/` output.
-- Keep public docs consistent with `tile.json`, `server.json`, and the latest release tag.
-
-## Install With skills.sh
-
-Requires [skills.sh](https://www.skills.sh/) CLI.
-
-```bash
-# Add the library to your workspace
-npx skills add igmarin/rails-agent-skills
-```
+- Keep public docs consistent with `tile.json` and the latest release tag.
 
 ## Acknowledgments
 

@@ -7,9 +7,6 @@
     "generate-api-collection": {
       "path": "skills/api/generate-api-collection/SKILL.md"
     },
-    "create-prd": {
-      "path": "skills/planning/create-prd/SKILL.md"
-    },
     "review-domain-boundaries": {
       "path": "skills/ddd/review-domain-boundaries/SKILL.md"
     },
@@ -18,9 +15,6 @@
     },
     "define-domain-language": {
       "path": "skills/ddd/define-domain-language/SKILL.md"
-    },
-    "generate-tasks": {
-      "path": "skills/planning/generate-tasks/SKILL.md"
     },
     "skill-router": {
       "path": "skills/orchestration/skill-router/SKILL.md"
@@ -120,9 +114,6 @@
     },
     "implement-calculator-pattern": {
       "path": "skills/patterns/implement-calculator-pattern/SKILL.md"
-    },
-    "plan-tickets": {
-      "path": "skills/planning/plan-tickets/SKILL.md"
     },
     "write-yard-docs": {
       "path": "skills/patterns/write-yard-docs/SKILL.md"
