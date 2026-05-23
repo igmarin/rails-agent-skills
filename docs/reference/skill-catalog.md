@@ -118,7 +118,6 @@ Complete catalog of 41 public skills and 9 callable agents organized by developm
 | **Understand codebase** | `load-context` |
 | **New project setup** | `setup-environment` |
 | **Start coding** | `plan-tests` → `write-tests` |
-| **Start coding** | `plan-tests` → `write-tests` |
 | **Fix bug** | `triage-bug` |
 | **Refactor** | `refactor-code` |
 | **Create service** | `create-service-object` |
