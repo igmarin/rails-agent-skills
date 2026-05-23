@@ -1,0 +1,134 @@
+name: Tessl Tile Publish
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'build/**'
+      - 'skills/**'
+      - 'docs/**'
+      - 'tessl-evals/**'
+      - 'tile.json'
+      - 'tessl.json'
+      - 'scripts/generate-tessl-evals.rb'
+      - 'scripts/stage-tessl-evals.rb'
+      - 'scripts/validate-tessl-evals.rb'
+      - 'scripts/validate-plugins.sh'
+      - '.github/workflows/tessl-publish.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: tessl-publish-main
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          fetch-depth: 0
+
+      - name: Generate and validate Tessl eval source
+        run: |
+          ruby scripts/generate-tessl-evals.rb
+          bash scripts/validate-plugins.sh
+          ruby scripts/validate-tessl-evals.rb
+
+      - name: Stage Tessl evals
+        run: ruby scripts/stage-tessl-evals.rb
+
+      - name: Set up Tessl
+        uses: tesslio/setup-tessl@v2
+        with:
+          token: ${{ secrets.TESSL_TOKEN }}
+
+      - name: Lint Tessl tile
+        run: tessl tile lint .
+
+      - name: Compute automatic patch version
+        id: version
+        run: |
+          tile_name="$(ruby -rjson -e 'puts JSON.parse(File.read("tile.json")).fetch("name")')"
+          local_version="$(ruby -rjson -e 'puts JSON.parse(File.read("tile.json")).fetch("version")')"
+
+          if info_output="$(tessl tile info "$tile_name" 2>&1)"; then
+            latest_version="$(printf '%s\n' "$info_output" | awk '/Latest Version/ {print $NF}')"
+            if [ -z "$latest_version" ]; then
+              echo "::error::Unable to determine latest published version for $tile_name"
+              exit 1
+            fi
+          else
+            if printf '%s\n' "$info_output" | grep -qi '404'; then
+              latest_version=""
+            else
+              echo "::error::Failed to query Tessl registry for $tile_name: $info_output"
+              exit 1
+            fi
+          fi
+
+          version="$(ruby -e '
+            local = ARGV.fetch(0)
+            latest = ARGV.fetch(1)
+
+            def parts(version)
+              values = version.to_s.split(".").map(&:to_i)
+              abort "invalid semver: #{version}" unless values.length == 3
+              values
+            end
+
+            if latest.empty?
+              puts local
+            elsif (parts(local) <=> parts(latest)) == 1
+              puts local
+            else
+              major, minor, patch = parts(latest)
+              puts [major, minor, patch + 1].join(".")
+            end
+          ' "$local_version" "$latest_version")"
+
+          VERSION="$version" ruby -rjson -e '
+            path = "tile.json"
+            data = JSON.parse(File.read(path))
+            data["version"] = ENV.fetch("VERSION")
+            File.write(path, "#{JSON.pretty_generate(data)}\n")
+          '
+
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "Publishing $tile_name@$version"
+
+      - name: Commit automatic version bump
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add tile.json
+          if git diff --cached --quiet; then
+            echo "tile.json already contains version $VERSION"
+          else
+            git commit -m "Bump Tessl tile to $VERSION [skip ci]"
+            git push origin HEAD:main
+          fi
+
+      - name: Publish Tessl tile
+        run: tessl tile publish .
+
+      - name: Create matching Git tag
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          git fetch --tags
+
+          tag="v$VERSION"
+          if git rev-parse "$tag" >/dev/null 2>&1; then
+            echo "Tag $tag already exists; skipping."
+          else
+            git tag -a "$tag" -m "Tessl tile $tag"
+            git push origin "$tag"
+          fi

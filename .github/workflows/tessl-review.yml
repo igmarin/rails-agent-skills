@@ -1,0 +1,74 @@
+name: Tessl Skill Review
+
+on:
+  pull_request:
+    paths:
+      - 'build/**'
+      - 'skills/**'
+      - 'tessl-evals/**'
+      - 'tile.json'
+      - 'tessl.json'
+      - 'scripts/changed-tessl-skill-paths.rb'
+      - 'scripts/generate-tessl-evals.rb'
+      - 'scripts/validate-tessl-evals.rb'
+      - 'scripts/validate-plugins.sh'
+      - '.github/workflows/tessl-review.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tessl-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Generate and validate Tessl eval source
+        run: |
+          ruby scripts/generate-tessl-evals.rb
+          bash scripts/validate-plugins.sh
+          ruby scripts/validate-tessl-evals.rb
+
+      - name: Find changed publishable skills
+        id: changed
+        run: |
+          git diff --name-only "${{ github.event.pull_request.base.sha }}" "${{ github.event.pull_request.head.sha }}" > changed-files.txt
+          ruby scripts/changed-tessl-skill-paths.rb < changed-files.txt > changed-skill-paths.txt
+          if [ -s changed-skill-paths.txt ]; then
+            echo "has_changed_skills=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_changed_skills=false" >> "$GITHUB_OUTPUT"
+          fi
+          {
+            echo "paths<<EOF"
+            cat changed-skill-paths.txt
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Set up Tessl
+        if: steps.changed.outputs.has_changed_skills == 'true'
+        uses: tesslio/setup-tessl@v2
+        with:
+          token: ${{ secrets.TESSL_TOKEN }}
+
+      - name: Review changed publishable skills
+        if: steps.changed.outputs.has_changed_skills == 'true'
+        run: |
+          while IFS= read -r skill_path; do
+            [ -z "$skill_path" ] && continue
+            echo "Reviewing $skill_path"
+            tessl skill review "$skill_path" --threshold 80
+          done < changed-skill-paths.txt
+
+      - name: No publishable skills changed
+        if: steps.changed.outputs.has_changed_skills != 'true'
+        run: echo "No publishable Tessl skills changed; skipping Tessl skill review."
