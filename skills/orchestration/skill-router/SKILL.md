@@ -127,4 +127,3 @@ skills/context/load-context → **[CHECK: context loaded]** → agents/tdd → P
 | Skill | When to chain |
 |-------|---------------|
 | **load-context** | Default for ambiguous requests |
-| **load-context** | Default for ambiguous requests |
