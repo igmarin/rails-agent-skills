@@ -1,6 +1,6 @@
 # Rails Agent Skills
 
-![Rails Agent Skills Logo](https://github.com/user-attachments/assets/55e84f62-52ab-44a5-8b0f-9fe1bdb12212)
+![Rails Agent Skills Logo](https://github.com/user-attachments/assets/d5f7b2e0-c651-41f2-a75f-df21349c883d)
 
 **Rails Agent Skills turns AI coding assistants into disciplined Rails collaborators.**
 
