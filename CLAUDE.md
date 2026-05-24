@@ -58,11 +58,6 @@ Skills are located in subdirectories of this plugin. Read the relevant `SKILL.md
 | `seed-database` | Designing seeds vs fixtures for dev/test data |
 | `implement-hotwire` | Turbo/Stimulus integration, frames, streams |
 
-### Ruby Patterns
-| Skill | Use when... |
-|-------|-------------|
-| `write-yard-docs` | Writing or reviewing YARD docs |
-
 ### Core Skills (from ruby-core-skills)
 
 This repository depends on `igmarin/ruby-core-skills` for foundational DDD and Ruby pattern skills. The following skills are available from the core dependency:

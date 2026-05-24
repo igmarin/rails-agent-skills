@@ -94,7 +94,7 @@ New to the project?
        Implement?
             Bug or refactor?
             ├─ Bug → triage-bug *(from core)*
-            ├─ Refactor → refactor-code *(from core)*
+            ├─ Refactor → refactor-code
             └─ New feature → plan-tests → write-tests
 
                  Code type?
