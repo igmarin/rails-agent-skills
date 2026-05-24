@@ -1,6 +1,6 @@
 # Agent Guide — Rails Agent Skills
 
-Companion to the [README](../README.md): **how to chain skills** using Rails agents. For install paths and hooks, see [implementation-guide.md](implementation-guide.md). For `SKILL.md` structure and frontmatter rules, see [architecture.md](architecture.md).
+Companion to the [README](../README.md): **how to chain skills** using Rails agents. For install paths and setup, see the [README](../README.md). For `SKILL.md` structure and frontmatter rules, see [architecture.md](architecture.md).
 
 ---
 
@@ -115,7 +115,7 @@ You respond with approval or redirections. Only then does Claude write the imple
 
 ### Across tools
 
-These skills work the same way in **Cursor**, **Codex**, and **Claude Code** — describe the task in natural language and the right skill is loaded from the catalog. The difference is only in how the plugin is installed (see [implementation-guide.md](implementation-guide.md)).
+These skills work the same way in **Cursor**, **Codex**, and **Claude Code** — describe the task in natural language and the right skill is loaded from the catalog. The difference is only in how the plugin is installed (see the [README](../README.md)).
 
 ---
 

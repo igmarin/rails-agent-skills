@@ -5,8 +5,6 @@ Master index for the Rails Agent Skills library. Start here to navigate the publ
 ## Quick Start
 
 - [Root README](../README.md) - Project value, audience, install paths, and documentation map.
-- [Implementation Guide](implementation-guide.md) - Installation overview.
-- [Calling Skills Guide](calling-skills.md) - Syntax and execution contexts (CLI, Chat).
 - [Agent Guide](agent-guide.md) — How to chain skills in real Rails work.
 - [Skill Catalog](reference/skill-catalog.md) - Complete list of 28 public Rails skills, 9 callable agents, and 15 core skills.
 
@@ -29,9 +27,3 @@ Master index for the Rails Agent Skills library. Start here to navigate the publ
 - [Skill Optimization](skill-optimization-guide.md) - Baseline-vs-context evaluation loop.
 - [Eval Provenance](eval-provenance.md) - Ownership rules for `tessl-evals/`, `personal-evals/`, and generated `evals/`.
 - [Skill Template](skill-template.md) - Template for contributing new skills.
-
-## Platform Setup
-
-- [Implementation Guide](implementation-guide.md)
-- [VS Code Setup](vs-code-setup.md)
-- [Plugin Validation](plugin-validation.md)

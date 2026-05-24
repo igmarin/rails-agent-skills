@@ -3,38 +3,29 @@
 Conventions and structure for every `SKILL.md` in this library.
 
 - **Overview and catalog:** [README](../README.md)
-- **Install and hooks:** [implementation-guide.md](implementation-guide.md)
 - **Agent chains:** [agent-guide.md](agent-guide.md)
 
 ## Directory Structure
 
 ```text
 rails-agent-skills/
-├── .claude-plugin/          # Claude Code plugin metadata
-│   ├── plugin.json
-│   └── marketplace.json
-├── .codex/                  # Codex installation instructions
-│   └── INSTALL.md
-├── .cursor-plugin/          # Cursor plugin metadata
-│   └── plugin.json
-├── hooks/                   # Session hooks
-│   ├── hooks.json
-│   └── session-start
-├── docs/                    # Documentation
-│   ├── implementation-guide.md
-│   ├── architecture.md
-│   ├── agent-guide.md
-│   └── skill-template.md
 ├── agents/                  # Orchestrated agent skills
-│   └── tdd/
-│       └── SKILL.md
+│   └── <agent-name>/        # One directory per agent
+│       └── SKILL.md         # Agent definition
+├── docs/                    # Documentation
+├── lean-ctx/                # Lean context configuration
+├── personal-evals/          # Tracked open custom evals
+├── scripts/                 # Utility scripts
 ├── skills/                  # Categorized skills
-│   └── <category>/          # e.g., ddd, testing, code-quality
+│   └── <category>/          # e.g., testing, code-quality
 │       └── <skill-name>/    # One directory per skill
 │           ├── SKILL.md     # Main skill file (required)
-│           └── reference.md # Optional reference material
-├── README.md
-└── .gitignore
+│           └── EXAMPLES.md  # Optional reference/examples material
+├── tessl-evals/             # Tracked Tessl evals
+├── tile.json                # Tessl/MCP manifest
+├── AGENTS.md                # Agent guidance document
+├── CLAUDE.md                # Claude Code setup instructions
+└── README.md                # Root README
 ```
 
 ## SKILL.md Structure
