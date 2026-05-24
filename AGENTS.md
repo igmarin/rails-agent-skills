@@ -8,7 +8,7 @@ A curated library of 28 public atomic skills for Ruby on Rails development, plus
 
 This repository depends on `ruby-core-skills` for shared Ruby skills (YARD docs, DDD, service objects, process discipline). These are resolved automatically via pack resolution.
 
-**Core dependency:** This repo depends on `igmarin/ruby-core-skills` for 15 shared skills including DDD, patterns, process discipline, and orchestration. See `tile.json` for the full list.
+**Core dependency:** This repo depends on `igmarin/ruby-core-skills` for 15 shared skills including DDD, patterns, process discipline, and orchestration. See the core skills table below for the list of shared skills and `tile.json` for deprecated aliases.
 
 ## How Skills Are Organized
 
