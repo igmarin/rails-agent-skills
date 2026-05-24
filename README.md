@@ -113,14 +113,16 @@ The library contains **28 public Rails-specific skills** organized by developmen
 
 | Category | Local Skills | Core Skills (from ruby-core-skills) |
 |----------|-------------|-----------------------------------|
-| Testing | `plan-tests`, `write-tests`, `test-service` | `triage-bug`, `test-planning-process` |
-| Code quality | `code-review`, `security-check`, `review-architecture`, `apply-code-conventions`, `apply-stack-conventions`, `implement-authorization`, `optimize-performance`, `refactor-code` | `respond-to-review`, `write-yard-docs`, `review-process`, `security-review-process` |
-| Architecture and DDD | `review-architecture` | `define-domain-language`, `review-domain-boundaries`, `model-domain` |
-| Rails implementation | `implement-background-job`, `implement-authorization`, `implement-hotwire` | `create-service-object`, `integrate-api-client`, `implement-calculator-pattern` |
-| APIs | `generate-api-collection`, `implement-graphql`, `version-api` | `integrate-api-client` |
+| Testing | `plan-tests`, `write-tests`, `test-service` | `triage-bug`, `test-planning-process`, `tdd-process` |
+| Code Quality | `code-review`, `security-check`, `review-architecture`, `apply-code-conventions`, `apply-stack-conventions`, `implement-authorization`, `refactor-code` | `respond-to-review`, `review-process`, `security-review-process`, `refactor-process` |
+| DDD | — | `define-domain-language`, `review-domain-boundaries`, `model-domain` |
 | Engines | `create-engine`, `test-engine`, `document-engine`, `review-engine`, `release-engine`, `create-engine-installer`, `extract-engine`, `upgrade-engine` | — |
-| Infrastructure | `review-migration`, `seed-database`, `optimize-performance`, `refactor-code`, `implement-hotwire` | — |
-| Orchestration | — | `skill-router`, `tdd-process` |
+| Infrastructure | `review-migration`, `implement-background-job`, `seed-database`, `optimize-performance`, `version-api`, `implement-hotwire` | — |
+| API | `generate-api-collection`, `implement-graphql` | `integrate-api-client` |
+| Context | `load-context`, `setup-environment` | — |
+| Patterns | — | `create-service-object`, `implement-calculator-pattern` |
+| Orchestration | — | `skill-router` |
+| Documentation | — | `write-yard-docs` |
 
 
 Use [docs/reference/skill-catalog.md](docs/reference/skill-catalog.md) for the complete catalog and [docs/reference/integration-matrix.md](docs/reference/integration-matrix.md) for skill chaining.
