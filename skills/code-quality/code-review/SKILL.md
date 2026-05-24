@@ -111,4 +111,4 @@ Group findings by severity. See [assets/examples.md](./assets/examples.md) for J
 | **review-architecture** | When review reveals structural problems |
 | **review-migration** | When reviewing migrations on large tables |
 
-|| **review-process** *(from ruby-core-skills)* | Process discipline: severity levels, structured findings format, re-review criteria |
+| **review-process** *(from ruby-core-skills)* | Process discipline: severity levels, structured findings format, re-review criteria |

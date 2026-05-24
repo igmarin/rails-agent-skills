@@ -188,8 +188,6 @@ Skills are organized in category folders (`skills/<category>/`) with frequent en
 
 ### Engines
 
-### Engines
-
 | Skill | Path | Description |
 |-------|------|-------------|
 | **create-engine** | `skills/engines/create-engine/` | Rails engine scaffolding |
@@ -230,11 +228,11 @@ Skills are organized in category folders (`skills/<category>/`) with frequent en
 
 ### Testing
 
-|| Skill | Path | Description |
-||-------|------|-------------|
-|| **write-tests** | `skills/testing/write-tests/` | TDD discipline, spec types |
-|| **test-service** | `skills/testing/test-service/` | Service object specific testing |
-|| **plan-tests** | `skills/testing/plan-tests/` | Choose the best first failing spec |
+| Skill | Path | Description |
+|-------|------|-------------|
+| **write-tests** | `skills/testing/write-tests/` | TDD discipline, spec types |
+| **test-service** | `skills/testing/test-service/` | Service object specific testing |
+| **plan-tests** | `skills/testing/plan-tests/` | Choose the best first failing spec |
 
 *Note: `triage-bug` has moved to `igmarin/ruby-core-skills`*
 

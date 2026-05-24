@@ -138,4 +138,4 @@ When asked to refactor, your output MUST include:
 | **code-review** | For reviewing the refactored code ([details](./INTEGRATION.md#code-review)) |
 | **create-service-object** | When extracting logic into service objects ([details](./INTEGRATION.md#create-service-object)) |
 
-|| **refactor-process** *(from ruby-core-skills)* | Process discipline: characterization tests first, small steps, verify after each |
+| **refactor-process** *(from ruby-core-skills)* | Process discipline: characterization tests first, small steps, verify after each |

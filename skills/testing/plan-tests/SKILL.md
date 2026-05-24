@@ -137,4 +137,4 @@ Load only when needed:
 | **triage-bug** | When the starting point is an existing bug report |
 | **refactor-code** | When the task is mostly structural and needs characterization tests first |
 
-|| **test-planning-process** *(from ruby-core-skills)* | Process discipline: test type decision framework, coverage strategy |
+| **test-planning-process** *(from ruby-core-skills)* | Process discipline: test type decision framework, coverage strategy |

@@ -91,7 +91,7 @@ Orchestrates systematic code review with optional deep dives for security/archit
 | **Suggestion** | Fix in this PR or ticket separately |
 
 **If Critical findings:**
-1. **skills/code-quality/respond-to-review** — Evaluate and implement fixes
+1. **ruby-core-skills/respond-to-review** — Evaluate and implement fixes
 
 ### TDD Enforcement for Critical Fixes
 

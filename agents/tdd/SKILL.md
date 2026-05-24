@@ -25,7 +25,7 @@ metadata:
 2. **testing/plan-tests**: Choose the best first failing spec.
 3. **testing/write-tests**: Write test and verify failure.
 
-**HARD GATE — tdd-process *(from ruby-core-skills)**
+**HARD GATE — tdd-process *(from ruby-core-skills)***
 - Test EXISTS and is RUN.
 - FAILS for correct reason (e.g., `undefined method 'full_name'`).
 - If FAIL is incorrect (syntax, config), return to `write-tests`.

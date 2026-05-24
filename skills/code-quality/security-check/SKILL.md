@@ -136,4 +136,4 @@ Critical anti-patterns: `permit!` on any parameter set, `html_safe` on user cont
 | **review-architecture** | When security issues stem from architectural problems |
 | **review-migration** | When reviewing migration security (data exposure, constraints) |
 
-|| **security-review-process** *(from ruby-core-skills)* | Process discipline: OWASP checklist, Ruby-level security concerns |
+| **security-review-process** *(from ruby-core-skills)* | Process discipline: OWASP checklist, Ruby-level security concerns |

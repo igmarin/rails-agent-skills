@@ -11,7 +11,7 @@ metadata:
   hard_gates: "Job Design Complete, Tests Pass, Retry Strategy Configured, Failure Scenarios Tested"
   dependencies:
     - source: self
-      skills: [implement-background-job]
+      skills: [implement-background-job, write-tests]
     - source: ruby-core-skills
       skills: [tdd-process]
   keywords: rails, background-job, async, sidekiq, solid-queue, active-job, retry, monitoring

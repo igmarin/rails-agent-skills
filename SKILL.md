@@ -92,7 +92,7 @@ Step 5 — apply-code-conventions + write-yard-docs + code-review
 | **Patterns** | `create-service-object`, `write-yard-docs` | Inherit `ApplicationService`, expose `.call`, document with `@param`/`@return` YARD tags |
 | **Setup** | `setup-environment` | Verify Ruby version, `bundle install`, and `bin/rails db:setup` |
 
-*The complete list of all 28 local atomic skills is defined in `tile.json` at the project root. This repository also depends on `igmarin/ruby-core-skills` for 15 additional core skills (DDD and Ruby patterns).*
+*The complete list of all 28 local atomic skills is defined in `tile.json` at the project root. This repository also depends on `igmarin/ruby-core-skills` for 15 additional core skills (Process, Code Quality, Orchestration, DDD, and Ruby patterns).*
 
 ## Integration
 

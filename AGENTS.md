@@ -28,37 +28,37 @@ Read `SKILL.md` first. Load supporting files only when the skill links to them a
 
 Load the skill that best matches the current task. The bootstrap skill `skill-router` (now in `ruby-core-skills`) routes to specialized skills. All skills are organized by category in `skills/<category>/`:
 
-|| Category | Path | Skills |
-||----------|------|--------|
-|| **Testing** | `skills/testing/` | `write-tests`, `test-service`, `plan-tests` |
-|| **Code Quality** | `skills/code-quality/` | `code-review`, `review-architecture`, `security-check`, `apply-stack-conventions`, `apply-code-conventions`, `implement-authorization`, `refactor-code` |
-|| **Engines** | `skills/engines/` | `create-engine`, `test-engine`, `review-engine`, `release-engine`, `document-engine`, `create-engine-installer`, `extract-engine`, `upgrade-engine` |
-|| **Infrastructure** | `skills/infrastructure/` | `review-migration`, `implement-background-job`, `seed-database`, `optimize-performance`, `version-api`, `implement-hotwire` |
-|| **API** | `skills/api/` | `generate-api-collection`, `implement-graphql` |
-|| **Context** | `skills/context/` | `load-context`, `setup-environment` |
-|| **Agents** | `agents/` | `tdd`, `review`, `setup`, `quality`, `engine`, `bug-fix`, `graphql`, `migration`, `background-job` |
+| Category | Path | Skills |
+|----------|------|--------|
+| **Testing** | `skills/testing/` | `write-tests`, `test-service`, `plan-tests` |
+| **Code Quality** | `skills/code-quality/` | `code-review`, `review-architecture`, `security-check`, `apply-stack-conventions`, `apply-code-conventions`, `implement-authorization`, `refactor-code` |
+| **Engines** | `skills/engines/` | `create-engine`, `test-engine`, `review-engine`, `release-engine`, `document-engine`, `create-engine-installer`, `extract-engine`, `upgrade-engine` |
+| **Infrastructure** | `skills/infrastructure/` | `review-migration`, `implement-background-job`, `seed-database`, `optimize-performance`, `version-api`, `implement-hotwire` |
+| **API** | `skills/api/` | `generate-api-collection`, `implement-graphql` |
+| **Context** | `skills/context/` | `load-context`, `setup-environment` |
+| **Agents** | `agents/` | `tdd`, `review`, `setup`, `quality`, `engine`, `bug-fix`, `graphql`, `migration`, `background-job` |
 
 ### Core Skills (from ruby-core-skills)
 
 The following skills are loaded automatically via pack resolution from `ruby-core-skills`:
 
-|| Skill | Category | Description |
-||-------|----------|-------------|
-|| `write-yard-docs` | Documentation | YARD documentation for public Ruby APIs |
-|| `create-service-object` | Patterns | PORO `.call` pattern |
-|| `implement-calculator-pattern` | Patterns | Polymorphic variant-based calculators |
-|| `integrate-api-client` | Patterns | HTTP integration layers |
-|| `define-domain-language` | DDD | Ubiquitous language extraction |
-|| `review-domain-boundaries` | DDD | Bounded context review |
-|| `model-domain` | DDD | Tactical DDD design |
-|| `triage-bug` | Testing | Bug triage and reproduction |
-|| `respond-to-review` | Code Quality | Review feedback response |
-|| `skill-router` | Orchestration | Skill routing (bootstrap) |
-|| `tdd-process` | Process | Red-Green-Refactor gates and checkpoints |
-|| `refactor-process` | Process | Safe refactoring discipline |
-|| `review-process` | Process | Code review severity and re-review criteria |
-|| `security-review-process` | Process | OWASP-based security review |
-|| `test-planning-process` | Process | Test type decision framework |
+| Skill | Category | Description |
+|-------|----------|-------------|
+| `write-yard-docs` | Documentation | YARD documentation for public Ruby APIs |
+| `create-service-object` | Patterns | PORO `.call` pattern |
+| `implement-calculator-pattern` | Patterns | Polymorphic variant-based calculators |
+| `integrate-api-client` | Patterns | HTTP integration layers |
+| `define-domain-language` | DDD | Ubiquitous language extraction |
+| `review-domain-boundaries` | DDD | Bounded context review |
+| `model-domain` | DDD | Tactical DDD design |
+| `triage-bug` | Testing | Bug triage and reproduction |
+| `respond-to-review` | Code Quality | Review feedback response |
+| `skill-router` | Orchestration | Skill routing (bootstrap) |
+| `tdd-process` | Process | Red-Green-Refactor gates and checkpoints |
+| `refactor-process` | Process | Safe refactoring discipline |
+| `review-process` | Process | Code review severity and re-review criteria |
+| `security-review-process` | Process | OWASP-based security review |
+| `test-planning-process` | Process | Test type decision framework |
 
 ## Non-Negotiable Workflow Rule
 
@@ -74,17 +74,17 @@ Do not write implementation code before the test exists and fails. Every skill t
 
 ### Quick Reference
 
-|| Goal | Agent | Atomic Skills |
-||------|-------|---------------|
-|| Implement feature with TDD | `agents/tdd` | Full orchestrated cycle |
-|| Review PR systematically | `agents/review` | Review → deep dive → response |
-|| Set up project / CI/CD | `agents/setup` | Context → onboarding → CI/CD |
-|| Quality check before PR | `agents/quality` | Conventions → refactor → docs |
-|| Build Rails engine | `agents/engine` | Author → test → review → release |
-|| Fix reported bug | `agents/bug-fix` | Triage → reproduce → fix → verify |
-|| Build GraphQL API | `agents/graphql` | Domain modeling → schema → TDD → security |
-|| Database migration | `agents/migration` | Plan → test → staging → production |
-|| Background job | `agents/background-job` | Design → TDD → retry config → monitoring |
+| Goal | Agent | Atomic Skills |
+|------|-------|---------------|
+| Implement feature with TDD | `agents/tdd` | Full orchestrated cycle |
+| Review PR systematically | `agents/review` | Review → deep dive → response |
+| Set up project / CI/CD | `agents/setup` | Context → onboarding → CI/CD |
+| Quality check before PR | `agents/quality` | Conventions → refactor → docs |
+| Build Rails engine | `agents/engine` | Author → test → review → release |
+| Fix reported bug | `agents/bug-fix` | Triage → reproduce → fix → verify |
+| Build GraphQL API | `agents/graphql` | Domain modeling → schema → TDD → security |
+| Database migration | `agents/migration` | Plan → test → staging → production |
+| Background job | `agents/background-job` | Design → TDD → retry config → monitoring |
 
 ### TDD Feature Loop (Recommended)
 

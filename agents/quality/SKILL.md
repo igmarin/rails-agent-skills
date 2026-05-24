@@ -16,7 +16,7 @@ metadata:
   hard_gates: "Conventions Check, Refactoring Test Gate, Quality Before Merge"
   dependencies:
     - source: self
-      skills: [apply-code-conventions, refactor-code, code-review]
+      skills: [apply-code-conventions, apply-stack-conventions, refactor-code, code-review]
     - source: ruby-core-skills
       skills: [write-yard-docs, refactor-process, review-process]
   keywords: rails, quality, conventions, refactoring, documentation, yard, review

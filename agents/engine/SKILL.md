@@ -14,7 +14,7 @@ metadata:
   hard_gates: "Engine Structure Check, Tests Run, Isolation Before Integration"
   dependencies:
     - source: self
-      skills: [create-engine, test-engine, review-engine, document-engine, release-engine]
+      skills: [create-engine, test-engine, review-engine, document-engine, release-engine, upgrade-engine]
     - source: ruby-core-skills
       skills: [write-yard-docs, tdd-process]
   keywords: rails, engine, agent, gem, release, testing, extraction

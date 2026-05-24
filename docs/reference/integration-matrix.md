@@ -163,6 +163,7 @@ code-review
 | write-yard-docs *(from ruby-core-skills)* | Document the public service |
 
 ### code-review
+
 | Next | When |
 |------|------|
 | security-check | If there are security concerns |
