@@ -32,7 +32,7 @@ The repository uses a hybrid model to keep agent context focused:
 
 | Setup | [Setup & Configuration](agents/setup.md) | CI/CD and infrastructure references | `setup-environment` |
 | Development | [Development](agents/development.md) | TDD and implementation | `plan-tests`, `write-tests`, `triage-bug` *(from core)* |
-| Quality | [Code Quality](agents/quality.md) | Conventions, refactoring, and docs | `apply-code-conventions`, `refactor-code`, `write-yard-docs` *(from core)* |
+| Quality | [Code Quality](agents/quality.md) | Conventions, refactoring, and docs | Local: `apply-code-conventions`, `refactor-code`. Core: `write-yard-docs`, `refactor-process`, `review-process` |
 | Review | [Review & Validation](agents/review.md) | Review, security, and architecture | `code-review`, `security-check`, `review-architecture`, `respond-to-review` *(from core)* |
 | Engines | [Engine Development](agents/engines.md) | Building and releasing Rails engines | `create-engine`, `release-engine` |
 
