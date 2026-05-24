@@ -2,8 +2,6 @@
 
 ![Rails Agent Skills Logo](https://github.com/user-attachments/assets/d5f7b2e0-c651-41f2-a75f-df21349c883d)
 
-**Rails Agent Skills turns AI coding assistants into disciplined Rails collaborators.**
-
 It is a curated library of **public Rails agent skills** and **callable agents** that teach AI tools how to test, implement, document, and review Rails work using production-minded conventions. This repository acts as a pure **Domain Knowledge Registry** and asset catalog of specialized Rails & Ruby AI Skills/Agents, consumable by external MCP or CLI runtimes.
 
 The project is built around one non-negotiable rule:
