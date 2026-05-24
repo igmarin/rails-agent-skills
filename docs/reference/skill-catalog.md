@@ -188,6 +188,8 @@ Skills are organized in category folders (`skills/<category>/`) with frequent en
 
 ### Engines
 
+### Engines
+
 | Skill | Path | Description |
 |-------|------|-------------|
 | **create-engine** | `skills/engines/create-engine/` | Rails engine scaffolding |
