@@ -27,7 +27,7 @@ plan-tests → write failing test
   → [CHECKPOINT: Implementation Proposal — confirm approach before coding]
   → implement (minimal code to pass test) → refactor
   → [GATE: Linters + Full Test Suite]
-  → write-yard-docs
+  → write-yard-docs *(from core)*
   → code-review (self-review)
   → respond-to-review *(from core)* (when feedback is received)
   → re-review if Critical findings were addressed
