@@ -175,6 +175,7 @@ Skills are organized in category folders (`skills/<category>/`) with frequent en
 | **apply-stack-conventions** | `skills/code-quality/apply-stack-conventions/` | Stack-specific conventions |
 | **apply-code-conventions** | `skills/code-quality/apply-code-conventions/` | DRY/YAGNI/PORO/CoC/KISS by path |
 | **implement-authorization** | `skills/code-quality/implement-authorization/` | Pundit/CanCanCan, roles, permissions |
+| **refactor-code** | `skills/code-quality/refactor-code/` | Refactor preserving behavior |
 
 
 ### DDD
@@ -183,6 +184,9 @@ Skills are organized in category folders (`skills/<category>/`) with frequent en
 *- `define-domain-language` — Domain terms glossary*
 *- `review-domain-boundaries` — Review bounded contexts*
 *- `model-domain` — Map DDD to Rails*
+
+
+### Engines
 
 | Skill | Path | Description |
 |-------|------|-------------|
