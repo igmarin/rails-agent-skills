@@ -156,7 +156,7 @@ code-review
 | review-migration | If there is a migration |
 | implement-graphql | If it's GraphQL |
 
-### create-service-object
+### create-service-object *(from ruby-core-skills)*
 | Next | When |
 |------|------|
 | test-service | To test the service |
