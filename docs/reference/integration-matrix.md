@@ -63,7 +63,7 @@ code-review
 ### Refactoring
 
 ```text
-refactor-code *(from ruby-core-skills)*
+refactor-code
     ↓
 [gate: Characterization tests pass]
     ↓
@@ -179,7 +179,7 @@ New to project?
   └─ No → What do you need?
 
        Refactor?
-            ├─ Yes → refactor-code *(from ruby-core-skills)*
+            ├─ Yes → refactor-code
             └─ No → plan-tests → write-tests
 
                       Type?

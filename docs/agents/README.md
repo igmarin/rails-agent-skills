@@ -46,7 +46,7 @@ flowchart TD
 | **Discovery** | [Discovery & Context](discovery.md) | Understand codebase, project onboarding | `load-context`, `setup-environment` |
 | **Setup** | [Setup & Configuration](setup.md) | Configure CI/CD, environment, deploy | `setup-environment` *(plus roadmap `setup-ci-cd`)* |
 | **Development** | [Development](development.md) | TDD development, implementation | `plan-tests`, `testing skills`, implementation |
-| **Quality** | [Code Quality](quality.md) | Conventions, refactoring, documentation | `apply-code-conventions`, `refactor-code` *(from core)*, `write-yard-docs` *(from core)* |
+| **Quality** | [Code Quality](quality.md) | Conventions, refactoring, documentation | `apply-code-conventions`, `refactor-code`, `write-yard-docs` *(from core)* |
 | **Review** | [Review & Validation](review.md) | Code review, security, architecture | `code-review`, `security-check`, `review-architecture`, `respond-to-review` *(from core)* |
 | **Engines** | [Engine Development](engines.md) | Create and maintain Rails engines | `engine skills` |
 
@@ -74,7 +74,7 @@ This directory contains **reference guides** describing each stage. For **execut
 | Situation | Agent | Quick Entry |
 |-----------|-------|-------------|
 | **Bug fix** | [`bug-fix`](../../agents/bug-fix/SKILL.md) | `triage-bug` *(from core)* → reproduce test → fix → verify |
-| **Refactoring** | [Refactor Safely](quality.md#refactor-code) | `refactor-code` *(from core)* → characterization tests → extract |
+| **Refactoring** | [Refactor Safely](quality.md#refactor-code) | `refactor-code` → characterization tests → extract |
 | **Performance** | [Performance Optimization](development.md#performance) | `optimize-performance` |
 | **GraphQL** | [`graphql`](../../agents/graphql/SKILL.md) | domain modeling *(from core)* → schema → TDD → security |
 | **Authorization** | [Authorization Setup](development.md#authorization) | `implement-authorization` |

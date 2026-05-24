@@ -116,7 +116,7 @@ Complete catalog of 28 public skills and 9 callable agents organized by developm
 | **New project setup** | `setup-environment` |
 | **Start coding** | `plan-tests` → `write-tests` |
 | **Fix bug** | `triage-bug` *(from core)* |
-| **Refactor** | `refactor-code` *(from core)* |
+| **Refactor** | `refactor-code` |
 | **Create service** | `create-service-object` *(from core)* |
 | **Integrate external API** | `integrate-api-client` *(from core)* |
 | **Add auth/roles** | `implement-authorization` |
@@ -155,7 +155,8 @@ Skills are organized in category folders (`skills/<category>/`) with frequent en
 |-------|------|-------------|
 | **generate-api-collection** | `skills/api/generate-api-collection/` | Generate Postman collections for REST APIs |
 | **implement-graphql** | `skills/api/implement-graphql/` | Schema design, N+1 prevention, auth |
-| **integrate-api-client** | `skills/api/integrate-api-client/` | Layered architecture for external APIs |
+
+*Note: `integrate-api-client` has moved to `igmarin/ruby-core-skills`*
 
 ### Context
 
@@ -223,11 +224,13 @@ Skills are organized in category folders (`skills/<category>/`) with frequent en
 
 ### Testing
 
-|-------|------|-------------|
-| **write-tests** | `skills/testing/write-tests/` | TDD discipline, spec types |
-| **test-service** | `skills/testing/test-service/` | Service object specific testing |
-| **plan-tests** | `skills/testing/plan-tests/` | Choose the best first failing spec |
-| **triage-bug** | `skills/testing/triage-bug/` | Bug diagnosis and reproduction |
+|| Skill | Path | Description |
+||-------|------|-------------|
+|| **write-tests** | `skills/testing/write-tests/` | TDD discipline, spec types |
+|| **test-service** | `skills/testing/test-service/` | Service object specific testing |
+|| **plan-tests** | `skills/testing/plan-tests/` | Choose the best first failing spec |
+
+*Note: `triage-bug` has moved to `igmarin/ruby-core-skills`*
 
 ### Agents
 

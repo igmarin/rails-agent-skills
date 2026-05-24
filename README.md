@@ -109,19 +109,17 @@ See [docs/agent-guide.md](docs/agent-guide.md) and [docs/agents/](docs/agents/) 
 
 ## Skill Catalog
 
-## Skill Catalog
-
 The library contains **28 public Rails-specific skills** organized by development concern, plus **15 core Ruby skills** available from the dependency `igmarin/ruby-core-skills`.
 
 || Category | Local Skills | Core Skills (from ruby-core-skills) |
 ||----------|-------------|-----------------------------------|
 || Testing | `plan-tests`, `write-tests`, `test-service` | `triage-bug`, `test-planning-process` |
-|| Code quality | `code-review`, `security-check`, `review-architecture`, `apply-code-conventions`, `apply-stack-conventions`, `implement-authorization`, `optimize-performance` | `respond-to-review`, `refactor-code`, `write-yard-docs`, `review-process`, `security-review-process` |
+|| Code quality | `code-review`, `security-check`, `review-architecture`, `apply-code-conventions`, `apply-stack-conventions`, `implement-authorization`, `optimize-performance`, `refactor-code` | `respond-to-review`, `write-yard-docs`, `review-process`, `security-review-process` |
 || Architecture and DDD | `review-architecture` | `define-domain-language`, `review-domain-boundaries`, `model-domain` |
 || Rails implementation | `implement-background-job`, `implement-authorization`, `implement-hotwire` | `create-service-object`, `integrate-api-client`, `implement-calculator-pattern` |
 || APIs | `generate-api-collection`, `implement-graphql`, `version-api` | `integrate-api-client` |
 || Engines | `create-engine`, `test-engine`, `document-engine`, `review-engine`, `release-engine`, `create-engine-installer`, `extract-engine`, `upgrade-engine` | — |
-|| Infrastructure | `review-migration`, `seed-database`, `optimize-performance`, `implement-hotwire` | — |
+|| Infrastructure | `review-migration`, `seed-database`, `optimize-performance`, `refactor-code`, `implement-hotwire` | — |
 || Orchestration | — | `skill-router`, `tdd-process` |
 
 
