@@ -137,3 +137,5 @@ When asked to refactor, your output MUST include:
 | **review-architecture** | When refactor reveals structural problems ([details](./INTEGRATION.md#review-architecture)) |
 | **code-review** | For reviewing the refactored code ([details](./INTEGRATION.md#code-review)) |
 | **create-service-object** | When extracting logic into service objects ([details](./INTEGRATION.md#create-service-object)) |
+
+| **refactor-process** *(from ruby-core-skills)* | Process discipline: characterization tests first, small steps, verify after each |

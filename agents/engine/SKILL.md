@@ -12,7 +12,11 @@ metadata:
   entry_point: "Invoke when creating, extracting, or maintaining Rails engines"
   phases: "Phase 1: Engine Authoring, Phase 2: Testing Setup, Phase 3: Implementation & Review, Phase 4: Documentation & Release"
   hard_gates: "Engine Structure Check, Tests Run, Isolation Before Integration"
-  dependencies: "create-engine, test-engine, review-engine, upgrade-engine, document-engine, release-engine"
+  dependencies:
+    - source: self
+      skills: [create-engine, test-engine, review-engine, document-engine, release-engine, upgrade-engine]
+    - source: ruby-core-skills
+      skills: [write-yard-docs, tdd-process]
   keywords: rails, engine, agent, gem, release, testing, extraction
 ---
 # Engine Agent

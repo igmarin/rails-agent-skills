@@ -150,3 +150,5 @@ When asked to write or review RSpec specs, your output MUST satisfy each rule be
 | **create-service-object** | Providing test structure for the `.call` pattern |
 | **refactor-code** | Adding characterization tests before refactoring |
 | **implement-graphql** | Writing specs for GraphQL resolvers and mutations |
+
+| **tdd-process** *(from ruby-core-skills)* | Process discipline: Red-Green-Refactor gates, checkpoint pattern |

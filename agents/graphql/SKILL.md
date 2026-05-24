@@ -9,7 +9,11 @@ metadata:
   entry_point: "Invoke when building GraphQL APIs or implementing GraphQL features with proper domain boundaries and security"
   phases: "Phase 1: Domain Modeling, Phase 2: Schema Design, Phase 3: TDD Implementation, Phase 4: Security Review"
   hard_gates: "Domain Language Defined, Schema Validated, Tests Pass, Security Check"
-  dependencies: "define-domain-language, implement-graphql, security-check, write-tests"
+  dependencies:
+    - source: self
+      skills: [implement-graphql, security-check, load-context]
+    - source: ruby-core-skills
+      skills: [define-domain-language, tdd-process, write-yard-docs]
   keywords: rails, graphql, api, ddd, domain, security, tdd, schema
 ---
 # GraphQL Agent

@@ -9,7 +9,11 @@ metadata:
   entry_point: "Invoke when practicing test-driven development or building Rails features where specs must gate implementation"
   phases: "Phase 1: Context & Test Design, Phase 2: Implementation, Phase 3: Iterate, Phase 4: Finish"
   hard_gates: "Test Feedback, Proposal Checkpoint, Implementation Verification, Quality Check"
-  dependencies: "load-context, plan-tests, write-tests, write-yard-docs, code-review"
+  dependencies:
+    - source: self
+      skills: [load-context, plan-tests, write-tests, code-review]
+    - source: ruby-core-skills
+      skills: [tdd-process, write-yard-docs]
   keywords: rails, tdd, agent, feature, implementation, testing, orchestration
 ---
 # TDD Agent
@@ -21,7 +25,7 @@ metadata:
 2. **testing/plan-tests**: Choose the best first failing spec.
 3. **testing/write-tests**: Write test and verify failure.
 
-**HARD GATE — Test Feedback:**
+**HARD GATE — tdd-process *(from ruby-core-skills)***
 - Test EXISTS and is RUN.
 - FAILS for correct reason (e.g., `undefined method 'full_name'`).
 - If FAIL is incorrect (syntax, config), return to `write-tests`.
@@ -39,13 +43,15 @@ Return to Phase 1 for next behavior or proceed to Phase 4.
 
 ### Phase 4: Finish
 1. **Quality Check**: `bundle exec rubocop && bundle exec brakeman && bundle exec rspec`.
-2. **patterns/write-yard-docs**: Document public Ruby API.
+2. **write-yard-docs *(from ruby-core-skills)***: Document public Ruby API.
 3. **code-quality/code-review**: Self-review PR diff.
 4. **Open PR**: Feature complete.
 
 ## Concrete Example
 
 Below is an abbreviated end-to-end walkthrough for adding a `full_name` method to a `User` model.
+
+For a complete end-to-end example, see [assets/example.md](assets/example.md).
 
 **Step 1 — Write the failing spec** (`spec/models/user_spec.rb`):
 ```ruby

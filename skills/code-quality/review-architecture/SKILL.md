@@ -95,3 +95,7 @@ Use this skill when the task is to review or improve the structure of a Rails ap
 | Skill | When to chain |
 |-------|---------------|
 | **code-review** | For smaller scopes and PR reviews |
+
+## Additional Resources
+
+- [EXAMPLES.md](EXAMPLES.md) — Complete architecture review examples

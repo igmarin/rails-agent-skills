@@ -140,3 +140,7 @@ end
 | **code-review** | When reviewing PRs that include migrations |
 | **implement-background-job** | For backfill jobs that run after schema change |
 | **security-check** | When migrations expose or move sensitive data |
+
+## Additional Resources
+
+- [PATTERNS.md](PATTERNS.md) — Advanced migration patterns for complex schema operations

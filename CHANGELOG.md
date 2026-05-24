@@ -1,81 +1,101 @@
 # Changelog
 
-All notable changes to this repository will be documented in this file.
+All notable changes to this project will be documented in this file.
 
-This project uses semantic versioning for published skill-library releases.
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [6.0.0] - 2026-05-24
 
-### Changed
+### Breaking Changes
 
-- Converted repository to a pure Agent Skills registry.
-- Removed MCP server, Docker, Cloudflare, and CI files to focus strictly on skill distribution via `npx skills`.
-- Evicted language-agnostic planning skills (`create-prd`, `generate-tasks`, `plan-tickets`).
+**Skill Extraction to ruby-core-skills**
+The following 10 skills have been extracted to the new `igmarin/ruby-core-skills` dependency and are no longer included in this repository:
 
-## [5.1.5] - 2026-05-11
+**DDD Skills (3):**
+- `define-domain-language` — Moved to ruby-core-skills
+- `review-domain-boundaries` — Moved to ruby-core-skills
+- `model-domain` — Moved to ruby-core-skills
 
-### Added
+**Ruby Pattern Skills (4):**
+- `create-service-object` — Moved to ruby-core-skills
+- `integrate-api-client` — Moved to ruby-core-skills
+- `implement-calculator-pattern` — Moved to ruby-core-skills
+- `write-yard-docs` — Moved to ruby-core-skills
 
-- Added a Cloudflare Workers Streamable HTTP MCP server for hosted integrations such as Smithery.
-- Added a GitHub Actions workflow to validate and deploy the Cloudflare MCP server from `cloudflare_mcp/`.
-- Documented the Cloudflare Worker MCP endpoint, health check, server card, and required deploy secrets.
-- Added structured MCP output schemas, tool annotations, and `list_skills` discovery metadata for better registry quality.
+**Code Quality Skills (2):**
+- `triage-bug` — Moved to ruby-core-skills
+- `respond-to-review` — Moved to ruby-core-skills
 
-### Changed
+**Orchestration Skills (1):**
+- `skill-router` — Moved to ruby-core-skills
 
-- Reworked public documentation around MCP-first usage, eval ownership, and the current release line.
-- Updated public install examples to the `5.1.5` release line.
-- Reinforced the first Tessl worst-score skill batch with clearer Output Style guidance.
-
-## [5.1.3] - 2026-05-11
-
-### Fixed
-
-- Fixed Docker deploy metadata for the MCP server release flow.
-- Removed the invalid package-level version field from MCP Registry package metadata.
-- Updated the MCP registry follow-up plan after the Docker deploy fix.
-
-## [5.1.2] - 2026-05-11
+**Migration Required:**
+- Install `igmarin/ruby-core-skills` alongside this repository
+- Update any references to the extracted skills
+- The extracted skills are now auto-detected and available from the core dependency
 
 ### Added
 
-- Added official MCP Registry publishing support for `io.github.igmarin/rails-agent-skills-mcp`.
-- Added root `server.json` metadata for the official MCP Registry.
-- Added Docker image ownership metadata required by the MCP Registry.
+**Core Dependency:**
+- Added `depends_on: ["igmarin/ruby-core-skills"]` to tile.json
+- Added 15 core skills from ruby-core-skills (DDD, Ruby patterns, process skills, code quality, orchestration)
+- Added `deprecated_skills` section to tile.json documenting the 10 moved skills
 
-## [5.1.1] - 2026-05-11
-
-### Fixed
-
-- Fixed Tessl eval staging and asset links used by the publish/review workflows.
-- Updated Tessl review and publish workflow behavior for staged eval assets.
-- Clarified Tessl eval handling in `tessl-evals/README.md`.
-
-## [5.0.0] - 2026-05-08
-
-### Added
-
-- Added required `metadata.json` files for all current `personal-evals` scenarios.
-- Added metadata validation to `scripts/validate-evals.sh`, including target skill/workflow resolution.
-- Added `personal-evals/schema.json` as the metadata contract for custom evaluator scenarios.
-- Added XML context bundle generation with `scripts/eval_context_builder.rb`.
-- Added test coverage for XML context generation.
-- Added `plans/personal-evals-and-custom-evaluator.md` to preserve the custom evaluator plan.
+**Documentation:**
+- Added "Core Skills (from ruby-core-skills)" section to CLAUDE.md
+- Added "Core Dependencies" section to root SKILL.md
+- Updated skill count references from 38 to 28 local skills
+- Updated workflow chains in CLAUDE.md with `*(from core)*` annotations
 
 ### Changed
 
-- Clarified that `personal-evals/` is the tracked source for open custom evaluator examples.
-- Clarified that root `evals/` is generated Tessl staging output and must not be committed.
-- Updated eval documentation to describe `skill_bundle_xml` context: `SKILL.md` plus companion resources.
-- Updated CodeQL configuration to ignore intentionally messy `personal-evals/**` fixture code.
+**Repository Structure:**
+- Removed 10 extracted skill directories (ddd/, patterns/, orchestration/ subdirectories)
+- Removed empty category directories (ddd/, patterns/, orchestration/)
+- Updated tile.json from v5.0.0 to v6.0.0
+- Updated skill catalog from 38 to 28 local skills
 
-### Removed
+**Agent Dependencies:**
+- Updated all 9 agent SKILL.md files with `metadata.dependencies` frontmatter
+- Agents now declare dependencies on both local and core skills
+- Dependencies include source: self and source: ruby-core-skills sections
 
-- Removed committed root `evals/` scenarios by moving them into `personal-evals/`.
+**Documentation Updates:**
+- Updated AGENTS.md skill count from 38 to 28
+- Updated CLAUDE.md to remove references to extracted skills
+- Updated CLAUDE.md workflow chains with core skill annotations
+- Updated root SKILL.md skill count and added core dependencies section
+- Updated docs/reference/skill-catalog.md to remove references to deleted skills
 
-### Validation
+### Deprecated
 
-- `rtk bash scripts/validate-evals.sh`
-- `ruby scripts/test/eval_context_builder_test.rb`
-- `rtk bash scripts/validate-plugins.sh`
-- `cd mcp_server && rtk bundle exec rake test`
+The following skills are deprecated in this repository and available from `igmarin/ruby-core-skills`:
+- `define-domain-language`
+- `review-domain-boundaries`
+- `model-domain`
+- `create-service-object`
+- `integrate-api-client`
+- `implement-calculator-pattern`
+- `write-yard-docs`
+- `triage-bug`
+- `respond-to-review`
+- `skill-router`
+
+### Migration Guide
+
+**For Users:**
+1. Install the new dependency: `gh skill install igmarin/ruby-core-skills`
+2. The extracted skills will be auto-detected and available automatically
+3. No code changes required — skill names remain the same
+4. Update any documentation that references the old skill count (38 → 28 local + 15 core)
+
+**For Contributors:**
+1. When adding new DDD or Ruby pattern skills, add them to `ruby-core-skills` instead
+2. When adding Rails-specific skills, add them to this repository
+3. Process skills should go to `ruby-core-skills` if framework-agnostic
+4. Update agent dependencies in SKILL.md frontmatter when adding new skills
+
+## [5.0.0] - Previous Release
+
+Previous releases documented in git history.

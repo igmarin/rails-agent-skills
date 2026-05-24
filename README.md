@@ -54,11 +54,13 @@ npx skills add igmarin/rails-agent-skills
 
 | Area | Purpose |
 |------|---------|
-| `skills/` | Public atomic skills. Each skill has a `SKILL.md` entry point with task-specific instructions. |
+| `skills/` | 28 public atomic skills for Rails-specific development. Each skill has a `SKILL.md` entry point with task-specific instructions. |
 | `agents/` | Callable agents that chain skills into full development loops (tdd, quality, review, setup, engine, bug-fix, graphql, migration, background-job). |
 | `docs/` | Public documentation, architecture, agent guides, skill catalog, and evaluation policy. |
 | `tessl-evals/` | Tessl-native eval scenarios for publishable skills in `tile.json`. |
 | `personal-evals/` | Open examples for the upcoming `ruby-skill-bench` full-context evaluator. |
+
+**Core Dependency:** This repository depends on `igmarin/ruby-core-skills` for 15 foundational Ruby skills (DDD, Ruby patterns, process skills, code quality, orchestration). Install both repositories for the complete skill set.
 
 The skills are not long-form tutorials. They are executable instructions for AI agents: when to gather context, when to stop for a checkpoint, how to write the first failing test, what Rails conventions to apply, and how to review the result.
 
@@ -107,18 +109,19 @@ See [docs/agent-guide.md](docs/agent-guide.md) and [docs/agents/](docs/agents/) 
 
 ## Skill Catalog
 
-The library contains public skills organized by Rails development concern.
+The library contains **28 public Rails-specific skills** organized by development concern, plus **15 core Ruby skills** available from the dependency `igmarin/ruby-core-skills`.
 
-| Category | Examples |
-|----------|----------|
-| Testing | `plan-tests`, `write-tests`, `test-service`, `triage-bug` |
-| Code quality | `code-review`, `respond-to-review`, `security-check`, `refactor-code` |
-| Architecture and DDD | `define-domain-language`, `review-domain-boundaries`, `model-domain`, `review-architecture` |
-| Rails implementation | `create-service-object`, `implement-background-job`, `implement-authorization`, `implement-hotwire` |
-| APIs | `generate-api-collection`, `implement-graphql`, `integrate-api-client`, `version-api` |
-| Engines | `create-engine`, `test-engine`, `document-engine`, `release-engine`, `upgrade-engine` |
-| Infrastructure | `review-migration`, `optimize-performance`, `seed-database` |
-| Orchestration | `skill-router` |
+| Category | Local Skills | Core Skills (from ruby-core-skills) |
+|----------|-------------|-----------------------------------|
+| Testing | `plan-tests`, `write-tests`, `test-service` | `triage-bug`, `test-planning-process` |
+| Code quality | `code-review`, `security-check`, `review-architecture`, `apply-code-conventions`, `apply-stack-conventions`, `implement-authorization`, `optimize-performance`, `refactor-code` | `respond-to-review`, `write-yard-docs`, `review-process`, `security-review-process` |
+| Architecture and DDD | `review-architecture` | `define-domain-language`, `review-domain-boundaries`, `model-domain` |
+| Rails implementation | `implement-background-job`, `implement-authorization`, `implement-hotwire` | `create-service-object`, `integrate-api-client`, `implement-calculator-pattern` |
+| APIs | `generate-api-collection`, `implement-graphql`, `version-api` | `integrate-api-client` |
+| Engines | `create-engine`, `test-engine`, `document-engine`, `review-engine`, `release-engine`, `create-engine-installer`, `extract-engine`, `upgrade-engine` | — |
+| Infrastructure | `review-migration`, `seed-database`, `optimize-performance`, `refactor-code`, `implement-hotwire` | — |
+| Orchestration | — | `skill-router`, `tdd-process` |
+
 
 Use [docs/reference/skill-catalog.md](docs/reference/skill-catalog.md) for the complete catalog and [docs/reference/integration-matrix.md](docs/reference/integration-matrix.md) for skill chaining.
 
@@ -140,6 +143,9 @@ See [docs/eval-provenance.md](docs/eval-provenance.md) for the canonical eval ow
 Requires [GitHub CLI](https://cli.github.com/) v2.90.0+ with `gh skill`.
 
 ```bash
+# Install the core dependency first for complete functionality
+gh skill install igmarin/ruby-core-skills
+
 # Install all skills interactively
 gh skill install igmarin/rails-agent-skills
 
@@ -150,7 +156,7 @@ gh skill install igmarin/rails-agent-skills code-review --scope project
 gh skill install igmarin/rails-agent-skills code-review --scope user
 
 # Install pinned to a release tag
-gh skill install igmarin/rails-agent-skills code-review --pin v5.1.5 --scope user
+gh skill install igmarin/rails-agent-skills code-review --pin v6.0.0 --scope user
 
 # Search this repository's skills
 gh skill search rails --owner igmarin

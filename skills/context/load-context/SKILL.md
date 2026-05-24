@@ -88,3 +88,9 @@ Post this block before proposing any code, spec, or PRD:
 | No specs exist for the area | Document "no spec coverage" in the Context Summary; treat the code as the sole source of truth and flag the gap |
 | Neighbor file is the file being changed | Skip self-reference; pick the next closest sibling that is not the target file |
 | Requirements change mid-conversation | Re-run steps 1–4 for the new scope and post a fresh Context Summary before continuing |
+
+## Additional Resources
+
+- [EXAMPLES.md](EXAMPLES.md) — Worked examples showing Context Summary and Confusion Block templates
+- [references/confusion-management.md](references/confusion-management.md) — Detailed guidance on handling ambiguity
+- [references/context-sources.md](references/context-sources.md) — Comprehensive list of context sources by Rails layer
