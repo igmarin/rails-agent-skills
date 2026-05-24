@@ -29,7 +29,7 @@ plan-tests → write failing test
   → [GATE: Linters + Full Test Suite]
   → write-yard-docs
   → code-review (self-review)
-  → respond-to-review (when feedback is received)
+  → respond-to-review *(from core)* (when feedback is received)
   → re-review if Critical findings were addressed
   → PR
 ```
@@ -44,7 +44,6 @@ Skills are located in subdirectories of this plugin. Read the relevant `SKILL.md
 | Skill | Use when... |
 |-------|-------------|
 | `code-review` | Reviewing Rails PRs, controllers, models, migrations — giving a review |
-| `respond-to-review` | Received review feedback and need to evaluate, respond, or implement it |
 | `review-architecture` | Reviewing app structure, boundaries, fat models/controllers |
 | `security-check` | Checking auth, params, XSS, CSRF, SQLi |
 | `review-migration` | Planning or reviewing database migrations |
@@ -63,14 +62,14 @@ Skills are located in subdirectories of this plugin. Read the relevant `SKILL.md
 This repository depends on `igmarin/ruby-core-skills` for foundational DDD and Ruby pattern skills. The following skills are available from the core dependency:
 
 **DDD & Domain Modeling:**
-- `define-domain-language` — Clarifying domain terms before modeling or refactoring
-- `review-domain-boundaries` — Reviewing bounded contexts and language leakage
-- `model-domain` — Mapping DDD concepts to Rails models, services, value objects
+- `define-domain-language` *(from core)* — Clarifying domain terms before modeling or refactoring
+- `review-domain-boundaries` *(from core)* — Reviewing bounded contexts and language leakage
+- `model-domain` *(from core)* — Mapping DDD concepts to Rails models, services, value objects
 
 **Ruby Patterns:**
-- `create-service-object` — Creating service classes with `.call` pattern
-- `integrate-api-client` — Integrating external APIs (Auth/Client/Fetcher/Builder)
-- `implement-calculator-pattern` — Building variant-based calculators
+- `create-service-object` *(from core)* — Creating service classes with `.call` pattern
+- `integrate-api-client` *(from core)* — Integrating external APIs (Auth/Client/Fetcher/Builder)
+- `implement-calculator-pattern` *(from core)* — Building variant-based calculators
 
 These skills are auto-detected and available when this plugin is installed alongside `ruby-core-skills`.
 
@@ -85,7 +84,6 @@ These skills are auto-detected and available when this plugin is installed along
 |-------|-------------|
 | `write-tests` | Writing, reviewing, or cleaning up RSpec tests |
 | `plan-tests` | Choosing the best first failing spec for a Rails change |
-| `triage-bug` | Turning a bug report into a failing spec and fix plan |
 | `test-service` | Testing service objects |
 
 ### Rails Engines
@@ -123,23 +121,23 @@ These skills are auto-detected and available when this plugin is installed along
 ## Skill Priority
 
 1. **TDD always** — `write-tests` applies whenever code is produced
-2. **Domain discovery next** — Core DDD skills (`define-domain-language`, `review-domain-boundaries`, `model-domain`) when domain is the hard part
+2. **Domain discovery next** — Core DDD skills *(from core)* (`define-domain-language`, `review-domain-boundaries`, `model-domain`) when domain is the hard part
 3. **Process skills** — `refactor-code`
 4. **Domain skills** — `rails-*`, `ruby-*` for specific implementation
 
 ## Typical Workflows
 
 **TDD Feature Loop** *(primary)*:
-`plan-tests` → **[Test Feedback checkpoint]** → **[Implementation Proposal checkpoint]** → implement → **[Linters + Suite gate]** → `write-yard-docs` → `code-review` → `respond-to-review` (on feedback) → PR
+`plan-tests` → **[Test Feedback checkpoint]** → **[Implementation Proposal checkpoint]** → implement → **[Linters + Suite gate]** → `write-yard-docs` *(from core)* → `code-review` → `respond-to-review` *(from core)* (on feedback) → PR
 
 **DDD-first:**
 `define-domain-language` *(from core)* → `review-domain-boundaries` *(from core)* → `model-domain` *(from core)* → *TDD Feature Loop*
 
 **Code review + response:**
-`code-review` → `respond-to-review` (on feedback) → re-review if Critical items addressed
+`code-review` → `respond-to-review` *(from core)* (on feedback) → re-review if Critical items addressed
 
 **Bug fix:**
-`triage-bug` → `plan-tests` → **[GATE: failing reproduction spec]** → fix → verify test passes
+`triage-bug` *(from core)* → `plan-tests` → **[GATE: failing reproduction spec]** → fix → verify test passes
 
 **GraphQL feature:**
 `define-domain-language` *(from core)* → `implement-graphql` → *TDD Feature Loop* → `security-check`

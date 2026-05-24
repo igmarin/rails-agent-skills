@@ -46,7 +46,7 @@ flowchart TD
 | **Discovery** | [Discovery & Context](discovery.md) | Understand codebase, project onboarding | `load-context`, `setup-environment` |
 | **Setup** | [Setup & Configuration](setup.md) | Configure CI/CD, environment, deploy | `setup-environment` *(plus roadmap `setup-ci-cd`)* |
 | **Development** | [Development](development.md) | TDD development, implementation | `plan-tests`, `testing skills`, implementation |
-| **Quality** | [Code Quality](quality.md) | Conventions, refactoring, documentation | `apply-code-conventions`, `refactor-code`, `write-yard-docs` *(from core)* |
+| **Quality** | [Code Quality](quality.md) | Conventions, refactoring, documentation | Local: `apply-code-conventions`, `refactor-code`. Core: `write-yard-docs`, `refactor-process`, `review-process` |
 | **Review** | [Review & Validation](review.md) | Code review, security, architecture | `code-review`, `security-check`, `review-architecture`, `respond-to-review` *(from core)* |
 | **Engines** | [Engine Development](engines.md) | Create and maintain Rails engines | `engine skills` |
 
