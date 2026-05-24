@@ -1,6 +1,6 @@
 # Rails Agent Skills Documentation Index
 
-Master index for the Rails Agent Skills library. Start here to navigate the public documentation for the 38 skills, 9 callable agents, and evaluation policy.
+Master index for the Rails Agent Skills library. Start here to navigate the public documentation for the 28 public Rails-specific skills, 9 callable agents, and evaluation policy.
 
 ## Quick Start
 
@@ -8,7 +8,7 @@ Master index for the Rails Agent Skills library. Start here to navigate the publ
 - [Implementation Guide](implementation-guide.md) - Installation overview.
 - [Calling Skills Guide](calling-skills.md) - Syntax and execution contexts (CLI, Chat).
 - [Agent Guide](agent-guide.md) — How to chain skills in real Rails work.
-- [Skill Catalog](reference/skill-catalog.md) - Complete list of 38 public skills and 9 callable agents.
+- [Skill Catalog](reference/skill-catalog.md) - Complete list of 28 public Rails skills, 9 callable agents, and 15 core skills.
 
 ## Agent Stages & Guides
 
