@@ -126,8 +126,9 @@ See details in each specific agent.
 
 ---
 
-## Quick Links
+## Reference & Troubleshooting
 
-- [Complete Skill Catalog](../reference/skill-catalog.md)
-- [Integration Matrix](../reference/integration-matrix.md)
-- [Implementation Guide](../implementation-guide.md)
+- [Agent Guide](../agent-guide.md) - Narrative workflows and variations
+- [Skill Catalog](../reference/skill-catalog.md) - Comprehensive catalog of all 28 public Rails skills, 9 agents, and 15 core skills
+- [Architecture](../architecture.md) - SKILL.md rules and repository design
+- [Root README](../../README.md) - Installation commands and platform setup guide

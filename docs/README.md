@@ -12,7 +12,7 @@ For the high-level project value proposition, start with the [root README](../RE
 | Ready to build a feature | [Development Guide](agents/development.md) |
 | Reviewing code | [Review Guide](agents/review.md) |
 | Not sure where to start | `skill-router` *(from ruby-core-skills)* |
-| Installing the library | [Implementation guide](implementation-guide.md) |
+| Installing the library | [Root README](../README.md) |
 | Validating skill quality | [Eval provenance](eval-provenance.md) and [Skill optimization](skill-optimization-guide.md) |
 
 **Note:** This repository depends on `igmarin/ruby-core-skills` for foundational Ruby skills. Install both repositories for complete functionality.
@@ -52,10 +52,8 @@ Tessl validates publishable skills from `tile.json` using `tessl-evals/`. The up
 ## Reference & Authoring
 
 - [Skill Catalog](reference/skill-catalog.md) - Complete list of 28 public Rails skills and 9 callable agents (plus 15 core skills from ruby-core-skills).
-- [Calling Skills Guide](calling-skills.md) - Syntax and execution contexts (MCP, CLI, Chat).
 - [Integration Matrix](reference/integration-matrix.md) - How skills connect.
 - [Agent Guide](agent-guide.md) - Narrative guide for daily use.
-- [Implementation Guide](implementation-guide.md) - Installation setup overview.
 - [Architecture](architecture.md) - Repository layout and `SKILL.md` conventions.
 - [Eval Provenance](eval-provenance.md) - Canonical eval ownership policy.
 - [Skill Template](skill-template.md) - Template for creating new skills.

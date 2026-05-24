@@ -8,9 +8,9 @@ Complete catalog of 28 public skills and 9 callable agents organized by developm
 
 **By Stage:** [00 — Discovery](#00--discovery--context) · [30 — Development](#30--development) · [40 — Quality](#40--code-quality) · [50 — Review](#50--review--validation) · [60 — Engines](#60--engines)
 
-**By Category:** [API](#api) · [Context](#context) · [Code Quality](#code-quality) · [DDD](#ddd) · [Engines](#engines) · [Infrastructure](#infrastructure) · [Orchestration](#orchestration) · [Patterns](#patterns) · [Testing](#testing) · [Agents](#agents)
+**By Category:** [API](#api) · [Context](#context) · [Code Quality](#code-quality) · [DDD](#ddd) · [Documentation](#documentation) · [Engines](#engines) · [Infrastructure](#infrastructure) · [Orchestration](#orchestration) · [Patterns](#patterns) · [Testing](#testing) · [Agents](#agents)
 
-*Note: DDD, Orchestration, and Patterns skills have moved to `igmarin/ruby-core-skills`. Install the core dependency to access them.*
+*Note: DDD, Documentation, Orchestration, and Patterns skills have moved to `igmarin/ruby-core-skills`. Install the core dependency to access them.*
 
 ---
 
@@ -186,6 +186,12 @@ Skills are organized in category folders (`skills/<category>/`) with frequent en
 *- `model-domain` — Map DDD to Rails*
 
 
+### Documentation
+
+*Documentation skills have moved to `igmarin/ruby-core-skills`:*
+*- `write-yard-docs` — Inline documentation with YARD*
+
+
 ### Engines
 
 | Skill | Path | Description |
@@ -221,7 +227,6 @@ Skills are organized in category folders (`skills/<category>/`) with frequent en
 *Pattern skills have moved to `igmarin/ruby-core-skills`:*
 *- `create-service-object` — `.call` pattern, response contract*
 *- `implement-calculator-pattern` — Variant-based calculators*
-*- `write-yard-docs` — Inline documentation with YARD*
 
 
 
