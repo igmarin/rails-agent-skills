@@ -4,7 +4,9 @@ This file tells AI agents how to use this repository effectively.
 
 ## What This Repository Is
 
-A curated library of 38 public atomic skills for Ruby on Rails development, plus 9 callable agents. Each skill encodes specialized workflow knowledge, conventions, and hard gates for a specific Rails domain. Skills are not documentation — they are executable instructions that guide agents through structured workflows.
+A curated library of 28 public atomic skills for Ruby on Rails development, plus 9 callable agents. Each skill encodes specialized workflow knowledge, conventions, and hard gates for a specific Rails domain. Skills are not documentation — they are executable instructions that guide agents through structured workflows.
+
+This repository depends on `ruby-core-skills` for shared Ruby skills (YARD docs, DDD, service objects, process discipline). These are resolved automatically via pack resolution.
 
 ## How Skills Are Organized
 
@@ -24,20 +26,39 @@ Read `SKILL.md` first. Load supporting files only when the skill links to them a
 
 ## Skill Selection
 
-Load the skill that best matches the current task. The bootstrap skill `skill-router` routes to specialized skills. All skills are organized by category in `skills/<category>/`:
+Load the skill that best matches the current task. The bootstrap skill `skill-router` (now in `ruby-core-skills`) routes to specialized skills. All skills are organized by category in `skills/<category>/`:
 
-| Category | Path | Skills |
-|----------|------|--------|
-| **Testing** | `skills/testing/` | `write-tests`, `test-service`, `plan-tests`, `triage-bug` |
-| **Code Quality** | `skills/code-quality/` | `code-review`, `respond-to-review`, `review-architecture`, `security-check`, `apply-stack-conventions`, `apply-code-conventions`, `implement-authorization`, `refactor-code` |
-| **DDD** | `skills/ddd/` | `define-domain-language`, `review-domain-boundaries`, `model-domain` |
-| **Engines** | `skills/engines/` | `create-engine`, `test-engine`, `review-engine`, `release-engine`, `document-engine`, `create-engine-installer`, `extract-engine`, `upgrade-engine` |
-| **Infrastructure** | `skills/infrastructure/` | `review-migration`, `implement-background-job`, `seed-database`, `optimize-performance`, `version-api`, `implement-hotwire` |
-| **API** | `skills/api/` | `generate-api-collection`, `implement-graphql`, `integrate-api-client` |
-| **Patterns** | `skills/patterns/` | `create-service-object`, `implement-calculator-pattern`, `write-yard-docs` |
-| **Context** | `skills/context/` | `load-context`, `setup-environment` |
-| **Orchestration** | `skills/orchestration/` | `skill-router` |
-| **Agents** | `agents/` | `tdd`, `review`, `setup`, `quality`, `engine`, `bug-fix`, `graphql`, `migration`, `background-job` |
+|| Category | Path | Skills |
+||----------|------|--------|
+|| **Testing** | `skills/testing/` | `write-tests`, `test-service`, `plan-tests` |
+|| **Code Quality** | `skills/code-quality/` | `code-review`, `review-architecture`, `security-check`, `apply-stack-conventions`, `apply-code-conventions`, `implement-authorization`, `refactor-code` |
+|| **Engines** | `skills/engines/` | `create-engine`, `test-engine`, `review-engine`, `release-engine`, `document-engine`, `create-engine-installer`, `extract-engine`, `upgrade-engine` |
+|| **Infrastructure** | `skills/infrastructure/` | `review-migration`, `implement-background-job`, `seed-database`, `optimize-performance`, `version-api`, `implement-hotwire` |
+|| **API** | `skills/api/` | `generate-api-collection`, `implement-graphql` |
+|| **Context** | `skills/context/` | `load-context`, `setup-environment` |
+|| **Agents** | `agents/` | `tdd`, `review`, `setup`, `quality`, `engine`, `bug-fix`, `graphql`, `migration`, `background-job` |
+
+### Core Skills (from ruby-core-skills)
+
+The following skills are loaded automatically via pack resolution from `ruby-core-skills`:
+
+|| Skill | Category | Description |
+||-------|----------|-------------|
+|| `write-yard-docs` | Documentation | YARD documentation for public Ruby APIs |
+|| `create-service-object` | Patterns | PORO `.call` pattern |
+|| `implement-calculator-pattern` | Patterns | Polymorphic variant-based calculators |
+|| `integrate-api-client` | Patterns | HTTP integration layers |
+|| `define-domain-language` | DDD | Ubiquitous language extraction |
+|| `review-domain-boundaries` | DDD | Bounded context review |
+|| `model-domain` | DDD | Tactical DDD design |
+|| `triage-bug` | Testing | Bug triage and reproduction |
+|| `respond-to-review` | Code Quality | Review feedback response |
+|| `skill-router` | Orchestration | Skill routing (bootstrap) |
+|| `tdd-process` | Process | Red-Green-Refactor gates and checkpoints |
+|| `refactor-process` | Process | Safe refactoring discipline |
+|| `review-process` | Process | Code review severity and re-review criteria |
+|| `security-review-process` | Process | OWASP-based security review |
+|| `test-planning-process` | Process | Test type decision framework |
 
 ## Non-Negotiable Workflow Rule
 
@@ -53,17 +74,17 @@ Do not write implementation code before the test exists and fails. Every skill t
 
 ### Quick Reference
 
-| Goal | Agent | Atomic Skills |
-|------|-------|---------------|
-| Implement feature with TDD | `agents/tdd` | Full orchestrated cycle |
-| Review PR systematically | `agents/review` | Review → deep dive → response |
-| Set up project / CI/CD | `agents/setup` | Context → onboarding → CI/CD |
-| Quality check before PR | `agents/quality` | Conventions → refactor → docs |
-| Build Rails engine | `agents/engine` | Author → test → review → release |
-| Fix reported bug | `agents/bug-fix` | Triage → reproduce → fix → verify |
-| Build GraphQL API | `agents/graphql` | Domain modeling → schema → TDD → security |
-| Database migration | `agents/migration` | Plan → test → staging → production |
-| Background job | `agents/background-job` | Design → TDD → retry config → monitoring |
+|| Goal | Agent | Atomic Skills |
+||------|-------|---------------|
+|| Implement feature with TDD | `agents/tdd` | Full orchestrated cycle |
+|| Review PR systematically | `agents/review` | Review → deep dive → response |
+|| Set up project / CI/CD | `agents/setup` | Context → onboarding → CI/CD |
+|| Quality check before PR | `agents/quality` | Conventions → refactor → docs |
+|| Build Rails engine | `agents/engine` | Author → test → review → release |
+|| Fix reported bug | `agents/bug-fix` | Triage → reproduce → fix → verify |
+|| Build GraphQL API | `agents/graphql` | Domain modeling → schema → TDD → security |
+|| Database migration | `agents/migration` | Plan → test → staging → production |
+|| Background job | `agents/background-job` | Design → TDD → retry config → monitoring |
 
 ### TDD Feature Loop (Recommended)
 
@@ -77,7 +98,7 @@ skills/context/load-context
     → [GATE: test feedback OK]
     → implement
     → [GATE: linters + suite]
-    → skills/patterns/write-yard-docs
+    → write-yard-docs *(from ruby-core-skills)*
     → skills/code-quality/code-review
     → PR
 ```
@@ -102,7 +123,7 @@ Skills are scored on two axes: **skill-specific criteria** AND **model performan
 
 - **The `evals/` directory is READ-ONLY.** These files contain intentional bugs, missing documentation, or non-standard patterns used to evaluate agent performance. Never "fix" or "improve" files in `evals/` unless explicitly instructed to update a test case scenario.
 - Do not skip the verify-failure step in the TDD gate.
-- Do not add repositories, aggregates, or domain events just because a task looks "DDD" — see `model-domain`.
+- Do not add repositories, aggregates, or domain events just because a task looks "DDD" — see `model-domain` in `ruby-core-skills`.
 - Do not use `implement-graphql` for REST endpoints or `generate-api-collection` for GraphQL endpoints.
 
 <!-- lean-ctx -->

@@ -58,20 +58,26 @@ Skills are located in subdirectories of this plugin. Read the relevant `SKILL.md
 | `seed-database` | Designing seeds vs fixtures for dev/test data |
 | `implement-hotwire` | Turbo/Stimulus integration, frames, streams |
 
-### DDD & Domain Modeling
-| Skill | Use when... |
-|-------|-------------|
-| `define-domain-language` | Clarifying domain terms before modeling or refactoring |
-| `review-domain-boundaries` | Reviewing bounded contexts and language leakage |
-| `model-domain` | Mapping DDD concepts to Rails models, services, value objects |
-
 ### Ruby Patterns
 | Skill | Use when... |
 |-------|-------------|
-| `create-service-object` | Creating service classes with `.call` pattern |
-| `integrate-api-client` | Integrating external APIs (Auth/Client/Fetcher/Builder) |
-| `implement-calculator-pattern` | Building variant-based calculators |
 | `write-yard-docs` | Writing or reviewing YARD docs |
+
+### Core Skills (from ruby-core-skills)
+
+This repository depends on `igmarin/ruby-core-skills` for foundational DDD and Ruby pattern skills. The following skills are available from the core dependency:
+
+**DDD & Domain Modeling:**
+- `define-domain-language` — Clarifying domain terms before modeling or refactoring
+- `review-domain-boundaries` — Reviewing bounded contexts and language leakage
+- `model-domain` — Mapping DDD concepts to Rails models, services, value objects
+
+**Ruby Patterns:**
+- `create-service-object` — Creating service classes with `.call` pattern
+- `integrate-api-client` — Integrating external APIs (Auth/Client/Fetcher/Builder)
+- `implement-calculator-pattern` — Building variant-based calculators
+
+These skills are auto-detected and available when this plugin is installed alongside `ruby-core-skills`.
 
 ### Context & Setup
 | Skill | Use when... |
@@ -122,7 +128,7 @@ Skills are located in subdirectories of this plugin. Read the relevant `SKILL.md
 ## Skill Priority
 
 1. **TDD always** — `write-tests` applies whenever code is produced
-2. **Domain discovery next** — `ddd-*` skills when domain is the hard part
+2. **Domain discovery next** — Core DDD skills (`define-domain-language`, `review-domain-boundaries`, `model-domain`) when domain is the hard part
 3. **Process skills** — `refactor-code`
 4. **Domain skills** — `rails-*`, `ruby-*` for specific implementation
 
@@ -132,7 +138,7 @@ Skills are located in subdirectories of this plugin. Read the relevant `SKILL.md
 `plan-tests` → **[Test Feedback checkpoint]** → **[Implementation Proposal checkpoint]** → implement → **[Linters + Suite gate]** → `write-yard-docs` → `code-review` → `respond-to-review` (on feedback) → PR
 
 **DDD-first:**
-`define-domain-language` → `review-domain-boundaries` → `model-domain` → *TDD Feature Loop*
+`define-domain-language` *(from core)* → `review-domain-boundaries` *(from core)* → `model-domain` *(from core)* → *TDD Feature Loop*
 
 **Code review + response:**
 `code-review` → `respond-to-review` (on feedback) → re-review if Critical items addressed
@@ -141,7 +147,7 @@ Skills are located in subdirectories of this plugin. Read the relevant `SKILL.md
 `triage-bug` → `plan-tests` → **[GATE: failing reproduction spec]** → fix → verify test passes
 
 **GraphQL feature:**
-`define-domain-language` → `implement-graphql` → *TDD Feature Loop* → `security-check`
+`define-domain-language` *(from core)* → `implement-graphql` → *TDD Feature Loop* → `security-check`
 
 **New engine:**
 `engine` (or atomic: `create-engine` → **[GATE: engine specs]** → implement → `document-engine`)

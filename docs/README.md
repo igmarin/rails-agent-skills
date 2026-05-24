@@ -1,6 +1,6 @@
 # Rails Agent Skills Documentation
 
-This documentation is the public map for the Rails Agent Skills library: 38 public Rails skills, 9 callable agents, an MCP distribution, and the evaluation process used to keep the skills useful.
+This documentation is the public map for the Rails Agent Skills library: 28 public Rails-specific skills, 9 callable agents, 15 core Ruby skills (from `igmarin/ruby-core-skills`), an MCP distribution, and the evaluation process used to keep the skills useful.
 
 For the high-level project value proposition, start with the [root README](../README.md).
 
@@ -11,9 +11,11 @@ For the high-level project value proposition, start with the [root README](../RE
 | New to the project | `load-context` and [Discovery & Context](agents/discovery.md) |
 | Ready to build a feature | [Development Guide](agents/development.md) |
 | Reviewing code | [Review Guide](agents/review.md) |
-| Not sure where to start | `skill-router` |
+| Not sure where to start | `skill-router` *(from ruby-core-skills)* |
 | Installing the library | [Implementation guide](implementation-guide.md) |
 | Validating skill quality | [Eval provenance](eval-provenance.md) and [Skill optimization](skill-optimization-guide.md) |
+
+**Note:** This repository depends on `igmarin/ruby-core-skills` for foundational Ruby skills. Install both repositories for complete functionality.
 
 ## Architecture: Skills vs. Agents
 
@@ -29,9 +31,9 @@ The repository uses a hybrid model to keep agent context focused:
 | Discovery | [Discovery & Context](agents/discovery.md) | Understand codebase and onboarding context | `load-context`, `setup-environment` |
 
 | Setup | [Setup & Configuration](agents/setup.md) | CI/CD and infrastructure references | `setup-environment` |
-| Development | [Development](agents/development.md) | TDD and implementation | `plan-tests`, `write-tests`, `triage-bug` |
-| Quality | [Code Quality](agents/quality.md) | Conventions, refactoring, and docs | `apply-code-conventions`, `refactor-code`, `write-yard-docs` |
-| Review | [Review & Validation](agents/review.md) | Review, security, and architecture | `code-review`, `security-check`, `review-architecture` |
+| Development | [Development](agents/development.md) | TDD and implementation | `plan-tests`, `write-tests`, `triage-bug` *(from core)* |
+| Quality | [Code Quality](agents/quality.md) | Conventions, refactoring, and docs | `apply-code-conventions`, `refactor-code` *(from core)*, `write-yard-docs` *(from core)* |
+| Review | [Review & Validation](agents/review.md) | Review, security, and architecture | `code-review`, `security-check`, `review-architecture`, `respond-to-review` *(from core)* |
 | Engines | [Engine Development](agents/engines.md) | Building and releasing Rails engines | `create-engine`, `release-engine` |
 
 ## Core Principles
@@ -50,7 +52,7 @@ Tessl validates publishable skills from `tile.json` using `tessl-evals/`. The up
 
 ## Reference & Authoring
 
-- [Skill Catalog](reference/skill-catalog.md) - Complete list of 38 public skills and 9 callable agents.
+- [Skill Catalog](reference/skill-catalog.md) - Complete list of 28 public Rails skills and 9 callable agents (plus 15 core skills from ruby-core-skills).
 - [Calling Skills Guide](calling-skills.md) - Syntax and execution contexts (MCP, CLI, Chat).
 - [Integration Matrix](reference/integration-matrix.md) - How skills connect.
 - [Agent Guide](agent-guide.md) - Narrative guide for daily use.

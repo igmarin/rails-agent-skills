@@ -14,7 +14,11 @@ metadata:
   entry_point: "Invoke when conducting full production-readiness review or code quality sweep before PR"
   phases: "Phase 1: Conventions Review, Phase 2: Refactoring, Phase 3: Documentation"
   hard_gates: "Conventions Check, Refactoring Test Gate, Quality Before Merge"
-  dependencies: "apply-code-conventions, apply-stack-conventions, refactor-code, write-yard-docs"
+  dependencies:
+    - source: self
+      skills: [apply-code-conventions, refactor-code, code-review]
+    - source: ruby-core-skills
+      skills: [write-yard-docs, refactor-process, review-process]
   keywords: rails, quality, conventions, refactoring, documentation, yard, review
 ---
 # Quality Agent
@@ -182,7 +186,7 @@ bundle exec rspec   # All tests must pass before proceeding
 
 ### Phase 3: Documentation
 
-Document public APIs via **skills/patterns/write-yard-docs** (annotate all public methods with params, return values, and examples; update README/diagrams for architecture or API changes).
+Document public APIs via **write-yard-docs** *(from ruby-core-skills)* (annotate all public methods with params, return values, and examples; update README/diagrams for architecture or API changes).
 
 **Output:** Updated YARD comments, refreshed README sections
 

@@ -108,3 +108,8 @@ end
 |-------|---------------|
 | **write-tests** | When setting up test scenarios |
 | **review-migration** | When ensuring DB schema is aligned |
+
+## Additional Resources
+
+- [EXAMPLES.md](EXAMPLES.md) — Complete seeding examples and patterns
+- [references/workflow.md](references/workflow.md) — Seeding workflow and best practices

@@ -102,3 +102,8 @@ end
 - Reviewing code style before architecture.
 - Missing dummy app coverage check (dummy app must exist and be used).
 - Ignoring `engine.rb` (often contains boot-time side effects).
+
+## Additional Resources
+
+- [FINDINGS.md](FINDINGS.md) — Sample engine review findings
+- [assets/examples.md](assets/examples.md) — Engine review examples

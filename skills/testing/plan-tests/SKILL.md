@@ -136,3 +136,5 @@ Load only when needed:
 | **test-engine** | When the first slice belongs to an engine |
 | **triage-bug** | When the starting point is an existing bug report |
 | **refactor-code** | When the task is mostly structural and needs characterization tests first |
+
+|| **test-planning-process** *(from ruby-core-skills)* | Process discipline: test type decision framework, coverage strategy |

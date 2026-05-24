@@ -9,7 +9,11 @@ metadata:
   entry_point: "Invoke when fixing reported bugs, addressing production issues, or implementing fixes for code review findings"
   phases: "Phase 1: Bug Triage, Phase 2: Reproduction, Phase 3: Fix Implementation, Phase 4: Verification"
   hard_gates: "Reproduction Test Fails, Fix Implementation, Test Passes, No Regressions"
-  dependencies: "triage-bug, plan-tests, write-tests"
+  dependencies:
+    - source: self
+      skills: [load-context, plan-tests, write-tests]
+    - source: ruby-core-skills
+      skills: [triage-bug, tdd-process]
   keywords: rails, bug-fix, debugging, testing, tdd, production, regression
 ---
 # Bug Fix Agent

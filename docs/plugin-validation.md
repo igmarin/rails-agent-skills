@@ -318,13 +318,15 @@ chmod +x .git/hooks/pre-commit
 
 1. Create the skill directory and `SKILL.md` (place it in an appropriate category under `skills/`):
    ```bash
-   mkdir -p skills/patterns/my-new-skill
+   mkdir -p skills/code-quality/my-new-skill
    echo "---
    name: my-new-skill
    description: Use when X happens
    type: skill
-   ---" > skills/patterns/my-new-skill/SKILL.md
+   ---" > skills/code-quality/my-new-skill/SKILL.md
    ```
+
+   *Note: Pattern skills have moved to `igmarin/ruby-core-skills`. Add Rails-specific skills to this repository.*
 
 2. Run validation to ensure frontmatter is correct:
    ```bash

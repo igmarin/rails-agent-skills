@@ -29,9 +29,9 @@ Implement
     ↓
 [gate: Linters + Full Suite]
     ↓
-skills/patterns/write-yard-docs
+write-yard-docs *(from ruby-core-skills)*
     ↓
-code-review → skills/code-quality/respond-to-review (if feedback) → PR
+code-review → respond-to-review *(from ruby-core-skills)* (if feedback) → PR
 ```
 
 ### Feature from Scratch
@@ -39,7 +39,7 @@ code-review → skills/code-quality/respond-to-review (if feedback) → PR
 ```text
 skills/context/load-context
     ↓
-skills/ddd/define-domain-language → skills/ddd/review-domain-boundaries → skills/ddd/model-domain
+define-domain-language *(from ruby-core-skills)* → review-domain-boundaries *(from ruby-core-skills)* → model-domain *(from ruby-core-skills)*
     ↓
 [TDD Feature Loop]
 ```
@@ -47,7 +47,7 @@ skills/ddd/define-domain-language → skills/ddd/review-domain-boundaries → sk
 ### Bug Fix
 
 ```text
-triage-bug
+triage-bug *(from ruby-core-skills)*
     ↓
 plan-tests
     ↓
@@ -63,7 +63,7 @@ code-review
 ### Refactoring
 
 ```text
-refactor-code
+refactor-code *(from ruby-core-skills)*
     ↓
 [gate: Characterization tests pass]
     ↓
@@ -111,7 +111,7 @@ test-engine
 ### GraphQL Feature
 
 ```text
-define-domain-language
+define-domain-language *(from ruby-core-skills)*
     ↓
 implement-graphql
     ↓
@@ -129,9 +129,9 @@ security-check
 ```text
 plan-tests
     ↓
-integrate-api-client
+integrate-api-client *(from ruby-core-skills)*
     ↓
-write-yard-docs
+write-yard-docs *(from ruby-core-skills)*
     ↓
 code-review
 ```
@@ -150,8 +150,8 @@ code-review
 ### write-tests
 | Next | When |
 |------|------|
-| create-service-object | If feature requires service |
-| integrate-api-client | If integrating external API |
+| create-service-object *(from ruby-core-skills)* | If feature requires service |
+| integrate-api-client *(from ruby-core-skills)* | If integrating external API |
 | implement-background-job | If there are jobs |
 | review-migration | If there is a migration |
 | implement-graphql | If it's GraphQL |
@@ -160,14 +160,14 @@ code-review
 | Next | When |
 |------|------|
 | test-service | To test the service |
-| write-yard-docs | Document the public service |
+| write-yard-docs *(from ruby-core-skills)* | Document the public service |
 
 ### code-review
 | Next | When |
 |------|------|
 | security-check | If there are security concerns |
 | review-architecture | If there are architecture issues |
-| respond-to-review | If feedback received |
+| respond-to-review *(from ruby-core-skills)* | If feedback received |
 
 ---
 
@@ -179,12 +179,12 @@ New to project?
   └─ No → What do you need?
 
        Refactor?
-            ├─ Yes → refactor-code
+            ├─ Yes → refactor-code *(from ruby-core-skills)*
             └─ No → plan-tests → write-tests
 
                       Type?
-                      ├─ Service → create-service-object → test-service
-                      ├─ API integration → integrate-api-client
+                      ├─ Service → create-service-object *(from ruby-core-skills)* → test-service
+                      ├─ API integration → integrate-api-client *(from ruby-core-skills)*
                       ├─ Background job → implement-background-job
                       ├─ Migration → review-migration
                       ├─ GraphQL → implement-graphql
@@ -193,7 +193,7 @@ New to project?
                       └─ Engine → create-engine
 
 Review?
-  └─ code-review → (security-check | review-architecture) → respond-to-review
+  └─ code-review → (security-check | review-architecture) → respond-to-review *(from ruby-core-skills)*
 ```
 
 ---

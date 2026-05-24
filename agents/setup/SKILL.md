@@ -15,7 +15,9 @@ metadata:
   entry_point: "Invoke when starting new Rails project, setting up dev environment, or configuring CI/CD"
   phases: "Phase 1: Context & Onboarding, Phase 2: CI/CD Configuration, Phase 3: Environment Validation"
   hard_gates: "Environment Check, CI/CD Configuration, Environment Validation"
-  dependencies: "load-context, setup-environment"
+  dependencies:
+    - source: self
+      skills: [load-context, setup-environment]
   keywords: rails, setup, onboarding, ci/cd, agent, devops, configuration
 ---
 # Setup Agent

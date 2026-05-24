@@ -9,7 +9,9 @@ metadata:
   entry_point: "Invoke when performing database schema changes with production safety"
   phases: "Phase 1: Migration Planning, Phase 2: Development Testing, Phase 3: Staging Deployment, Phase 4: Production Deployment"
   hard_gates: "Migration Safety Check, Development Tests Pass, Staging Verification, Production Monitoring"
-  dependencies: "review-migration"
+  dependencies:
+    - source: self
+      skills: [review-migration, load-context]
   keywords: rails, migration, database, schema, postgresql, production, deployment
 ---
 # Migration Agent

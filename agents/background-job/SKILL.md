@@ -9,7 +9,11 @@ metadata:
   entry_point: "Invoke when implementing background jobs with proper retry/discard strategies and monitoring"
   phases: "Phase 1: Job Design, Phase 2: TDD Implementation, Phase 3: Retry/Discard Configuration, Phase 4: Testing & Monitoring"
   hard_gates: "Job Design Complete, Tests Pass, Retry Strategy Configured, Failure Scenarios Tested"
-  dependencies: "implement-background-job, write-tests"
+  dependencies:
+    - source: self
+      skills: [implement-background-job]
+    - source: ruby-core-skills
+      skills: [tdd-process]
   keywords: rails, background-job, async, sidekiq, solid-queue, active-job, retry, monitoring
 ---
 # Background Job Agent

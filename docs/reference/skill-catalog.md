@@ -1,6 +1,6 @@
 # Skill Catalog — Rails Agent Skills
 
-Complete catalog of 38 public skills and 9 callable agents organized by development lifecycle stage and by category.
+Complete catalog of 28 public skills and 9 callable agents organized by development lifecycle stage and by category.
 
 ---
 
@@ -10,12 +10,14 @@ Complete catalog of 38 public skills and 9 callable agents organized by developm
 
 **By Category:** [API](#api) · [Context](#context) · [Code Quality](#code-quality) · [DDD](#ddd) · [Engines](#engines) · [Infrastructure](#infrastructure) · [Orchestration](#orchestration) · [Patterns](#patterns) · [Testing](#testing) · [Agents](#agents)
 
+*Note: DDD, Orchestration, and Patterns skills have moved to `igmarin/ruby-core-skills`. Install the core dependency to access them.*
+
 ---
 
 ## Index by Stage
 
 - [00 — Discovery & Context](#00--discovery--context)
-
+- [10 — Planning & Design](#10--planning--design)
 - [20 — Setup & Configuration](#20--setup--configuration)
 - [30 — Development](#30--development)
 - [40 — Code Quality](#40--code-quality)
@@ -33,13 +35,14 @@ Complete catalog of 38 public skills and 9 callable agents organized by developm
 
 ---
 
+---
+
 ## 10 — Planning & Design
 
-| Skill | Description | Trigger Words |
-|-------|-------------|---------------|
-| **define-domain-language** | Domain terms glossary | "domain terms", "ubiquitous language", "what should we call this", "naming" |
-| **review-domain-boundaries** | Review bounded contexts and language leakage | "context boundaries", "language leakage", "ownership", "cross-context" |
-| **model-domain** | Map DDD to Rails (models, services, VO) | "aggregate", "value object", "domain event", "repository", "DDD" |
+*Skills in this stage have moved to `igmarin/ruby-core-skills` (DDD skills). Install the core dependency to access:*
+*- `define-domain-language` — Domain terms glossary*
+*- `review-domain-boundaries` — Review bounded contexts and language leakage*
+*- `model-domain` — Map DDD to Rails (models, services, VO)*
 
 ---
 
@@ -56,18 +59,14 @@ Complete catalog of 38 public skills and 9 callable agents organized by developm
 | **plan-tests** | Choose the best first failing spec | "where to start testing", "what test first", "TDD", "first failing spec" |
 | **write-tests** | TDD discipline, spec types, factory design | "write test", "RSpec", "test-driven", "spec type" |
 | **test-service** | Service object specific testing | "test service", "spec/services", "service spec" |
-| **create-service-object** | `.call` pattern, response contract, YARD | "create service", "extract service", ".call", "service object" |
-| **integrate-api-client** | Layered architecture for external APIs | "API integration", "HTTP client", "external API", "third party" |
 | **implement-background-job** | Active Job, Solid Queue, Sidekiq, idempotency | "background job", "Active Job", "async", "Sidekiq", "worker" |
 | **review-migration** | Safe migrations for production | "migration", "add column", "index", "backfill", "zero-downtime" |
 | **implement-graphql** | Schema design, N+1 prevention, auth | "GraphQL", "resolver", "mutation", "dataloader" |
-| **triage-bug** | Bug diagnosis and reproduction | "bug", "debug", "fix", "broken", "error", "regression" |
 | **implement-authorization** *(NEW)* | Pundit/CanCanCan, roles, permissions | "authorization", "Pundit", "CanCanCan", "roles", "permissions", "policy" |
 | **optimize-performance** *(NEW)* | N+1s, profiling, caching, query optimization | "N+1", "slow", "performance", "optimize", "caching", "profiling" |
 | **version-api** *(NEW)* | REST API versioning | "API version", "v1", "v2", "versioning", "deprecation" |
 | **seed-database** *(NEW)* | Fixtures vs Seeds for dev/test | "seeds", "fixtures", "test data", "development data" |
 | **implement-hotwire** *(NEW)* | Turbo/Stimulus integration | "Hotwire", "Turbo", "Stimulus", "SPA", "frames", "streams" |
-| **implement-calculator-pattern** | Variant-based calculators | "calculator", "strategy pattern", "factory", "dispatch", "variant" |
 
 ---
 
@@ -77,7 +76,6 @@ Complete catalog of 38 public skills and 9 callable agents organized by developm
 |-------|-------------|---------------|
 | **refactor-code** | Refactor preserving behavior | "refactor", "extract", "restructure", "clean up" |
 | **apply-code-conventions** | DRY/YAGNI/PORO/CoC/KISS by path | "code review", "conventions", "clean code", "DRY", "YAGNI" |
-| **write-yard-docs** | Inline documentation with YARD | "YARD", "documentation", "@param", "@return", "inline docs" |
 | **apply-stack-conventions** | Stack-specific conventions (PostgreSQL, Hotwire, Tailwind) | "stack", "PostgreSQL", "Hotwire", "Tailwind", "conventions" |
 
 ---
@@ -87,7 +85,6 @@ Complete catalog of 38 public skills and 9 callable agents organized by developm
 | Skill | Description | Trigger Words |
 |-------|-------------|---------------|
 | **code-review** | Systematic Rails PR review | "review PR", "code review", "check this code", "CR" |
-| **respond-to-review** | Respond to review feedback | "feedback", "review comments", "address feedback", "respond" |
 | **security-check** | Deep security audit | "security", "audit", "vulnerability", "XSS", "SQL injection", "CSRF" |
 | **review-architecture** | Structural boundary review | "architecture", "structure", "boundaries", "fat model", "extract" |
 | **generate-api-collection** | Generate Postman collections for APIs | "Postman", "API collection", "REST", "test endpoints" |
@@ -118,17 +115,17 @@ Complete catalog of 38 public skills and 9 callable agents organized by developm
 | **Understand codebase** | `load-context` |
 | **New project setup** | `setup-environment` |
 | **Start coding** | `plan-tests` → `write-tests` |
-| **Fix bug** | `triage-bug` |
-| **Refactor** | `refactor-code` |
-| **Create service** | `create-service-object` |
-| **Integrate external API** | `integrate-api-client` |
+| **Fix bug** | `triage-bug` *(from core)* |
+| **Refactor** | `refactor-code` *(from core)* |
+| **Create service** | `create-service-object` *(from core)* |
+| **Integrate external API** | `integrate-api-client` *(from core)* |
 | **Add auth/roles** | `implement-authorization` |
 | **Optimize performance** | `optimize-performance` |
 | **Create engine** | `create-engine` |
 | **Review code** | `code-review` |
-| **Respond to feedback** | `respond-to-review` |
+| **Respond to feedback** | `respond-to-review` *(from core)* |
 | **Setup CI/CD** | *(roadmap — `setup-ci-cd`)* |
-| **Not sure** | `skill-router` |
+| **Not sure** | `skill-router` *(from core)* |
 
 ---
 
@@ -144,7 +141,7 @@ Complete catalog of 38 public skills and 9 callable agents organized by developm
 
 - [Integration Matrix](integration-matrix.md) — Which skill connects to which
 - [Agents Index](../../agents/) — Complete orchestrated step-by-step flows
-- [Orchestrator](../../skills/orchestration/skill-router/) — Entry skill when you don't know which to use
+- Orchestration skill `skill-router` (from ruby-core-skills) — Entry skill when you don't know which to use
 
 ---
 
@@ -172,23 +169,19 @@ Skills are organized in category folders (`skills/<category>/`) with frequent en
 | Skill | Path | Description |
 |-------|------|-------------|
 | **code-review** | `skills/code-quality/code-review/` | Systematic Rails PR review |
-| **respond-to-review** | `skills/code-quality/respond-to-review/` | Respond to review feedback |
 | **review-architecture** | `skills/code-quality/review-architecture/` | Structural boundary review |
 | **security-check** | `skills/code-quality/security-check/` | Deep security audit |
 | **apply-stack-conventions** | `skills/code-quality/apply-stack-conventions/` | Stack-specific conventions |
 | **apply-code-conventions** | `skills/code-quality/apply-code-conventions/` | DRY/YAGNI/PORO/CoC/KISS by path |
 | **implement-authorization** | `skills/code-quality/implement-authorization/` | Pundit/CanCanCan, roles, permissions |
-| **refactor-code** | `skills/code-quality/refactor-code/` | Refactor preserving behavior |
+
 
 ### DDD
 
-| Skill | Path | Description |
-|-------|------|-------------|
-| **define-domain-language** | `skills/ddd/define-domain-language/` | Domain terms glossary |
-| **review-domain-boundaries** | `skills/ddd/review-domain-boundaries/` | Review bounded contexts |
-| **model-domain** | `skills/ddd/model-domain/` | Map DDD to Rails |
-
-### Engines
+*DDD skills have moved to `igmarin/ruby-core-skills`:*
+*- `define-domain-language` — Domain terms glossary*
+*- `review-domain-boundaries` — Review bounded contexts*
+*- `model-domain` — Map DDD to Rails*
 
 | Skill | Path | Description |
 |-------|------|-------------|
@@ -212,25 +205,24 @@ Skills are organized in category folders (`skills/<category>/`) with frequent en
 | **version-api** | `skills/infrastructure/version-api/` | REST API versioning |
 | **implement-hotwire** | `skills/infrastructure/implement-hotwire/` | Turbo/Stimulus integration |
 
+
 ### Orchestration
 
-| Skill | Path | Description |
-|-------|------|-------------|
-| **skill-router** | `skills/orchestration/skill-router/` | Routes to correct specialized skill |
+*Orchestration skills have moved to `igmarin/ruby-core-skills`:*
+*- `skill-router` — Routes to correct specialized skill*
 
 ### Patterns
 
-| Skill | Path | Description |
-|-------|------|-------------|
-| **create-service-object** | `skills/patterns/create-service-object/` | `.call` pattern, response contract |
-| **implement-calculator-pattern** | `skills/patterns/implement-calculator-pattern/` | Variant-based calculators |
-| **write-yard-docs** | `skills/patterns/write-yard-docs/` | Inline documentation with YARD |
+*Pattern skills have moved to `igmarin/ruby-core-skills`:*
+*- `create-service-object` — `.call` pattern, response contract*
+*- `implement-calculator-pattern` — Variant-based calculators*
+*- `write-yard-docs` — Inline documentation with YARD*
+
 
 
 
 ### Testing
 
-| Skill | Path | Description |
 |-------|------|-------------|
 | **write-tests** | `skills/testing/write-tests/` | TDD discipline, spec types |
 | **test-service** | `skills/testing/test-service/` | Service object specific testing |

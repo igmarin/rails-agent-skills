@@ -108,3 +108,8 @@ end
 | Skill | When to chain |
 |-------|---------------|
 | **write-tests** | When implementing authorization tests. |
+
+## Additional Resources
+
+- [EXAMPLES.md](EXAMPLES.md) — Complete code examples for Pundit and CanCanCan implementations
+- [references/workflow.md](references/workflow.md) — Authorization implementation workflow

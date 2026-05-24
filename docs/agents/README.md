@@ -2,6 +2,8 @@
 
 Step-by-step guides for each stage of Rails development. Each stage defines a chain of skills executed in order.
 
+**Note:** This repository depends on `igmarin/ruby-core-skills` for foundational Ruby skills. Install both repositories for complete functionality. Skills marked with `*(from core)*` are provided by the core dependency.
+
 ---
 
 ## Master Stage Diagram
@@ -23,11 +25,11 @@ flowchart TD
     NEXT -->|Implement| DEV
     NEXT -->|Done| END([PR / Merge])
 
-    DEV -->|Tests pass| YARD[write-yard-docs]
+    DEV -->|Tests pass| YARD[write-yard-docs *(from core)*]
     DEV -->|Need review| REVIEW
 
     YARD --> REVIEW
-    REVIEW -->|Feedback received| RESPOND[respond-to-review]
+    REVIEW -->|Feedback received| RESPOND[respond-to-review *(from core)*]
     RESPOND -->|Re-implement| DEV
     RESPOND -->|OK| END
 
@@ -44,8 +46,8 @@ flowchart TD
 | **Discovery** | [Discovery & Context](discovery.md) | Understand codebase, project onboarding | `load-context`, `setup-environment` |
 | **Setup** | [Setup & Configuration](setup.md) | Configure CI/CD, environment, deploy | `setup-environment` *(plus roadmap `setup-ci-cd`)* |
 | **Development** | [Development](development.md) | TDD development, implementation | `plan-tests`, `testing skills`, implementation |
-| **Quality** | [Code Quality](quality.md) | Conventions, refactoring, documentation | `apply-code-conventions`, `refactor-code`, `write-yard-docs` |
-| **Review** | [Review & Validation](review.md) | Code review, security, architecture | `code-review`, `security-check`, `review-architecture` |
+| **Quality** | [Code Quality](quality.md) | Conventions, refactoring, documentation | `apply-code-conventions`, `refactor-code` *(from core)*, `write-yard-docs` *(from core)* |
+| **Review** | [Review & Validation](review.md) | Code review, security, architecture | `code-review`, `security-check`, `review-architecture`, `respond-to-review` *(from core)* |
 | **Engines** | [Engine Development](engines.md) | Create and maintain Rails engines | `engine skills` |
 
 ---
@@ -71,12 +73,12 @@ This directory contains **reference guides** describing each stage. For **execut
 
 | Situation | Agent | Quick Entry |
 |-----------|-------|-------------|
-| **Bug fix** | [`bug-fix`](../../agents/bug-fix/SKILL.md) | `triage-bug` → reproduce test → fix → verify |
-| **Refactoring** | [Refactor Safely](quality.md#refactor-code) | `refactor-code` → characterization tests → extract |
+| **Bug fix** | [`bug-fix`](../../agents/bug-fix/SKILL.md) | `triage-bug` *(from core)* → reproduce test → fix → verify |
+| **Refactoring** | [Refactor Safely](quality.md#refactor-code) | `refactor-code` *(from core)* → characterization tests → extract |
 | **Performance** | [Performance Optimization](development.md#performance) | `optimize-performance` |
-| **GraphQL** | [`graphql`](../../agents/graphql/SKILL.md) | domain modeling → schema → TDD → security |
+| **GraphQL** | [`graphql`](../../agents/graphql/SKILL.md) | domain modeling *(from core)* → schema → TDD → security |
 | **Authorization** | [Authorization Setup](development.md#authorization) | `implement-authorization` |
-| **External API** | [API Integration](development.md#external-api-integration) | `integrate-api-client` |
+| **External API** | [API Integration](development.md#external-api-integration) | `integrate-api-client` *(from core)* |
 | **Database migration** | [`migration`](../../agents/migration/SKILL.md) | plan → test → staging → production |
 | **Background job** | [`background-job`](../../agents/background-job/SKILL.md) | design → TDD → retry config → monitoring |
 
@@ -91,13 +93,13 @@ New to the project?
 
        Implement?
             Bug or refactor?
-            ├─ Bug → triage-bug
-            ├─ Refactor → refactor-code
+            ├─ Bug → triage-bug *(from core)*
+            ├─ Refactor → refactor-code *(from core)*
             └─ New feature → plan-tests → write-tests
 
                  Code type?
-                 ├─ Service → create-service-object
-                 ├─ REST API → integrate-api-client
+                 ├─ Service → create-service-object *(from core)*
+                 ├─ REST API → integrate-api-client *(from core)*
                  ├─ GraphQL → implement-graphql
                  ├─ Migration → review-migration
                  ├─ Background job → implement-background-job

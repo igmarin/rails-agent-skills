@@ -9,7 +9,11 @@ metadata:
   entry_point: "Invoke when conducting full PR review, multi-pass security/architecture audit, or implementing review feedback"
   phases: "Phase 1: Systematic Review, Phase 2: Deep Dive, Phase 3: Respond"
   hard_gates: "Security Check, Architecture Check, Findings Assessment, Re-review for Critical"
-  dependencies: "code-review, security-check, review-architecture, respond-to-review"
+  dependencies:
+    - source: self
+      skills: [code-review]
+    - source: ruby-core-skills
+      skills: [review-process, respond-to-review]
   keywords: rails, review, audit, security, architecture, agent, pr, feedback
 ---
 # Review Agent

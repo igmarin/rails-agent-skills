@@ -1,50 +1,42 @@
 {
   "name": "igmarin/rails-agent-skills",
-  "version": "5.1.17",
-  "summary": "Curated library of 38 public AI agent skills for Ruby on Rails development. Organized by category: testing, code-quality, ddd, engines, infrastructure, api, patterns, context, and orchestration. Covers code review, architecture, security, testing (RSpec), engines, service objects, DDD patterns, and TDD automation. Repository agents remain documented in GitHub but are intentionally excluded from the Tessl tile.",
+  "version": "6.0.0",
+  "summary": "Curated library of 28 public AI agent skills for Ruby on Rails development. Organized by category: testing, code-quality, engines, infrastructure, api, and context. Covers code review, architecture, security, testing (RSpec), engines, Hotwire, and TDD automation. Shared Ruby skills (YARD docs, DDD, service objects) have moved to ruby-core-skills. Repository agents remain documented in GitHub but are intentionally excluded from the Tessl tile.",
   "docs": "docs/index.md",
+  "depends_on": ["igmarin/ruby-core-skills"],
   "skills": {
     "generate-api-collection": {
       "path": "skills/api/generate-api-collection/SKILL.md"
     },
-    "review-domain-boundaries": {
-      "path": "skills/ddd/review-domain-boundaries/SKILL.md"
-    },
-    "model-domain": {
-      "path": "skills/ddd/model-domain/SKILL.md"
-    },
-    "define-domain-language": {
-      "path": "skills/ddd/define-domain-language/SKILL.md"
-    },
-    "skill-router": {
-      "path": "skills/orchestration/skill-router/SKILL.md"
-    },
-    "version-api": {
-      "path": "skills/infrastructure/version-api/SKILL.md"
-    },
-    "review-architecture": {
-      "path": "skills/code-quality/review-architecture/SKILL.md"
-    },
-    "implement-authorization": {
-      "path": "skills/code-quality/implement-authorization/SKILL.md"
-    },
-    "implement-background-job": {
-      "path": "skills/infrastructure/implement-background-job/SKILL.md"
-    },
-    "triage-bug": {
-      "path": "skills/testing/triage-bug/SKILL.md"
+    "implement-graphql": {
+      "path": "skills/api/implement-graphql/SKILL.md"
     },
     "apply-code-conventions": {
       "path": "skills/code-quality/apply-code-conventions/SKILL.md"
     },
+    "apply-stack-conventions": {
+      "path": "skills/code-quality/apply-stack-conventions/SKILL.md"
+    },
     "code-review": {
       "path": "skills/code-quality/code-review/SKILL.md"
+    },
+    "implement-authorization": {
+      "path": "skills/code-quality/implement-authorization/SKILL.md"
+    },
+    "refactor-code": {
+      "path": "skills/code-quality/refactor-code/SKILL.md"
+    },
+    "review-architecture": {
+      "path": "skills/code-quality/review-architecture/SKILL.md"
+    },
+    "security-check": {
+      "path": "skills/code-quality/security-check/SKILL.md"
     },
     "load-context": {
       "path": "skills/context/load-context/SKILL.md"
     },
-    "seed-database": {
-      "path": "skills/infrastructure/seed-database/SKILL.md"
+    "setup-environment": {
+      "path": "skills/context/setup-environment/SKILL.md"
     },
     "create-engine": {
       "path": "skills/engines/create-engine/SKILL.md"
@@ -73,50 +65,81 @@
     "implement-hotwire": {
       "path": "skills/infrastructure/implement-hotwire/SKILL.md"
     },
-    "implement-graphql": {
-      "path": "skills/api/implement-graphql/SKILL.md"
-    },
-    "review-migration": {
-      "path": "skills/infrastructure/review-migration/SKILL.md"
+    "implement-background-job": {
+      "path": "skills/infrastructure/implement-background-job/SKILL.md"
     },
     "optimize-performance": {
       "path": "skills/infrastructure/optimize-performance/SKILL.md"
     },
-    "setup-environment": {
-      "path": "skills/context/setup-environment/SKILL.md"
+    "review-migration": {
+      "path": "skills/infrastructure/review-migration/SKILL.md"
     },
-    "respond-to-review": {
-      "path": "skills/code-quality/respond-to-review/SKILL.md"
+    "seed-database": {
+      "path": "skills/infrastructure/seed-database/SKILL.md"
     },
-    "security-check": {
-      "path": "skills/code-quality/security-check/SKILL.md"
-    },
-    "apply-stack-conventions": {
-      "path": "skills/code-quality/apply-stack-conventions/SKILL.md"
+    "version-api": {
+      "path": "skills/infrastructure/version-api/SKILL.md"
     },
     "plan-tests": {
       "path": "skills/testing/plan-tests/SKILL.md"
-    },
-    "refactor-code": {
-      "path": "skills/code-quality/refactor-code/SKILL.md"
     },
     "write-tests": {
       "path": "skills/testing/write-tests/SKILL.md"
     },
     "test-service": {
       "path": "skills/testing/test-service/SKILL.md"
-    },
-    "integrate-api-client": {
-      "path": "skills/api/integrate-api-client/SKILL.md"
+    }
+  },
+  "deprecated_skills": {
+    "write-yard-docs": {
+      "moved_to": "igmarin/ruby-core-skills",
+      "message": "This skill has moved to ruby-core-skills. It will be resolved automatically via pack resolution.",
+      "removed_in": "7.0.0"
     },
     "create-service-object": {
-      "path": "skills/patterns/create-service-object/SKILL.md"
+      "moved_to": "igmarin/ruby-core-skills",
+      "message": "This skill has moved to ruby-core-skills.",
+      "removed_in": "7.0.0"
     },
     "implement-calculator-pattern": {
-      "path": "skills/patterns/implement-calculator-pattern/SKILL.md"
+      "moved_to": "igmarin/ruby-core-skills",
+      "message": "This skill has moved to ruby-core-skills.",
+      "removed_in": "7.0.0"
     },
-    "write-yard-docs": {
-      "path": "skills/patterns/write-yard-docs/SKILL.md"
+    "integrate-api-client": {
+      "moved_to": "igmarin/ruby-core-skills",
+      "message": "This skill has moved to ruby-core-skills.",
+      "removed_in": "7.0.0"
+    },
+    "define-domain-language": {
+      "moved_to": "igmarin/ruby-core-skills",
+      "message": "This skill has moved to ruby-core-skills.",
+      "removed_in": "7.0.0"
+    },
+    "review-domain-boundaries": {
+      "moved_to": "igmarin/ruby-core-skills",
+      "message": "This skill has moved to ruby-core-skills.",
+      "removed_in": "7.0.0"
+    },
+    "model-domain": {
+      "moved_to": "igmarin/ruby-core-skills",
+      "message": "This skill has moved to ruby-core-skills.",
+      "removed_in": "7.0.0"
+    },
+    "triage-bug": {
+      "moved_to": "igmarin/ruby-core-skills",
+      "message": "This skill has moved to ruby-core-skills.",
+      "removed_in": "7.0.0"
+    },
+    "respond-to-review": {
+      "moved_to": "igmarin/ruby-core-skills",
+      "message": "This skill has moved to ruby-core-skills.",
+      "removed_in": "7.0.0"
+    },
+    "skill-router": {
+      "moved_to": "igmarin/ruby-core-skills",
+      "message": "This skill has moved to ruby-core-skills.",
+      "removed_in": "7.0.0"
     }
   }
 }
