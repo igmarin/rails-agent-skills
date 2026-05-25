@@ -1,0 +1,26 @@
+name: Tile.json Validation
+on: [push, pull_request]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate tile.json
+        run: |
+          ruby -rjson -e '
+            tile = JSON.parse(File.read("tile.json"))
+            
+            # Check all skills have directories
+            tile.fetch("skills", {}).each do |name, entry|
+              path = entry["path"]
+              abort "Missing: #{path}/SKILL.md" unless File.exist?("#{path}/SKILL.md")
+            end
+            
+            # Check skill count matches
+            actual = Dir.glob("skills/*/*/SKILL.md").count + Dir.glob("skills/*/SKILL.md").count
+            declared = tile.fetch("skills", {}).size
+            warn "Warning: #{actual} skill dirs vs #{declared} in tile.json" if actual != declared
+            
+            puts "tile.json: #{declared} skills, all directories present"
+          '

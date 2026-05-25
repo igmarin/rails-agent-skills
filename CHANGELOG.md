@@ -4,6 +4,7 @@
 
 ### Added
 - Integrated `load-context` skill with `get_project_context` tool of `agent-mcp-runtime` to automatically query `rails-ai-bridge` when available.
+- GitHub Actions workflow (`.github/workflows/tile-check.yml`) to perform local `tile.json` integrity validation.
 
 ## [6.0.0] - 2026-05-24
 
