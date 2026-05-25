@@ -85,10 +85,12 @@ while IFS= read -r scenario_dir; do
         if data.fetch("target_type") == "agent"
           File.join(root, "agents", target_name, "SKILL.md")
         else
-          Dir[File.join(root, "skills", "*", target_name, "SKILL.md")].first
+          local_path = Dir[File.join(root, "skills", "*", target_name, "SKILL.md")].first
+          core_path = Dir[File.join(root, "..", "ruby-core-skills", "skills", "*", target_name, "SKILL.md")].first
+          local_path || core_path
         end
 
-      abort "target SKILL.md not found for #{target_name}" unless File.file?(target_path)
+      abort "target SKILL.md not found for #{target_name}" unless target_path && File.file?(target_path)
     ' "$ROOT_DIR" "$scenario_dir" \
       && pass "$relative_dir metadata.json is valid" \
       || fail "$relative_dir metadata.json failed validation"
