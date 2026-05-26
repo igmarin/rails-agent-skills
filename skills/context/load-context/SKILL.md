@@ -33,7 +33,18 @@ ALWAYS re-check context when the user's request changes scope mid-conversation.
 
 Load minimum context before any code, spec, or PRD in an existing Rails codebase. A fifteen-second read of `db/schema.rb`, `config/routes.rb`, and one neighbor saves a full retry.
 
-### Process
+### Automatic Context (Optional)
+
+If `rails-ai-bridge` is running in the project, the runtime automatically provides unified context.
+Use the `get_project_context` tool to retrieve:
+- Project structure and directory layout
+- Rails routes and controller mappings
+- Model associations and database schema
+- Gemfile dependencies
+
+When this data is successfully retrieved via `get_project_context`, you may skip the manual discovery steps 2 and 3 below and proceed directly to analyzing the context, finding neighbor patterns, and posting the Context Summary.
+
+### Manual Context Discovery (Fallback)
 
 1. **Scope the change:** In one sentence, name the Rails layer touched (controller, model, service, job, engine, view/Turbo, migration, API, GraphQL).
 2. **Load baseline Rails context:** Read at minimum:
