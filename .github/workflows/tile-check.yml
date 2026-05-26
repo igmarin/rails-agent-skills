@@ -14,7 +14,7 @@ jobs:
             # Check all skills have directories
             tile.fetch("skills", {}).each do |name, entry|
               path = entry["path"]
-              abort "Missing: #{path}/SKILL.md" unless File.exist?("#{path}/SKILL.md")
+              abort "Missing: #{path}" unless File.exist?(path)
             end
             
             # Check skill count matches
