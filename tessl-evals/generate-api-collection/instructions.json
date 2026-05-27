@@ -21,8 +21,32 @@
       "why_given": "preference"
     },
     {
+      "instruction": "Create or open the corresponding API collection JSON file.",
+      "original_snippets": "Create or open the corresponding API collection JSON file.",
+      "relevant_when": "When a user asks for Rails work that should trigger generate-api-collection.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "Use `{{base_url}}` for the base URL.",
+      "original_snippets": "Use `{{base_url}}` for the base URL.",
+      "relevant_when": "When a user asks for Rails work that should trigger generate-api-collection.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "Run `python -m json.tool collection.json` or `jq . collection.json` — both print errors on invalid JSON.",
+      "original_snippets": "Run `python -m json.tool collection.json` or `jq . collection.json` — both print errors on invalid JSON.",
+      "relevant_when": "When a user asks for Rails work that should trigger generate-api-collection.",
+      "why_given": "new knowledge"
+    },
+    {
       "instruction": "Verify the collection can be imported into a compatible API client (e.g. Postman) without errors.",
       "original_snippets": "Verify the collection can be imported into a compatible API client (e.g. Postman) without errors.",
+      "relevant_when": "When a user asks for Rails work that should trigger generate-api-collection.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "Load only when a concrete collection example is needed:",
+      "original_snippets": "Load only when a concrete collection example is needed:",
       "relevant_when": "When a user asks for Rails work that should trigger generate-api-collection.",
       "why_given": "new knowledge"
     }

@@ -29,7 +29,7 @@
     },
     {
       "name": "instruction-6",
-      "description": "The submitted artifact follows this skill instruction: Use `find_or_create_by!` to keep seeds idempotent — safe to run multiple times.",
+      "description": "The submitted artifact follows this skill instruction: Use idiomatic Rails seeding patterns.",
       "max_score": 16
     }
   ]

@@ -2,11 +2,7 @@
 name: write-tests
 license: MIT
 description: >
-  Use when writing, reviewing, or cleaning up RSpec tests for Ruby and Rails codebases.
-  Covers spec type selection, factory design, flaky test fixes, shared examples, deterministic
-  assertions, test-driven development discipline, and choosing the best first failing
-  spec for Rails changes. Also applies when choosing between model, request, system,
-  and job specs. Trigger words: write spec, rspec, test-driven development, testing.
+  Use when writing, reviewing, or cleaning up RSpec tests — prefer behavioral confidence over implementation coupling, tests gate implementation (write smallest spec type model>service>request>system→show concrete RED failure message proving missing behavior not broken setup, never use illustrative `e.g.` placeholders→implement minimum→verify GREEN→run full spec file then suite), service specs use `describe '.call'` + `subject(:result)`, default to `let` with `let!` ONLY when must-exist-before-action, one behavior per example (split `it` containing "and"), output MUST satisfy each rule: each is graded independently — one violation drops the whole check, load extended resources only when needed (progressive disclosure: `assets/tdd_proof_checklist.md` when final answer must show RED/GREEN proof). Trigger words: write spec, rspec, test-driven development, testing.
 metadata:
   version: 1.0.0
   user-invocable: "true"

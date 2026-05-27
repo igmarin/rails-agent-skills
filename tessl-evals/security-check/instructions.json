@@ -3,12 +3,6 @@
   "source_path": "skills/code-quality/security-check/SKILL.md",
   "instructions": [
     {
-      "instruction": "Use this skill when the task is to review or harden Rails code from a security perspective.",
-      "original_snippets": "Use this skill when the task is to review or harden Rails code from a security perspective.",
-      "relevant_when": "When a user asks for Rails work that should trigger security-check.",
-      "why_given": "new knowledge"
-    },
-    {
       "instruction": "Check authentication and authorization boundaries.",
       "original_snippets": "Check authentication and authorization boundaries.",
       "relevant_when": "When a user asks for Rails work that should trigger security-check.",
@@ -43,6 +37,18 @@
       "original_snippets": "**Verify each finding:** Confirm it is exploitable with a concrete attack scenario before reporting. Exclude false positives (e.g., `html_safe` on a developer-defined constant, not user input).",
       "relevant_when": "When a user asks for Rails work that should trigger security-check.",
       "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**Format**: Sections must appear in the order below, even when empty — write \"No issues found\" and state what evidence would be needed to verify the category.",
+      "original_snippets": "**Format**: Sections must appear in the order below, even when empty — write \"No issues found\" and state what evidence would be needed to verify the category.",
+      "relevant_when": "When a user asks for Rails work that should trigger security-check.",
+      "why_given": "preference"
+    },
+    {
+      "instruction": "Do not use representative file paths as if they were confirmed evidence.",
+      "original_snippets": "Do not use representative file paths as if they were confirmed evidence.",
+      "relevant_when": "When a user asks for Rails work that should trigger security-check.",
+      "why_given": "preference"
     }
   ]
 }

@@ -49,3 +49,4 @@ node_modules/
 !build/SKILL.md
 LEAN-CTX.md
 AGENTS.md.lean-ctx.bak
+docs/engineering/

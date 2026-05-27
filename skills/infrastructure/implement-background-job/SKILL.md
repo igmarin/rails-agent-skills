@@ -2,11 +2,7 @@
 name: implement-background-job
 license: MIT
 description: >
-  Use when adding or reviewing background jobs in Rails. Configures Active Job
-  workers, implements idempotency checks, sets up retry/discard strategies,
-  selects Solid Queue (Rails 8+) or Sidekiq based on scale, and defines recurring
-  jobs via recurring.yml or sidekiq-cron. Trigger words: background job, Active Job,
-  Solid Queue, Sidekiq, idempotency, retry, discard, recurring job, queue.
+  Use when adding or reviewing background jobs in Rails — EVERY job MUST have its test written and validated BEFORE implementation (write job spec covering idempotency/retry/error handling→run and confirm it fails→implement→run full suite), `perform` receives IDs loads the record guards for no-op and delegates to a service, configure Active Job with Solid Queue (Rails 8+ default) or Sidekiq at scale, implement idempotency checks with database uniqueness constraints or state field locks, set up `retry_on`/`discard_on` strategies, define recurring jobs via `config/recurring.yml` or sidekiq-cron, test with `queue_adapter = :test` + `have_enqueued_job` matchers. Trigger words: background job, Active Job, Solid Queue, Sidekiq, idempotency, retry, discard, recurring job, queue.
 metadata:
   version: 1.0.0
   user-invocable: "true"

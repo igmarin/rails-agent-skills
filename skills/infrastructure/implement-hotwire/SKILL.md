@@ -2,13 +2,7 @@
 name: implement-hotwire
 license: MIT
 description: >
-  Creates Stimulus controllers, configures Turbo Frame lazy loading, sets up
-  Turbo Stream broadcasts, and converts traditional Rails views to Hotwire
-  patterns for interactive, real-time UIs. Use when the user asks about adding
-  real-time updates, replacing full page reloads with Turbo, building
-  interactive Rails UIs without heavy JavaScript frameworks, or wiring up
-  Stimulus behavior to existing HTML. Trigger words: Hotwire, Turbo, Stimulus,
-  Turbo Frames, Turbo Streams, progressive enhancement, SPA without JS.
+  Creates Hotwire UIs with progressive enhancement — ALWAYS start with plain HTML, NEVER use Turbo Frames for full page navigation, output MUST include Verification: verify degraded mode without JavaScript (disable JS in browser or run `rails test:system` with Capybara `:rack_test` driver, checklist must confirm forms submit/links navigate/data persists after reload), plus system/browser checks for frame/stream/Stimulus behavior, use Turbo Frames for replacing page sections, Turbo Streams for broadcasting, Stimulus only when beyond Turbo. Trigger words: Hotwire, Turbo, Stimulus, Turbo Frames, Turbo Streams, progressive enhancement.
 metadata:
   version: 1.0.0
   user-invocable: "true"

@@ -9,14 +9,14 @@
       "why_given": "preference"
     },
     {
-      "instruction": "Write the spec: bundle exec rspec spec/[path]_spec.rb",
-      "original_snippets": "Write the spec: bundle exec rspec spec/[path]_spec.rb",
+      "instruction": "Write the spec file content, not only the spec path: bundle exec rspec spec/[path]_spec.rb",
+      "original_snippets": "Write the spec file content, not only the spec path: bundle exec rspec spec/[path]_spec.rb",
       "relevant_when": "When a user asks for Rails work that should trigger apply-stack-conventions.",
       "why_given": "new knowledge"
     },
     {
-      "instruction": "Verify it FAILS — output must show the feature does not exist yet",
-      "original_snippets": "Verify it FAILS — output must show the feature does not exist yet",
+      "instruction": "Verify it FAILS — output must show the observed failure proving the feature does not exist yet",
+      "original_snippets": "Verify it FAILS — output must show the observed failure proving the feature does not exist yet",
       "relevant_when": "When a user asks for Rails work that should trigger apply-stack-conventions.",
       "why_given": "preference"
     },
@@ -27,8 +27,20 @@
       "why_given": "new knowledge"
     },
     {
-      "instruction": "Verify it PASSES — run the same spec and confirm green",
-      "original_snippets": "Verify it PASSES — run the same spec and confirm green",
+      "instruction": "Verify it PASSES — run the same spec and include the observed green result line",
+      "original_snippets": "Verify it PASSES — run the same spec and include the observed green result line",
+      "relevant_when": "When a user asks for Rails work that should trigger apply-stack-conventions.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "The final artifact must show the test proof before implementation code.",
+      "original_snippets": "The final artifact must show the test proof before implementation code.",
+      "relevant_when": "When a user asks for Rails work that should trigger apply-stack-conventions.",
+      "why_given": "preference"
+    },
+    {
+      "instruction": "Use **Observed RED output** and **Observed GREEN output** labels for proof",
+      "original_snippets": "Use **Observed RED output** and **Observed GREEN output** labels for proof",
       "relevant_when": "When a user asks for Rails work that should trigger apply-stack-conventions.",
       "why_given": "new knowledge"
     },
@@ -37,6 +49,18 @@
       "original_snippets": "Each step should remain testable in isolation before wiring to the next layer.",
       "relevant_when": "When a user asks for Rails work that should trigger apply-stack-conventions.",
       "why_given": "reminder"
+    },
+    {
+      "instruction": "When applying stack conventions, your output MUST include:",
+      "original_snippets": "When applying stack conventions, your output MUST include:",
+      "relevant_when": "When a user asks for Rails work that should trigger apply-stack-conventions.",
+      "why_given": "preference"
+    },
+    {
+      "instruction": "**Tests-first proof before implementation** — Put this section before any implementation code. For each layer, include the actual spec code written or updated, the exact command (`bundle exec rspec spec/[path]_spec.rb`), and the **Observed RED output** proving the feature is absent rather than misconfigured. Do not use placeholder or illustrative `e.g.` failure lines.",
+      "original_snippets": "**Tests-first proof before implementation** — Put this section before any implementation code. For each layer, include the actual spec code written or updated, the exact command (`bundle exec rspec spec/[path]_spec.rb`), and the **Observed RED output** proving the feature is absent rather than misconfigured. Do not use placeholder or illustrative `e.g.` failure lines.",
+      "relevant_when": "When a user asks for Rails work that should trigger apply-stack-conventions.",
+      "why_given": "preference"
     }
   ]
 }

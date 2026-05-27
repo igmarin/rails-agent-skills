@@ -4,18 +4,13 @@
   "checklist": [
     {
       "name": "instruction-1",
-      "description": "The submitted artifact follows this skill instruction: **Create controllers** — Inherit from the previous version's controller and override only changed actions.",
-      "max_score": 34
+      "description": "The submitted artifact follows this skill instruction: **Create controllers** — Inherit from the previous version's controller and override only changed actions:",
+      "max_score": 50
     },
     {
       "name": "instruction-2",
-      "description": "The submitted artifact follows this skill instruction: **Run compatibility specs** — Execute `rspec spec/requests/api/backward_compatibility_spec.rb` to confirm no regressions.",
-      "max_score": 33
-    },
-    {
-      "name": "instruction-3",
-      "description": "The submitted artifact follows this skill instruction: All existing v1 contract tests must remain green; a new version should never silently break prior consumers.",
-      "max_score": 33
+      "description": "The submitted artifact follows this skill instruction: **Run compatibility specs** — Execute `bundle exec rspec spec/requests/api/backward_compatibility_spec.rb` to confirm no regressions before merging.",
+      "max_score": 50
     }
   ]
 }

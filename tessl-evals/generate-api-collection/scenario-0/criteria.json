@@ -5,22 +5,42 @@
     {
       "name": "instruction-1",
       "description": "The submitted artifact follows this skill instruction: you MUST also create or update the corresponding API collection file so the",
-      "max_score": 25
+      "max_score": 13
     },
     {
       "name": "instruction-2",
       "description": "The submitted artifact follows this skill instruction: flow can be tested. Do not leave the collection missing or outdated.",
-      "max_score": 25
+      "max_score": 13
     },
     {
       "name": "instruction-3",
       "description": "The submitted artifact follows this skill instruction: Each request MUST include a description and at least one basic test script (e.g. status code check).",
-      "max_score": 25
+      "max_score": 13
     },
     {
       "name": "instruction-4",
+      "description": "The submitted artifact follows this skill instruction: Create or open the corresponding API collection JSON file.",
+      "max_score": 13
+    },
+    {
+      "name": "instruction-5",
+      "description": "The submitted artifact follows this skill instruction: Use `{{base_url}}` for the base URL.",
+      "max_score": 12
+    },
+    {
+      "name": "instruction-6",
+      "description": "The submitted artifact follows this skill instruction: Run `python -m json.tool collection.json` or `jq . collection.json` — both print errors on invalid JSON.",
+      "max_score": 12
+    },
+    {
+      "name": "instruction-7",
       "description": "The submitted artifact follows this skill instruction: Verify the collection can be imported into a compatible API client (e.g. Postman) without errors.",
-      "max_score": 25
+      "max_score": 12
+    },
+    {
+      "name": "instruction-8",
+      "description": "The submitted artifact follows this skill instruction: Load only when a concrete collection example is needed:",
+      "max_score": 12
     }
   ]
 }

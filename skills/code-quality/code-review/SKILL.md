@@ -2,11 +2,7 @@
 name: code-review
 license: MIT
 description: >
-  Reviews Rails pull requests, focusing on controller/model conventions,
-  migration safety, query performance, and Rails Way compliance. Covers
-  routing, ActiveRecord, security, caching, and background jobs. Use when
-  reviewing existing Rails code for quality, conducting a PR review, or
-  doing a code review on Ruby on Rails (RoR) code.
+  Reviews Rails pull requests — core principle: review early and often, self-review before PR, re-review after significant changes; use ONLY three severity labels: Critical (security/data loss/crash/Always Critical — blocks merge), Suggestion, Nice to have; Always Critical flags: `permit!`, `html_safe` on user content, business logic in controller actions, unparameterized SQL, destructive migrations; ground every finding in a real file:line from the diff — do not present a simulated PR review; follow Review Order: Configuration→Routing→Controllers→Views→Models→Associations→Queries→Migrations→Validations→I18n→Sessions→Security→Caching→Jobs→Tests; always include `Code review before merge` task. Use when reviewing existing Rails code for quality.
 metadata:
   version: 1.0.0
   user-invocable: "true"

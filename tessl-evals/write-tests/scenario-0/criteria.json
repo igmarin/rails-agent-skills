@@ -5,47 +5,52 @@
     {
       "name": "instruction-1",
       "description": "The submitted artifact follows this skill instruction: Use this skill when the task is to write, review, or clean up RSpec tests.",
-      "max_score": 12
+      "max_score": 10
     },
     {
       "name": "instruction-2",
       "description": "The submitted artifact follows this skill instruction: **Core principle:** Prefer behavioral confidence over implementation coupling. Good specs are readable, deterministic, and cheap to maintain.",
-      "max_score": 11
+      "max_score": 10
     },
     {
       "name": "instruction-3",
-      "description": "The submitted artifact follows this skill instruction: **Write the failing spec** — pick the smallest spec type that exercises the intended behaviour (model > service > request > system).",
-      "max_score": 11
+      "description": "The submitted artifact follows this skill instruction: Run spec and verify it fails",
+      "max_score": 10
     },
     {
       "name": "instruction-4",
-      "description": "The submitted artifact follows this skill instruction: **Run it and confirm the failure message** — the error should be about missing code, not a setup problem.",
-      "max_score": 11
+      "description": "The submitted artifact follows this skill instruction: Run spec and verify it passes",
+      "max_score": 10
     },
     {
       "name": "instruction-5",
-      "description": "The submitted artifact follows this skill instruction: **Verify** — run the full relevant spec file, then the suite, before committing.",
-      "max_score": 11
+      "description": "The submitted artifact follows this skill instruction: **Write the failing spec** — pick the smallest spec type that exercises the intended behaviour (model > service > request > system). See table below for guidance.",
+      "max_score": 10
     },
     {
       "name": "instruction-6",
-      "description": "The submitted artifact follows this skill instruction: Minimal factories only. Never rely on factory defaults for business logic — set explicitly or use traits. Avoid `create` when `build`/`build_stubbed` suffices.",
-      "max_score": 11
+      "description": "The submitted artifact follows this skill instruction: **Run it and confirm the failure message** — show the concrete RED failure class/message for the first spec. Do not leave this as a placeholder template and do not use illustrative `e.g.` failure examples in the final artifact.",
+      "max_score": 10
     },
     {
       "name": "instruction-7",
-      "description": "The submitted artifact follows this skill instruction: Use only when the same behavioural contract applies to multiple subjects without per-example `let` overrides. Avoid when each context needs different setup — that signals a wrong abstraction.",
-      "max_score": 11
+      "description": "The submitted artifact follows this skill instruction: **Verify** — run the full relevant spec file, then the suite, before committing.",
+      "max_score": 10
     },
     {
       "name": "instruction-8",
-      "description": "The submitted artifact follows this skill instruction: When asked to write or review RSpec specs, your output MUST satisfy each rule below. Each is graded independently — one violation drops the whole check.",
-      "max_score": 11
+      "description": "The submitted artifact follows this skill instruction: Load these files only when their specific content is needed:",
+      "max_score": 10
     },
     {
       "name": "instruction-9",
-      "description": "The submitted artifact follows this skill instruction: **`let` for test data**, `let!` ONLY when the object must exist before the action under test.",
-      "max_score": 11
+      "description": "The submitted artifact follows this skill instruction: **[assets/tdd_proof_checklist.md](assets/tdd_proof_checklist.md)** — Use when the task involves new behavior and the final answer must show RED/GREEN proof.",
+      "max_score": 10
+    },
+    {
+      "name": "instruction-10",
+      "description": "The submitted artifact follows this skill instruction: When asked to write or review RSpec specs, your output MUST satisfy each rule below. Each is graded independently — one violation drops the whole check.",
+      "max_score": 10
     }
   ]
 }

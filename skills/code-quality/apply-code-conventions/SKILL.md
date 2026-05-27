@@ -2,13 +2,7 @@
 name: apply-code-conventions
 license: MIT
 description: >
-  A daily checklist for writing clean Rails code, covering design principles
-  (DRY, YAGNI, PORO, CoC, KISS), per-path rules (models, services, workers,
-  controllers), structured logging, and comment discipline. Defers style and
-  formatting to the project's configured linter(s). Use when writing, reviewing,
-  or refactoring Ruby on Rails code, or when asked about Rails best practices,
-  clean code, or code quality. Trigger words: code review, refactor, RoR,
-  clean code, best practices, Ruby on Rails conventions.
+  Daily checklist for clean Rails code — Detect→run→defer: run linter (detect `.rubocop.yml`/`.standard.yml`→run→note absence), never invent style rules, style/formatting defers to detected config, apply area-specific rules per path (models→eager load/pluck, controllers→strong params/thin, services→.call, jobs→idempotency/retries, specs→let>let!), verify tests gate BEFORE new behavior (RED→implement→GREEN), enforce structured logging: every Rails.logger call MUST use static string first arg + hash with event: key second arg + no interpolation, enforce comment discipline: TODO/FIXME tags MUST carry actionable context, chain to specialised skills, only recommend let_it_be if test-prof already in Gemfile.lock, progressive disclosure: load extended resources only when needed. Use when writing, reviewing, or refactoring Ruby on Rails code. Trigger words: code review, refactor, RoR, clean code, best practices.
 metadata:
   version: 1.0.0
   user-invocable: "true"

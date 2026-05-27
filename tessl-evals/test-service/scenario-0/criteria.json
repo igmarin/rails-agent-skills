@@ -4,28 +4,33 @@
   "checklist": [
     {
       "name": "instruction-1",
-      "description": "The submitted artifact follows this skill instruction: Use this skill when writing tests for service classes under `spec/services/`.",
-      "max_score": 20
+      "description": "The submitted artifact follows this skill instruction: WRITE:   Write the spec (happy path + error cases + edge cases)",
+      "max_score": 17
     },
     {
       "name": "instruction-2",
-      "description": "The submitted artifact follows this skill instruction: **Core principle:** Test the public contract (`.call`, `.find`, `.search`), not internal implementation. Use `instance_double` for isolation, `create` for integration.",
-      "max_score": 20
+      "description": "The submitted artifact follows this skill instruction: Use this skill when writing tests for service classes under `spec/services/`.",
+      "max_score": 17
     },
     {
       "name": "instruction-3",
-      "description": "The submitted artifact follows this skill instruction: WRITE:   Write the spec (happy path + error cases + edge cases)",
-      "max_score": 20
+      "description": "The submitted artifact follows this skill instruction: **Core principle:** Test the public contract (`.call`, `.find`, `.search`), not internal implementation. Use `instance_double` for isolation, `create` for integration.",
+      "max_score": 17
     },
     {
       "name": "instruction-4",
       "description": "The submitted artifact follows this skill instruction: Use `instance_double` for unit isolation:",
-      "max_score": 20
+      "max_score": 17
     },
     {
       "name": "instruction-5",
       "description": "The submitted artifact follows this skill instruction: Use `create` for integration tests:",
-      "max_score": 20
+      "max_score": 16
+    },
+    {
+      "name": "instruction-6",
+      "description": "The submitted artifact follows this skill instruction: **Clear structure**: Write tests with properly structured `describe` and `context` blocks.",
+      "max_score": 16
     }
   ]
 }

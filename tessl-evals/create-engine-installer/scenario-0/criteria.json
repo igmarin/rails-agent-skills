@@ -9,32 +9,32 @@
     },
     {
       "name": "instruction-2",
-      "description": "The submitted artifact follows this skill instruction: **Core principle:** Setup must be explicit, repeatable, and safe to rerun. Never modify the host app at boot time.",
+      "description": "The submitted artifact follows this skill instruction: GENERATE:  Run the generator against a clean host app",
       "max_score": 15
     },
     {
       "name": "instruction-3",
-      "description": "The submitted artifact follows this skill instruction: GENERATE:  Run the generator against a clean host app",
-      "max_score": 14
-    },
-    {
-      "name": "instruction-4",
       "description": "The submitted artifact follows this skill instruction: VERIFY:    Check output files exist in the correct host paths",
       "max_score": 14
     },
     {
-      "name": "instruction-5",
+      "name": "instruction-4",
       "description": "The submitted artifact follows this skill instruction: RERUN:     Run the generator a second time",
       "max_score": 14
     },
     {
-      "name": "instruction-6",
+      "name": "instruction-5",
       "description": "The submitted artifact follows this skill instruction: DOCUMENT:  List what was generated vs. what the user must do manually",
       "max_score": 14
     },
     {
-      "name": "instruction-7",
+      "name": "instruction-6",
       "description": "The submitted artifact follows this skill instruction: **Minimal rerun spec (must always pass):**",
+      "max_score": 14
+    },
+    {
+      "name": "instruction-7",
+      "description": "The submitted artifact follows this skill instruction: Use idiomatic Rails Thor generator commands.",
       "max_score": 14
     }
   ]

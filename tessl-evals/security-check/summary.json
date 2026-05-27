@@ -2,11 +2,12 @@
   "target_skill": "security-check",
   "total_scenarios": 1,
   "instructions_coverage": {
-    "total_instructions": 7,
-    "instructions_tested": 7,
+    "total_instructions": 8,
+    "instructions_tested": 8,
     "coverage_percentage": 100
   },
   "reason_distribution": {
-    "new knowledge": 7
+    "new knowledge": 6,
+    "preference": 2
   }
 }

@@ -2,12 +2,12 @@
   "target_skill": "generate-api-collection",
   "total_scenarios": 1,
   "instructions_coverage": {
-    "total_instructions": 4,
-    "instructions_tested": 4,
+    "total_instructions": 8,
+    "instructions_tested": 8,
     "coverage_percentage": 100
   },
   "reason_distribution": {
     "preference": 3,
-    "new knowledge": 1
+    "new knowledge": 5
   }
 }

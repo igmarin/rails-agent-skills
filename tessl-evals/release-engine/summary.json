@@ -2,11 +2,11 @@
   "target_skill": "release-engine",
   "total_scenarios": 1,
   "instructions_coverage": {
-    "total_instructions": 7,
-    "instructions_tested": 7,
+    "total_instructions": 5,
+    "instructions_tested": 5,
     "coverage_percentage": 100
   },
   "reason_distribution": {
-    "new knowledge": 7
+    "new knowledge": 5
   }
 }

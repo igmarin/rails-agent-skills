@@ -2,10 +2,7 @@
 name: generate-api-collection
 license: MIT
 description: >
-  Use when creating or modifying REST API endpoints (Rails controllers, engine routes,
-  API actions). Requires generating or updating an API Collection file (e.g., Postman
-  Collection v2.1) so the new or changed endpoints can be tested. Trigger words:
-  endpoint, API route, controller action, API collection, request collection.
+  Sync API collections with REST endpoints — when creating or modifying any REST API endpoint you MUST also create or update the corresponding Postman Collection v2.1 JSON file: one collection per app or engine in `docs/api-collections/` or `spec/fixtures/api-collections/`, use `{{base_url}}` variable, each request MUST include a description and at least one test script (e.g. `pm.response.to.have.status(200)`), group related endpoints into folders with nested `item` arrays, validate JSON with `python -m json.tool` or `jq .`, verify import into Postman without errors, load extended examples only when needed (progressive disclosure). Trigger words: endpoint, API route, controller action, API collection, request collection.
 metadata:
   user-invocable: "true"
   version: 1.0.0

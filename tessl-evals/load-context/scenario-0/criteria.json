@@ -5,27 +5,22 @@
     {
       "name": "instruction-1",
       "description": "The submitted artifact follows this skill instruction: Load minimum context before any code, spec, or PRD in an existing Rails codebase. A fifteen-second read of `db/schema.rb`, `config/routes.rb`, and one neighbor saves a full retry.",
-      "max_score": 20
+      "max_score": 25
     },
     {
       "name": "instruction-2",
-      "description": "The submitted artifact follows this skill instruction: **Load baseline Rails context:** Read at minimum:",
-      "max_score": 20
+      "description": "The submitted artifact follows this skill instruction: Use the `get_project_context` tool to retrieve:",
+      "max_score": 25
     },
     {
       "name": "instruction-3",
-      "description": "The submitted artifact follows this skill instruction: **Load one neighbor of each kind:** For each Rails layer touched, open the nearest sibling that already solves a similar problem — a comparable controller, service, spec, factory. Use grep to find: `grep -r \"class.*Controller\" app/controllers`, `grep -r \"class.*Service\" app/services`, etc.",
-      "max_score": 20
+      "description": "The submitted artifact follows this skill instruction: **Load baseline Rails context:** Read at minimum:",
+      "max_score": 25
     },
     {
       "name": "instruction-4",
-      "description": "The submitted artifact follows this skill instruction: Every invocation of this skill MUST produce a **Context Summary** in this exact shape, before any code or spec is proposed:",
-      "max_score": 20
-    },
-    {
-      "name": "instruction-5",
-      "description": "The submitted artifact follows this skill instruction: **One neighbor per layer.** Do not dump 5 similar files; pick the closest match and name it.",
-      "max_score": 20
+      "description": "The submitted artifact follows this skill instruction: **Load one neighbor of each kind:** For each Rails layer touched, open the nearest sibling that already solves a similar problem — a comparable controller, service, spec, factory. Use grep to find: `grep -r \"class.*Controller\" app/controllers`, `grep -r \"class.*Service\" app/services`, etc.",
+      "max_score": 25
     }
   ]
 }

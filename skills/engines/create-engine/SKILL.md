@@ -2,9 +2,7 @@
 name: create-engine
 license: MIT
 description: >
-  Use when creating, scaffolding, or refactoring a Rails engine. Covers engine
-  types (Plain, Railtie, Engine, Mountable), namespace isolation, host-app
-  contract definition, and recommended file structure.
+  Use when creating a Rails engine — choose engine type (Plain/Railtie/Engine/Mountable) before coding, engine should have narrow purpose and small public API, use `isolate_namespace` + `.configure` block, host model references MUST be configurable strings never hard-coded, NEVER auto-apply migrations at boot, initializers must be idempotent and reload-safe, verify dummy app exists (`ls spec/dummy`), verify dummy app boots, confirm no hard-coded host constants, confirm no migration auto-apply patterns, create minimal engine structure first (checkpoint: `bundle exec rake` must pass), define the host-app contract, write minimum integration coverage through the dummy app. Covers namespace isolation, file structure, engine scaffolding.
 metadata:
   user-invocable: "true"
   version: 1.1.0

@@ -5,7 +5,17 @@
     {
       "name": "instruction-1",
       "description": "The submitted artifact follows this skill instruction: **Verify degraded mode** — disable JavaScript in browser DevTools (or run `rails test:system` with a headless driver set to `no_js`) and confirm forms submit, links navigate, and data persists correctly without JS.",
-      "max_score": 100
+      "max_score": 34
+    },
+    {
+      "name": "instruction-2",
+      "description": "The submitted artifact follows this skill instruction: When implementing Hotwire, your output MUST include:",
+      "max_score": 33
+    },
+    {
+      "name": "instruction-3",
+      "description": "The submitted artifact follows this skill instruction: **Verification** — Include no-JavaScript degraded-mode check plus system/browser checks for frame, stream, or Stimulus behavior. The degraded-mode checklist must explicitly include: `rails test:system` with the Capybara `:rack_test` driver, or the equivalent driver name in the test configuration, forms submit, links navigate, and data persists after reload.",
+      "max_score": 33
     }
   ]
 }

@@ -3,26 +3,26 @@
   "source_path": "skills/code-quality/apply-code-conventions/SKILL.md",
   "instructions": [
     {
-      "instruction": "Detect → run → defer. Do not invent style rules.",
-      "original_snippets": "Detect → run → defer. Do not invent style rules.",
+      "instruction": "**Run linter** — Detect config (for example `.rubocop.yml` or `.standard.yml`), run the appropriate tool, note absence if none found. Do not invent style rules; all style/formatting defers to the detected config. *Output: state which linter was detected (or absent) and that style defers to it.*",
+      "original_snippets": "**Run linter** — Detect config (for example `.rubocop.yml` or `.standard.yml`), run the appropriate tool, note absence if none found. Do not invent style rules; all style/formatting defers to the detected config. *Output: state which linter was detected (or absent) and that style defers to it.*",
       "relevant_when": "When a user asks for Rails work that should trigger apply-code-conventions.",
       "why_given": "preference"
     },
     {
-      "instruction": "**Run linter** — detect config, run the appropriate tool, note absence if none found.",
-      "original_snippets": "**Run linter** — detect config, run the appropriate tool, note absence if none found.",
+      "instruction": "**Apply area-specific rules** — Check path patterns (e.g., models, background jobs, controllers) and apply targeted guidance from the Apply by area table below. *Output: concrete per-path recommendations for every relevant changed file.*",
+      "original_snippets": "**Apply area-specific rules** — Check path patterns (e.g., models, background jobs, controllers) and apply targeted guidance from the Apply by area table below. *Output: concrete per-path recommendations for every relevant changed file.*",
       "relevant_when": "When a user asks for Rails work that should trigger apply-code-conventions.",
       "why_given": "new knowledge"
     },
     {
-      "instruction": "**Check area-specific rules** — apply the \"Apply by area\" table below to each changed path.",
-      "original_snippets": "**Check area-specific rules** — apply the \"Apply by area\" table below to each changed path.",
+      "instruction": "**Verify tests gate** — Confirm failing tests exist before any new behavior; run specs and checkpoints. *Output: state the failing spec, run command, expected failure, minimal implementation step, and passing rerun.*",
+      "original_snippets": "**Verify tests gate** — Confirm failing tests exist before any new behavior; run specs and checkpoints. *Output: state the failing spec, run command, expected failure, minimal implementation step, and passing rerun.*",
       "relevant_when": "When a user asks for Rails work that should trigger apply-code-conventions.",
       "why_given": "new knowledge"
     },
     {
-      "instruction": "**Verify tests gate** — confirm failing tests exist before any new behavior; run specs and checkpoints.",
-      "original_snippets": "**Verify tests gate** — confirm failing tests exist before any new behavior; run specs and checkpoints.",
+      "instruction": "**Chain to specialised skills** — Use the Integration table to pull in deeper guidance (security, jobs, specs) as needed.",
+      "original_snippets": "**Chain to specialised skills** — Use the Integration table to pull in deeper guidance (security, jobs, specs) as needed.",
       "relevant_when": "When a user asks for Rails work that should trigger apply-code-conventions.",
       "why_given": "new knowledge"
     },
@@ -31,6 +31,24 @@
       "original_snippets": "Only recommend `let_it_be` if `test-prof` is already in `Gemfile.lock`. Otherwise default to `let`; reach for `let!` only when lazy evaluation would break the example. Don't introduce `test-prof` unless asked.",
       "relevant_when": "When a user asks for Rails work that should trigger apply-code-conventions.",
       "why_given": "preference"
+    },
+    {
+      "instruction": "Load these files only when their specific content is needed:",
+      "original_snippets": "Load these files only when their specific content is needed:",
+      "relevant_when": "When a user asks for Rails work that should trigger apply-code-conventions.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**[assets/checklist.md](assets/checklist.md)** — Use for detailed code review checklists.",
+      "original_snippets": "**[assets/checklist.md](assets/checklist.md)** — Use for detailed code review checklists.",
+      "relevant_when": "When a user asks for Rails work that should trigger apply-code-conventions.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**[assets/snippets.md](assets/snippets.md)** — Use for quick code snippets of common patterns.",
+      "original_snippets": "**[assets/snippets.md](assets/snippets.md)** — Use for quick code snippets of common patterns.",
+      "relevant_when": "When a user asks for Rails work that should trigger apply-code-conventions.",
+      "why_given": "new knowledge"
     }
   ]
 }

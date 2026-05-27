@@ -8,7 +8,7 @@
   },
   "reason_distribution": {
     "preference": 1,
-    "reminder": 1,
-    "new knowledge": 2
+    "new knowledge": 2,
+    "reminder": 1
   }
 }

@@ -9,8 +9,8 @@
       "why_given": "new knowledge"
     },
     {
-      "instruction": "**EVERY engine MUST have a dummy app for testing.**",
-      "original_snippets": "**EVERY engine MUST have a dummy app for testing.**",
+      "instruction": "EVERY engine MUST have a dummy app for testing.",
+      "original_snippets": "EVERY engine MUST have a dummy app for testing.",
       "relevant_when": "When a user asks for Rails work that should trigger test-engine.",
       "why_given": "preference"
     },

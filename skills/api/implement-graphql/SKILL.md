@@ -2,10 +2,7 @@
 name: implement-graphql
 license: MIT
 description: >
-  Use when building or reviewing GraphQL APIs in Rails with the graphql-ruby gem.
-  Covers schema design, N+1 prevention with dataloaders, field-level auth, query
-  limits, error handling, and testing resolvers/mutations with RSpec. Trigger words: 
-  graphql, graphql-ruby, resolver, mutation, dataloader, schema.
+  Use when building GraphQL APIs in Rails with graphql-ruby — gates: SPEC (write failing spec with happy path+auth+validation error cases in `spec/graphql/` using `AppSchema.execute`, never HTTP dispatch)→TYPE (define arguments/return types, use `connection_type` for pagination, don't leak internal model names)→IMPLEMENT (dedicated resolver/mutation classes delegating to services)→N+1 CHECK (dataloader on every association load, prime dataloader in collection resolvers)→FINAL CHECK (verify every HARD-GATE item: field-level auth, mutations return `{result, errors}`, max_depth/max_complexity set, introspection disabled in production, description on every field, error handling with rescue blocks). Output MUST include schema contract, resolver structure, N+1 prevention, auth/limits, error shape, verification commands, and hard-gate checklist. Trigger words: graphql, graphql-ruby, resolver, mutation, dataloader, schema.
 metadata:
   version: 1.0.0
   user-invocable: "true"

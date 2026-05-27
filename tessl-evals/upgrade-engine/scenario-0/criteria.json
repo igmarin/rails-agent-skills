@@ -29,7 +29,7 @@
     },
     {
       "name": "instruction-6",
-      "description": "The submitted artifact follows this skill instruction: Check optional integrations (jobs, mailers, assets, routes) per version.",
+      "description": "The submitted artifact follows this skill instruction: Check optional integrations (jobs, mailers, assets, routes, install generators, dummy-app mounts) per version. State the check even if an integration is absent.",
       "max_score": 14
     },
     {

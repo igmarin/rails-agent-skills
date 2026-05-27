@@ -2,14 +2,7 @@
 name: refactor-code
 license: MIT
 description: >
-  Use when the goal is to change code structure without changing behavior — this
-  includes extracting a service object from a fat controller or model, splitting
-  a large class, renaming abstractions, reducing duplication, or reorganizing
-  modules. Covers characterization tests (write tests that document current behavior
-  before touching the code), safe extraction in small steps, and verification after
-  every step. Do NOT use for bug fixes or new features — those follow the TDD gate
-  in write-tests. Do NOT mix structural changes with behavior changes in
-  the same step. Trigger words: refactor, restructure, extract service, split class, reduce duplication.
+  Use when changing structure without changing behavior — write characterization tests BEFORE touching any production file (must pass on current un-refactored code, if it fails stop and fix the test or behavior mismatch), NEVER mix behavior changes with structural refactors, identify exact inputs/outputs, keep public interfaces stable until callers migrate, ONE boundary per step, run verification after EVERY step plus full test suite at end, use ONLY Observed output for actual run output (NEVER substitute expected/required/planned output or "must produce 0 failures" as evidence), include stable behavior statement. Covers extracting services, splitting classes, renaming abstractions, reducing duplication. Trigger words: refactor, restructure, extract service, split class, reduce duplication.
 metadata:
   version: 1.0.0
   user-invocable: "true"

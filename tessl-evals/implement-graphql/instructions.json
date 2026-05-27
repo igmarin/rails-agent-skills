@@ -9,52 +9,58 @@
       "why_given": "new knowledge"
     },
     {
-      "instruction": "Before shipping a resolver/mutation slice, ALL of the following must be true (details in linked sections; do not duplicate checks in prose here):",
-      "original_snippets": "Before shipping a resolver/mutation slice, ALL of the following must be true (details in linked sections; do not duplicate checks in prose here):",
+      "instruction": "Before shipping a resolver/mutation slice, ALL of the following must be true:",
+      "original_snippets": "Before shipping a resolver/mutation slice, ALL of the following must be true:",
       "relevant_when": "When a user asks for Rails work that should trigger implement-graphql.",
       "why_given": "preference"
     },
     {
-      "instruction": "TESTING.md: specs in `spec/graphql/` use `AppSchema.execute` — **ALL spec files** (resolver specs AND mutation specs). Never use HTTP controller dispatch for GraphQL specs.",
-      "original_snippets": "TESTING.md: specs in `spec/graphql/` use `AppSchema.execute` — **ALL spec files** (resolver specs AND mutation specs). Never use HTTP controller dispatch for GraphQL specs.",
+      "instruction": "TESTING.md: specs in `spec/graphql/` use `AppSchema.execute`. Never use HTTP controller dispatch for GraphQL specs.",
+      "original_snippets": "TESTING.md: specs in `spec/graphql/` use `AppSchema.execute`. Never use HTTP controller dispatch for GraphQL specs.",
       "relevant_when": "When a user asks for Rails work that should trigger implement-graphql.",
       "why_given": "preference"
     },
     {
-      "instruction": "SPEC:       Write failing spec (happy path + auth + validation error case) — see TESTING.md",
-      "original_snippets": "SPEC:       Write failing spec (happy path + auth + validation error case) — see TESTING.md",
+      "instruction": "**SPEC:** Write failing spec (happy path + auth + validation error case) — see [TESTING.md](./TESTING.md).",
+      "original_snippets": "**SPEC:** Write failing spec (happy path + auth + validation error case) — see [TESTING.md](./TESTING.md).",
       "relevant_when": "When a user asks for Rails work that should trigger implement-graphql.",
       "why_given": "new knowledge"
     },
     {
-      "instruction": "FINAL CHECK: Verify every HARD-GATE item above against the code you wrote — all 8 must be true",
-      "original_snippets": "FINAL CHECK: Verify every HARD-GATE item above against the code you wrote — all 8 must be true",
+      "instruction": "**TYPE:** Define arguments and return types. Use `connection_type` for pagination shapes. Do not leak internal model names.",
+      "original_snippets": "**TYPE:** Define arguments and return types. Use `connection_type` for pagination shapes. Do not leak internal model names.",
       "relevant_when": "When a user asks for Rails work that should trigger implement-graphql.",
       "why_given": "preference"
     },
     {
-      "instruction": "Prefer **dedicated resolver classes** over inline field blocks for non-trivial logic.",
-      "original_snippets": "Prefer **dedicated resolver classes** over inline field blocks for non-trivial logic.",
-      "relevant_when": "When a user asks for Rails work that should trigger implement-graphql.",
-      "why_given": "reminder"
-    },
-    {
-      "instruction": "**FORBIDDEN:** Never call `object.association` directly and never use `.includes` on the scope — every association load MUST go through the dataloader (graphql-ruby 1.12+). This applies both in type field definitions and in list resolvers:",
-      "original_snippets": "**FORBIDDEN:** Never call `object.association` directly and never use `.includes` on the scope — every association load MUST go through the dataloader (graphql-ruby 1.12+). This applies both in type field definitions and in list resolvers:",
-      "relevant_when": "When a user asks for Rails work that should trigger implement-graphql.",
-      "why_given": "preference"
-    },
-    {
-      "instruction": "List resolvers must also prime the dataloader for each association the returned records will expose:",
-      "original_snippets": "List resolvers must also prime the dataloader for each association the returned records will expose:",
-      "relevant_when": "When a user asks for Rails work that should trigger implement-graphql.",
-      "why_given": "preference"
-    },
-    {
-      "instruction": "Write `description:` inline on **every** field in every type — no field left undescribed:",
-      "original_snippets": "Write `description:` inline on **every** field in every type — no field left undescribed:",
+      "instruction": "**IMPLEMENT:** Create resolver/mutation class delegating to a service object. Use dedicated classes instead of inline field blocks.",
+      "original_snippets": "**IMPLEMENT:** Create resolver/mutation class delegating to a service object. Use dedicated classes instead of inline field blocks.",
       "relevant_when": "When a user asks for Rails work that should trigger implement-graphql.",
       "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**N+1 CHECK:** Ensure dataloader is used on every association load. For list resolvers, prime the dataloader with the records returned by the relation before fields resolve associated objects. Use `bullet` and `db-query-matchers` in specs.",
+      "original_snippets": "**N+1 CHECK:** Ensure dataloader is used on every association load. For list resolvers, prime the dataloader with the records returned by the relation before fields resolve associated objects. Use `bullet` and `db-query-matchers` in specs.",
+      "relevant_when": "When a user asks for Rails work that should trigger implement-graphql.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**FINAL CHECK:** Verify every HARD-GATE item is met. Ensure your mutations return `{ result, errors }` shapes on failure.",
+      "original_snippets": "**FINAL CHECK:** Verify every HARD-GATE item is met. Ensure your mutations return `{ result, errors }` shapes on failure.",
+      "relevant_when": "When a user asks for Rails work that should trigger implement-graphql.",
+      "why_given": "preference"
+    },
+    {
+      "instruction": "Load these files only when their specific content is needed:",
+      "original_snippets": "Load these files only when their specific content is needed:",
+      "relevant_when": "When a user asks for Rails work that should trigger implement-graphql.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "When implementing GraphQL, your output MUST include:",
+      "original_snippets": "When implementing GraphQL, your output MUST include:",
+      "relevant_when": "When a user asks for Rails work that should trigger implement-graphql.",
+      "why_given": "preference"
     }
   ]
 }

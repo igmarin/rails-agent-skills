@@ -15,16 +15,28 @@
       "why_given": "reminder"
     },
     {
-      "instruction": "**Write the failing spec** — pick the smallest spec type that exercises the intended behaviour (model > service > request > system).",
-      "original_snippets": "**Write the failing spec** — pick the smallest spec type that exercises the intended behaviour (model > service > request > system).",
+      "instruction": "Run spec and verify it fails",
+      "original_snippets": "Run spec and verify it fails",
       "relevant_when": "When a user asks for Rails work that should trigger write-tests.",
       "why_given": "new knowledge"
     },
     {
-      "instruction": "**Run it and confirm the failure message** — the error should be about missing code, not a setup problem.",
-      "original_snippets": "**Run it and confirm the failure message** — the error should be about missing code, not a setup problem.",
+      "instruction": "Run spec and verify it passes",
+      "original_snippets": "Run spec and verify it passes",
       "relevant_when": "When a user asks for Rails work that should trigger write-tests.",
       "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**Write the failing spec** — pick the smallest spec type that exercises the intended behaviour (model > service > request > system). See table below for guidance.",
+      "original_snippets": "**Write the failing spec** — pick the smallest spec type that exercises the intended behaviour (model > service > request > system). See table below for guidance.",
+      "relevant_when": "When a user asks for Rails work that should trigger write-tests.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**Run it and confirm the failure message** — show the concrete RED failure class/message for the first spec. Do not leave this as a placeholder template and do not use illustrative `e.g.` failure examples in the final artifact.",
+      "original_snippets": "**Run it and confirm the failure message** — show the concrete RED failure class/message for the first spec. Do not leave this as a placeholder template and do not use illustrative `e.g.` failure examples in the final artifact.",
+      "relevant_when": "When a user asks for Rails work that should trigger write-tests.",
+      "why_given": "preference"
     },
     {
       "instruction": "**Verify** — run the full relevant spec file, then the suite, before committing.",
@@ -33,16 +45,16 @@
       "why_given": "new knowledge"
     },
     {
-      "instruction": "Minimal factories only. Never rely on factory defaults for business logic — set explicitly or use traits. Avoid `create` when `build`/`build_stubbed` suffices.",
-      "original_snippets": "Minimal factories only. Never rely on factory defaults for business logic — set explicitly or use traits. Avoid `create` when `build`/`build_stubbed` suffices.",
-      "relevant_when": "When a user asks for Rails work that should trigger write-tests.",
-      "why_given": "preference"
-    },
-    {
-      "instruction": "Use only when the same behavioural contract applies to multiple subjects without per-example `let` overrides. Avoid when each context needs different setup — that signals a wrong abstraction.",
-      "original_snippets": "Use only when the same behavioural contract applies to multiple subjects without per-example `let` overrides. Avoid when each context needs different setup — that signals a wrong abstraction.",
+      "instruction": "Load these files only when their specific content is needed:",
+      "original_snippets": "Load these files only when their specific content is needed:",
       "relevant_when": "When a user asks for Rails work that should trigger write-tests.",
       "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**[assets/tdd_proof_checklist.md](assets/tdd_proof_checklist.md)** — Use when the task involves new behavior and the final answer must show RED/GREEN proof.",
+      "original_snippets": "**[assets/tdd_proof_checklist.md](assets/tdd_proof_checklist.md)** — Use when the task involves new behavior and the final answer must show RED/GREEN proof.",
+      "relevant_when": "When a user asks for Rails work that should trigger write-tests.",
+      "why_given": "preference"
     },
     {
       "instruction": "When asked to write or review RSpec specs, your output MUST satisfy each rule below. Each is graded independently — one violation drops the whole check.",
@@ -53,6 +65,12 @@
     {
       "instruction": "**`let` for test data**, `let!` ONLY when the object must exist before the action under test.",
       "original_snippets": "**`let` for test data**, `let!` ONLY when the object must exist before the action under test.",
+      "relevant_when": "When a user asks for Rails work that should trigger write-tests.",
+      "why_given": "preference"
+    },
+    {
+      "instruction": "**TDD failure proof** — State the smallest spec type chosen, the command run, and the concrete observed failing message proving missing behavior rather than broken setup. Do not return only a RED proof template with placeholders, and do not write `e.g.` before the failure message.",
+      "original_snippets": "**TDD failure proof** — State the smallest spec type chosen, the command run, and the concrete observed failing message proving missing behavior rather than broken setup. Do not return only a RED proof template with placeholders, and do not write `e.g.` before the failure message.",
       "relevant_when": "When a user asks for Rails work that should trigger write-tests.",
       "why_given": "preference"
     }

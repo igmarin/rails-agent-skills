@@ -3,22 +3,16 @@
   "source_path": "skills/infrastructure/version-api/SKILL.md",
   "instructions": [
     {
-      "instruction": "**Create controllers** — Inherit from the previous version's controller and override only changed actions.",
-      "original_snippets": "**Create controllers** — Inherit from the previous version's controller and override only changed actions.",
+      "instruction": "**Create controllers** — Inherit from the previous version's controller and override only changed actions:",
+      "original_snippets": "**Create controllers** — Inherit from the previous version's controller and override only changed actions:",
       "relevant_when": "When a user asks for Rails work that should trigger version-api.",
       "why_given": "new knowledge"
     },
     {
-      "instruction": "**Run compatibility specs** — Execute `rspec spec/requests/api/backward_compatibility_spec.rb` to confirm no regressions.",
-      "original_snippets": "**Run compatibility specs** — Execute `rspec spec/requests/api/backward_compatibility_spec.rb` to confirm no regressions.",
+      "instruction": "**Run compatibility specs** — Execute `bundle exec rspec spec/requests/api/backward_compatibility_spec.rb` to confirm no regressions before merging.",
+      "original_snippets": "**Run compatibility specs** — Execute `bundle exec rspec spec/requests/api/backward_compatibility_spec.rb` to confirm no regressions before merging.",
       "relevant_when": "When a user asks for Rails work that should trigger version-api.",
       "why_given": "new knowledge"
-    },
-    {
-      "instruction": "All existing v1 contract tests must remain green; a new version should never silently break prior consumers.",
-      "original_snippets": "All existing v1 contract tests must remain green; a new version should never silently break prior consumers.",
-      "relevant_when": "When a user asks for Rails work that should trigger version-api.",
-      "why_given": "preference"
     }
   ]
 }

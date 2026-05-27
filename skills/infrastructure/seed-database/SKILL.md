@@ -2,12 +2,7 @@
 name: seed-database
 license: MIT
 description: >
-  Manage development and test data in Rails. Covers fixtures vs seeds,
-  seeding strategies for different environments, test data factories,
-  and production-like data generation. Use when the user asks about setting
-  up seed data, creating test fixtures, or generating development data in a
-  Rails application. Trigger words: seeds, fixtures, seeding, database seed,
-  test data, development data, db:seed, FactoryBot, factory_bot.
+  Manage development and test data in Rails — NEVER commit production data to seeds, ALWAYS make seeds idempotent with `find_or_create_by!` so re-runs are safe, run seeds with `rails db:seed` (or `rails db:setup` for fresh database), verify data by opening `rails console` and spot-checking expected records exist with correct attributes, NEVER hardcode credentials: use `ENV.fetch('KEY')` or `SecureRandom.hex(16)` for non-production, use `rails credentials:edit` for production secrets never commit them in code, use FactoryBot for test-specific scenarios in `spec/factories/`, static reference data in `db/seeds.rb`. Use idiomatic Rails seeding patterns. Trigger words: seeds, fixtures, seeding, db:seed, test data, development data, FactoryBot.
 metadata:
   version: 1.0.0
   user-invocable: "true"

@@ -9,64 +9,52 @@
       "why_given": "new knowledge"
     },
     {
-      "instruction": "`grep -r \"isolate_namespace\" lib/` — must appear in the engine class.",
-      "original_snippets": "`grep -r \"isolate_namespace\" lib/` — must appear in the engine class.",
+      "instruction": "**Inspect the namespace and public API surface.** Check for `isolate_namespace` and unqualified top-level constant references.",
+      "original_snippets": "**Inspect the namespace and public API surface.** Check for `isolate_namespace` and unqualified top-level constant references.",
+      "relevant_when": "When a user asks for Rails work that should trigger review-engine.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**Check host-app integration points.** Flag direct host constant references. Verify host dependencies flow through config seams.",
+      "original_snippets": "**Check host-app integration points.** Flag direct host constant references. Verify host dependencies flow through config seams.",
+      "relevant_when": "When a user asks for Rails work that should trigger review-engine.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**Check initialization and reload behavior.** Inspect `initializer`, `config.to_prepare`, and `ActiveSupport.on_load`. Flag anything that mutates global state at `require` time outside an initializer block.",
+      "original_snippets": "**Check initialization and reload behavior.** Inspect `initializer`, `config.to_prepare`, and `ActiveSupport.on_load`. Flag anything that mutates global state at `require` time outside an initializer block.",
+      "relevant_when": "When a user asks for Rails work that should trigger review-engine.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**Check migrations, generators, and install flow.** Confirm migrations are copied via a generator. Check for destructive or irreversible migrations.",
+      "original_snippets": "**Check migrations, generators, and install flow.** Confirm migrations are copied via a generator. Check for destructive or irreversible migrations.",
+      "relevant_when": "When a user asks for Rails work that should trigger review-engine.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**Check dummy-app and integration tests.** Confirm `spec/dummy/` exists and exercises the mount point.",
+      "original_snippets": "**Check dummy-app and integration tests.** Confirm `spec/dummy/` exists and exercises the mount point.",
+      "relevant_when": "When a user asks for Rails work that should trigger review-engine.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**Summarize findings by severity.** Flag High findings first. Do not surface Low findings before architecture issues.",
+      "original_snippets": "**Summarize findings by severity.** Flag High findings first. Do not surface Low findings before architecture issues.",
       "relevant_when": "When a user asks for Rails work that should trigger review-engine.",
       "why_given": "preference"
     },
     {
-      "instruction": "**Check host-app integration points.**",
-      "original_snippets": "**Check host-app integration points.**",
+      "instruction": "Write findings first. For each finding include severity, affected file/area, risk, and smallest credible fix.",
+      "original_snippets": "Write findings first. For each finding include severity, affected file/area, risk, and smallest credible fix.",
       "relevant_when": "When a user asks for Rails work that should trigger review-engine.",
       "why_given": "new knowledge"
     },
     {
-      "instruction": "Verify that any host dependency flows through a config seam or adapter (e.g., `MyEngine.config.user_finder`).",
-      "original_snippets": "Verify that any host dependency flows through a config seam or adapter (e.g., `MyEngine.config.user_finder`).",
-      "relevant_when": "When a user asks for Rails work that should trigger review-engine.",
-      "why_given": "new knowledge"
-    },
-    {
-      "instruction": "**Check initialization and reload behavior.**",
-      "original_snippets": "**Check initialization and reload behavior.**",
-      "relevant_when": "When a user asks for Rails work that should trigger review-engine.",
-      "why_given": "new knowledge"
-    },
-    {
-      "instruction": "**Check migrations, generators, and install flow.**",
-      "original_snippets": "**Check migrations, generators, and install flow.**",
-      "relevant_when": "When a user asks for Rails work that should trigger review-engine.",
-      "why_given": "new knowledge"
-    },
-    {
-      "instruction": "Check for destructive or irreversible migrations (missing `down` or `change` with unsafe operations).",
-      "original_snippets": "Check for destructive or irreversible migrations (missing `down` or `change` with unsafe operations).",
-      "relevant_when": "When a user asks for Rails work that should trigger review-engine.",
-      "why_given": "new knowledge"
-    },
-    {
-      "instruction": "**Check dummy-app and integration tests.**",
-      "original_snippets": "**Check dummy-app and integration tests.**",
-      "relevant_when": "When a user asks for Rails work that should trigger review-engine.",
-      "why_given": "new knowledge"
-    },
-    {
-      "instruction": "Verify integration tests boot the dummy app and exercise the mount point, not just unit-test engine classes in isolation.",
-      "original_snippets": "Verify integration tests boot the dummy app and exercise the mount point, not just unit-test engine classes in isolation.",
-      "relevant_when": "When a user asks for Rails work that should trigger review-engine.",
-      "why_given": "new knowledge"
-    },
-    {
-      "instruction": "Flag High findings first. Do not surface Low findings before architecture issues.",
-      "original_snippets": "Flag High findings first. Do not surface Low findings before architecture issues.",
+      "instruction": "Missing dummy app coverage check (dummy app must exist and be used).",
+      "original_snippets": "Missing dummy app coverage check (dummy app must exist and be used).",
       "relevant_when": "When a user asks for Rails work that should trigger review-engine.",
       "why_given": "preference"
-    },
-    {
-      "instruction": "Write findings first. For each finding include:",
-      "original_snippets": "Write findings first. For each finding include:",
-      "relevant_when": "When a user asks for Rails work that should trigger review-engine.",
-      "why_given": "new knowledge"
     }
   ]
 }

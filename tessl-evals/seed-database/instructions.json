@@ -33,8 +33,8 @@
       "why_given": "new knowledge"
     },
     {
-      "instruction": "Use `find_or_create_by!` to keep seeds idempotent — safe to run multiple times.",
-      "original_snippets": "Use `find_or_create_by!` to keep seeds idempotent — safe to run multiple times.",
+      "instruction": "Use idiomatic Rails seeding patterns.",
+      "original_snippets": "Use idiomatic Rails seeding patterns.",
       "relevant_when": "When a user asks for Rails work that should trigger seed-database.",
       "why_given": "new knowledge"
     }

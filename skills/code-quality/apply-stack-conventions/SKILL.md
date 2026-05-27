@@ -2,12 +2,7 @@
 name: apply-stack-conventions
 license: MIT
 description: >
-  Use when writing new Rails code for a project using the PostgreSQL + Hotwire +
-  Tailwind CSS stack. Covers stack-specific patterns only: MVC structure,
-  ActiveRecord query conventions, Turbo Frames/Streams wiring, Stimulus
-  controllers, and Tailwind component patterns. Not for general Rails design
-  principles — this skill is scoped to what changes based on this specific
-  technology stack.
+  Use when writing new Rails code for a PostgreSQL + Hotwire + Tailwind CSS stack — ALL new code MUST have test written BEFORE implementation (write spec file content not just path: `bundle exec rspec spec/[path]_spec.rb`→verify RED failure with observed output→implement→verify GREEN with observed result, use Observed RED/GREEN labels as proof, never use illustrative `e.g.` comments as evidence), output MUST include tests-first proof before implementation with actual spec code + exact command + Observed RED/GREEN output per layer, layers testable in isolation (model/query→service→controller/request→view/Turbo→Stimulus→Tailwind, Layer isolation section with focused spec per layer, "not applicable" for unchanged), apply Devise+Pundit on access-controlled resources. Covers MVC structure, ActiveRecord queries, Turbo Frames/Streams, Stimulus controllers, Tailwind patterns. Not for general Rails design principles — scoped to this specific stack.
 metadata:
   version: 1.0.0
   user-invocable: "true"
