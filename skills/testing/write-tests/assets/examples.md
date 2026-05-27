@@ -124,7 +124,7 @@ RSpec.describe Campaigns::DeliveryService do
     context 'when delivery succeeds' do
       before { allow(SendgridClient).to receive(:deliver).and_return({ success: true }) }
 
-    it 'returns delivered count' do
+      it 'returns delivered count' do
         aggregate_failures do
           expect(result[:success]).to be true
           expect(result[:response][:delivered_count]).to eq(1)

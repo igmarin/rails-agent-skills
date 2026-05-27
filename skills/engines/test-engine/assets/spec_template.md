@@ -1,3 +1,8 @@
+# Engine Spec Helper Template
+
+Basic spec helper template to verify engine mounting and loading.
+
+```ruby
 # frozen_string_literal: true
 
 # spec/spec_helper.rb (engine spec template)
@@ -8,3 +13,4 @@ RSpec.describe 'Engine basic lifecycle' do
     expect(defined?(MyEngine::Engine)).to eq('constant')
   end
 end
+```

@@ -21,8 +21,8 @@
       "why_given": "new knowledge"
     },
     {
-      "instruction": "Verify: dummy app exercises real host integration; routes tested through engine namespace; configurable seams covered with at least one non-default case; generators safe to run twice.",
-      "original_snippets": "Verify: dummy app exercises real host integration; routes tested through engine namespace; configurable seams covered with at least one non-default case; generators safe to run twice.",
+      "instruction": "Run the full test suite (`bundle exec rspec`) to verify all specs pass.",
+      "original_snippets": "Run the full test suite (`bundle exec rspec`) to verify all specs pass.",
       "relevant_when": "When a user asks for Rails work that should trigger test-engine.",
       "why_given": "new knowledge"
     }

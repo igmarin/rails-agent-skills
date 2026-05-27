@@ -4,7 +4,7 @@
 
 A Rails team needs help with a task in this area:
 
-Use when reviewing Rails application structure — prioritize boundary problems over style, verify each High-severity finding with concrete code-level evidence (read the actual code, confirm real structural problem, redact any credential-like values), never use representative file paths or fabricated line numbers as evidence, check where domain logic lives and whether abstractions clarify the design or only move code around, produce severity-classified findings with the smallest credible improvement for each.
+Use to perform structural audits, code reviews, and architecture reviews for Ruby on Rails applications.
 
 The team has asked for a concise implementation artifact that a reviewer can inspect without needing to observe the agent's process.
 

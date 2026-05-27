@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ArchitectureFinding",
+  "type": "object",
+  "properties": {
+    "severity": {
+      "type": "string",
+      "enum": ["High", "Medium", "Low"]
+    },
+    "affected_file": {
+      "type": "string",
+      "description": "File path and location of the architecture issue"
+    },
+    "risk": {
+      "type": "string",
+      "description": "Description of the structural risk and impact"
+    },
+    "improvement": {
+      "type": "string",
+      "description": "Smallest credible improvement or refactoring step"
+    }
+  },
+  "required": ["severity", "affected_file", "risk", "improvement"]
+}

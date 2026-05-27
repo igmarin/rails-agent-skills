@@ -57,20 +57,14 @@
       "why_given": "preference"
     },
     {
-      "instruction": "When asked to write or review RSpec specs, your output MUST satisfy each rule below. Each is graded independently — one violation drops the whole check.",
-      "original_snippets": "When asked to write or review RSpec specs, your output MUST satisfy each rule below. Each is graded independently — one violation drops the whole check.",
+      "instruction": "When asked to write or review RSpec specs, the output must comply with all RSpec conventions, TDD proof steps, and self-audit checks.",
+      "original_snippets": "When asked to write or review RSpec specs, the output must comply with all RSpec conventions, TDD proof steps, and self-audit checks.",
       "relevant_when": "When a user asks for Rails work that should trigger write-tests.",
       "why_given": "preference"
     },
     {
-      "instruction": "**`let` for test data**, `let!` ONLY when the object must exist before the action under test.",
-      "original_snippets": "**`let` for test data**, `let!` ONLY when the object must exist before the action under test.",
-      "relevant_when": "When a user asks for Rails work that should trigger write-tests.",
-      "why_given": "preference"
-    },
-    {
-      "instruction": "**TDD failure proof** — State the smallest spec type chosen, the command run, and the concrete observed failing message proving missing behavior rather than broken setup. Do not return only a RED proof template with placeholders, and do not write `e.g.` before the failure message.",
-      "original_snippets": "**TDD failure proof** — State the smallest spec type chosen, the command run, and the concrete observed failing message proving missing behavior rather than broken setup. Do not return only a RED proof template with placeholders, and do not write `e.g.` before the failure message.",
+      "instruction": "**Spec structure**: File paths must mirror the source, use `# frozen_string_literal: true`, and define `subject(:result)` for service specs.",
+      "original_snippets": "**Spec structure**: File paths must mirror the source, use `# frozen_string_literal: true`, and define `subject(:result)` for service specs.",
       "relevant_when": "When a user asks for Rails work that should trigger write-tests.",
       "why_given": "preference"
     }

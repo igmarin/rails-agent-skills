@@ -2,7 +2,7 @@
 name: review-architecture
 license: MIT
 description: >
-  Use when reviewing Rails application structure — prioritize boundary problems over style, verify each High-severity finding with concrete code-level evidence (read the actual code, confirm real structural problem, redact any credential-like values), never use representative file paths or fabricated line numbers as evidence, check where domain logic lives and whether abstractions clarify the design or only move code around, produce severity-classified findings with the smallest credible improvement for each. Recommends structural fixes: service object extractions, simplified callback chains, domain boundary realignment.
+  Use to perform structural audits, code reviews, and architecture reviews for Ruby on Rails applications. Use when the user asks for a Rails code review, architecture review, refactoring advice, or wants feedback on their Rails app structure. Trigger words and natural phrasings include: code review, architecture, refactor, Rails app, MVC, fat models, fat controllers, tech debt, Rails audit, application structure review. Key checks: prioritize boundary problems over style, verify High-severity findings with concrete code-level evidence, inspect models and controllers for logic leakage, evaluate callback chains, and suggest clean abstractions like service objects.
 metadata:
   version: 1.0.0
   user-invocable: "true"
@@ -94,4 +94,5 @@ Use this skill when the task is to review or improve the structure of a Rails ap
 
 ## Additional Resources
 
-- [EXAMPLES.md](EXAMPLES.md) — Complete architecture review examples
+- [assets/examples.md](assets/examples.md) — Complete architecture review examples
+- [assets/findings_schema.json](assets/findings_schema.json) — JSON schema for architecture review findings

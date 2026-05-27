@@ -2,7 +2,7 @@
 name: test-engine
 license: MIT
 description: >
-  Use when creating RSpec test coverage for Rails engines — EVERY engine MUST have a dummy app, verify dummy app boots before writing specs, add the smallest integration test proving mount and boot FIRST and verify it passes before continuing (if it fails check engine.rb initializer order and mount configuration rather than adding more specs on a broken foundation), use engine named route helpers, assert namespace scoping in routing specs, assert generator idempotency (safe to run twice), test configuration seams with at least one non-default value using `around` blocks, verify: dummy app exercises real host integration, routes tested through engine namespace, configurable seams covered with non-default case, generators safe to run twice. Covers request/routing/generator/configuration specs.
+  Use to write and configure RSpec tests for Rails engines. Use when testing a Rails engine, writing engine specs, or adding test coverage for an engine. Trigger words and natural phrasings include: testing a Rails engine, engine specs, write tests for my engine, test coverage for engine, engine testing, spec Rails engine, mount engine test, specs for engine, write tests, dummy app specs, generator specs. Key capabilities covered: dummy app boot validation, request and routing specs with namespace scoping, generator idempotency checks, and configuration testing using around blocks.
 metadata:
   version: 1.0.0
   user-invocable: "true"
@@ -42,7 +42,7 @@ If this fails, check the engine's `engine.rb` initializer order and ensure the e
 3. Add the smallest integration test that proves mounting and boot work. **Verify it passes before continuing** — if it fails, check `engine.rb` initializer order and mount configuration rather than adding more specs on top of a broken foundation.
 4. Add request, routing, configuration, and generator coverage as needed.
 5. Add regression tests for coupling or reload bugs before refactoring.
-6. Verify: dummy app exercises real host integration; routes tested through engine namespace; configurable seams covered with at least one non-default case; generators safe to run twice.
+6. Run the full test suite (`bundle exec rspec`) to verify all specs pass.
 
 **Minimal request spec to prove the engine mounts:**
 
@@ -87,10 +87,11 @@ end
 | Install generators without file assertions | Assert copied files and idempotency in generator specs |
 
 For generator and reload-safety spec examples, see [assets/examples.md](assets/examples.md).
+For a basic spec template to verify engine loading, see [assets/spec_template.md](assets/spec_template.md).
 
 - [assets/dummy_app_instructions.md](assets/dummy_app_instructions.md)
 - [assets/examples.md](assets/examples.md)
-- [EXAMPLES.md](EXAMPLES.md)
+- [assets/spec_template.md](assets/spec_template.md)
 
 ## Integration
 

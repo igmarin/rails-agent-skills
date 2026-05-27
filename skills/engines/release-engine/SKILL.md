@@ -2,7 +2,7 @@
 name: release-engine
 license: MIT
 description: >
-  Use when shipping a Rails engine gem — FIRST run full test suite (`bundle exec rspec`) and fix ALL failures, verify gemspec metadata and dependencies match tested Rails/Ruby versions, dry-run: `gem build *.gemspec && gem push --dry-run *.gem` and verify contents, generate CHANGELOG.md organized by category (added/changed/deprecated/removed/fixed), produce step-by-step upgrade notes with before/after code, set semantic version in `lib/<engine>/version.rb`, document deprecations with migration paths, load release assets conditionally and state which one informed the output. Trigger words: version bump, changelog, deprecation, gemspec, upgrade, release, publish gem, ship gem.
+  Use when shipping a Rails engine gem — FIRST run full test suite (`bundle exec rspec`) and fix ALL failures, verify gemspec metadata and dependencies match tested Rails/Ruby versions, dry-run: `gem build *.gemspec && gem push --dry-run *.gem` and verify contents, generate CHANGELOG.md organized by category (added/changed/deprecated/removed/fixed), produce step-by-step upgrade notes with before/after code, set semantic version in `lib/[engine_name]/version.rb`, document deprecations with migration paths, load release assets conditionally and state which one informed the output. Trigger words: version bump, changelog, deprecation, gemspec, upgrade, release, publish gem, ship gem.
 metadata:
   version: 1.0.0
   user-invocable: "true"
@@ -66,7 +66,7 @@ Load release assets conditionally and say which one informed the output:
 ## Output Style
 
 1. Version bump recommendation — patch/minor/major with explicit reasoning.
-2. Version constant — updated `lib/<engine>/version.rb`.
+2. Version constant — updated `lib/[engine_name]/version.rb`.
 3. CHANGELOG entries — under Added/Changed/Fixed/Deprecated headers.
 4. Upgrade notes — host app steps (config, migrations, dependencies).
 5. Gemspec verification — metadata, files, and dependency ranges confirmed.

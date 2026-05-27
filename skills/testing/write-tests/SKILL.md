@@ -2,7 +2,7 @@
 name: write-tests
 license: MIT
 description: >
-  Use when writing, reviewing, or cleaning up RSpec tests — prefer behavioral confidence over implementation coupling, tests gate implementation (write smallest spec type model>service>request>system→show concrete RED failure message proving missing behavior not broken setup, never use illustrative `e.g.` placeholders→implement minimum→verify GREEN→run full spec file then suite), service specs use `describe '.call'` + `subject(:result)`, default to `let` with `let!` ONLY when must-exist-before-action, one behavior per example (split `it` containing "and"), output MUST satisfy each rule: each is graded independently — one violation drops the whole check, load extended resources only when needed (progressive disclosure: `assets/tdd_proof_checklist.md` when final answer must show RED/GREEN proof). Trigger words: write spec, rspec, test-driven development, testing.
+  Use to write, review, and configure RSpec tests in Ruby on Rails. Use when adding test coverage, refactoring specs, or practicing TDD. Trigger words and natural phrasings include: write spec, rspec, test-driven development, testing, write tests, unit test, integration test, service spec, request spec, model spec. Key conventions: enforce tests gate implementation workflow, split examples containing 'and' to ensure one behavior per example, prefer let over let!, and use subject(:result) with describe '.call' for service objects.
 metadata:
   version: 1.0.0
   user-invocable: "true"
@@ -17,17 +17,13 @@ Use this skill when the task is to write, review, or clean up RSpec tests.
 
 | Aspect | Rule |
 |--------|------|
-| Spec types | Model: domain logic; Request: HTTP endpoints (prefer over controller); Job: background processing; Service/PORO: no Rails helpers; System: critical E2E only (slow) |
+| Spec types | Model: domain logic; Request: HTTP endpoints; Job: background processing; Service/PORO: clean Ruby; System: E2E |
 | Assertions | Test behavior, not implementation |
-| Factories | Minimal — only attributes needed; use traits for optional states; prefer `build`/`build_stubbed` over `create` |
-| Mocking | Stub external boundaries, not internal code |
-| Isolation | Each example independent; no shared mutable state |
-| Naming | `describe` for class/method, `context` for scenario |
-| Service specs | **Required:** `describe '.call'` and `subject(:result)` for the primary invocation |
-| `let` vs `let!` | Default to `let`; `let!` ONLY when object must exist before example runs |
-| External service mocking | `allow(ServiceClass).to receive(:method)` — **not** `instance_double`; `instance_double` only for injected collaborators |
-| Example names | Present tense: `it 'returns the user'`; **NEVER** `it 'should ...'`; **NEVER** contains `and` — see [One Behavior Per Example](#one-behavior-per-example) |
-| `aggregate_failures` | Use when asserting multiple related items in one example |
+| Factories | Minimal attributes; traits for options; prefer `build`/`build_stubbed` over `create` |
+| Mocking | Stub external boundaries at class level (e.g. `allow(Client).to receive`); no Active Record mocking |
+| Service specs | **Required:** `describe '.call'` and `subject(:result)` (see assets/output_checklist.md) |
+| `let` vs `let!` | Default to `let`; use `let!` only when object must exist before action |
+| Example names | Present tense; no `should`; **no `and`** (see assets/output_checklist.md) |
 
 ## HARD-GATE
 
@@ -99,44 +95,26 @@ it 'creates the record' do; end
 | External HTTP | `WebMock` / `VCR`; never allow real network in CI |
 | DB state bleed | Transactional fixtures or `DatabaseCleaner`; never share `let!` across contexts |
 | Race conditions | Explicit Capybara waits; avoid `sleep` |
-| Imprecise assertions | `change.from().to()` over final state; exact values over `be_truthy`/`be_falsey`; see rule 16 for `updated_at` |
+| Imprecise assertions | `change.from().to()` over final state; exact values over `be_truthy`/`be_falsey`; see rule 16 |
 
 ## Extended Resources (Progressive Disclosure)
 
 Load these files only when their specific content is needed:
 
-- **[EXAMPLES.md](EXAMPLES.md)** — For code examples of service specs, shared examples, and factory design.
+- **[assets/examples.md](assets/examples.md)** — For code examples of service specs, shared examples, and factory design.
 - **[assets/spec_templates.md](assets/spec_templates.md)** — Standard templates for different types of specs.
 - **[assets/tdd_proof_checklist.md](assets/tdd_proof_checklist.md)** — Use when the task involves new behavior and the final answer must show RED/GREEN proof.
+- **[assets/output_checklist.md](assets/output_checklist.md)** — Complete 18-point checklist for RSpec output structure, conventions, and self-auditing.
 
 ## Output Style
 
-When asked to write or review RSpec specs, your output MUST satisfy each rule below. Each is graded independently — one violation drops the whole check.
+When asked to write or review RSpec specs, the output must comply with all RSpec conventions, TDD proof steps, and self-audit checks.
 
-1. **Spec file path** mirrors the source: `app/foo/bar.rb` → `spec/foo/bar_spec.rb`.
-2. **`# frozen_string_literal: true`** as the first line of every spec file.
-3. **`RSpec.describe`** uses the full constant path (`RSpec.describe Module::Class do`), not a string.
-4. **`describe '#method'` / `describe '.class_method'`** for each method under test.
-5. **`context 'when ...'` / `context 'with ...'`** for scenario variations — never use `context` to group methods.
-6. **`let` for test data**, `let!` ONLY when the object must exist before the action under test.
-7. **No `let_it_be`** unless the project already depends on `test-prof` (check `Gemfile.lock` first).
-8. **NO "and" in any example description** — Split them. Perform an explicit scan before returning the spec.
-9. **`subject(:result) { ... }`** for service / PORO specs invoking `.call`.
-10. **`travel_to` / `freeze_time`** for any time-dependent assertion — never set past `Time.now` or stub `Time.current` directly.
-11. **External boundaries mocked** at the class-method level (`allow(SomeClient).to receive(:method)`); ActiveRecord finders are NEVER mocked.
-12. **TDD failure proof** — State the smallest spec type chosen, the command run, and the concrete observed failing message proving missing behavior rather than broken setup. Do not return only a RED proof template with placeholders, and do not write `e.g.` before the failure message.
-13. **Verification proof** — After implementation, state the passing focused rerun, the full relevant spec file, and the broader suite command when available.
-14. **Minimal factories** — Use only explicit attributes needed for the behavior; prefer traits for optional states and `build` / `build_stubbed` unless persistence is required. Do not hide business-meaningful defaults in the factory.
-15. **Multiple related assertions** — Use `aggregate_failures` when one behavior needs several related expectations, and show it in the produced spec when relevant.
-16. **Timestamp assertions** — Never assert `updated_at` unless time is frozen and the timestamp change is the behavior under test.
-17. **Self-audit** — Before returning, include a short checklist confirming:
-   - No `it`/`specify` descriptions contain "and".
-   - Every `let!` is justified by a must-exist-before-action constraint.
-   - Referenced shared examples are actually included.
-   - Shared examples are avoided when each context needs different setup.
-   - Factories use the least-persistent setup that proves the behavior.
-   - Time-dependent records are created before `travel_to` when the original timestamp matters.
-18. **Language** — Must be in English unless explicitly requested otherwise.
+Refer to **[assets/output_checklist.md](assets/output_checklist.md)** for the complete 18-point checklist. Key highlights:
+- **TDD failure and verification proof**: Provide the exact command and failure/success output.
+- **Spec structure**: File paths must mirror the source, use `# frozen_string_literal: true`, and define `subject(:result)` for service specs.
+- **Conventions**: No `and` in example descriptions, use `let!` only when needed before action, and mock external boundaries cleanly.
+- **Language**: Must be in English unless explicitly requested otherwise.
 
 ## Integration
 
