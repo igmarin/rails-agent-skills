@@ -43,12 +43,6 @@
       "original_snippets": "Run directly in `rails dbconsole` (PostgreSQL) after applying an index or query change:",
       "relevant_when": "When a user asks for Rails work that should trigger optimize-performance.",
       "why_given": "new knowledge"
-    },
-    {
-      "instruction": "`Seq Scan` on large tables → should become `Index Scan` after adding an index",
-      "original_snippets": "`Seq Scan` on large tables → should become `Index Scan` after adding an index",
-      "relevant_when": "When a user asks for Rails work that should trigger optimize-performance.",
-      "why_given": "reminder"
     }
   ]
 }

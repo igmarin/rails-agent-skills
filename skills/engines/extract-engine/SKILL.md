@@ -2,12 +2,7 @@
 name: extract-engine
 license: MIT
 description: >
-  Use when extracting existing Rails app code into a reusable engine. Scaffolds the
-  engine structure, moves POROs/services/controllers incrementally, creates adapter
-  interfaces to decouple host dependencies, and verifies regression coverage throughout
-  each extraction slice. Trigger words: extract to engine, move feature to engine,
-  host coupling, adapters, extraction slices, preserve behavior, incremental extraction,
-  bounded feature.
+  Use when extracting existing Rails app code into a reusable engine — DO NOT extract and change behavior in the same step, preserve existing behavior first then refactor separately, move stable domain logic first (POROs/services/value objects), add adapters or configuration seams for host dependencies before moving controllers/routes/views, keep regression coverage green throughout each slice, one bounded slice per step with one coherent responsibility and minimal new public API. Scaffolds engine structure, increments through extraction slices, creates adapter interfaces to decouple host dependencies. Trigger words: extract to engine, move feature to engine, host coupling, adapters, extraction slices, preserve behavior, incremental extraction.
 metadata:
   version: 1.0.0
   user-invocable: "true"

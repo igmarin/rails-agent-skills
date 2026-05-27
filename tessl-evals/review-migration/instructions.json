@@ -9,12 +9,6 @@
       "why_given": "preference"
     },
     {
-      "instruction": "**Core principle:** Prefer phased rollouts over one-shot migrations on large or busy tables.",
-      "original_snippets": "**Core principle:** Prefer phased rollouts over one-shot migrations on large or busy tables.",
-      "relevant_when": "When a user asks for Rails work that should trigger review-migration.",
-      "why_given": "reminder"
-    },
-    {
       "instruction": "Check lock behavior for indexes, constraints, defaults, and rewrites.",
       "original_snippets": "Check lock behavior for indexes, constraints, defaults, and rewrites.",
       "relevant_when": "When a user asks for Rails work that should trigger review-migration.",
@@ -25,6 +19,12 @@
       "original_snippets": "Use multi-step rollouts for renames, type changes, and unique constraints.",
       "relevant_when": "When a user asks for Rails work that should trigger review-migration.",
       "why_given": "new knowledge"
+    },
+    {
+      "instruction": "Always include explicit phased patterns for column renames, type changes, and unique constraints. If one does not apply, mark it `Not applicable` and explain why.",
+      "original_snippets": "Always include explicit phased patterns for column renames, type changes, and unique constraints. If one does not apply, mark it `Not applicable` and explain why.",
+      "relevant_when": "When a user asks for Rails work that should trigger review-migration.",
+      "why_given": "reminder"
     }
   ]
 }

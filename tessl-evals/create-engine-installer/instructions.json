@@ -9,12 +9,6 @@
       "why_given": "new knowledge"
     },
     {
-      "instruction": "**Core principle:** Setup must be explicit, repeatable, and safe to rerun. Never modify the host app at boot time.",
-      "original_snippets": "**Core principle:** Setup must be explicit, repeatable, and safe to rerun. Never modify the host app at boot time.",
-      "relevant_when": "When a user asks for Rails work that should trigger create-engine-installer.",
-      "why_given": "preference"
-    },
-    {
       "instruction": "GENERATE:  Run the generator against a clean host app",
       "original_snippets": "GENERATE:  Run the generator against a clean host app",
       "relevant_when": "When a user asks for Rails work that should trigger create-engine-installer.",
@@ -43,6 +37,12 @@
       "original_snippets": "**Minimal rerun spec (must always pass):**",
       "relevant_when": "When a user asks for Rails work that should trigger create-engine-installer.",
       "why_given": "preference"
+    },
+    {
+      "instruction": "Use idiomatic Rails Thor generator commands.",
+      "original_snippets": "Use idiomatic Rails Thor generator commands.",
+      "relevant_when": "When a user asks for Rails work that should trigger create-engine-installer.",
+      "why_given": "new knowledge"
     }
   ]
 }

@@ -2,13 +2,13 @@
   "target_skill": "code-review",
   "total_scenarios": 1,
   "instructions_coverage": {
-    "total_instructions": 5,
-    "instructions_tested": 5,
+    "total_instructions": 8,
+    "instructions_tested": 8,
     "coverage_percentage": 100
   },
   "reason_distribution": {
-    "new knowledge": 3,
-    "preference": 1,
-    "reminder": 1
+    "new knowledge": 4,
+    "reminder": 3,
+    "preference": 1
   }
 }

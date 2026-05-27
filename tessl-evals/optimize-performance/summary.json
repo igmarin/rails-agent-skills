@@ -2,13 +2,12 @@
   "target_skill": "optimize-performance",
   "total_scenarios": 1,
   "instructions_coverage": {
-    "total_instructions": 8,
-    "instructions_tested": 8,
+    "total_instructions": 7,
+    "instructions_tested": 7,
     "coverage_percentage": 100
   },
   "reason_distribution": {
     "preference": 3,
-    "new knowledge": 4,
-    "reminder": 1
+    "new knowledge": 4
   }
 }

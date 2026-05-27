@@ -1,0 +1,56 @@
+{
+  "context": "Checks whether the final artifact follows the refactor-code instructions from the published Rails Agent Skills tile.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "instruction-1",
+      "description": "The submitted artifact follows this skill instruction: Use this skill when the task is to change structure without changing intended behavior.",
+      "max_score": 10
+    },
+    {
+      "name": "instruction-2",
+      "description": "The submitted artifact follows this skill instruction: Identify the exact inputs and outputs of the logic being refactored. Keep public interfaces stable until callers are migrated. Prefer adapters, facades, or wrappers for transitional states.",
+      "max_score": 10
+    },
+    {
+      "name": "instruction-3",
+      "description": "The submitted artifact follows this skill instruction: **Write this before touching any production file.** No refactoring step begins until this test exists and passes on the current (un-refactored) code.",
+      "max_score": 10
+    },
+    {
+      "name": "instruction-4",
+      "description": "The submitted artifact follows this skill instruction: Run it: `bundle exec rspec spec/requests/orders_spec.rb` — it must pass on the **current** code. If it fails, stop and fix the characterization test or current behavior mismatch before refactoring.",
+      "max_score": 10
+    },
+    {
+      "name": "instruction-5",
+      "description": "The submitted artifact follows this skill instruction: Run verification after every refactoring step:",
+      "max_score": 10
+    },
+    {
+      "name": "instruction-6",
+      "description": "The submitted artifact follows this skill instruction: Run the full test suite.",
+      "max_score": 10
+    },
+    {
+      "name": "instruction-7",
+      "description": "The submitted artifact follows this skill instruction: Use an **Observed output** label only for output copied from an actual run. Never label planned or desired results as \"Required output\", \"Expected output\", or \"Expected final output\".",
+      "max_score": 10
+    },
+    {
+      "name": "instruction-8",
+      "description": "The submitted artifact follows this skill instruction: Do not write \"required exit condition\", \"must produce 0 failures\", or \"must still report 0 failures\" as evidence; run the command and paste the observed final line, or state that verification has not been run yet.",
+      "max_score": 10
+    },
+    {
+      "name": "instruction-9",
+      "description": "The submitted artifact follows this skill instruction: Load these files only when their specific content is needed:",
+      "max_score": 10
+    },
+    {
+      "name": "instruction-10",
+      "description": "The submitted artifact follows this skill instruction: When asked to refactor, your output MUST include:",
+      "max_score": 10
+    }
+  ]
+}

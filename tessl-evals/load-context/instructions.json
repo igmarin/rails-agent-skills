@@ -9,6 +9,12 @@
       "why_given": "new knowledge"
     },
     {
+      "instruction": "Use the `get_project_context` tool to retrieve:",
+      "original_snippets": "Use the `get_project_context` tool to retrieve:",
+      "relevant_when": "When a user asks for Rails work that should trigger load-context.",
+      "why_given": "new knowledge"
+    },
+    {
       "instruction": "**Load baseline Rails context:** Read at minimum:",
       "original_snippets": "**Load baseline Rails context:** Read at minimum:",
       "relevant_when": "When a user asks for Rails work that should trigger load-context.",
@@ -19,18 +25,6 @@
       "original_snippets": "**Load one neighbor of each kind:** For each Rails layer touched, open the nearest sibling that already solves a similar problem — a comparable controller, service, spec, factory. Use grep to find: `grep -r \"class.*Controller\" app/controllers`, `grep -r \"class.*Service\" app/services`, etc.",
       "relevant_when": "When a user asks for Rails work that should trigger load-context.",
       "why_given": "new knowledge"
-    },
-    {
-      "instruction": "Every invocation of this skill MUST produce a **Context Summary** in this exact shape, before any code or spec is proposed:",
-      "original_snippets": "Every invocation of this skill MUST produce a **Context Summary** in this exact shape, before any code or spec is proposed:",
-      "relevant_when": "When a user asks for Rails work that should trigger load-context.",
-      "why_given": "preference"
-    },
-    {
-      "instruction": "**One neighbor per layer.** Do not dump 5 similar files; pick the closest match and name it.",
-      "original_snippets": "**One neighbor per layer.** Do not dump 5 similar files; pick the closest match and name it.",
-      "relevant_when": "When a user asks for Rails work that should trigger load-context.",
-      "why_given": "preference"
     }
   ]
 }

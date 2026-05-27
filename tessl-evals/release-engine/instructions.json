@@ -27,20 +27,8 @@
       "why_given": "new knowledge"
     },
     {
-      "instruction": "Load these files only when their specific content is needed:",
-      "original_snippets": "Load these files only when their specific content is needed:",
-      "relevant_when": "When a user asks for Rails work that should trigger release-engine.",
-      "why_given": "new knowledge"
-    },
-    {
-      "instruction": "**[assets/release_checklist.md](assets/release_checklist.md)** — Use when you need a detailed step-by-step verification checklist before finalizing the release",
-      "original_snippets": "**[assets/release_checklist.md](assets/release_checklist.md)** — Use when you need a detailed step-by-step verification checklist before finalizing the release",
-      "relevant_when": "When a user asks for Rails work that should trigger release-engine.",
-      "why_given": "new knowledge"
-    },
-    {
-      "instruction": "**[assets/release_notes_template.md](assets/release_notes_template.md)** — Use when drafting GitHub release notes or long-form release announcements",
-      "original_snippets": "**[assets/release_notes_template.md](assets/release_notes_template.md)** — Use when drafting GitHub release notes or long-form release announcements",
+      "instruction": "Load release assets conditionally and say which one informed the output:",
+      "original_snippets": "Load release assets conditionally and say which one informed the output:",
       "relevant_when": "When a user asks for Rails work that should trigger release-engine.",
       "why_given": "new knowledge"
     }

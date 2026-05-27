@@ -2,9 +2,7 @@
 name: test-engine
 license: MIT
 description: >
-  Use when creating or improving RSpec test coverage for Rails engines.
-  Covers dummy app setup, request, routing, generator, and configuration
-  specs for proving engine behavior within a host application.
+  Use when creating RSpec test coverage for Rails engines — EVERY engine MUST have a dummy app, verify dummy app boots before writing specs, add the smallest integration test proving mount and boot FIRST and verify it passes before continuing (if it fails check engine.rb initializer order and mount configuration rather than adding more specs on a broken foundation), use engine named route helpers, assert namespace scoping in routing specs, assert generator idempotency (safe to run twice), test configuration seams with at least one non-default value using `around` blocks, verify: dummy app exercises real host integration, routes tested through engine namespace, configurable seams covered with non-default case, generators safe to run twice. Covers request/routing/generator/configuration specs.
 metadata:
   version: 1.0.0
   user-invocable: "true"

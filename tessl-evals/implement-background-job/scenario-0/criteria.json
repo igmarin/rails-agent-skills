@@ -5,42 +5,52 @@
     {
       "name": "instruction-1",
       "description": "The submitted artifact follows this skill instruction: Use this skill when the task is to add, configure, or review background jobs in a Rails application.",
-      "max_score": 13
+      "max_score": 10
     },
     {
       "name": "instruction-2",
-      "description": "The submitted artifact follows this skill instruction: **Core principle:** Design jobs for idempotency and safe retries. Prefer Active Job's unified API; choose backend based on Rails version and scale.",
-      "max_score": 13
+      "description": "The submitted artifact follows this skill instruction: EVERY job MUST have its test written and validated BEFORE implementation.",
+      "max_score": 10
     },
     {
       "name": "instruction-3",
-      "description": "The submitted artifact follows this skill instruction: EVERY job MUST have its test written and validated BEFORE implementation.",
-      "max_score": 13
+      "description": "The submitted artifact follows this skill instruction: Write the job spec (idempotency, retry, error handling)",
+      "max_score": 10
     },
     {
       "name": "instruction-4",
-      "description": "The submitted artifact follows this skill instruction: Write the job spec (idempotency, retry, error handling)",
-      "max_score": 13
+      "description": "The submitted artifact follows this skill instruction: Run the spec — verify the job does not yet exhibit the intended behavior",
+      "max_score": 10
     },
     {
       "name": "instruction-5",
-      "description": "The submitted artifact follows this skill instruction: Run the spec — verify it fails because the job does not exist yet",
-      "max_score": 12
+      "description": "The submitted artifact follows this skill instruction: EVERY job that performs a side effect (charge, email, API call) MUST have",
+      "max_score": 10
     },
     {
       "name": "instruction-6",
-      "description": "The submitted artifact follows this skill instruction: EVERY job that performs a side effect (charge, email, API call) MUST have",
-      "max_score": 12
+      "description": "The submitted artifact follows this skill instruction: EVERY perform method should do only three things:",
+      "max_score": 10
     },
     {
       "name": "instruction-7",
-      "description": "The submitted artifact follows this skill instruction: EVERY perform method should do only three things:",
-      "max_score": 12
+      "description": "The submitted artifact follows this skill instruction: Load the record from the passed ID",
+      "max_score": 10
     },
     {
       "name": "instruction-8",
-      "description": "The submitted artifact follows this skill instruction: Load the record from the passed ID",
-      "max_score": 12
+      "description": "The submitted artifact follows this skill instruction: Write the job spec first — idempotency, retry, and error handling.",
+      "max_score": 10
+    },
+    {
+      "name": "instruction-9",
+      "description": "The submitted artifact follows this skill instruction: Run the spec to confirm it fails.",
+      "max_score": 10
+    },
+    {
+      "name": "instruction-10",
+      "description": "The submitted artifact follows this skill instruction: Write the job class: `perform` receives IDs, loads the record, guards for no-op, delegates to a service.",
+      "max_score": 10
     }
   ]
 }

@@ -14,7 +14,7 @@
     },
     {
       "name": "instruction-3",
-      "description": "The submitted artifact follows this skill instruction: **DO NOT extract and change behavior in the same step.** Extraction must preserve existing behavior; refactoring and improvements belong in a separate step after the move is complete and verified.",
+      "description": "The submitted artifact follows this skill instruction: Extraction must preserve existing behavior; refactoring and improvements belong in a separate step after the move is complete and verified.",
       "max_score": 20
     },
     {

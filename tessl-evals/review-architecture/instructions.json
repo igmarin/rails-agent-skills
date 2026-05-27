@@ -3,6 +3,18 @@
   "source_path": "skills/code-quality/review-architecture/SKILL.md",
   "instructions": [
     {
+      "instruction": "Verify each High-severity finding by reading the actual code to confirm it is a real structural problem.",
+      "original_snippets": "Verify each High-severity finding by reading the actual code to confirm it is a real structural problem.",
+      "relevant_when": "When a user asks for Rails work that should trigger review-architecture.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "SECRET SAFETY: code-level evidence must never reproduce secrets, tokens, API",
+      "original_snippets": "SECRET SAFETY: code-level evidence must never reproduce secrets, tokens, API",
+      "relevant_when": "When a user asks for Rails work that should trigger review-architecture.",
+      "why_given": "preference"
+    },
+    {
       "instruction": "Use this skill when the task is to review or improve the structure of a Rails application or library.",
       "original_snippets": "Use this skill when the task is to review or improve the structure of a Rails application or library.",
       "relevant_when": "When a user asks for Rails work that should trigger review-architecture.",
@@ -27,8 +39,14 @@
       "why_given": "new knowledge"
     },
     {
-      "instruction": "**Verify each High-severity finding** by reading the actual code — confirm it is a real structural problem, not just a pattern match on file size or line count. If verification reveals the finding is not a genuine structural problem, either downgrade it to Medium/Low with a revised rationale, or remove it entirely. Do not list findings that do not survive code-level confirmation.",
-      "original_snippets": "**Verify each High-severity finding** by reading the actual code — confirm it is a real structural problem, not just a pattern match on file size or line count. If verification reveals the finding is not a genuine structural problem, either downgrade it to Medium/Low with a revised rationale, or remove it entirely. Do not list findings that do not survive code-level confirmation.",
+      "instruction": "**Verify each High-severity finding** per the HARD-GATE above — confirm real structural problem, redact any credential-like values found.",
+      "original_snippets": "**Verify each High-severity finding** per the HARD-GATE above — confirm real structural problem, redact any credential-like values found.",
+      "relevant_when": "When a user asks for Rails work that should trigger review-architecture.",
+      "why_given": "preference"
+    },
+    {
+      "instruction": "**High-severity verification**: For every High finding, state the concrete code-level evidence read (per HARD-GATE). Redact any secret-like literal. Never use representative file paths or fabricated line numbers as evidence.",
+      "original_snippets": "**High-severity verification**: For every High finding, state the concrete code-level evidence read (per HARD-GATE). Redact any secret-like literal. Never use representative file paths or fabricated line numbers as evidence.",
       "relevant_when": "When a user asks for Rails work that should trigger review-architecture.",
       "why_given": "preference"
     }

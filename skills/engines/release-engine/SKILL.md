@@ -2,12 +2,7 @@
 name: release-engine
 license: MIT
 description: >
-  Use when preparing a Rails engine gem release. Generates CHANGELOG.md entries,
-  produces step-by-step upgrade notes for host apps, sets semantic version constants,
-  verifies gemspec metadata, confirms test suite passes, and sequences gem build
-  and publish commands. Trigger words: version bump, changelog, deprecation,
-  gemspec, upgrade, migration guide, release, publish gem, ship gem, verify gemspec,
-  test suite.
+  Use when shipping a Rails engine gem — FIRST run full test suite (`bundle exec rspec`) and fix ALL failures, verify gemspec metadata and dependencies match tested Rails/Ruby versions, dry-run: `gem build *.gemspec && gem push --dry-run *.gem` and verify contents, generate CHANGELOG.md organized by category (added/changed/deprecated/removed/fixed), produce step-by-step upgrade notes with before/after code, set semantic version in `lib/<engine>/version.rb`, document deprecations with migration paths, load release assets conditionally and state which one informed the output. Trigger words: version bump, changelog, deprecation, gemspec, upgrade, release, publish gem, ship gem.
 metadata:
   version: 1.0.0
   user-invocable: "true"

@@ -21,34 +21,22 @@
       "why_given": "reminder"
     },
     {
+      "instruction": "Define the host-app contract (what the host must provide, what the engine exposes, which extension points are supported). See [reference.md](reference.md) for the full contract template.",
+      "original_snippets": "Define the host-app contract (what the host must provide, what the engine exposes, which extension points are supported). See [reference.md](reference.md) for the full contract template.",
+      "relevant_when": "When a user asks for Rails work that should trigger create-engine.",
+      "why_given": "preference"
+    },
+    {
       "instruction": "Create the minimal engine structure. **Checkpoint:** `bundle exec rake` inside the engine must pass.",
       "original_snippets": "Create the minimal engine structure. **Checkpoint:** `bundle exec rake` inside the engine must pass.",
       "relevant_when": "When a user asks for Rails work that should trigger create-engine.",
       "why_given": "preference"
     },
     {
-      "instruction": "Use a structure close to this:",
-      "original_snippets": "Use a structure close to this:",
+      "instruction": "Write minimum integration coverage through the dummy app. See [TESTING.md](TESTING.md) for coverage requirements.",
+      "original_snippets": "Write minimum integration coverage through the dummy app. See [TESTING.md](TESTING.md) for coverage requirements.",
       "relevant_when": "When a user asks for Rails work that should trigger create-engine.",
       "why_given": "new knowledge"
-    },
-    {
-      "instruction": "**What the host app must add:** mount route, initializer, migrations, credentials, background jobs, or assets.",
-      "original_snippets": "**What the host app must add:** mount route, initializer, migrations, credentials, background jobs, or assets.",
-      "relevant_when": "When a user asks for Rails work that should trigger create-engine.",
-      "why_given": "preference"
-    },
-    {
-      "instruction": "Prefer one explicit configuration surface, for example:",
-      "original_snippets": "Prefer one explicit configuration surface, for example:",
-      "relevant_when": "When a user asks for Rails work that should trigger create-engine.",
-      "why_given": "reminder"
-    },
-    {
-      "instruction": "Do not scatter configuration across unrelated constants and initializers.",
-      "original_snippets": "Do not scatter configuration across unrelated constants and initializers.",
-      "relevant_when": "When a user asks for Rails work that should trigger create-engine.",
-      "why_given": "preference"
     }
   ]
 }

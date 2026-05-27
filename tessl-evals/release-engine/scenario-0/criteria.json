@@ -5,37 +5,27 @@
     {
       "name": "instruction-1",
       "description": "The submitted artifact follows this skill instruction: Use this skill when the task is to ship a Rails engine as a gem or prepare a new version.",
-      "max_score": 15
+      "max_score": 20
     },
     {
       "name": "instruction-2",
       "description": "The submitted artifact follows this skill instruction: Run full test suite: `bundle exec rspec`. Fix all failures before proceeding.",
-      "max_score": 15
+      "max_score": 20
     },
     {
       "name": "instruction-3",
       "description": "The submitted artifact follows this skill instruction: Verify gemspec metadata and dependencies match tested Rails/Ruby versions.",
-      "max_score": 14
+      "max_score": 20
     },
     {
       "name": "instruction-4",
       "description": "The submitted artifact follows this skill instruction: Dry-run the gem build: `gem build *.gemspec && gem push --dry-run *.gem`. Verify contents.",
-      "max_score": 14
+      "max_score": 20
     },
     {
       "name": "instruction-5",
-      "description": "The submitted artifact follows this skill instruction: Load these files only when their specific content is needed:",
-      "max_score": 14
-    },
-    {
-      "name": "instruction-6",
-      "description": "The submitted artifact follows this skill instruction: **[assets/release_checklist.md](assets/release_checklist.md)** — Use when you need a detailed step-by-step verification checklist before finalizing the release",
-      "max_score": 14
-    },
-    {
-      "name": "instruction-7",
-      "description": "The submitted artifact follows this skill instruction: **[assets/release_notes_template.md](assets/release_notes_template.md)** — Use when drafting GitHub release notes or long-form release announcements",
-      "max_score": 14
+      "description": "The submitted artifact follows this skill instruction: Load release assets conditionally and say which one informed the output:",
+      "max_score": 20
     }
   ]
 }

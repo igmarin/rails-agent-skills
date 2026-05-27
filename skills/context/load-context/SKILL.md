@@ -2,17 +2,7 @@
 name: load-context
 license: MIT
 description: >
-  Use before writing code, tests, or PRDs in a Rails project to load the minimum
-  context needed to make correct decisions. Inspects `db/schema.rb`,
-  `config/routes.rb`, neighboring models, factories, specs, engine boundaries,
-  and `Gemfile.lock` to surface existing patterns, naming conventions, and
-  gotchas. Produces a concise context summary before any code is proposed, and
-  a confusion-management block when requirements are ambiguous or specs and
-  code have drifted. Trigger words: load context, gather context, context
-  engineering, read the code first, before I code, existing patterns, project
-  conventions, where is this defined, ambiguous requirements, spec vs code
-  drift, unclear spec, missing requirements, what does the codebase already
-  use, match existing style.
+  Use before writing code, tests, or PRDs in a Rails project — DO NOT propose code until a Context Summary is posted: load minimum context (read `db/schema.rb` + `config/routes.rb` + `Gemfile.lock`, if `rails-ai-bridge` is running use `get_project_context` tool to retrieve project structure/routes/models/dependencies), then load one neighbor of each kind by grepping for similar files like `grep -r "class.*Controller" app/controllers`, if requirements conflict or specs and code drift produce a Confusion Block first, cite files read (path:line), re-check context when scope changes mid-conversation. Inspects neighboring models, factories, specs, and engine boundaries to surface existing patterns, naming conventions, and gotchas. Trigger words: load context, gather context, context engineering, read the code first, before I code, existing patterns, ambiguous requirements, spec vs code drift.
 metadata:
   user-invocable: "true"
   version: 1.0.0

@@ -2,11 +2,7 @@
 name: plan-tests
 license: MIT
 description: >
-  Use when choosing the best first failing RSpec spec or vertical slice for a
-  Ruby on Rails change. Covers request vs model vs service vs job vs engine spec
-  selection, system spec escalation, smallest safe slice planning, and
-  Rails-first TDD sequencing. Trigger words: where to start testing, what test
-  to write first, RSpec, test-driven development, TDD, first failing test.
+  Choose the best first failing RSpec spec for a Rails change — start at the highest-value boundary that proves behavior with least setup, pick one smallest strong slice: choose spec type that proves the behavior without dragging in unrelated layers (don't start at a lower-level unit if the real risk is request/job/engine/persistence), write exactly ONE failing example for the initial TDD gate (list additional cases as follow-up coverage), confirm failure is for missing behavior not broken setup, present the test design checkpoint: answer right behavior/correct boundary/edge cases represented/failure reason before handing off to write-tests. Covers spec selection by change type, vertical slice planning, TDD sequencing. Trigger words: where to start testing, what test to write first, TDD, first failing test.
 metadata:
   version: 1.0.0
   user-invocable: "true"

@@ -9,7 +9,7 @@
     },
     {
       "name": "instruction-2",
-      "description": "The submitted artifact follows this skill instruction: **EVERY engine MUST have a dummy app for testing.**",
+      "description": "The submitted artifact follows this skill instruction: EVERY engine MUST have a dummy app for testing.",
       "max_score": 25
     },
     {

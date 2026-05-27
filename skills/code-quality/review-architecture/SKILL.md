@@ -2,11 +2,7 @@
 name: review-architecture
 license: MIT
 description: >
-  Use when reviewing Rails application structure, identifying fat models or controllers,
-  auditing callbacks, concerns, service extraction, domain boundaries, or general Rails
-  architecture decisions. Recommends service object extractions, simplifies callback
-  chains, identifies abstraction quality issues, and produces severity-classified
-  findings with the smallest credible improvement for each.
+  Use when reviewing Rails application structure — prioritize boundary problems over style, verify each High-severity finding with concrete code-level evidence (read the actual code, confirm real structural problem, redact any credential-like values), never use representative file paths or fabricated line numbers as evidence, check where domain logic lives and whether abstractions clarify the design or only move code around, produce severity-classified findings with the smallest credible improvement for each. Recommends structural fixes: service object extractions, simplified callback chains, domain boundary realignment.
 metadata:
   version: 1.0.0
   user-invocable: "true"

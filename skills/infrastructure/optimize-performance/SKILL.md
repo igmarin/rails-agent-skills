@@ -2,10 +2,7 @@
 name: optimize-performance
 license: MIT
 description: >
-  Optimizes Rails application performance. Use when investigating slow endpoints,
-  eliminating N+1 queries, implementing caching strategies, profiling with Bullet
-  or rack-mini-profiler, or optimizing database queries with EXPLAIN ANALYZE.
-  Trigger words: performance, optimize, N+1, slow query, caching, Bullet, profiling.
+  Optimizes Rails performance with a mandated workflow — measure baseline FIRST, write a regression spec asserting query count with a `make_database_queries` matcher and show it FAILING BEFORE any fix, apply the minimal optimization (eager load/index/cache), re-run the spec to confirm PASSES at the new count, then verify with EXPLAIN ANALYZE confirming plan change (Seq Scan→Index Scan), report output order MUST strictly match work order: measure→identify bottleneck with Bullet or rack-mini-profiler→RED regression spec→fix→GREEN regression spec→EXPLAIN ANALYZE→quantified improvement (queries: N→M, p95: Xms→Yms). Use when investigating slow endpoints, eliminating N+1 queries, implementing caching strategies, profiling with Bullet or rack-mini-profiler, or optimizing database queries with EXPLAIN ANALYZE. Trigger words: performance, optimize, N+1, slow query, caching, Bullet, profiling.
 metadata:
   version: 1.0.0
   user-invocable: "true"

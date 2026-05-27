@@ -2,10 +2,7 @@
 name: security-check
 license: MIT
 description: >
-  Performs security audits and vulnerability assessments on Ruby on Rails application
-  code. Use when reviewing Rails code for security risks, assessing authentication or
-  authorization, auditing parameter handling, redirects, file uploads, secrets management,
-  or checking for XSS, CSRF, SSRF, SQL injection, and other common vulnerabilities.
+  Performs security audits on Rails app code — review in this exact order: authentication/authorization boundaries first→parameter handling→redirects/rendering/output encoding→file handling/network calls/background job inputs→secrets/logging/operational exposure; sections MUST appear in this order even when empty (write "No issues found" and state what evidence needed), verify each finding is exploitable with a concrete attack scenario, exclude false positives (e.g. `html_safe` on developer-defined constants not user input), never use representative file paths as confirmed evidence. Use when reviewing for XSS, CSRF, SSRF, SQL injection, parameter handling, redirects, file uploads, secrets management.
 metadata:
   version: 1.0.0
   user-invocable: "true"

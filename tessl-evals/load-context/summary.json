@@ -2,12 +2,11 @@
   "target_skill": "load-context",
   "total_scenarios": 1,
   "instructions_coverage": {
-    "total_instructions": 5,
-    "instructions_tested": 5,
+    "total_instructions": 4,
+    "instructions_tested": 4,
     "coverage_percentage": 100
   },
   "reason_distribution": {
-    "new knowledge": 3,
-    "preference": 2
+    "new knowledge": 4
   }
 }

@@ -4,28 +4,43 @@
   "checklist": [
     {
       "name": "instruction-1",
-      "description": "The submitted artifact follows this skill instruction: Use this skill when the task is to review or improve the structure of a Rails application or library.",
-      "max_score": 20
+      "description": "The submitted artifact follows this skill instruction: Verify each High-severity finding by reading the actual code to confirm it is a real structural problem.",
+      "max_score": 13
     },
     {
       "name": "instruction-2",
-      "description": "The submitted artifact follows this skill instruction: **Core principle:** Prioritize boundary problems over style. Prefer simple objects and explicit flow over hidden behavior.",
-      "max_score": 20
+      "description": "The submitted artifact follows this skill instruction: SECRET SAFETY: code-level evidence must never reproduce secrets, tokens, API",
+      "max_score": 13
     },
     {
       "name": "instruction-3",
-      "description": "The submitted artifact follows this skill instruction: Check where domain logic lives.",
-      "max_score": 20
+      "description": "The submitted artifact follows this skill instruction: Use this skill when the task is to review or improve the structure of a Rails application or library.",
+      "max_score": 13
     },
     {
       "name": "instruction-4",
-      "description": "The submitted artifact follows this skill instruction: Check whether abstractions clarify the design or only move code around.",
-      "max_score": 20
+      "description": "The submitted artifact follows this skill instruction: **Core principle:** Prioritize boundary problems over style. Prefer simple objects and explicit flow over hidden behavior.",
+      "max_score": 13
     },
     {
       "name": "instruction-5",
-      "description": "The submitted artifact follows this skill instruction: **Verify each High-severity finding** by reading the actual code — confirm it is a real structural problem, not just a pattern match on file size or line count. If verification reveals the finding is not a genuine structural problem, either downgrade it to Medium/Low with a revised rationale, or remove it entirely. Do not list findings that do not survive code-level confirmation.",
-      "max_score": 20
+      "description": "The submitted artifact follows this skill instruction: Check where domain logic lives.",
+      "max_score": 12
+    },
+    {
+      "name": "instruction-6",
+      "description": "The submitted artifact follows this skill instruction: Check whether abstractions clarify the design or only move code around.",
+      "max_score": 12
+    },
+    {
+      "name": "instruction-7",
+      "description": "The submitted artifact follows this skill instruction: **Verify each High-severity finding** per the HARD-GATE above — confirm real structural problem, redact any credential-like values found.",
+      "max_score": 12
+    },
+    {
+      "name": "instruction-8",
+      "description": "The submitted artifact follows this skill instruction: **High-severity verification**: For every High finding, state the concrete code-level evidence read (per HARD-GATE). Redact any secret-like literal. Never use representative file paths or fabricated line numbers as evidence.",
+      "max_score": 12
     }
   ]
 }

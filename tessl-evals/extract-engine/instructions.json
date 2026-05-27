@@ -15,8 +15,8 @@
       "why_given": "reminder"
     },
     {
-      "instruction": "**DO NOT extract and change behavior in the same step.** Extraction must preserve existing behavior; refactoring and improvements belong in a separate step after the move is complete and verified.",
-      "original_snippets": "**DO NOT extract and change behavior in the same step.** Extraction must preserve existing behavior; refactoring and improvements belong in a separate step after the move is complete and verified.",
+      "instruction": "Extraction must preserve existing behavior; refactoring and improvements belong in a separate step after the move is complete and verified.",
+      "original_snippets": "Extraction must preserve existing behavior; refactoring and improvements belong in a separate step after the move is complete and verified.",
       "relevant_when": "When a user asks for Rails work that should trigger extract-engine.",
       "why_given": "preference"
     },

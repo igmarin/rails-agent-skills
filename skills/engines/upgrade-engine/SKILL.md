@@ -2,11 +2,7 @@
 name: upgrade-engine
 license: MIT
 description: >
-  Use when making a Rails engine stable across Rails and Ruby versions. Configures
-  Zeitwerk autoloading, updates gemspec dependency bounds, replaces Rails.version
-  branching with feature detection patterns, and sets up CI matrices for cross-version
-  testing. Trigger words: Zeitwerk, autoloading, Rails upgrade, gemspec, dependency
-  bounds, CI matrix, feature detection, reload safety, deprecated APIs, cross-version.
+  Use when making a Rails engine stable across Rails and Ruby versions — every claimed version MUST be in the CI matrix and pass (not just main), run `bundle exec rake zeitwerk:check` to verify file paths match constant names, configure Zeitwerk autoloading with explicit loader, update gemspec dependency bounds matching what CI actually tests (`>= 7.0, < 8.0`), replace `Rails.version` branching with feature detection (`defined?`/`respond_to?` checks), audit deprecated API usage, verify reload safety: check initializer behavior across boot and reload using `config.to_prepare` for reload-sensitive hooks, check optional integrations (jobs/mailers/assets/routes/generators/dummy-app mounts) per version even if absent. Trigger words: Zeitwerk, autoloading, Rails upgrade, gemspec, dependency bounds, CI matrix, feature detection, reload safety, deprecated APIs.
 metadata:
   version: 1.0.0
   user-invocable: "true"

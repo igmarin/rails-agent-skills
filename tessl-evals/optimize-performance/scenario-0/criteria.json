@@ -5,42 +5,37 @@
     {
       "name": "instruction-1",
       "description": "The submitted artifact follows this skill instruction: REPORT ORDER MUST MATCH WORK ORDER:",
-      "max_score": 13
+      "max_score": 15
     },
     {
       "name": "instruction-2",
       "description": "The submitted artifact follows this skill instruction: to lock it in.\" The spec MUST be written and shown failing BEFORE the fix",
-      "max_score": 13
+      "max_score": 15
     },
     {
       "name": "instruction-3",
       "description": "The submitted artifact follows this skill instruction: **Write regression spec** — assert query count",
-      "max_score": 13
+      "max_score": 14
     },
     {
       "name": "instruction-4",
       "description": "The submitted artifact follows this skill instruction: **Verify** — confirm improvement with EXPLAIN ANALYZE",
-      "max_score": 13
+      "max_score": 14
     },
     {
       "name": "instruction-5",
       "description": "The submitted artifact follows this skill instruction: Write this spec **before** applying any optimization to lock in the expected query count:",
-      "max_score": 12
+      "max_score": 14
     },
     {
       "name": "instruction-6",
       "description": "The submitted artifact follows this skill instruction: Use the `db-query-matchers` gem or a custom `make_database_queries` matcher. The spec must pass after the fix and fail if a future change reintroduces the N+1.",
-      "max_score": 12
+      "max_score": 14
     },
     {
       "name": "instruction-7",
       "description": "The submitted artifact follows this skill instruction: Run directly in `rails dbconsole` (PostgreSQL) after applying an index or query change:",
-      "max_score": 12
-    },
-    {
-      "name": "instruction-8",
-      "description": "The submitted artifact follows this skill instruction: `Seq Scan` on large tables → should become `Index Scan` after adding an index",
-      "max_score": 12
+      "max_score": 14
     }
   ]
 }
