@@ -99,6 +99,15 @@ jobs:
             File.write(path, "#{JSON.pretty_generate(data)}\n")
           '
 
+          if [ -f ".tessl-plugin/plugin.json" ]; then
+            VERSION="$version" ruby -rjson -e '
+              path = ".tessl-plugin/plugin.json"
+              data = JSON.parse(File.read(path))
+              data["version"] = ENV.fetch("VERSION")
+              File.write(path, "#{JSON.pretty_generate(data)}\n")
+            '
+          fi
+
           echo "version=$version" >> "$GITHUB_OUTPUT"
           echo "Publishing $tile_name@$version"
 
@@ -109,6 +118,9 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add tile.json
+          if [ -f ".tessl-plugin/plugin.json" ]; then
+            git add .tessl-plugin/plugin.json
+          fi
           if git diff --cached --quiet; then
             echo "tile.json already contains version $VERSION"
           else
