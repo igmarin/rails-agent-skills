@@ -46,6 +46,7 @@ See the [Ecosystem Overview](https://github.com/igmarin/agent-mcp-runtime/blob/m
 > [![GitHub tag](https://img.shields.io/github/v/tag/igmarin/rails-agent-skills?label=release)](https://github.com/igmarin/rails-agent-skills/tags)
 > [![tessl](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.tessl.io%2Fv1%2Fbadges%2Figmarin%2Frails-agent-skills)](https://tessl.io/registry/igmarin/rails-agent-skills)
 > [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+> [![skills.sh](https://skills.sh/b/igmarin/rails-agent-skills)](https://skills.sh/igmarin/rails-agent-skills)
 
 ## What are Agent Skills?
 

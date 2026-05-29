@@ -1,0 +1,29 @@
+name: Scheduled OpenCode Task
+
+on:
+  schedule:
+    - cron: "5 9 * * 1" # Every Monday at 9:05am UTC
+
+jobs:
+  opencode:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
+      pull-requests: write
+      issues: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Run OpenCode
+        uses: anomalyco/opencode/github@latest
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+        with:
+          model: deepseek/deepseek-v4-pro
+          prompt: |
+            Review the codebase for any TODO comments and create a summary.
+            If you find issues worth addressing, open an issue to track them.

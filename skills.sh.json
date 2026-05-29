@@ -1,0 +1,70 @@
+{
+  "$schema": "https://skills.sh/schemas/skills.sh.schema.json",
+  "notGrouped": "bottom",
+  "groupings": [
+    {
+      "title": "API",
+      "description": "Skills for REST API collections and GraphQL implementation.",
+      "skills": [
+        "generate-api-collection",
+        "implement-graphql"
+      ]
+    },
+    {
+      "title": "Code Quality",
+      "description": "Skills for code review, security, architecture review, code conventions, and authorization.",
+      "skills": [
+        "apply-code-conventions",
+        "apply-stack-conventions",
+        "code-review",
+        "implement-authorization",
+        "refactor-code",
+        "review-architecture",
+        "security-check"
+      ]
+    },
+    {
+      "title": "Context",
+      "description": "Skills for context loading and development environment setup.",
+      "skills": [
+        "load-context",
+        "setup-environment"
+      ]
+    },
+    {
+      "title": "Engines",
+      "description": "Skills for creating, testing, documenting, reviewing, releasing, extracting, and upgrading Rails engines.",
+      "skills": [
+        "create-engine",
+        "create-engine-installer",
+        "document-engine",
+        "extract-engine",
+        "release-engine",
+        "review-engine",
+        "test-engine",
+        "upgrade-engine"
+      ]
+    },
+    {
+      "title": "Infrastructure",
+      "description": "Skills for migrations, background jobs, seeding, performance, API versioning, and Hotwire.",
+      "skills": [
+        "implement-background-job",
+        "implement-hotwire",
+        "optimize-performance",
+        "review-migration",
+        "seed-database",
+        "version-api"
+      ]
+    },
+    {
+      "title": "Testing",
+      "description": "Skills for test planning, test writing, and service object testing.",
+      "skills": [
+        "plan-tests",
+        "test-service",
+        "write-tests"
+      ]
+    }
+  ]
+}
