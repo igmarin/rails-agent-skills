@@ -3,7 +3,6 @@
   "version": "6.0.18",
   "license": "MIT",
   "summary": "Curated library of 28 public AI agent skills for Ruby on Rails development. Organized by category: testing, code-quality, engines, infrastructure, api, and context. Covers code review, architecture, security, testing (RSpec), engines, Hotwire, and TDD automation. Shared Ruby skills (YARD docs, DDD, service objects) have moved to ruby-core-skills. Repository agents remain documented in GitHub but are intentionally excluded from the Tessl tile.",
-  "docs": "docs/index.md",
   "depends_on": [
     "igmarin/ruby-core-skills"
   ],

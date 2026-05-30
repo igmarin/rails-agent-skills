@@ -6,8 +6,8 @@ require "json"
 require "yaml"
 
 ROOT = File.expand_path("..", __dir__)
-TILE_PATH = File.join(ROOT, "tile.json")
 OUTPUT_ROOT = File.join(ROOT, "tessl-evals")
+SKILLS_DIR = File.join(ROOT, "skills")
 
 Instruction = Struct.new(:text, :snippet, :why_given, keyword_init: true)
 
@@ -171,21 +171,24 @@ def write_skill_eval(skill_name, skill_path)
   write_json(
     File.join(scenario_dir, "criteria.json"),
     {
-      "context" => "Checks whether the final artifact follows the #{skill_name} instructions from the published Rails Agent Skills tile.",
+      "context" => "Checks whether the final artifact follows the #{skill_name} instructions from the published Rails Agent Skills plugin.",
       "type" => "weighted_checklist",
       "checklist" => weighted_checklist(instructions)
     }
   )
 end
 
-tile = read_json(TILE_PATH)
-skills = tile.fetch("skills")
-filtered_skills = skills.reject { |_name, spec| spec.fetch("path").start_with?("workflows/") || spec.fetch("path").start_with?("agents/") }
+skills = Dir.glob("**/SKILL.md", base: SKILLS_DIR).each_with_object({}) do |path, hash|
+  next if path.start_with?("workflows/") || path.start_with?("agents/")
+  name = File.basename(File.dirname(path))
+  hash[name] = { "path" => "skills/#{path}" }
+end
+
 FileUtils.mkdir_p(OUTPUT_ROOT)
 
-filtered_skills.each do |skill_name, spec|
+skills.each do |skill_name, spec|
   skill_path = spec.fetch("path")
   write_skill_eval(skill_name, skill_path)
 end
 
-puts "Generated Tessl eval source for #{filtered_skills.length} publishable skills in tessl-evals/"
+puts "Generated Tessl eval source for #{skills.length} publishable skills in tessl-evals/"

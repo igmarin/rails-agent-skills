@@ -1,12 +1,15 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require "json"
 require "set"
 
 ROOT = File.expand_path("..", __dir__)
-tile = JSON.parse(File.read(File.join(ROOT, "tile.json")))
-publishable_paths = tile.fetch("skills").values.map { |spec| spec.fetch("path") }.reject { |path| path.start_with?("workflows/") || path.start_with?("agents/") }
+SKILLS_DIR = File.join(ROOT, "skills")
+
+publishable_paths = Dir.glob("**/SKILL.md", base: SKILLS_DIR).reject { |path|
+  path.start_with?("workflows/") || path.start_with?("agents/")
+}.map { |path| "skills/#{path}" }
+
 changed_files = STDIN.read.lines.map(&:strip).reject(&:empty?)
 
 changed_skill_paths = publishable_paths.select do |skill_path|

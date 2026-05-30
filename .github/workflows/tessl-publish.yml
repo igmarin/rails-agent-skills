@@ -1,4 +1,4 @@
-name: Tessl Tile Publish
+name: Tessl Plugin Publish
 
 on:
   push:
@@ -8,8 +8,7 @@ on:
       - 'skills/**'
       - 'docs/**'
       - 'tessl-evals/**'
-      - 'tile.json'
-      - 'tessl.json'
+      - '.tessl-plugin/plugin.json'
       - 'scripts/generate-tessl-evals.rb'
       - 'scripts/stage-tessl-evals.rb'
       - 'scripts/validate-tessl-evals.rb'
@@ -48,26 +47,23 @@ jobs:
         with:
           token: ${{ secrets.TESSL_TOKEN }}
 
-      - name: Lint Tessl tile
-        run: tessl tile lint .
-
       - name: Compute automatic patch version
         id: version
         run: |
-          tile_name="$(ruby -rjson -e 'puts JSON.parse(File.read("tile.json")).fetch("name")')"
-          local_version="$(ruby -rjson -e 'puts JSON.parse(File.read("tile.json")).fetch("version")')"
+          plugin_name="$(ruby -rjson -e 'puts JSON.parse(File.read(".tessl-plugin/plugin.json")).fetch("name")')"
+          local_version="$(ruby -rjson -e 'puts JSON.parse(File.read(".tessl-plugin/plugin.json")).fetch("version")')"
 
-          if info_output="$(tessl tile info "$tile_name" 2>&1)"; then
+          if info_output="$(tessl plugin info "$plugin_name" 2>&1)"; then
             latest_version="$(printf '%s\n' "$info_output" | awk '/Latest Version/ {print $NF}')"
             if [ -z "$latest_version" ]; then
-              echo "::error::Unable to determine latest published version for $tile_name"
+              echo "::error::Unable to determine latest published version for $plugin_name"
               exit 1
             fi
           else
             if printf '%s\n' "$info_output" | grep -qi '404'; then
               latest_version=""
             else
-              echo "::error::Failed to query Tessl registry for $tile_name: $info_output"
+              echo "::error::Failed to query Tessl registry for $plugin_name: $info_output"
               exit 1
             fi
           fi
@@ -93,23 +89,14 @@ jobs:
           ' "$local_version" "$latest_version")"
 
           VERSION="$version" ruby -rjson -e '
-            path = "tile.json"
+            path = ".tessl-plugin/plugin.json"
             data = JSON.parse(File.read(path))
             data["version"] = ENV.fetch("VERSION")
             File.write(path, "#{JSON.pretty_generate(data)}\n")
           '
 
-          if [ -f ".tessl-plugin/plugin.json" ]; then
-            VERSION="$version" ruby -rjson -e '
-              path = ".tessl-plugin/plugin.json"
-              data = JSON.parse(File.read(path))
-              data["version"] = ENV.fetch("VERSION")
-              File.write(path, "#{JSON.pretty_generate(data)}\n")
-            '
-          fi
-
           echo "version=$version" >> "$GITHUB_OUTPUT"
-          echo "Publishing $tile_name@$version"
+          echo "Publishing $plugin_name@$version"
 
       - name: Commit automatic version bump
         env:
@@ -117,19 +104,16 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add tile.json
-          if [ -f ".tessl-plugin/plugin.json" ]; then
-            git add .tessl-plugin/plugin.json
-          fi
+          git add .tessl-plugin/plugin.json
           if git diff --cached --quiet; then
-            echo "tile.json already contains version $VERSION"
+            echo "plugin.json already contains version $VERSION"
           else
-            git commit -m "Bump Tessl tile to $VERSION [skip ci]"
+            git commit -m "Bump Tessl plugin to $VERSION [skip ci]"
             git push origin HEAD:main
           fi
 
-      - name: Publish Tessl tile
-        run: tessl tile publish .
+      - name: Publish plugin
+        run: tessl plugin publish .
 
       - name: Create matching Git tag
         env:
@@ -141,6 +125,6 @@ jobs:
           if git rev-parse "$tag" >/dev/null 2>&1; then
             echo "Tag $tag already exists; skipping."
           else
-            git tag -a "$tag" -m "Tessl tile $tag"
+            git tag -a "$tag" -m "Tessl plugin $tag"
             git push origin "$tag"
           fi
