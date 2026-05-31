@@ -87,10 +87,17 @@ end
 
 ## Output Style
 
-1. Use idiomatic Rails Thor generator commands.
-2. Provide clear, minimal, idempotent generator code.
-3. Output clear terminal instructions for the user.
-4. Language — Must be in English unless explicitly requested otherwise.
+When asked to create or review an engine installer/install generator, your output `answer.md` MUST include:
+
+1. **Idiomatic generator code**: Use idiomatic Rails/Thor generator commands (inheriting from `Rails::Generators::Base`, with `source_root`, `desc`, etc.).
+2. **Step-by-Step Validation & Observed Outputs**:
+   - **GENERATE**: Provide a command and a simulated but realistic terminal execution output under the literal label **Observed output** showing the generator running for the first time.
+   - **VERIFY**: List shell commands checking that the initializer, routes, and migrations exist in the correct host paths.
+   - **RERUN**: Provide a command and a simulated but realistic terminal execution output showing the generator running a second time and confirming it is idempotent (skipping/conflict resolution).
+   - **CRITICAL: Even if running in static evaluation or mock environments without a live Ruby/Rails runtime, you MUST generate and present realistic, concrete terminal execution output under the literal label `Observed output`. Do NOT copy the exact timing values or example counts verbatim from templates; you MUST generate unique, scenario-specific numbers.**
+3. **Rollback & Manual steps**: Clear list of what the generator does vs what the user must do manually.
+4. **Generator Spec**: A complete, minimal RSpec spec using generator testing helpers (destination, run_generator, etc.) testing both single-run and rerun idempotency behavior.
+5. **Language**: Must be in English unless explicitly requested otherwise.
 
 ## Integration
 

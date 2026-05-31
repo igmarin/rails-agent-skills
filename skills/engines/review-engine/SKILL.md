@@ -71,9 +71,11 @@ end
 
 ## Output Style
 
-1. Write findings first. For each finding include severity, affected file/area, risk, and smallest credible fix.
-2. Include verification commands used, including `grep -r "isolate_namespace" lib/` for namespace isolation and a migration audit such as `grep -R "remove_column\|drop_table\|change_column" db/migrate lib/**/db/migrate` for destructive or irreversible changes.
-3. Then include open assumptions and recommended next changes.
+When asked to review an engine, your output `answer.md` MUST comply with:
+
+1. **Findings First**: Write the findings section (ordered HIGH -> MEDIUM -> LOW) as the very first section in the concrete artifact `answer.md` (or immediately after the short plan if a plan is requested). For each finding include severity, affected file/area, risk, and smallest credible fix.
+2. **Verification Commands**: Include verification commands used, including `grep -r "isolate_namespace" lib/` for namespace isolation, a migration audit such as `grep -R "remove_column\|drop_table\|change_column" db/migrate lib/**/db/migrate` for destructive or irreversible changes, and `grep -r "ActiveSupport.on_load" lib/` or `grep -r "initializer" lib/` to verify initialization reload safety.
+3. Include open assumptions and recommended next changes.
 4. If no meaningful findings exist, explicitly state so and mention residual testing gaps.
 5. Language — Must be in English unless explicitly requested otherwise.
 

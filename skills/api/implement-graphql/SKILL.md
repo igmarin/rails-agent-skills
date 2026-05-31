@@ -66,6 +66,17 @@ Load these files only when their specific content is needed:
 - **[TESTING.md](./TESTING.md)** — For the spec template, paths, and checklist.
 - **[EXAMPLES.md](EXAMPLES.md)** — For detailed code examples of dataloaders, mutations, and types.
 
+## Output Style
+
+When building or reviewing GraphQL APIs, your output `answer.md` MUST include:
+1. **Short Plan**: Step-by-step implementation/review plan.
+2. **GraphQL Schema & Types**: Code blocks defining Types, Query, and Mutation entry points.
+3. **Resolvers & Mutations**: Code blocks for dedicated resolver and mutation classes delegating to services.
+4. **Specs**: RSpec code block in `spec/graphql/` using `AppSchema.execute` (never HTTP dispatch), covering happy path, auth, and validation error cases.
+5. **Quality Gates & Verification**: Exact commands to verify the schema, N+1 detection, and mutation shapes.
+6. **Resource Loading & Reference**: Include a short section in `answer.md` documenting which specific assets (e.g. `TESTING.md`, `EXAMPLES.md`) were loaded conditionally and why. This makes the process instruction verifiable.
+7. **Language**: Must be in English unless explicitly requested otherwise.
+
 ## Integration
 
 | Skill | When to chain |

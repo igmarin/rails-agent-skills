@@ -53,9 +53,15 @@ Do not pick silently.
 
 ## Output Style
 
+When asked to load project context, your output `answer.md` MUST follow the template below.
+
+### Motivating Principle
+You MUST explicitly state the **fifteen-second read** principle as a motivating principle before the summary (e.g. "To ensure a rapid setup and avoid retries, we follow the fifteen-second read principle of schema, routes, and one neighbor before proposing any changes").
+
 ### Context Summary Template
 
 Post this block before proposing any code, spec, or PRD:
+
 
 ```text
 ### Context Summary

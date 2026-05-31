@@ -79,7 +79,11 @@ See [CHECKLIST.md](./CHECKLIST.md) for the full recommended README shape and doc
 3. Document operational steps explicitly.
 4. Keep sections short and task-oriented.
 5. Validate against CHECKLIST.md: a checklist item **passes** when the docs contain a corresponding section with at least one copyable code example or explicit prose statement. A checklist item **fails** when the section is absent, incomplete, or lacks a concrete example. For each failing item: add the missing section or example, then re-run the checklist from the top. Do not finalize until all critical items pass.
-6. Language — Must be in English unless explicitly requested otherwise.
+6. **Syntax Verification**: Double-check all Ruby/Rails syntax in code examples (for instance, route mounting and authentication blocks like `authenticate :user, ->(u) { u.admin? } do`) to ensure there are no syntax errors.
+7. **No Mounting Redundancy**: Show the engine route mounting command (`mount MyEngine::Engine ...`) only once in the primary installation/mounting section. Do not duplicate it across multiple sections.
+8. **Section Delineation**: Explicitly delineate and label the mandatory "Hard-Gate" sections (Installation, Configuration, Host Assumptions) and the "Optional" sections (Extension Points, Usage Examples) in the document structure.
+9. **Upgrade Notes Formatting**: Format the Upgrade Notes section as a copyable code block, or ensure it contains at least one copyable code example.
+10. Language — Must be in English unless explicitly requested otherwise.
 
 ## Integration
 

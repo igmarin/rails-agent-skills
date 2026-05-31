@@ -37,11 +37,12 @@ when the underlying work was correct.
 
 1. **Baseline** — timing or query count with source (log line, profiler output, EXPLAIN row).
 2. **Bottleneck** — specific cause + the tool that surfaced it (`bullet`, `rack-mini-profiler`, or `EXPLAIN ANALYZE` — at least one named).
-3. **Regression spec — RED** — spec with `make_database_queries(count: <unoptimized>)`, shown failing.
+3. **Regression spec — RED** — spec asserting the target/optimized query count (e.g. `expect { ... }.to make_database_queries(count: <optimized_count>)` where `optimized_count` is the expected count after the fix), shown failing on the unoptimized code (since the unoptimized code executes more queries than the target count).
 4. **Fix** — minimal code change (eager load, index, cache, scope rewrite).
-5. **Regression spec — GREEN** — rerun output at the new count.
+5. **Regression spec — GREEN** — rerun output at the new count (confirming that with the fix applied, the exact same spec asserting the target/optimized count now passes).
 6. **EXPLAIN ANALYZE** — actual output rows for any DB-touching change; call out `Seq Scan → Index Scan` or `actual time` delta.
 7. **Quantified improvement** — `queries: N → M`, `p95: X ms → Y ms`. Numbers, not adjectives.
+
 
 Language: English unless explicitly requested otherwise.
 
@@ -63,13 +64,18 @@ user.posts_count  # no extra query
 
 **Regression Spec (Query Count Assertion)**
 ```ruby
+# In the regression spec, execute the controller action or query block that triggers the N+1,
+# and assert the target/optimized query count.
 RSpec.describe "Post index performance" do
   it "loads posts with authors in a fixed number of queries" do
     create_list(:post, 10, :with_author)
 
+    # In the RED phase (before fix), this triggers 11 queries.
+    # Since we assert count: 2, this spec will FAIL (producing a RED result).
+    # In the GREEN phase (after fix), it executes only 2 queries and passes.
     expect do
-      Post.includes(:author).to_a
-    end.to make_database_queries(count: 2) # posts + authors
+      get posts_path
+    end.to make_database_queries(count: 2) # target: 1 posts query + 1 authors query
   end
 end
 ```

@@ -30,14 +30,18 @@ BEFORE returning your security review, verify:
   2. All other findings follow auth/authz
   3. If no auth/authz issue exists, open with "Authentication & Authorization:
      no issues found" before any other category
+  4. You have searched the workspace using file listing/search tools to find
+     actual Rails codebase files (e.g. under app/controllers, app/models) and 
+     audited them, rather than stating no source code was provided.
 ```
-If no source files were provided or read, do not fabricate affected files,
-line numbers, or exploitable findings. Return a security review checklist and
-mark findings as requiring code-level verification.
+You MUST use your filesystem and search tools (like listing directories and searching patterns) to locate any source files in the workspace. Only if the workspace is completely empty may you return a checklist and state that no source files were provided.
 
 ## Core Process
 
 **Core principle:** Prioritize exploitable issues over style. Assume any untrusted input can be abused.
+
+### 0. Inspect the Workspace
+Before writing any findings or analysis, you MUST run search and directory listing tools to find source files in the workspace (e.g. controllers, models, config files). Perform a code-level security review on the actual files found. Do not claim no source code was provided without first checking the workspace.
 
 ### Review Order
 
@@ -106,19 +110,22 @@ Critical anti-patterns: `permit!` on any parameter set, `html_safe` on user cont
 1. **Format**: Produce sections in the review order defined in Core Process, even when empty — write "No issues found" and state what evidence would be needed to verify the category.
    ```text
    ## Authentication & Authorization
-   ## Parameter Handling & Mass Assignment
-   ## Query Safety (SQL / NoSQL / shell injection)
-   ## Output Encoding & Redirects
+   ## Parameter Handling & Sensitive Attribute Assignment
+   ## Redirects, Rendering & Output Encoding
    ## File Handling, Network Calls & Background Job Inputs
    ## Secrets, Logging & Operational Exposure
    ```
-2. **Finding details**: Each finding carries:
+2. **Finding details & Exploitability**: Each finding carries:
    - **Severity:** **High** or **Medium** (not "Critical")
    - **Attack path:** input → reach → impact
    - **Affected file:** path + line, e.g. `app/controllers/documents_controller.rb:42`
    - **Mitigation:** smallest credible fix
-   Do not use representative file paths as if they were confirmed evidence.
-3. **Language**: Must be in English unless explicitly requested otherwise.
+   - Do not use representative file paths as if they were confirmed evidence.
+   - **Verification Steps & Quality Gates**:
+     - **Hypothetical Exploitability Proof**: Even if no source files are provided and no vulnerabilities are found, you MUST include a **Hypothetical Exploitability Verification** sub-section inside the **Verification Steps & Quality Gates** section of the output `answer.md` (never as a separate top-level section interleaving the findings and the gates). Show a concrete example of a hypothetical vulnerability (e.g. an unscoped SQL query or open redirect) and detail exactly what the corresponding concrete attack scenario (exploit request/payload) would look like, proving how to confirm exploitability in practice.
+3. **No Implied Paths**: When no source code is analyzed, do NOT include any specific directory paths or file patterns (such as 'app/views/', 'app/controllers/') even in grep command examples or search patterns; instead, use generic placeholders like 'SRC_DIR/' or 'CONTROLLER_DIR/'. For hypothetical examples, use completely abstract placeholder names like `HYPOTHETICAL_DIR/hypothetical_controller.rb` to prevent them from being mistaken for real workspace file references.
+4. **Language**: Must be in English unless explicitly requested otherwise.
+
 
 ## Integration
 

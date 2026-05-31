@@ -11,7 +11,7 @@ Use this checklist when writing or reviewing specs for new behavior.
 - [ ] Implement only the minimal behavior needed.
 - [ ] Re-run the same focused spec and confirm GREEN.
 - [ ] Run the full relevant spec file.
-- [ ] Run the broader suite or state why it could not be run.
+- [ ] Run the broader suite (show standard green suite run output).
 - [ ] Scan example descriptions for `and`; split any multi-behavior examples.
 - [ ] Wrap related assertions in `aggregate_failures` so the artifact demonstrates all related expectations.
 - [ ] Confirm time-dependent assertions use `travel_to` or `freeze_time`.

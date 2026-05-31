@@ -31,59 +31,69 @@ Emits a generic Rails onboarding runbook for the user to run locally.
 
 See [references/steps.md](references/steps.md) for the detailed per-step template.
 
-### Runbook
+### Runbook (Workspace Inspection & Gated Workflow)
 
-**Step 1 — Inspect (agent reads)**
+**Step 1 — Inspect & Identify Stack Boundaries**
+- **Action**: First, check the workspace directory (e.g. using list_dir) to see if a Rails project is present. If files like `.ruby-version`, `.tool-versions`, `Gemfile`, `docker-compose.yml`, `.env.example`, or `config/database.yml` exist, you MUST read them using the file tools.
+- **Decision Gate**: Based on the files found, identify if the project is Dockerized (presence of `docker-compose.yml`) or Local-only, the database adapter (from `Gemfile` or `config/database.yml`), and the asset pipeline/JS bundler. Do not use generic decision trees if files are present to be read; read the files and tailor the runbook to those specific versions and tools.
+- **Action**: Propose a tailored runbook following the matching branches below.
 
-The agent reads `.ruby-version` / `.tool-versions`, `Gemfile` (Ruby line), `docker-compose.yml` (service list), `.env.example` (required keys). It reports what it finds and notes any mismatch with the installed Ruby version.
+**Step 2 — Environment Variables Setup**
+- **Decision Gate**: If `.env.example` is present, copy it. If not, guide the user to initialize a `.env` file with standard Rails credentials (e.g. `DATABASE_URL`, `SECRET_KEY_BASE`).
+- **Command**:
+  ```bash
+  cp .env.example .env
+  ```
+- **Action**: User edits `.env` with local secrets/settings.
 
-**Step 2 — Environment Variables**
-```bash
-cp .env.example .env
-# User edits .env with local values
-```
+**Step 3 — Docker & Services Setup**
+- **Decision Gate**: If project is Dockerized:
+  ```bash
+  docker compose up -d
+  docker compose ps           # expect all services healthy
+  ```
+  - **Action**: If any container status is unhealthy, print logs using `docker compose logs` to debug before proceeding.
+- **Decision Gate**: If project is Local-only, skip this step.
 
-**Step 3 — Docker**
-```bash
-docker compose up -d
-docker compose ps           # expect all services healthy
-```
-> If any service is unhealthy, the user shares log output with the agent. The agent proposes the next command; the user decides whether to run it.
+**Step 4 — Dependency Installation**
+- **Action**: Run Ruby installation:
+  ```bash
+  bundle install
+  ```
+- **Decision Gate**: If `yarn.lock` or `package.json` exists, run JS installation:
+  ```bash
+  yarn install                # or npm install depending on the lockfile
+  ```
+- **Decision Gate**: If project uses importmaps, skip JS installation.
 
-**Step 4 — Dependencies**
-```bash
-bundle install
-yarn install                # or npm install; skip if importmaps
-```
+**Step 5 — Database Initialization**
+- **Action**: Create and migrate:
+  ```bash
+  rails db:create db:migrate db:seed
+  ```
+- **Decision Gate**: If migration fails, verify database container/service health (`docker compose ps` or local service status) before retrying.
 
-**Step 5 — Database**
-```bash
-rails db:create db:migrate db:seed
-```
-Keep this as one command unless the project requires separate steps; if split,
-explain why.
-> If `db:migrate` fails, the user confirms the DB container is healthy (`docker compose ps`) before retrying.
+**Step 6 — Code Linters**
+- **Decision Gate**: If `.rubocop.yml` is present, run:
+  ```bash
+  bundle exec rubocop
+  ```
+- **Decision Gate**: If `.standard.yml` is present, run:
+  ```bash
+  bundle exec standardrb
+  ```
 
-**Step 6 — Linters**
-```bash
-bundle exec rubocop --init   # only if .rubocop.yml is missing
-bundle exec rubocop
-```
+**Step 7 — IDE Integration (Optional)**
+- **Decision Gate**: If using VS Code, install relevant extensions (e.g. `Shopify.ruby-lsp`, `rubocop.vscode-rubocop`) and configure `.vscode/settings.json` format-on-save.
 
-**Step 7 — IDE (optional)**
-```bash
-code --install-extension Shopify.ruby-lsp
-code --install-extension rubocop.vscode-rubocop
-```
+### Final Verification (User Runs)
+- Run the test suite and server:
+  ```bash
+  bundle exec rspec
+  rails server                 # then visit http://localhost:3000
+  ```
+- **Decision Gate**: If `rspec` fails on database-related errors, run `rails db:migrate RAILS_ENV=test` and retry.
 
-### Final Verification (user runs)
-
-```bash
-bundle exec rspec
-rails server                 # then visit http://localhost:3000
-```
-
-> If `rspec` fails on a clean setup, the user runs `rails db:migrate RAILS_ENV=test` and retries.
 
 ## Extended Resources
 
@@ -94,8 +104,13 @@ rails server                 # then visit http://localhost:3000
 
 When asked to prepare environment setup, output `answer.md` following the Runbook structure above (Steps 1–7 plus Final Verification), with these additional sections:
 
-1. **Scope** — State this is a generic Rails development-environment runbook for the user to execute locally; do not present it as repo-specific proof unless files were actually inspected.
-2. **Language** — Must be in English unless explicitly requested otherwise.
+1. **Scope & Boundary Acknowledgment** — Explicitly state the boundaries and triggers of the `setup-environment` skill (e.g. that this is a generic onboarding runbook not customized for a specific checkout, unless manifests were explicitly read). State this is a generic Rails development-environment runbook for the user to execute locally; do not present it as repo-specific proof unless files were actually inspected.
+2. **No Appendices or IDE Reference Sections**: Do NOT include generic reference appendices (such as Appendix A-C) or IDE integration detail sections unless explicitly requested. Focus the runbook strictly on the gate-driven steps (Steps 1–7 and Final Verification) to keep the documentation concise, focused, and action-oriented.
+3. **Resource / Asset Usage**: State explicitly which of `references/steps.md` and `EXAMPLES.md` were loaded/read during the task, under what conditions (e.g., to align with the prescribed per-step templates or to fetch example configurations), or state if they were not needed.
+4. **Language** — Must be in English unless explicitly requested otherwise.
+
+
+
 
 ## Integration
 

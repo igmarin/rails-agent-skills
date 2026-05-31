@@ -90,6 +90,15 @@ let(:client) { instance_double(Api::Client) }
 before { allow(client).to receive(:execute_query).and_return(api_response) }
 ```
 
+- **CRITICAL**: Collaborators (such as API clients, external services, or other domain objects) MUST be stubbed using `instance_double` to ensure true unit isolation.
+- If the collaborator is instantiated inside the service under test, stub its `.new` constructor to return the `instance_double`:
+  ```ruby
+  let(:client) { instance_double(CarrierApi::Client) }
+  before { allow(CarrierApi::Client).to receive(:new).and_return(client) }
+  ```
+- Alternatively, design the service to accept the collaborator as an injected dependency, and pass the `instance_double` in the params.
+- DO NOT use class-level stubs (e.g., `allow(CarrierApi::Client).to receive(:notify)`) as a fallback or workaround. If a collaborator is called via class methods, you must wrap/instantiate it, inject it, or stub `.new` to return the doubled instance.
+
 Use `create` for integration tests:
 
 ```ruby

@@ -75,7 +75,7 @@ Use this skill when the task is to review or improve the structure of a Rails ap
 
 1. **Scope**: State that the task is an architecture/structure review, not style review, and identify the Rails entry points inspected.
 2. **Order**: Begin with entry points. Then write findings ordered by review area.
-3. **Boundary-first lens**: Prioritize where domain logic lives, whether flow is explicit, and whether abstractions clarify the design or only move code around.
+3. **Boundary-first lens**: Prioritize where domain logic lives, whether flow is explicit, and whether abstractions clarify the design or only move code around. For services, concerns, and helpers, you MUST explicitly evaluate and state whether each abstraction clarifies the design or merely relocates code (indirection without value).
 4. **Finding Structure**: Every finding uses a four-field structure:
    ```text
    **Severity:** High

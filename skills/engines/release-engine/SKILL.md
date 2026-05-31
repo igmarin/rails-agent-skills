@@ -69,9 +69,9 @@ Load release assets conditionally and say which one informed the output:
 2. **Version constant** — updated `lib/[engine_name]/version.rb`.
 3. **CHANGELOG entries** — under Added/Changed/Fixed/Deprecated headers.
 4. **Upgrade notes** — host app steps (config, migrations, dependencies).
-5. **Gemspec + test status** — metadata, files, dependency ranges confirmed; pass/fail result of `bundle exec rspec`.
-6. **Dry-run output** — exact command `gem build *.gemspec && gem push --dry-run *.gem` plus contents verification (`tar tf pkg/*.gem` or `gem contents`).
-7. **Asset usage** — state which of `assets/release_checklist.md`, `assets/release_notes_template.md`, `assets/examples.md` was loaded, or explicitly say none was needed.
+5. **Gemspec + test status** — You MUST search the workspace for the `.gemspec` file, read its actual metadata and dependencies, and report them. Run `bundle exec rspec` and report the actual test status. Do NOT write illustrative/mock gemspec values or test results if a gemspec and test suite exist in the workspace.
+6. **Dry-run output** — You MUST run the actual `gem build *.gemspec` command in the workspace and report the actual terminal output from the build. Do NOT simulate or illustrate this output.
+7. **Asset usage** — state which of `assets/release_checklist.md`, `assets/release_notes_template.md`, `assets/examples.md` was loaded, stating the specific condition that was met for loading each asset, or explicitly say none was needed.
 8. **GitHub release notes** — concise draft with summary, highlights, upgrade notes, and verification status.
 9. **Release blockers** — open issues, or explicitly "No blockers".
 

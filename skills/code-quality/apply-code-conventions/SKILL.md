@@ -2,7 +2,7 @@
 name: apply-code-conventions
 license: MIT
 description: >
-  Use when applying code conventions to Rails files — must run linter (detect .rubocop.yml/.standard.yml, note absence, and state which linter was detected and that style defers to it), apply area-specific rules per path with concrete per-path recommendations, verify tests gate (state the failing spec, run command, expected failure, minimal implementation step, and passing rerun) BEFORE new behavior, chain to specialised skills, only recommend let_it_be if test-prof already in Gemfile.lock (otherwise default to let, reach for "let!" only if lazy evaluation breaks example, do not introduce test-prof), and load extended files (assets/checklist.md, assets/snippets.md) only when needed. Use when writing, reviewing, or refactoring Ruby on Rails code. Trigger words: code review, refactor, RoR, clean code, best practices.
+  Applies code conventions to Ruby on Rails files. Use when writing, reviewing, or refactoring Ruby on Rails code — including code review, refactoring, linting, RuboCop configuration, RSpec/specs/test setup, or improving clean code and best practices in a Rails app. Detects and runs the configured linter (.rubocop.yml/.standard.yml), applies area-specific architecture and behaviour rules per file path, enforces a tests-gate (failing spec before implementation), applies structured logging and comment discipline, recommends let_it_be only when test-prof is already in Gemfile.lock, and chains to specialised skills for deeper guidance. Trigger words: code review, refactor, RoR, Ruby code, Rails app, rubocop, linting, rspec, specs, test setup, clean code, best practices.
 metadata:
   version: 1.0.0
   user-invocable: "true"
@@ -91,6 +91,16 @@ Load these files only when their specific content is needed:
 
 - **[assets/checklist.md](assets/checklist.md)** — Use for detailed code review checklists.
 - **[assets/snippets.md](assets/snippets.md)** — Use for quick code snippets of common patterns.
+
+## Output Style
+
+When applying code conventions, your output `answer.md` MUST include:
+1. **Linter Detection**: State which linter configuration was detected in the project (e.g. `.rubocop.yml` or `.standard.yml`), or note its absence.
+2. **Applied Area-Specific Rules**: State the concrete per-path recommendations for each changed/reviewed file path using the Apply by area guidelines.
+3. **Structured Logging Verification**: Confirm that all logger calls follow the mandatory static string + domain fields hash shape.
+4. **Comment Discipline Verification**: Verify that all `TODO:`/`FIXME:`/`NOTE:` tags contain owner and ticket context.
+5. **Resource Loading & Reference**: Include a short section in `answer.md` documenting which specific assets (e.g. `assets/checklist.md`, `assets/snippets.md`) were loaded conditionally and why. This makes the process instruction verifiable.
+6. **Language**: Must be in English unless explicitly requested otherwise.
 
 ## Integration
 

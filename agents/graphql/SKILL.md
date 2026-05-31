@@ -18,19 +18,19 @@ metadata:
 ---
 # GraphQL Agent
 
+> **Hard Gate Convention:** Every phase ends with a HARD GATE. All gates block progression — fix all issues in the current phase before advancing.
+
 ## Agent Phases
 
 ### Phase 1: Domain Modeling
 
 **Steps:**
-1. Map entities → Types, actions → Mutations, read paths → Queries (e.g. `Order` entity → `OrderType`, `placeOrder` action → `PlaceOrderMutation`, order lookup → `orderQuery`)
+1. Map entities → Types, actions → Mutations, read paths → Queries (e.g. `Order` → `OrderType`, `placeOrder` → `PlaceOrderMutation`)
 2. Assign each type to a bounded context and define which context owns and exposes it
 
 **HARD GATE — Domain Language:**
 - Core GraphQL types and their owning bounded contexts identified
 - Entity relationships mapped to GraphQL connections or nested types
-
-**If gate fails:** Return to domain discovery.
 
 ---
 
@@ -65,8 +65,6 @@ bundle exec rake graphql:validate
 - No circular type references
 - All types have proper fields and arguments
 - Authorization rules defined for sensitive fields
-
-**If gate fails:** Fix schema validation errors before proceeding.
 
 **Example Type:**
 ```ruby
@@ -103,17 +101,17 @@ end
 - Test PASSES after implementation
 - Full test suite PASSES (no regressions)
 
-**If test fails for wrong reason:** Fix the test (not the implementation) to accurately reflect intended behavior.
+> If a test fails for the wrong reason, fix the test (not the implementation) to accurately reflect intended behavior.
 
 **Example Resolver Test + Implementation:**
 ```ruby
 # spec/graphql/resolvers/order_resolver_spec.rb
 RSpec.describe Resolvers::OrderResolver do
-  let(:current_user) { create(:user) }
-  let(:order) { create(:order, customer: current_user) }
+  let(:user) { create(:user) }
+  let(:order) { create(:order, customer: user) }
 
   it 'returns order for authorized user' do
-    result = described_class.new(object: nil, context: { current_user: }).resolve(id: order.id)
+    result = described_class.new(object: nil, context: { current_user: user }).resolve(id: order.id)
     expect(result).to eq(order)
   end
 
@@ -130,9 +128,9 @@ module Resolvers
     argument :id, ID, required: true
 
     def resolve(id:)
-      Order.find_by(id: id).tap do |order|
-        raise GraphQL::ExecutionError, "Not authorized" unless order&.customer == context[:current_user]
-      end
+      order = Order.find_by(id: id)
+      raise GraphQL::ExecutionError, "Not authorized" unless order&.customer == context[:current_user]
+      order
     end
   end
 end
@@ -144,10 +142,10 @@ end
 
 **Steps:**
 1. Audit authorization at field level — every sensitive field must have an `authorized?` guard
-2. Configure query depth and complexity limits
-3. Implement rate limiting
-4. Eliminate N+1 queries using `GraphQL::Batch` or `dataloader`
-5. Verify error messages do not leak sensitive information
+2. Configure query depth and complexity limits on the schema class
+3. Implement rate limiting at the application layer
+4. Eliminate N+1 queries using `GraphQL::Batch` or `dataloader` — use `graphql-ruby`'s built-in dataloader or `batch-loader` gem for associations
+5. Ensure `rescue_from` on the schema class catches `StandardError` and returns a generic message, preventing stack traces or model details from leaking
 
 **HARD GATE — Security Check:**
 - Authorization on all sensitive fields
@@ -156,8 +154,6 @@ end
 - Rate limiting implemented
 - No N+1 queries in resolvers
 - Error messages sanitized
-
-**If gate fails:** Address all security issues before deploying. Never ship a GraphQL API without passing this gate.
 
 **Example Security Configuration:**
 ```ruby

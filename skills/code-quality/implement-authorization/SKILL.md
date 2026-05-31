@@ -100,6 +100,32 @@ RSpec.describe PostPolicy do
 end
 ```
 
+## Output Style
+
+When asked to implement or review authorization, your output `answer.md` MUST follow this style:
+
+1. **Simulated Console Exception Output**:
+   - In the verification steps, you MUST include a dedicated **Manual Denied-Action Verification** section.
+   - Show simulated Rails console output blocks demonstrating Pundit or CanCanCan actually raising the appropriate authorization exception when an unauthorized action is attempted.
+   - **CRITICAL**: Do NOT use unsaved records (e.g., `User.new` or `Post.new`) in the console examples; you MUST use persisted records (e.g., `User.create!` or `Post.create!`) to accurately reflect real Rails console verification.
+   - Example format for Pundit:
+     ```
+     irb(main):001:0> user = User.create!(role: :guest)
+     irb(main):002:0> post = Post.create!(user: User.create!(role: :admin))
+     irb(main):003:0> Pundit.authorize(user, post, :update?)
+     Pundit::NotAuthorizedError: not allowed to update? this #<Post...>
+     ```
+   - Example format for CanCanCan:
+     ```
+     irb(main):001:0> ability = Ability.new(User.create!(role: :guest))
+     irb(main):002:0> post = Post.create!(user: User.create!(role: :admin))
+     irb(main):003:0> ability.authorize!(:update, post)
+     CanCan::AccessDenied: You are not authorized to access this page.
+     ```
+2. **HTTP and Policy Verification**:
+   - Provide concrete `curl` requests or controller test commands with expected HTTP response codes (e.g. `403 Forbidden` or `302 Found` redirecting to unauthorized alerts) when access is denied.
+3. **Language**: Must be in English unless explicitly requested otherwise.
+
 ## Integration
 
 | Skill | When to chain |
