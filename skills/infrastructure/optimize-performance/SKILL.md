@@ -27,10 +27,8 @@ NEVER optimize without a baseline measurement
 ALWAYS write a regression spec before optimizing (query count assertion)
 ALWAYS verify with EXPLAIN ANALYZE for database changes
 
-NEVER write the report as "I applied includes(:author), then wrote a spec
-to lock it in." The spec MUST be written and shown failing BEFORE the fix
-appears in your output. Reordering for narrative flow fails the audit even
-when the underlying work was correct.
+The spec MUST be written and shown failing BEFORE the fix appears in your
+output — reordering for narrative flow fails the audit.
 ```
 
 **Required report order — each step must appear in output:**
@@ -48,40 +46,38 @@ Language: English unless explicitly requested otherwise.
 
 ## Extended Resources
 
-**Less-Obvious Optimizations**
+### Less-Obvious Optimizations
+
 ```ruby
-# Use pluck to avoid loading full objects when only a column is needed
+# Avoid loading full objects when only a column is needed
 Post.where(published: true).pluck(:id, :title)
 
-# Use select to limit loaded columns on large tables
+# Limit loaded columns on large tables
 Post.select(:id, :title, :author_id).where(published: true)
 
-# Use counter_cache to avoid COUNT queries in loops
-# In migration: add_column :users, :posts_count, :integer, default: 0
-# In Post model: belongs_to :user, counter_cache: true
+# counter_cache avoids COUNT queries in loops
+# Migration: add_column :users, :posts_count, :integer, default: 0
+# Post model: belongs_to :user, counter_cache: true
 user.posts_count  # no extra query
 ```
 
-**Regression Spec (Query Count Assertion)**
+### Regression Spec (Query Count Assertion)
+
 ```ruby
-# In the regression spec, execute the controller action or query block that triggers the N+1,
-# and assert the target/optimized query count.
 RSpec.describe "Post index performance" do
   it "loads posts with authors in a fixed number of queries" do
     create_list(:post, 10, :with_author)
 
-    # In the RED phase (before fix), this triggers 11 queries.
-    # Since we assert count: 2, this spec will FAIL (producing a RED result).
-    # In the GREEN phase (after fix), it executes only 2 queries and passes.
     expect do
       get posts_path
-    end.to make_database_queries(count: 2) # target: 1 posts query + 1 authors query
+    end.to make_database_queries(count: 2) # 1 posts query + 1 authors query
   end
 end
 ```
 Use the `db-query-matchers` gem or a custom `make_database_queries` matcher.
 
-**EXPLAIN ANALYZE Verification**
+### EXPLAIN ANALYZE Verification
+
 Run directly in `rails dbconsole` (PostgreSQL) after applying an index or query change:
 ```sql
 EXPLAIN ANALYZE

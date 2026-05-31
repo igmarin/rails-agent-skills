@@ -72,3 +72,22 @@ class AddIndexToAnalyticsEvents < ActiveRecord::Migration[7.2]
   end
 end
 ```
+
+## PostgreSQL Lock Behavior Reference
+
+Use this table when stating lock/rewrite risk for each migration step.
+
+| Operation | PG Lock | Blocks | Duration | Notes |
+|-----------|---------|--------|----------|-------|
+| `add_column` (nullable, no default) | `ACCESS EXCLUSIVE` | All | ~ms | Fast metadata-only change |
+| `add_column` (with default, PG 11+) | `ACCESS EXCLUSIVE` | All | ~ms | No rewrite since PG 11 |
+| `add_column` (with default, PG < 11) | `ACCESS EXCLUSIVE` | All | Full table rewrite | Avoid on large tables |
+| `add_index` (standard) | `SHARE` | Writes | Duration of index build | Blocks INSERT/UPDATE/DELETE |
+| `add_index` (concurrent) | `SHARE UPDATE EXCLUSIVE` | DDL only | Duration of index build | Does not block writes |
+| `add_foreign_key` (validate: true, default) | `SHARE ROW EXCLUSIVE` | Writes | Full row scan | Validates all existing rows |
+| `add_foreign_key` (validate: false) | `ACCESS EXCLUSIVE` | All | ~ms | Metadata-only, no row scan |
+| `validate_foreign_key` | `SHARE UPDATE EXCLUSIVE` | DDL only | Full row scan | Does not block writes |
+| `change_column_null` (to NOT NULL) | `ACCESS EXCLUSIVE` | All | Full row scan | Scans every row to verify no NULLs |
+| `change_column` (type change) | `ACCESS EXCLUSIVE` | All | Full table rewrite | Always rewrite unless cast is binary-coercible |
+| `remove_column` | `ACCESS EXCLUSIVE` | All | ~ms | Fast metadata-only change |
+| `rename_column` | `ACCESS EXCLUSIVE` | All | ~ms | Fast but breaks running app code |

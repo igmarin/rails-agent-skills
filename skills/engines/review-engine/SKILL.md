@@ -69,6 +69,22 @@ class MyEngine::SomeService
 end
 ```
 
+**Bad (require-time patching — not reload-safe):**
+
+```ruby
+# Bad: patches at require time — double-includes on code reload
+ActionController::Base.include(MyEngine::ControllerHelpers)
+```
+
+**Good (lazy-loaded with `ActiveSupport.on_load`):**
+
+```ruby
+# Good: patches only when the framework component is ready, reload-safe
+ActiveSupport.on_load(:action_controller) do
+  include MyEngine::ControllerHelpers
+end
+```
+
 ## Output Style
 
 When asked to review an engine, your output `answer.md` MUST comply with:

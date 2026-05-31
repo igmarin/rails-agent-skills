@@ -2,7 +2,7 @@
 name: review-architecture
 license: MIT
 description: >
-  Use when reviewing Rails application structure or architecture — must prioritize boundary problems over style, evaluate where domain logic lives, and for every High-severity finding verify it by reading the actual code and stating the concrete code-level evidence read (redacting any secret-like literal, without using representative file paths or fabricated line numbers). Tech debt, fat controllers, fat models.
+  Use when reviewing Rails application structure, MVC boundaries, or architecture — including when the user mentions tech debt, fat controllers, fat models, service objects, refactoring, monolith structure, or Rails best practices. Prioritizes boundary problems over style, evaluates where domain logic lives, and for every High-severity finding verifies it by reading the actual code and stating concrete code-level evidence (redacting any secret-like literal, without using representative file paths or fabricated line numbers).
 metadata:
   version: 1.0.0
   user-invocable: "true"
@@ -51,7 +51,7 @@ Use this skill when the task is to review or improve the structure of a Rails ap
 4. Inspect controller size and orchestration.
 5. Read every concern, helper, and presenter: does it do one coherent thing, or does it mix auditing + notifications + emails + external API calls? Mixed concerns are High or Medium severity depending on blast radius. **Treat any concern used by only one class as a candidate for deletion — inline it instead.**
 6. Check whether abstractions clarify the design or only move code around.
-7. **Verify each High-severity finding** per the HARD-GATE above — confirm real structural problem, redact any credential-like values found.
+7. **Verify each High-severity finding** per the [HARD-GATE](#hard-gate-authoritative-verification-rule) — confirm real structural problem, redact any credential-like values found.
 
 ### Severity Levels
 
@@ -75,7 +75,7 @@ Use this skill when the task is to review or improve the structure of a Rails ap
 
 1. **Scope**: State that the task is an architecture/structure review, not style review, and identify the Rails entry points inspected.
 2. **Order**: Begin with entry points. Then write findings ordered by review area.
-3. **Boundary-first lens**: Prioritize where domain logic lives, whether flow is explicit, and whether abstractions clarify the design or only move code around. For services, concerns, and helpers, you MUST explicitly evaluate and state whether each abstraction clarifies the design or merely relocates code (indirection without value).
+3. **Boundary-first lens**: Prioritize where domain logic lives and whether flow is explicit. For services, concerns, and helpers, you MUST explicitly evaluate and state whether each abstraction clarifies the design or merely relocates code (indirection without value).
 4. **Finding Structure**: Every finding uses a four-field structure:
    ```text
    **Severity:** High
@@ -83,7 +83,7 @@ Use this skill when the task is to review or improve the structure of a Rails ap
    **Risk:** Controller runs a 5-step domain workflow. Partial state on failure; untestable without HTTP.
    **Improvement:** Extract to Orders::CreateOrder.call(params). Controller handles response/redirect only.
    ```
-5. **High-severity verification**: For every High finding, state the concrete code-level evidence read (per HARD-GATE). Redact any secret-like literal. Never use representative file paths or fabricated line numbers as evidence.
+5. **High-severity verification**: For every High finding, state the concrete code-level evidence read per the [HARD-GATE](#hard-gate-authoritative-verification-rule). Redact any secret-like literal. Never use representative file paths or fabricated line numbers as evidence.
 6. **Completeness**: For each finding include severity, affected files or area, why the structure is risky, and the smallest credible improvement. Then list open assumptions and recommended next refactor steps.
 7. **Language**: Must be in English unless explicitly requested otherwise.
 

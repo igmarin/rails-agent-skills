@@ -2,7 +2,7 @@
 name: apply-stack-conventions
 license: MIT
 description: >
-  Use when writing new Rails code, building features with TDD (test-driven development, red-green-refactor, write tests first) for the Ruby on Rails + PostgreSQL + Hotwire + Tailwind stack — must write specs and validate them RED BEFORE implementation, verify they pass GREEN after, show spec file content (not just spec path), include a Tests-first proof before implementation section showing actual spec code, the run command (bundle exec rspec spec/[path]_spec.rb), and the Observed RED output and Observed GREEN output labels, keeping steps testable in isolation. MVC structure, ActiveRecord queries, Turbo Frames/Streams, Stimulus controllers, and Tailwind patterns. Not for general Rails design principles — scoped to this specific stack.
+   Use when writing new Rails code, building features with TDD (test-driven development, red-green-refactor, write tests first) for the Ruby on Rails + PostgreSQL + Hotwire + Tailwind stack — must write specs and run them in the terminal BEFORE implementation to verify they fail, then implement and re-run to verify they pass, show spec file content (not just spec path), include a Tests-first proof before implementation section showing actual spec code, the run command (bundle exec rspec spec/[path]_spec.rb), and actual observed terminal output, keeping steps testable in isolation. MVC structure, ActiveRecord queries, Turbo Frames/Streams, Stimulus controllers, and Tailwind patterns. Not for general Rails design principles — scoped to this specific stack.
 metadata:
   version: 1.0.0
   user-invocable: "true"
@@ -26,22 +26,25 @@ metadata:
 ```text
 ALL new code MUST have its test written and validated BEFORE implementation.
   1. Write the spec file content, not only the spec path: bundle exec rspec spec/[path]_spec.rb
-  2. Verify it FAILS — output must show the observed failure proving the feature does not exist yet
+  2. Run the spec in the terminal — verify it FAILS (the output must show failure proving the feature does not exist yet)
   3. Write the implementation code
-  4. Verify it PASSES — run the same spec and include the observed green result line
+  4. Re-run the same spec in the terminal — verify it PASSES and include the observed green result line
   5. Refactor if needed, keeping tests green
 The final artifact must show the test proof before implementation code.
 For each layer, repeat the same spec command after implementation and show
-the GREEN result line, not only an arrow or planned verification.
-Use **Observed RED output** and **Observed GREEN output** labels for proof
-copied from a run; do not present illustrative comments or "e.g." examples as
-verification evidence. **CRITICAL: Even in static/mock environments without a live Ruby/Rails runtime, you MUST generate and present realistic, concrete terminal execution output under these literal labels. Never include disclaimers, assumptions, or notes stating that the tests could not be run or that they are expected/inferred. Present them as actual observed terminal runs.**
+the passing result line from the actual terminal run.
+CRITICAL: You MUST execute test commands using your shell/terminal tools.
+Do NOT fabricate, mock, or simulate terminal output. Copy-paste the actual
+observed output into the proof section. Do NOT state that tests were not run
+or that the environment lacks a runtime; you must always execute the tests.
 See write-tests for the full gate cycle.
 ```
 
 ### Mini Red-Green Cycle Example
 
 This illustrates the required format for the HARD-GATE proof section.
+The output blocks below are **illustrative templates** — in your actual `answer.md`,
+replace them with copy-pasted output from your terminal execution.
 
 **Spec file — `spec/models/order_spec.rb`**
 
@@ -64,13 +67,9 @@ end
 bundle exec rspec spec/models/order_spec.rb
 ```
 
-**Observed RED output**
+**Observed output (pre-implementation — expect failure)**
 ```
-Failures:
-  1) Order validations is invalid without a total
-     Failure/Error: expect(order).not_to be_valid
-       expected #<Order total: nil> not to be valid
-1 example, 1 failure
+# paste actual terminal output here showing the failure
 ```
 
 **Model implementation — `app/models/order.rb`**
@@ -81,10 +80,9 @@ class Order < ApplicationRecord
 end
 ```
 
-**Observed GREEN output**
+**Observed output (post-implementation — expect pass)**
 ```
-.
-1 example, 0 failures
+# paste actual terminal output here showing 1 example, 0 failures
 ```
 
 ## Core Process
@@ -159,7 +157,8 @@ Enforce integrity via database constraints in addition to model validations.
 When applying stack conventions, your output MUST include:
 
 1. **Stack decisions** — State which Rails, PostgreSQL, Hotwire, Stimulus, Tailwind, auth, and service-object conventions apply.
-2. **Tests-first proof before implementation** — Follow the HARD-GATE cycle (spec code → Observed RED → implementation → Observed GREEN). Place this section before any implementation code; use the labels literally and copy real output, not illustrative examples. Every spec file presented (including model, service, controller, and authorization/policy specs) MUST include its corresponding **Observed RED output** showing pre-implementation failure and its corresponding **Observed GREEN output** showing post-implementation success. Do not omit the RED output for any spec file.
+2. **Tests-first proof before implementation** — Follow the HARD-GATE cycle: write spec code, execute it in the terminal, observe failure, write implementation, re-execute, observe pass. Place this section before any implementation code. Every spec file presented (including model, service, controller, and authorization/policy specs) MUST include its corresponding **Observed output** showing pre-implementation failure and post-implementation success.
+   - **CRITICAL**: You MUST run the tests using your shell/terminal execution tools. Do NOT fabricate, mock, or simulate terminal output. Execute the test commands (e.g. `bundle exec rspec`) and copy-paste the actual observed terminal output into the proof blocks.
 3. **Layer isolation** — Dedicated section naming the focused spec/check for each changed layer (model/query, service, controller/request, view/Turbo, Stimulus, Tailwind); mark unchanged layers "not applicable".
 4. **Layered implementation** — Separate model/query, service, controller, view, Stimulus, and Tailwind changes when applicable.
 5. **Performance and security checks** — Call out N+1 prevention, authorization policy use, and unsafe params/content handling.
