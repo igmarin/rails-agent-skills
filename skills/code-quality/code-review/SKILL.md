@@ -116,8 +116,6 @@ Group findings by severity. The canonical output shape is shown below; [assets/e
    - [ ] Code review before merge
    ```
    Findings must come from an actual diff or provided file contents. Do not present a simulated PR review as if it were a completed review of real code.
-   - **Checklist Reference**: You MUST explicitly reference and link to the [checklist](file:///absolute/path/to/assets/checklist.md) (e.g. `assets/checklist.md` relative to this skill) for the detailed per-area review criteria.
-   - **Template & Placeholders**: When displaying the `Example (inline):` or any template review guide, ensure you clearly annotate or label it as a template/placeholder, and do NOT use mock files/lines in a way that can be mistaken for a real completed review of the workspace code. For example, use abstract placeholders like `[FILE_PATH:LINE_NUMBER]` or explicitly state `(Template Example)` in the header.
 2. **Tagging**: Tag (Area) from Controllers, Routing, Views, Models, Queries, Migrations, Validations, Security, Caching, Jobs, Tests. Cover **≥4** distinct areas if applicable.
 3. **Task-list handoff** — Always include a `Code review before merge` task or task-list line.
 4. **Language**: Must be in English unless explicitly requested otherwise.
