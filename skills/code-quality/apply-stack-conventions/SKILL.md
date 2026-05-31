@@ -2,7 +2,7 @@
 name: apply-stack-conventions
 license: MIT
 description: >
-  Use when writing new Rails code for the PostgreSQL + Hotwire + Tailwind stack — must write specs and validate them RED BEFORE implementation, verify they pass GREEN after, show spec file content (not just spec path), include a Tests-first proof before implementation section showing actual spec code, the run command (bundle exec rspec spec/[path]_spec.rb), and the Observed RED output and Observed GREEN output labels, keeping steps testable in isolation. MVC structure, ActiveRecord queries, Turbo Frames/Streams, Stimulus controllers, and Tailwind patterns. Not for general Rails design principles — scoped to this specific stack.
+  Use when writing new Rails code (Ruby on Rails) for the PostgreSQL + Hotwire + Tailwind stack, including TDD (test-driven development), write-tests-first, or red-green-refactor workflows — must write specs and validate them RED BEFORE implementation, verify they pass GREEN after, show spec file content (not just spec path), include a Tests-first proof before implementation section showing actual spec code, the run command (bundle exec rspec spec/[path]_spec.rb), and the Observed RED output and Observed GREEN output labels, keeping steps testable in isolation. MVC structure, ActiveRecord queries, Turbo Frames/Streams, Stimulus controllers, and Tailwind patterns. Not for general Rails design principles — scoped to this specific stack.
 metadata:
   version: 1.0.0
   user-invocable: "true"
@@ -16,34 +16,25 @@ metadata:
 |------------|------------------|
 | Rails MVC | Thin controllers; move non-trivial business logic into service objects |
 | PostgreSQL | Avoid N+1s with `includes`; use database constraints for integrity |
-| Hotwire | Prefer Turbo Frames/Streams before Stimulus |
+| Hotwire | Prefer Turbo Frames/Streams before Stimulus (see Pitfalls) |
 | Tailwind | Use utilities in views; extract repeated UI into partials/components |
 | Auth | Apply Devise authentication and Pundit authorization to protected resources |
 
-## HARD-GATE
+## HARD-GATE: TDD Cycle
 
-```text
-ALL new code MUST have its test written and validated BEFORE implementation.
-  1. Write the spec file content, not only the spec path: bundle exec rspec spec/[path]_spec.rb
-  2. Run the spec in the terminal — verify it FAILS (the output must show failure proving the feature does not exist yet)
-  3. Write the implementation code
-  4. Re-run the same spec in the terminal — verify it PASSES and include the observed green result line
-  5. Refactor if needed, keeping tests green
-The final artifact must show the test proof before implementation code.
-For each layer, repeat the same spec command after implementation and show
-the passing result line from the actual terminal run.
-CRITICAL: You MUST execute test commands using your shell/terminal tools.
-Do NOT fabricate, mock, or simulate terminal output. Copy-paste the actual
-observed output into the proof section. Do NOT state that tests were not run
-or that the environment lacks a runtime; you must always execute the tests.
-See write-tests for the full gate cycle.
-```
+All new code **must** have its test written and validated **before** implementation. Follow this exact cycle for every layer:
 
-### Mini Red-Green Cycle Example
+1. Write the spec file — show the full file content, not only the path
+2. Run: `bundle exec rspec spec/[path]_spec.rb` — verify it **FAILS** (**Observed RED output**)
+3. Write the implementation code
+4. Re-run the same command — verify it **PASSES** (**Observed GREEN output**)
+5. Refactor if needed, keeping tests green
 
-This illustrates the required format for the HARD-GATE proof section.
-The output blocks below are **illustrative templates** — in your actual `answer.md`,
-replace them with copy-pasted output from your terminal execution.
+**CRITICAL:** Execute all test commands using your shell/terminal tools. Do **not** fabricate, mock, or simulate terminal output. Copy-paste the actual observed output. If the environment does not support running tests, stop and tell the user — do not proceed to implementation without verified RED output. See **write-tests** for the full gate cycle.
+
+### Red-Green Cycle Example
+
+The output blocks below are **illustrative templates** — replace them with copy-pasted output from your actual terminal execution.
 
 **Spec file — `spec/models/order_spec.rb`**
 
@@ -66,7 +57,7 @@ end
 bundle exec rspec spec/models/order_spec.rb
 ```
 
-**Observed output (pre-implementation — expect failure)**
+**Observed RED output (pre-implementation — expect failure)**
 ```
 # paste actual terminal output here showing the failure
 ```
@@ -79,7 +70,7 @@ class Order < ApplicationRecord
 end
 ```
 
-**Observed output (post-implementation — expect pass)**
+**Observed GREEN output (post-implementation — expect pass)**
 ```
 # paste actual terminal output here showing 1 example, 0 failures
 ```
@@ -109,18 +100,14 @@ applicable"; do not silently omit view, Stimulus, or Tailwind isolation.
 
 ### Service Object Pattern
 
-Controllers delegate to a service via `.call`; the service returns a result hash.
+Controllers delegate to a service via `.call`; the service returns a result hash. See **create-service-object** for the full pattern and response format.
 
 ```ruby
 # app/services/create_order_service.rb
 class CreateOrderService
   def self.call(params)
     order = Order.new(params)
-    if order.save
-      { success: true, record: order }
-    else
-      { success: false, record: order }
-    end
+    order.save ? { success: true, record: order } : { success: false, record: order }
   end
 end
 
@@ -142,21 +129,6 @@ end
 @orders = Order.includes(:line_items).where(user: current_user)
 ```
 
-#### Service Object
-
-```ruby
-# Controller stays thin — delegate to service
-result = Orders::CreateOrder.call(user: current_user, params: order_params)
-if result[:success]
-  redirect_to result[:order], notice: "Order created"
-else
-  @order = Order.new(order_params)
-  render :new, status: :unprocessable_entity
-end
-```
-
-See **create-service-object** for the full `.call` pattern and response format.
-
 ### Security
 
 This project uses **Devise** for authentication and **Pundit** for authorization. Apply these on every feature that introduces access-controlled resources.
@@ -165,7 +137,7 @@ This project uses **Devise** for authentication and **Pundit** for authorization
 
 | Issue | Correct approach |
 |-------|------------------|
-| Reaching for Stimulus before trying Turbo | Use Turbo Frames/Streams first |
+| Reaching for Stimulus before trying Turbo | Use Turbo Frames/Streams first; only add a Stimulus controller when Turbo cannot handle the interactivity |
 | N+1 queries in loops over associations | Eager load with `includes` before the loop |
 | Controller action with 15+ lines of business logic | Extract to a service object using the `.call` pattern |
 | Accessing a protected resource without an authorisation check | Apply a Pundit policy on every action that touches access-controlled data |
@@ -175,7 +147,7 @@ This project uses **Devise** for authentication and **Pundit** for authorization
 When applying stack conventions, your output MUST include:
 
 1. **Stack decisions** — State which Rails, PostgreSQL, Hotwire, Stimulus, Tailwind, auth, and service-object conventions apply.
-2. **Tests-first proof before implementation** — Follow the HARD-GATE cycle above. Put this section before any implementation code, with actual spec code, exact command, and Observed RED/GREEN output per layer.
+2. **Tests-first proof before implementation** — Follow the HARD-GATE cycle above (spec code, exact command, Observed RED output per layer). Put this section before any implementation code.
 3. **Layer isolation** — Dedicated section naming the focused spec/check for each changed layer (model/query, service, controller/request, view/Turbo, Stimulus, Tailwind); mark unchanged layers "not applicable".
 4. **Layered implementation** — Separate model/query, service, controller, view, Stimulus, and Tailwind changes when applicable.
 5. **Performance and security checks** — Call out N+1 prevention, authorization policy use, and unsafe params/content handling.
