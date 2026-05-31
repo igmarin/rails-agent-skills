@@ -9,12 +9,6 @@
       "why_given": "new knowledge"
     },
     {
-      "instruction": "Use the `get_project_context` tool to retrieve:",
-      "original_snippets": "Use the `get_project_context` tool to retrieve:",
-      "relevant_when": "When a user asks for Rails work that should trigger load-context.",
-      "why_given": "new knowledge"
-    },
-    {
       "instruction": "**Load baseline Rails context:** Read at minimum:",
       "original_snippets": "**Load baseline Rails context:** Read at minimum:",
       "relevant_when": "When a user asks for Rails work that should trigger load-context.",

@@ -1,5 +1,5 @@
 {
-  "context": "Checks whether the final artifact follows the code-review instructions from the published Rails Agent Skills tile.",
+  "context": "Checks whether the final artifact follows the code-review instructions from the published Rails Agent Skills plugin.",
   "type": "weighted_checklist",
   "checklist": [
     {
@@ -9,27 +9,27 @@
     },
     {
       "name": "instruction-2",
-      "description": "The submitted artifact follows this skill instruction: **Core principle:** Review early, review often. Self-review before PR. Re-review after significant changes.",
-      "max_score": 13
-    },
-    {
-      "name": "instruction-3",
       "description": "The submitted artifact follows this skill instruction: Use **only** these labels:",
       "max_score": 13
     },
     {
-      "name": "instruction-4",
+      "name": "instruction-3",
       "description": "The submitted artifact follows this skill instruction: **`Critical`** — security, data loss, crash, or **Always Critical** (see below). Block merge.",
       "max_score": 13
     },
     {
-      "name": "instruction-5",
+      "name": "instruction-4",
       "description": "The submitted artifact follows this skill instruction: **Always Critical (flag every occurrence):**",
+      "max_score": 13
+    },
+    {
+      "name": "instruction-5",
+      "description": "The submitted artifact follows this skill instruction: [assets/checklist.md](assets/checklist.md) — detailed per-area review criteria (referenced as the Review Order checklist above)",
       "max_score": 12
     },
     {
       "name": "instruction-6",
-      "description": "The submitted artifact follows this skill instruction: **Review principle** — State: \"Review early, review often. Self-review before PR. Re-review after significant changes.\"",
+      "description": "The submitted artifact follows this skill instruction: **Re-review required:** Yes — Critical fixes must be re-diffed before approval.",
       "max_score": 12
     },
     {

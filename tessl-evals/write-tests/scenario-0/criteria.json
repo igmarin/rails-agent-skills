@@ -1,5 +1,5 @@
 {
-  "context": "Checks whether the final artifact follows the write-tests instructions from the published Rails Agent Skills tile.",
+  "context": "Checks whether the final artifact follows the write-tests instructions from the published Rails Agent Skills plugin.",
   "type": "weighted_checklist",
   "checklist": [
     {

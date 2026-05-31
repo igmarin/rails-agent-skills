@@ -1,41 +1,26 @@
 {
-  "context": "Checks whether the final artifact follows the optimize-performance instructions from the published Rails Agent Skills tile.",
+  "context": "Checks whether the final artifact follows the optimize-performance instructions from the published Rails Agent Skills plugin.",
   "type": "weighted_checklist",
   "checklist": [
     {
       "name": "instruction-1",
-      "description": "The submitted artifact follows this skill instruction: REPORT ORDER MUST MATCH WORK ORDER:",
-      "max_score": 15
+      "description": "The submitted artifact follows this skill instruction: to lock it in.\" The spec MUST be written and shown failing BEFORE the fix",
+      "max_score": 25
     },
     {
       "name": "instruction-2",
-      "description": "The submitted artifact follows this skill instruction: to lock it in.\" The spec MUST be written and shown failing BEFORE the fix",
-      "max_score": 15
+      "description": "The submitted artifact follows this skill instruction: **Required report order — each step must appear in output:**",
+      "max_score": 25
     },
     {
       "name": "instruction-3",
-      "description": "The submitted artifact follows this skill instruction: **Write regression spec** — assert query count",
-      "max_score": 14
+      "description": "The submitted artifact follows this skill instruction: Use the `db-query-matchers` gem or a custom `make_database_queries` matcher.",
+      "max_score": 25
     },
     {
       "name": "instruction-4",
-      "description": "The submitted artifact follows this skill instruction: **Verify** — confirm improvement with EXPLAIN ANALYZE",
-      "max_score": 14
-    },
-    {
-      "name": "instruction-5",
-      "description": "The submitted artifact follows this skill instruction: Write this spec **before** applying any optimization to lock in the expected query count:",
-      "max_score": 14
-    },
-    {
-      "name": "instruction-6",
-      "description": "The submitted artifact follows this skill instruction: Use the `db-query-matchers` gem or a custom `make_database_queries` matcher. The spec must pass after the fix and fail if a future change reintroduces the N+1.",
-      "max_score": 14
-    },
-    {
-      "name": "instruction-7",
       "description": "The submitted artifact follows this skill instruction: Run directly in `rails dbconsole` (PostgreSQL) after applying an index or query change:",
-      "max_score": 14
+      "max_score": 25
     }
   ]
 }

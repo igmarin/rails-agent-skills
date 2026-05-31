@@ -1,56 +1,46 @@
 {
-  "context": "Checks whether the final artifact follows the implement-graphql instructions from the published Rails Agent Skills tile.",
+  "context": "Checks whether the final artifact follows the implement-graphql instructions from the published Rails Agent Skills plugin.",
   "type": "weighted_checklist",
   "checklist": [
     {
       "name": "instruction-1",
       "description": "The submitted artifact follows this skill instruction: Use this skill when **designing, implementing, or reviewing GraphQL APIs** in a Rails application with the `graphql-ruby` gem.",
-      "max_score": 10
+      "max_score": 13
     },
     {
       "name": "instruction-2",
-      "description": "The submitted artifact follows this skill instruction: Before shipping a resolver/mutation slice, ALL of the following must be true:",
-      "max_score": 10
+      "description": "The submitted artifact follows this skill instruction: **SPEC:** Write failing spec (happy path + auth + validation error case) — see [TESTING.md](./TESTING.md). Use `AppSchema.execute` in `spec/graphql/`. Never use HTTP controller dispatch for GraphQL specs.",
+      "max_score": 13
     },
     {
       "name": "instruction-3",
-      "description": "The submitted artifact follows this skill instruction: TESTING.md: specs in `spec/graphql/` use `AppSchema.execute`. Never use HTTP controller dispatch for GraphQL specs.",
-      "max_score": 10
+      "description": "The submitted artifact follows this skill instruction: **TYPE:** Define arguments and return types. Use `connection_type` for pagination shapes. Do not leak internal model names.",
+      "max_score": 13
     },
     {
       "name": "instruction-4",
-      "description": "The submitted artifact follows this skill instruction: **SPEC:** Write failing spec (happy path + auth + validation error case) — see [TESTING.md](./TESTING.md).",
-      "max_score": 10
+      "description": "The submitted artifact follows this skill instruction: **IMPLEMENT:** Create resolver/mutation class delegating to a service object. Use dedicated classes instead of inline field blocks.",
+      "max_score": 13
     },
     {
       "name": "instruction-5",
-      "description": "The submitted artifact follows this skill instruction: **TYPE:** Define arguments and return types. Use `connection_type` for pagination shapes. Do not leak internal model names.",
-      "max_score": 10
+      "description": "The submitted artifact follows this skill instruction: **N+1 CHECK:** Use dataloader on every association load. For list resolvers, prime the dataloader with the records returned by the relation before fields resolve associated objects. Use `bullet` and `db-query-matchers` in specs.",
+      "max_score": 12
     },
     {
       "name": "instruction-6",
-      "description": "The submitted artifact follows this skill instruction: **IMPLEMENT:** Create resolver/mutation class delegating to a service object. Use dedicated classes instead of inline field blocks.",
-      "max_score": 10
+      "description": "The submitted artifact follows this skill instruction: **FINAL CHECK:** Verify every item in the HARD-GATE checklist below. Ensure mutations return `{ result, errors }` shapes on failure.",
+      "max_score": 12
     },
     {
       "name": "instruction-7",
-      "description": "The submitted artifact follows this skill instruction: **N+1 CHECK:** Ensure dataloader is used on every association load. For list resolvers, prime the dataloader with the records returned by the relation before fields resolve associated objects. Use `bullet` and `db-query-matchers` in specs.",
-      "max_score": 10
+      "description": "The submitted artifact follows this skill instruction: Before shipping a resolver/mutation slice, ALL of the following must be confirmed:",
+      "max_score": 12
     },
     {
       "name": "instruction-8",
-      "description": "The submitted artifact follows this skill instruction: **FINAL CHECK:** Verify every HARD-GATE item is met. Ensure your mutations return `{ result, errors }` shapes on failure.",
-      "max_score": 10
-    },
-    {
-      "name": "instruction-9",
       "description": "The submitted artifact follows this skill instruction: Load these files only when their specific content is needed:",
-      "max_score": 10
-    },
-    {
-      "name": "instruction-10",
-      "description": "The submitted artifact follows this skill instruction: When implementing GraphQL, your output MUST include:",
-      "max_score": 10
+      "max_score": 12
     }
   ]
 }

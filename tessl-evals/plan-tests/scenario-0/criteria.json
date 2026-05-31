@@ -1,36 +1,26 @@
 {
-  "context": "Checks whether the final artifact follows the plan-tests instructions from the published Rails Agent Skills tile.",
+  "context": "Checks whether the final artifact follows the plan-tests instructions from the published Rails Agent Skills plugin.",
   "type": "weighted_checklist",
   "checklist": [
     {
       "name": "instruction-1",
       "description": "The submitted artifact follows this skill instruction: CHECKPOINT: Test Design Review",
-      "max_score": 17
+      "max_score": 25
     },
     {
       "name": "instruction-2",
-      "description": "The submitted artifact follows this skill instruction: Use this skill when the hardest part of the task is deciding where TDD should start.",
-      "max_score": 17
+      "description": "The submitted artifact follows this skill instruction: **Locate the boundary:** Decide where the behavior is observed first — HTTP request, service entry point, model rule, job execution, engine integration, or external adapter. Use the Quick Reference table to map the change type to the right spec type.",
+      "max_score": 25
     },
     {
       "name": "instruction-3",
-      "description": "The submitted artifact follows this skill instruction: **Pick the smallest strong slice:** Choose the spec type that proves the behavior without dragging in unrelated layers. Do not choose the first spec based on convenience alone — do not start with a lower-level unit if the real risk is request, job, engine, or persistence wiring.",
-      "max_score": 17
+      "description": "The submitted artifact follows this skill instruction: **Write one failing example:** Keep it minimal; one example is enough to open the gate. List additional cases as follow-up coverage.",
+      "max_score": 25
     },
     {
       "name": "instruction-4",
-      "description": "The submitted artifact follows this skill instruction: **Write one failing example:** Keep it minimal; one example is enough to open the gate. Do not include multiple opening examples unless the user explicitly asks for expanded coverage; list additional cases as follow-up coverage instead.",
-      "max_score": 17
-    },
-    {
-      "name": "instruction-5",
       "description": "The submitted artifact follows this skill instruction: **Run and validate:** Confirm the failure is because the behavior is missing, not because the setup is broken.",
-      "max_score": 16
-    },
-    {
-      "name": "instruction-6",
-      "description": "The submitted artifact follows this skill instruction: [assets/first_slice_template.md](assets/first_slice_template.md) — Use when producing a complete first-slice decision artifact with boundary table, one opening example, RED proof, follow-up coverage, and HARD-GATE answers.",
-      "max_score": 16
+      "max_score": 25
     }
   ]
 }

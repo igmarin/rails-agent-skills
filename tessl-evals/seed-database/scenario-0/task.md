@@ -4,7 +4,7 @@
 
 A Rails team needs help with a task in this area:
 
-Manage development and test data in Rails — NEVER commit production data to seeds, ALWAYS make seeds idempotent with `find_or_create_by!` so re-runs are safe, run seeds with `rails db:seed` (or `rails db:setup` for fresh database), verify data by opening `rails console` and spot-checking expected records exist with correct attributes, NEVER hardcode credentials: use `ENV.fetch('KEY')` or `SecureRandom.hex(16)` for non-production, use `rails credentials:edit` for production secrets never commit them in code, use FactoryBot for test-specific scenarios in `spec/factories/`, static reference data in `db/seeds.rb`.
+Use when managing development and test data in Rails — must write idempotent seeds using find_or_create_by!, run seeds with rails db:seed or rails db:setup, verify data by opening rails console and spot-checking records, use ENV variables or SecureRandom for non-production data without committing secrets in code, and use rails credentials:edit for production secrets.
 
 The team has asked for a concise implementation artifact that a reviewer can inspect without needing to observe the agent's process.
 

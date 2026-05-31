@@ -2,11 +2,12 @@
 name: load-context
 license: MIT
 description: >
-  Use before writing code, tests, or PRDs in a Rails project — DO NOT propose code until a Context Summary is posted: load minimum context (read `db/schema.rb` + `config/routes.rb` + `Gemfile.lock`, if `rails-ai-bridge` is running use `get_project_context` tool to retrieve project structure/routes/models/dependencies), then load one neighbor of each kind by grepping for similar files like `grep -r "class.*Controller" app/controllers`, if requirements conflict or specs and code drift produce a Confusion Block first, cite files read (path:line), re-check context when scope changes mid-conversation. Inspects neighboring models, factories, specs, and engine boundaries to surface existing patterns, naming conventions, and gotchas. Trigger words: load context, gather context, context engineering, read the code first, before I code, existing patterns, ambiguous requirements, spec vs code drift.
+  Use before writing code, tests, or PRDs in an existing Rails project — must load baseline context by reading db/schema.rb, config/routes.rb, or using the get_project_context tool, and load one neighbor of each kind for each layer touched (such as a controller, service, or spec) by running a grep command to find and inspect sibling implementations. Cite files read (path:line), re-check context when scope changes. Trigger words: load context, gather context, context engineering, read the code first, before I code, existing patterns, ambiguous requirements, spec vs code drift.
 metadata:
-  user-invocable: "true"
   version: 1.0.0
+  user-invocable: "true"
 ---
+
 # Load Context
 
 ## HARD-GATE
@@ -25,14 +26,7 @@ Load minimum context before any code, spec, or PRD in an existing Rails codebase
 
 ### Automatic Context (Optional)
 
-If `rails-ai-bridge` is running in the project, the runtime automatically provides unified context.
-Use the `get_project_context` tool to retrieve:
-- Project structure and directory layout
-- Rails routes and controller mappings
-- Model associations and database schema
-- Gemfile dependencies
-
-When this data is successfully retrieved via `get_project_context`, you may skip the manual discovery steps 2 and 3 below and proceed directly to analyzing the context, finding neighbor patterns, and posting the Context Summary.
+If `rails-ai-bridge` is running, call the `get_project_context` tool to retrieve unified project context (structure, routes, models, schema, dependencies). When this succeeds, skip manual steps 2 and 3 below and proceed directly to finding neighbor patterns and posting the Context Summary.
 
 ### Manual Context Discovery (Fallback)
 

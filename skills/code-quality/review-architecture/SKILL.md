@@ -2,11 +2,12 @@
 name: review-architecture
 license: MIT
 description: >
-  Use to perform structural audits, code reviews, and architecture reviews for Ruby on Rails applications. Use when the user asks for a Rails code review, architecture review, refactoring advice, or wants feedback on their Rails app structure. Trigger words and natural phrasings include: code review, architecture, refactor, Rails app, MVC, fat models, fat controllers, tech debt, Rails audit, application structure review. Key checks: prioritize boundary problems over style, verify High-severity findings with concrete code-level evidence, inspect models and controllers for logic leakage, evaluate callback chains, and suggest clean abstractions like service objects.
+  Use when reviewing Rails application structure or architecture — must prioritize boundary problems over style, evaluate where domain logic lives, and for every High-severity finding verify it by reading the actual code and stating the concrete code-level evidence read (redacting any secret-like literal, without using representative file paths or fabricated line numbers). Tech debt, fat controllers, fat models.
 metadata:
   version: 1.0.0
   user-invocable: "true"
 ---
+
 # Review Architecture
 
 ## Quick Reference

@@ -4,7 +4,7 @@
 
 A Rails team needs help with a task in this area:
 
-Use before writing code, tests, or PRDs in a Rails project — DO NOT propose code until a Context Summary is posted: load minimum context (read `db/schema.rb` + `config/routes.rb` + `Gemfile.lock`, if `rails-ai-bridge` is running use `get_project_context` tool to retrieve project structure/routes/models/dependencies), then load one neighbor of each kind by grepping for similar files like `grep -r "class.*Controller" app/controllers`, if requirements conflict or specs and code drift produce a Confusion Block first, cite files read (path:line), re-check context when scope changes mid-conversation.
+Use before writing code, tests, or PRDs in an existing Rails project — must load baseline context by reading db/schema.rb, config/routes.rb, or using the get_project_context tool, and load one neighbor of each kind for each layer touched (such as a controller, service, or spec) by running a grep command to find and inspect sibling implementations.
 
 The team has asked for a concise implementation artifact that a reviewer can inspect without needing to observe the agent's process.
 

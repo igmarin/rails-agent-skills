@@ -1,10 +1,10 @@
 {
-  "context": "Checks whether the final artifact follows the create-engine instructions from the published Rails Agent Skills tile.",
+  "context": "Checks whether the final artifact follows the create-engine instructions from the published Rails Agent Skills plugin.",
   "type": "weighted_checklist",
   "checklist": [
     {
       "name": "instruction-1",
-      "description": "The submitted artifact follows this skill instruction: Use this skill when the task is to create, scaffold, or refactor a Rails engine.",
+      "description": "The submitted artifact follows this skill instruction: Use this skill when the task is to create, scaffold, or refactor a Rails engine, Rails plugin, or engine gem.",
       "max_score": 17
     },
     {

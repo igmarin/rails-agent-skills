@@ -2,7 +2,7 @@
 name: test-engine
 license: MIT
 description: >
-  Use to write and configure RSpec tests for Rails engines. Use when testing a Rails engine, writing engine specs, or adding test coverage for an engine. Trigger words and natural phrasings include: testing a Rails engine, engine specs, write tests for my engine, test coverage for engine, engine testing, spec Rails engine, mount engine test, specs for engine, write tests, dummy app specs, generator specs. Key capabilities covered: dummy app boot validation, request and routing specs with namespace scoping, generator idempotency checks, and configuration testing using around blocks.
+  Use when writing and configuring RSpec tests for Rails engines — must ensure that a dummy app exists for testing, add the smallest integration test that proves mounting and boot and verify it passes before continuing, and run the full test suite via bundle exec rspec to verify all specs pass. Key capabilities: request and routing specs with namespace scoping, generator idempotency, configuration testing.
 metadata:
   version: 1.0.0
   user-invocable: "true"

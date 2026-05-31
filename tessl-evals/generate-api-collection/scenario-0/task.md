@@ -4,7 +4,7 @@
 
 A Rails team needs help with a task in this area:
 
-Sync API collections with REST endpoints — when creating or modifying any REST API endpoint you MUST also create or update the corresponding Postman Collection v2.1 JSON file: one collection per app or engine in `docs/api-collections/` or `spec/fixtures/api-collections/`, use `{{base_url}}` variable, each request MUST include a description and at least one test script (e.g.
+Use when creating or modifying REST API endpoints — must create or update the corresponding API collection JSON file using the {{base_url}} variable, ensure each request includes a description and at least one basic test script, validate the collection JSON using python -m json.tool or jq, and verify it imports into compatible API clients without errors.
 
 The team has asked for a concise implementation artifact that a reviewer can inspect without needing to observe the agent's process.
 

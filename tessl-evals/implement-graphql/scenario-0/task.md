@@ -4,7 +4,7 @@
 
 A Rails team needs help with a task in this area:
 
-Use when building GraphQL APIs in Rails with graphql-ruby — gates: SPEC (write failing spec with happy path+auth+validation error cases in `spec/graphql/` using `AppSchema.execute`, never HTTP dispatch)→TYPE (define arguments/return types, use `connection_type` for pagination, don't leak internal model names)→IMPLEMENT (dedicated resolver/mutation classes delegating to services)→N+1 CHECK (dataloader on every association load, prime dataloader in collection resolvers)→FINAL CHECK (verify every HARD-GATE item: field-level auth, mutations return `{result, errors}`, max_depth/max_complexity set, introspection disabled in production, description on every field, error handling with rescue blocks).
+Use when building or reviewing GraphQL APIs in Rails with graphql-ruby — must follow the TDD gates by writing a failing spec in spec/graphql/ using AppSchema.execute rather than HTTP controller dispatch, define arguments/return types without leaking internal model names (use connection_type for pagination), implement resolver/mutation classes that delegate to services, prevent N+1 queries by using and priming the dataloader on association loads, and ensure mutations return result and errors shapes on failure.
 
 The team has asked for a concise implementation artifact that a reviewer can inspect without needing to observe the agent's process.
 

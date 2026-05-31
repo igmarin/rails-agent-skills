@@ -2,7 +2,7 @@
 name: create-engine-installer
 license: MIT
 description: >
-  Use when creating install generators or initializer installers for Rails engines — GENERATE: run the generator against a clean host app, VERIFY: check output files exist in correct host paths, RERUN: run the generator a second time confirming idempotent output (no duplicate routes/initializers, write a minimal rerun spec that must always pass), DOCUMENT: list what was generated vs what the user must do manually (mount route in host routes, run install, configure initializers), use idiomatic Rails Thor generator commands, copied migrations must be safe to run multiple times. Covers idempotent setup, host-app onboarding, route mount setup. Trigger words: install generator, mountable engine setup, gem installation, engine onboarding, copy migrations, initializer generator.
+  Use when creating install generators or initializer installers for Rails engines — must use idiomatic Rails Thor generator commands, and follow the strict workflow: GENERATE (run generator against clean host app), VERIFY (check output files exist in correct host paths), RERUN (run a second time confirming idempotent output), TEST (write a minimal rerun spec that must always pass), and DOCUMENT (list what was generated versus what the user must do manually). Idempotent setup, host-app onboarding, and route mount setup. Trigger words: install generator, mountable engine setup, gem installation, engine onboarding, copy migrations, initializer generator.
 metadata:
   version: 1.0.0
   user-invocable: "true"
@@ -85,9 +85,6 @@ end
 - [ ] Rollback steps documented
 - [ ] Install docs match what the generator actually produces
 
-- [EXAMPLES.md](./EXAMPLES.md) (full generator class and complete spec suite)
-- [assets/README.md](assets/README.md)
-
 ## Output Style
 
 1. Use idiomatic Rails Thor generator commands.
@@ -99,6 +96,6 @@ end
 
 | Skill | When to chain |
 |-------|---------------|
-| create-engine | When designing the engine structure that installers will configure |
-| document-engine | When documenting install steps or upgrade instructions |
-| test-engine | When adding generator specs or dummy-app install coverage |
+| [create-engine](../create-engine/SKILL.md) | When designing the engine structure that installers will configure |
+| [document-engine](../document-engine/SKILL.md) | When documenting install steps or upgrade instructions |
+| [test-engine](../test-engine/SKILL.md) | When adding generator specs or dummy-app install coverage |

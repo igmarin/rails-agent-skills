@@ -4,7 +4,7 @@
 
 A Rails team needs help with a task in this area:
 
-Implement and test authorization in Rails using Pundit or CanCanCan — ALWAYS test with multiple roles (admin/user/guest), NEVER rely on presence checks alone (check specific permissions), use policy objects never inline logic in controllers, Pundit uses `authorize @record` + `policy_scope(Model)`, CanCanCan uses `authorize!
+Use when implementing or testing authorization in Rails using Pundit or CanCanCan — must always verify authorization by attempting an unauthorized action in the browser or console and confirming it raises Pundit::NotAuthorizedError or CanCan::AccessDenied as expected, use policy objects rather than inline controller logic, test with multiple roles, and check specific permissions instead of presence checks alone.
 
 The team has asked for a concise implementation artifact that a reviewer can inspect without needing to observe the agent's process.
 

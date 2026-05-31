@@ -2,7 +2,7 @@
 name: extract-engine
 license: MIT
 description: >
-  Use when extracting existing Rails app code into a reusable engine — DO NOT extract and change behavior in the same step, preserve existing behavior first then refactor separately, move stable domain logic first (POROs/services/value objects), add adapters or configuration seams for host dependencies before moving controllers/routes/views, keep regression coverage green throughout each slice, one bounded slice per step with one coherent responsibility and minimal new public API. Scaffolds engine structure, increments through extraction slices, creates adapter interfaces to decouple host dependencies. Trigger words: extract to engine, move feature to engine, host coupling, adapters, extraction slices, preserve behavior, incremental extraction.
+  Use when extracting existing Rails app code into a reusable engine — must extract incrementally over big-bang, preserve existing behavior first and verify regression coverage passes before proceeding (do not extract and change behavior in the same step), ensure each slice has one coherent responsibility, minimal new public API, passing regression tests, and a clear next step. Scaffolds engine structure, increments through extraction slices, creates adapter interfaces to decouple host dependencies, and preserves regression coverage throughout. Trigger words: extract to engine, move feature to engine, host coupling, adapters, extraction slices, preserve behavior, incremental extraction.
 metadata:
   version: 1.0.0
   user-invocable: "true"
@@ -44,18 +44,19 @@ Each slice must have: one coherent responsibility, minimal new public API, passi
 ## Extended Resources
 
 **Pitfalls**
+
 | Pitfall | What to do |
 |---------|------------|
-| Extracting too much at once | One bounded slice per step; large extractions hide bugs and are hard to revert |
-| Direct host references in engine | Use adapters or config; direct constants couple engine to host internals |
-| Behavior changes mixed with extraction | Preserve behavior first; refactor only after the move is verified |
-| Circular dependencies introduced | Verify import graph before moving each slice |
-| Dummy app passes but host contract is implicit | Explicitly document and test the host app contract |
+| Extracting too much at once | One bounded slice per step |
+| Direct host references in engine | Use adapters or config |
+| Behavior changes mixed with extraction | Preserve behavior first; refactor after |
+| Circular dependencies introduced | Verify import graph before each slice |
+| Implicit host contract | Explicitly document and test the host app contract |
 
 **Examples**
+
 **First slice (move PORO, no host model yet):**
 ```bash
-# Move the file into the engine and adjust the namespace
 mkdir -p my_engine/app/services/my_engine
 mv app/services/pricing/calculator.rb my_engine/app/services/my_engine/pricing_calculator.rb
 ```
@@ -74,14 +75,13 @@ module MyEngine
   end
 end
 ```
-Verify regression coverage still passes before proceeding to the next slice:
+Verify regression coverage still passes before proceeding:
 ```bash
 bundle exec rspec spec/services/pricing/ spec/requests/orders/
 ```
 
-**Adapter for host dependency (compact):**
+**Adapter for host dependency:**
 ```ruby
-# config seam (compact)
 module MyEngine
   def self.current_user_for(request)
     config.current_user_provider.call(request)
@@ -92,8 +92,7 @@ end
 OrderCreator.for_request(request) # resolves via MyEngine.current_user_for(request)
 ```
 
-- [assets/examples.md](assets/examples.md)
-- [references/adapter_examples.md](references/adapter_examples.md)
+See [assets/examples.md](assets/examples.md) and [references/adapter_examples.md](references/adapter_examples.md) for extended examples.
 
 ## Output Style
 

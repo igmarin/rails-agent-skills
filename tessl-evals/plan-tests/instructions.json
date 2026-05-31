@@ -9,34 +9,22 @@
       "why_given": "new knowledge"
     },
     {
-      "instruction": "Use this skill when the hardest part of the task is deciding where TDD should start.",
-      "original_snippets": "Use this skill when the hardest part of the task is deciding where TDD should start.",
+      "instruction": "**Locate the boundary:** Decide where the behavior is observed first — HTTP request, service entry point, model rule, job execution, engine integration, or external adapter. Use the Quick Reference table to map the change type to the right spec type.",
+      "original_snippets": "**Locate the boundary:** Decide where the behavior is observed first — HTTP request, service entry point, model rule, job execution, engine integration, or external adapter. Use the Quick Reference table to map the change type to the right spec type.",
       "relevant_when": "When a user asks for Rails work that should trigger plan-tests.",
       "why_given": "new knowledge"
     },
     {
-      "instruction": "**Pick the smallest strong slice:** Choose the spec type that proves the behavior without dragging in unrelated layers. Do not choose the first spec based on convenience alone — do not start with a lower-level unit if the real risk is request, job, engine, or persistence wiring.",
-      "original_snippets": "**Pick the smallest strong slice:** Choose the spec type that proves the behavior without dragging in unrelated layers. Do not choose the first spec based on convenience alone — do not start with a lower-level unit if the real risk is request, job, engine, or persistence wiring.",
+      "instruction": "**Write one failing example:** Keep it minimal; one example is enough to open the gate. List additional cases as follow-up coverage.",
+      "original_snippets": "**Write one failing example:** Keep it minimal; one example is enough to open the gate. List additional cases as follow-up coverage.",
       "relevant_when": "When a user asks for Rails work that should trigger plan-tests.",
-      "why_given": "preference"
-    },
-    {
-      "instruction": "**Write one failing example:** Keep it minimal; one example is enough to open the gate. Do not include multiple opening examples unless the user explicitly asks for expanded coverage; list additional cases as follow-up coverage instead.",
-      "original_snippets": "**Write one failing example:** Keep it minimal; one example is enough to open the gate. Do not include multiple opening examples unless the user explicitly asks for expanded coverage; list additional cases as follow-up coverage instead.",
-      "relevant_when": "When a user asks for Rails work that should trigger plan-tests.",
-      "why_given": "preference"
+      "why_given": "new knowledge"
     },
     {
       "instruction": "**Run and validate:** Confirm the failure is because the behavior is missing, not because the setup is broken.",
       "original_snippets": "**Run and validate:** Confirm the failure is because the behavior is missing, not because the setup is broken.",
       "relevant_when": "When a user asks for Rails work that should trigger plan-tests.",
       "why_given": "new knowledge"
-    },
-    {
-      "instruction": "[assets/first_slice_template.md](assets/first_slice_template.md) — Use when producing a complete first-slice decision artifact with boundary table, one opening example, RED proof, follow-up coverage, and HARD-GATE answers.",
-      "original_snippets": "[assets/first_slice_template.md](assets/first_slice_template.md) — Use when producing a complete first-slice decision artifact with boundary table, one opening example, RED proof, follow-up coverage, and HARD-GATE answers.",
-      "relevant_when": "When a user asks for Rails work that should trigger plan-tests.",
-      "why_given": "preference"
     }
   ]
 }

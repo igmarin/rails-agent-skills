@@ -3,8 +3,8 @@
   "source_path": "skills/engines/create-engine/SKILL.md",
   "instructions": [
     {
-      "instruction": "Use this skill when the task is to create, scaffold, or refactor a Rails engine.",
-      "original_snippets": "Use this skill when the task is to create, scaffold, or refactor a Rails engine.",
+      "instruction": "Use this skill when the task is to create, scaffold, or refactor a Rails engine, Rails plugin, or engine gem.",
+      "original_snippets": "Use this skill when the task is to create, scaffold, or refactor a Rails engine, Rails plugin, or engine gem.",
       "relevant_when": "When a user asks for Rails work that should trigger create-engine.",
       "why_given": "new knowledge"
     },

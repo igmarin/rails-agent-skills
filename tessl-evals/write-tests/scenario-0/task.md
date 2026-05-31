@@ -4,7 +4,7 @@
 
 A Rails team needs help with a task in this area:
 
-Use to write, review, and configure RSpec tests in Ruby on Rails.
+Use when writing, reviewing, or configuring RSpec tests in Ruby on Rails — must run the spec and verify it fails (confirm the concrete RED failure class/message, no placeholders/illustrative e.g.
 
 The team has asked for a concise implementation artifact that a reviewer can inspect without needing to observe the agent's process.
 

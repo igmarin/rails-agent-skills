@@ -65,22 +65,20 @@ Load release assets conditionally and say which one informed the output:
 
 ## Output Style
 
-1. Version bump recommendation — patch/minor/major with explicit reasoning.
-2. Version constant — updated `lib/[engine_name]/version.rb`.
-3. CHANGELOG entries — under Added/Changed/Fixed/Deprecated headers.
-4. Upgrade notes — host app steps (config, migrations, dependencies).
-5. Gemspec verification — metadata, files, and dependency ranges confirmed.
-6. Test suite status — pass/fail result of `bundle exec rspec`.
-7. Asset usage — state which release asset was loaded, or explicitly say no optional asset was needed. Mention `assets/release_checklist.md`, `assets/release_notes_template.md`, and `assets/examples.md` by name when deciding whether each was used.
-8. GitHub release notes — include a concise release-notes draft with summary, highlights, upgrade notes, and verification status.
-9. Release blockers — open issues, or explicitly "No blockers".
-10. Dry-run command — include the exact command `gem build *.gemspec && gem push --dry-run *.gem` and a contents verification command such as `tar tf pkg/*.gem` or `gem contents`.
-11. Language — Must be in English unless explicitly requested otherwise.
+1. **Version bump** — patch/minor/major with explicit reasoning.
+2. **Version constant** — updated `lib/[engine_name]/version.rb`.
+3. **CHANGELOG entries** — under Added/Changed/Fixed/Deprecated headers.
+4. **Upgrade notes** — host app steps (config, migrations, dependencies).
+5. **Gemspec + test status** — metadata, files, dependency ranges confirmed; pass/fail result of `bundle exec rspec`.
+6. **Dry-run output** — exact command `gem build *.gemspec && gem push --dry-run *.gem` plus contents verification (`tar tf pkg/*.gem` or `gem contents`).
+7. **Asset usage** — state which of `assets/release_checklist.md`, `assets/release_notes_template.md`, `assets/examples.md` was loaded, or explicitly say none was needed.
+8. **GitHub release notes** — concise draft with summary, highlights, upgrade notes, and verification status.
+9. **Release blockers** — open issues, or explicitly "No blockers".
 
 ## Integration
 
 | Skill | When to chain |
 |-------|---------------|
-| document-engine | When updating README, setup instructions, or API docs for the release |
-| upgrade-engine | When verifying Rails/Ruby version support or deprecation impact |
-| test-engine | When ensuring tests pass before release and match documented behavior |
+| document-engine | Updating README, setup instructions, or API docs for the release |
+| upgrade-engine | Verifying Rails/Ruby version support or deprecation impact |
+| test-engine | Ensuring tests pass before release and match documented behavior |

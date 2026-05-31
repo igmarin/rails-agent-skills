@@ -27,8 +27,8 @@
       "why_given": "preference"
     },
     {
-      "instruction": "Verify regression coverage still passes before proceeding to the next slice:",
-      "original_snippets": "Verify regression coverage still passes before proceeding to the next slice:",
+      "instruction": "Verify regression coverage still passes before proceeding:",
+      "original_snippets": "Verify regression coverage still passes before proceeding:",
       "relevant_when": "When a user asks for Rails work that should trigger extract-engine.",
       "why_given": "new knowledge"
     }

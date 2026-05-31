@@ -4,7 +4,7 @@
 
 A Rails team needs help with a task in this area:
 
-Performs security audits on Rails app code — review in this exact order: authentication/authorization boundaries first→parameter handling→redirects/rendering/output encoding→file handling/network calls/background job inputs→secrets/logging/operational exposure; sections MUST appear in this order even when empty (write "No issues found" and state what evidence needed), verify each finding is exploitable with a concrete attack scenario, exclude false positives (e.g.
+Use when performing security audits on Rails application code — must check authentication/authorization, parameter handling, redirects/rendering, file/network/job inputs, and secrets/logging, verify each finding is exploitable with a concrete attack scenario before reporting (excluding false positives without using representative file paths), and present sections in the exact order specified, even if empty.
 
 The team has asked for a concise implementation artifact that a reviewer can inspect without needing to observe the agent's process.
 

@@ -3,20 +3,14 @@
   "source_path": "skills/infrastructure/implement-hotwire/SKILL.md",
   "instructions": [
     {
-      "instruction": "**Verify degraded mode** — disable JavaScript in browser DevTools (or run `rails test:system` with a headless driver set to `no_js`) and confirm forms submit, links navigate, and data persists correctly without JS.",
-      "original_snippets": "**Verify degraded mode** — disable JavaScript in browser DevTools (or run `rails test:system` with a headless driver set to `no_js`) and confirm forms submit, links navigate, and data persists correctly without JS.",
+      "instruction": "**Verify degraded mode** — disable JavaScript in browser DevTools (or run `rails test:system` with the Capybara `:rack_test` driver) and confirm all hold without JS: forms submit, links navigate, data persists after reload.",
+      "original_snippets": "**Verify degraded mode** — disable JavaScript in browser DevTools (or run `rails test:system` with the Capybara `:rack_test` driver) and confirm all hold without JS: forms submit, links navigate, data persists after reload.",
       "relevant_when": "When a user asks for Rails work that should trigger implement-hotwire.",
       "why_given": "new knowledge"
     },
     {
       "instruction": "When implementing Hotwire, your output MUST include:",
       "original_snippets": "When implementing Hotwire, your output MUST include:",
-      "relevant_when": "When a user asks for Rails work that should trigger implement-hotwire.",
-      "why_given": "preference"
-    },
-    {
-      "instruction": "**Verification** — Include no-JavaScript degraded-mode check plus system/browser checks for frame, stream, or Stimulus behavior. The degraded-mode checklist must explicitly include: `rails test:system` with the Capybara `:rack_test` driver, or the equivalent driver name in the test configuration, forms submit, links navigate, and data persists after reload.",
-      "original_snippets": "**Verification** — Include no-JavaScript degraded-mode check plus system/browser checks for frame, stream, or Stimulus behavior. The degraded-mode checklist must explicitly include: `rails test:system` with the Capybara `:rack_test` driver, or the equivalent driver name in the test configuration, forms submit, links navigate, and data persists after reload.",
       "relevant_when": "When a user asks for Rails work that should trigger implement-hotwire.",
       "why_given": "preference"
     }

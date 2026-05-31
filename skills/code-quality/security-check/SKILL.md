@@ -2,11 +2,12 @@
 name: security-check
 license: MIT
 description: >
-  Performs security audits on Rails app code — review in this exact order: authentication/authorization boundaries first→parameter handling→redirects/rendering/output encoding→file handling/network calls/background job inputs→secrets/logging/operational exposure; sections MUST appear in this order even when empty (write "No issues found" and state what evidence needed), verify each finding is exploitable with a concrete attack scenario, exclude false positives (e.g. `html_safe` on developer-defined constants not user input), never use representative file paths as confirmed evidence. Use when reviewing for XSS, CSRF, SSRF, SQL injection, parameter handling, redirects, file uploads, secrets management.
+  Use when performing security audits on Rails application code — must check authentication/authorization, parameter handling, redirects/rendering, file/network/job inputs, and secrets/logging, verify each finding is exploitable with a concrete attack scenario before reporting (excluding false positives without using representative file paths), and present sections in the exact order specified, even if empty. Code review for XSS, CSRF, SSRF, SQL injection, open redirects, secrets.
 metadata:
   version: 1.0.0
   user-invocable: "true"
 ---
+
 # Security Check
 
 ## Quick Reference
@@ -40,11 +41,13 @@ mark findings as requiring code-level verification.
 
 ### Review Order
 
-1. Check authentication and authorization boundaries.
-2. Check parameter handling and sensitive attribute assignment.
-3. Check redirects, rendering, and output encoding.
-4. Check file handling, network calls, and background job inputs.
-5. Check secrets, logging, and operational exposure.
+Review in this sequence, and produce output sections in this same order (see Output Style):
+
+1. Authentication and authorization boundaries.
+2. Parameter handling and sensitive attribute assignment.
+3. Redirects, rendering, and output encoding.
+4. File handling, network calls, and background job inputs.
+5. Secrets, logging, and operational exposure.
 6. **Verify each finding:** Confirm it is exploitable with a concrete attack scenario before reporting. Exclude false positives (e.g., `html_safe` on a developer-defined constant, not user input).
 
 ### Severity Levels
@@ -64,14 +67,6 @@ mark findings as requiring code-level verification.
 - Sensitive data logged in plaintext
 - Security-relevant behavior hidden in callbacks or background jobs without guardrails
 - Brittle custom auth logic where framework primitives would be safer
-
-### Review Checklist
-
-- Are permissions enforced on every sensitive action?
-- Are untrusted inputs validated before database, filesystem, or network use?
-- Are redirects and URLs constrained?
-- Are secrets stored and logged safely?
-- Are security assumptions explicit and testable?
 
 ### Examples
 
@@ -108,7 +103,7 @@ Critical anti-patterns: `permit!` on any parameter set, `html_safe` on user cont
 
 ## Output Style
 
-1. **Format**: Sections must appear in the order below, even when empty — write "No issues found" and state what evidence would be needed to verify the category.
+1. **Format**: Produce sections in the review order defined in Core Process, even when empty — write "No issues found" and state what evidence would be needed to verify the category.
    ```text
    ## Authentication & Authorization
    ## Parameter Handling & Mass Assignment

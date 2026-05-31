@@ -2,11 +2,12 @@
 name: write-tests
 license: MIT
 description: >
-  Use to write, review, and configure RSpec tests in Ruby on Rails. Use when adding test coverage, refactoring specs, or practicing TDD. Trigger words and natural phrasings include: write spec, rspec, test-driven development, testing, write tests, unit test, integration test, service spec, request spec, model spec. Key conventions: enforce tests gate implementation workflow, split examples containing 'and' to ensure one behavior per example, prefer let over let!, and use subject(:result) with describe '.call' for service objects.
+  Use when writing, reviewing, or configuring RSpec tests in Ruby on Rails — must run the spec and verify it fails (confirm the concrete RED failure class/message, no placeholders/illustrative e.g. examples) and run it and verify it passes, prefer behavioral confidence over implementation coupling, pick the smallest spec type exercising the behavior (model > service > request > system), mirror the file paths of the source, use # frozen_string_literal: true, define subject(:result) for service specs, and load `assets/tdd_proof_checklist.md` when the task involves new behavior. Use when adding test coverage, refactoring specs, or practicing TDD. Trigger words: write spec, rspec, test-driven development, testing, write tests.
 metadata:
   version: 1.0.0
   user-invocable: "true"
 ---
+
 # Write Tests
 
 Use this skill when the task is to write, review, or clean up RSpec tests.

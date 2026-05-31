@@ -2,15 +2,15 @@
 name: create-engine
 license: MIT
 description: >
-  Use when creating a Rails engine — choose engine type (Plain/Railtie/Engine/Mountable) before coding, engine should have narrow purpose and small public API, use `isolate_namespace` + `.configure` block, host model references MUST be configurable strings never hard-coded, NEVER auto-apply migrations at boot, initializers must be idempotent and reload-safe, verify dummy app exists (`ls spec/dummy`), verify dummy app boots, confirm no hard-coded host constants, confirm no migration auto-apply patterns, create minimal engine structure first (checkpoint: `bundle exec rake` must pass), define the host-app contract, write minimum integration coverage through the dummy app. Covers namespace isolation, file structure, engine scaffolding.
+  Use when creating or refactoring a Rails engine — must keep a narrow purpose and small public API, verify that a dummy app exists under spec/dummy or test/dummy, define the host-app contract specifying what the host must provide and what the engine exposes, create the minimal engine structure verifying that bundle exec rake inside the engine passes, and write minimum integration coverage through the dummy app. Covers namespace isolation, file structure, engine scaffolding, mountable engine setup, and Rails plugin scaffolding.
 metadata:
-  user-invocable: "true"
   version: 1.1.0
+  user-invocable: "true"
 ---
 
 # Create Engine
 
-Use this skill when the task is to create, scaffold, or refactor a Rails engine.
+Use this skill when the task is to create, scaffold, or refactor a Rails engine, Rails plugin, or engine gem.
 
 A good engine has a narrow purpose, a clear host-app integration story, and a small public API. Keep this skill focused on structure and design. Use adjacent skills for installer details, deep test coverage, release workflow, or documentation work.
 
@@ -64,6 +64,8 @@ VERIFICATION COMMANDS:
 If the user does not specify the engine type, infer it from the requested behavior and say which type you chose.
 
 ## Extended Resources
+
+> The sections below contain supplementary reference material. Core process steps above are sufficient to start; consult these for copy-paste scaffolding and structural guidance.
 
 ### Recommended Structure
 

@@ -7,8 +7,8 @@
     "coverage_percentage": 100
   },
   "reason_distribution": {
-    "new knowledge": 4,
+    "new knowledge": 3,
     "reminder": 3,
-    "preference": 1
+    "preference": 2
   }
 }

@@ -2,12 +2,12 @@
   "target_skill": "apply-stack-conventions",
   "total_scenarios": 1,
   "instructions_coverage": {
-    "total_instructions": 10,
-    "instructions_tested": 10,
+    "total_instructions": 9,
+    "instructions_tested": 9,
     "coverage_percentage": 100
   },
   "reason_distribution": {
-    "preference": 5,
+    "preference": 4,
     "new knowledge": 4,
     "reminder": 1
   }

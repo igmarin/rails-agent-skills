@@ -22,24 +22,15 @@ metadata:
 ---
 # Setup Agent
 
-Orchestrates the full Rails project setup from context gathering through CI/CD configuration.
-
-## When to Use
-
-- Starting a new Rails project (`rails new` or existing repo clone)
-- Setting up development environment for existing project
-- Configuring CI/CD pipeline
-- Docker/environment setup
-
 ## Agent Phases
 
 ### Phase 1: Context & Onboarding
 
-**Load project context first:**
+**Load project context first (if sub-skills are available in the bundle):**
 1. **skills/context/load-context** — Understand existing codebase structure
 2. **skills/context/setup-environment** — Complete dev environment setup
 
-**Inline fallback (if sub-skills are unavailable):**
+**Inline fallback (always applicable; use this if sub-skills are unavailable):**
 ```bash
 # Verify Ruby version matches .ruby-version
 ruby -v
@@ -53,12 +44,12 @@ bundle exec rspec --dry-run
 cp .env.example .env 2>/dev/null || true
 ```
 
-**HARD GATE — Environment Check:**
-- Ruby version correct (check `.ruby-version`)
-- Bundler installed and working
-- Database connection successful
-- All env vars loaded (check `config/credentials.yml.enc` or `.env`)
-- All external CI actions pinned to immutable commit SHAs (never mutable tags like @v4, @v1)
+**HARD GATE — Environment Check** (all items must pass before Phase 2):
+- [ ] Ruby version correct (check `.ruby-version`)
+- [ ] Bundler installed and working
+- [ ] Database connection successful
+- [ ] All env vars loaded (check `config/credentials.yml.enc` or `.env`)
+- [ ] All external CI actions pinned to immutable commit SHAs (never mutable tags like @v4, @v1)
 
 **If environment check FAILS:** Fix the failing item above before proceeding to Phase 2.
 
@@ -73,21 +64,26 @@ cp .env.example .env 2>/dev/null || true
    - Staging vs production environments?
    - Deployment strategy (basic, blue-green, canary)?
 
-2. **Configure CI pipeline** (linting, testing, security, migrations):
+**Shared job preamble** (pin SHAs, never mutable tags):
+```yaml
+steps:
+  - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+  - uses: ruby/setup-ruby@ff740bc00a01b3a50fffc55a1071b1060eeae9dc
+    with:
+      ruby-version: .ruby-version
+      bundler-cache: true
+```
+
+2. **Configure CI pipeline** — write to `.github/workflows/ci.yml`:
 
 ```yaml
-# .github/workflows/ci.yml
 name: CI
 on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
-      - uses: ruby/setup-ruby@ff740bc00a01b3a50fffc55a1071b1060eeae9dc
-        with:
-          ruby-version: .ruby-version
-          bundler-cache: true
+      # <shared preamble above>
       - run: bundle exec rails db:create db:migrate
       - run: bundle exec rspec
       - run: bundle exec rubocop
@@ -95,10 +91,9 @@ jobs:
       - run: bundle exec bundle-audit check --update
 ```
 
-3. **Configure CD pipeline** (staging + production deployment gates):
+3. **Configure CD pipeline** — write to `.github/workflows/cd.yml`:
 
 ```yaml
-# .github/workflows/cd.yml
 name: CD
 on:
   push:
@@ -108,32 +103,23 @@ jobs:
     runs-on: ubuntu-latest
     environment: staging
     steps:
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
-      - uses: ruby/setup-ruby@ff740bc00a01b3a50fffc55a1071b1060eeae9dc
-        with:
-          ruby-version: .ruby-version
-          bundler-cache: true
+      # <shared preamble above>
       - run: bundle exec rails db:migrate
         env:
           RAILS_ENV: staging
           DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
-      - run: echo "Deploy to staging here (e.g. Heroku, Fly.io, Kamal)"
+      # Add deployment step (e.g. Heroku, Fly.io, or Kamal CLI)
   deploy-production:
     runs-on: ubuntu-latest
     needs: deploy-staging
     environment: production   # Requires manual approval gate in GitHub
     steps:
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
-      - uses: ruby/setup-ruby@ff740bc00a01b3a50fffc55a1071b1060eeae9dc
-        with:
-          ruby-version: .ruby-version
-          bundler-cache: true
+      # <shared preamble above>
       - run: bundle exec rails db:migrate
         env:
           RAILS_ENV: production
           DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
-      - run: echo "Deploy to production here"
-      # Rollback: re-run previous deployment job or use platform CLI
+      # Add deployment step matching staging; rollback via platform CLI
 ```
 
 ---
@@ -146,24 +132,18 @@ jobs:
 # Local development
 bundle install
 rails db:create db:migrate
-rails server  # Should start without errors
-bundle exec rspec  # Should run (even if 0 tests)
+rails server
+bundle exec rspec
 
 # CI simulation (if possible locally)
 act push  # GitHub Actions local runner (optional)
 ```
 
----
-
-## Output Style
-
-**Setup Checklist:** Marked file `SETUP_CHECKLIST.md` with:
-- [ ] Ruby installed
-- [ ] Bundler working
-- [ ] Database created
-- [ ] Tests passing
+**Write `SETUP_CHECKLIST.md`** with the final state of all HARD GATE items (see Phase 1) plus:
 - [ ] CI configured
 - [ ] Secrets configured
+
+---
 
 ## Integration
 

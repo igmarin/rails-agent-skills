@@ -49,9 +49,7 @@ Return to Phase 1 for next behavior or proceed to Phase 4.
 
 ## Concrete Example
 
-Below is an abbreviated end-to-end walkthrough for adding a `full_name` method to a `User` model.
-
-For a complete end-to-end example, see [assets/example.md](assets/example.md).
+Abbreviated walkthrough for adding a `full_name` method to a `User` model. For the full end-to-end example, see [assets/example.md](assets/example.md).
 
 **Step 1 — Write the failing spec** (`spec/models/user_spec.rb`):
 ```ruby
@@ -67,20 +65,16 @@ end
 Run: `bundle exec rspec spec/models/user_spec.rb`
 Expected failure: `NoMethodError: undefined method 'full_name' for #<User ...>` ✅
 
-**Step 2 — Propose & confirm implementation**
+**Step 2 — Propose & confirm**
 > Proposal: Add `def full_name = "#{first_name} #{last_name}"` to `app/models/user.rb`. Proceed?
 
 **Step 3 — Minimal implementation** (`app/models/user.rb`):
 ```ruby
-class User < ApplicationRecord
-  # @return [String] the user's full name
-  def full_name
-    "#{first_name} #{last_name}"
-  end
+def full_name
+  "#{first_name} #{last_name}"
 end
 ```
-Run: `bundle exec rspec spec/models/user_spec.rb`
-Expected: `1 example, 0 failures` ✅
+Run: `bundle exec rspec spec/models/user_spec.rb` → `1 example, 0 failures` ✅
 
 **Step 4 — Quality check**:
 ```bash

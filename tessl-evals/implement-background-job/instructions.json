@@ -9,8 +9,8 @@
       "why_given": "new knowledge"
     },
     {
-      "instruction": "EVERY job MUST have its test written and validated BEFORE implementation.",
-      "original_snippets": "EVERY job MUST have its test written and validated BEFORE implementation.",
+      "instruction": "EVERY job MUST have its test written and validated BEFORE implementation:",
+      "original_snippets": "EVERY job MUST have its test written and validated BEFORE implementation:",
       "relevant_when": "When a user asks for Rails work that should trigger implement-background-job.",
       "why_given": "preference"
     },
@@ -21,8 +21,14 @@
       "why_given": "new knowledge"
     },
     {
-      "instruction": "Run the spec — verify the job does not yet exhibit the intended behavior",
-      "original_snippets": "Run the spec — verify the job does not yet exhibit the intended behavior",
+      "instruction": "Run the spec — verify it fails",
+      "original_snippets": "Run the spec — verify it fails",
+      "relevant_when": "When a user asks for Rails work that should trigger implement-background-job.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "Load the record from the passed ID",
+      "original_snippets": "Load the record from the passed ID",
       "relevant_when": "When a user asks for Rails work that should trigger implement-background-job.",
       "why_given": "new knowledge"
     },
@@ -33,34 +39,16 @@
       "why_given": "preference"
     },
     {
-      "instruction": "EVERY perform method should do only three things:",
-      "original_snippets": "EVERY perform method should do only three things:",
-      "relevant_when": "When a user asks for Rails work that should trigger implement-background-job.",
-      "why_given": "reminder"
-    },
-    {
-      "instruction": "Load the record from the passed ID",
-      "original_snippets": "Load the record from the passed ID",
+      "instruction": "Write the job spec first — idempotency, retry, and error handling — and run it to confirm it fails.",
+      "original_snippets": "Write the job spec first — idempotency, retry, and error handling — and run it to confirm it fails.",
       "relevant_when": "When a user asks for Rails work that should trigger implement-background-job.",
       "why_given": "new knowledge"
     },
     {
-      "instruction": "Write the job spec first — idempotency, retry, and error handling.",
-      "original_snippets": "Write the job spec first — idempotency, retry, and error handling.",
+      "instruction": "Write the job class following the perform contract in HARD-GATE.",
+      "original_snippets": "Write the job class following the perform contract in HARD-GATE.",
       "relevant_when": "When a user asks for Rails work that should trigger implement-background-job.",
-      "why_given": "new knowledge"
-    },
-    {
-      "instruction": "Run the spec to confirm it fails.",
-      "original_snippets": "Run the spec to confirm it fails.",
-      "relevant_when": "When a user asks for Rails work that should trigger implement-background-job.",
-      "why_given": "new knowledge"
-    },
-    {
-      "instruction": "Write the job class: `perform` receives IDs, loads the record, guards for no-op, delegates to a service.",
-      "original_snippets": "Write the job class: `perform` receives IDs, loads the record, guards for no-op, delegates to a service.",
-      "relevant_when": "When a user asks for Rails work that should trigger implement-background-job.",
-      "why_given": "new knowledge"
+      "why_given": "preference"
     },
     {
       "instruction": "Run the full test suite.",

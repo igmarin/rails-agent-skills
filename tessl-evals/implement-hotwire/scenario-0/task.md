@@ -4,7 +4,7 @@
 
 A Rails team needs help with a task in this area:
 
-Creates Hotwire UIs with progressive enhancement — ALWAYS start with plain HTML, NEVER use Turbo Frames for full page navigation, output MUST include Verification: verify degraded mode without JavaScript (disable JS in browser or run `rails test:system` with Capybara `:rack_test` driver, checklist must confirm forms submit/links navigate/data persists after reload), plus system/browser checks for frame/stream/Stimulus behavior, use Turbo Frames for replacing page sections, Turbo Streams for broadcasting, Stimulus only when beyond Turbo.
+Use when creating Hotwire UIs with progressive enhancement in Rails — must verify degraded mode by disabling JavaScript (or running rails test:system with Capybara rack_test driver) and confirming forms submit, links navigate, and data persists after reload, and include a Verification section with these explicit no-JavaScript checks.
 
 The team has asked for a concise implementation artifact that a reviewer can inspect without needing to observe the agent's process.
 

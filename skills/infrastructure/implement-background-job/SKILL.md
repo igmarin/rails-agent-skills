@@ -2,7 +2,7 @@
 name: implement-background-job
 license: MIT
 description: >
-  Use when adding or reviewing background jobs in Rails — EVERY job MUST have its test written and validated BEFORE implementation (write job spec covering idempotency/retry/error handling→run and confirm it fails→implement→run full suite), `perform` receives IDs loads the record guards for no-op and delegates to a service, configure Active Job with Solid Queue (Rails 8+ default) or Sidekiq at scale, implement idempotency checks with database uniqueness constraints or state field locks, set up `retry_on`/`discard_on` strategies, define recurring jobs via `config/recurring.yml` or sidekiq-cron, test with `queue_adapter = :test` + `have_enqueued_job` matchers. Trigger words: background job, Active Job, Solid Queue, Sidekiq, idempotency, retry, discard, recurring job, queue.
+  Use when adding or reviewing background jobs in Rails — must write the job spec covering idempotency, retry, and error handling and verify it FAILS before implementation, ensure the perform method only loads the record from the passed ID, guards for no-op, and delegates to a service, and run the full test suite to verify success. Active Job, Solid Queue, Sidekiq, idempotency, retry, discard, recurring job, queue.
 metadata:
   version: 1.0.0
   user-invocable: "true"
@@ -15,28 +15,26 @@ Use this skill when the task is to add, configure, or review background jobs in 
 ## HARD-GATE
 
 ```text
-EVERY job MUST have its test written and validated BEFORE implementation.
+EVERY job MUST have its test written and validated BEFORE implementation:
   1. Write the job spec (idempotency, retry, error handling)
-  2. Run the spec — verify the job does not yet exhibit the intended behavior
+  2. Run the spec — verify it fails
   3. ONLY THEN write the job class
 
-EVERY job that performs a side effect (charge, email, API call) MUST have
-an idempotency check BEFORE the side effect.
-
-EVERY perform method should do only three things:
+The authoritative perform contract — EVERY perform method does exactly three things:
   1. Load the record from the passed ID
   2. Guard for idempotency / permanent no-op conditions
   3. Delegate the side effect or orchestration to a service object
 
 If perform needs more than that, extract a service.
+EVERY job that performs a side effect (charge, email, API call) MUST have
+an idempotency check BEFORE the side effect.
 ```
 
 ## Core Rules
 
 | Aspect | Rule |
 |--------|------|
-| Arguments | Pass IDs, not objects. Load in `perform`. |
-| Idempotency | Check "already done?" before doing work |
+| Arguments | Pass IDs, not objects |
 | Retries | `retry_on` (explicit `attempts:`) for transient; `discard_on` for permanent errors |
 | Backend (Rails 8) | Solid Queue (database-backed, no Redis) |
 | Backend (Rails 7) | Sidekiq + Redis for high throughput |
@@ -45,13 +43,12 @@ If perform needs more than that, extract a service.
 
 ## Core Process
 
-1. Write the job spec first — idempotency, retry, and error handling.
-2. Run the spec to confirm it fails.
-3. Write the job class: `perform` receives IDs, loads the record, guards for no-op, delegates to a service.
-4. Add `retry_on` with explicit `attempts:` limit and `discard_on` for at least one permanent error.
-5. Run the full test suite.
-6. Enqueue or perform the job twice — confirm the second run is a no-op.
-7. For recurring jobs, define them in `config/recurring.yml` (Rails 8) or the chosen scheduler config.
+1. Write the job spec first — idempotency, retry, and error handling — and run it to confirm it fails.
+2. Write the job class following the perform contract in HARD-GATE.
+3. Add `retry_on` with explicit `attempts:` limit and `discard_on` for at least one permanent error.
+4. Run the full test suite.
+5. Enqueue or perform the job twice — confirm the second run is a no-op.
+6. For recurring jobs, define them in `config/recurring.yml` (Rails 8) or the chosen scheduler config.
 
 ## Extended Resources
 
@@ -93,9 +90,9 @@ module InvoiceReminders
 end
 ```
 
-- [BACKENDS.md](./BACKENDS.md)
-- [assets/job_patterns.md](assets/job_patterns.md)
-- [assets/retry_examples.md](assets/retry_examples.md)
+- [BACKENDS.md](./BACKENDS.md) — Solid Queue vs Sidekiq setup, configuration details, and Redis requirements.
+- [assets/job_patterns.md](assets/job_patterns.md) — Additional job patterns including multi-step orchestration and batch jobs.
+- [assets/retry_examples.md](assets/retry_examples.md) — Extended `retry_on`/`discard_on` examples for common error classes.
 
 ## Output Checklist
 

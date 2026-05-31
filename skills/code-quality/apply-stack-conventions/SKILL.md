@@ -2,17 +2,18 @@
 name: apply-stack-conventions
 license: MIT
 description: >
-  Use when writing new Rails code for a PostgreSQL + Hotwire + Tailwind CSS stack — ALL new code MUST have test written BEFORE implementation (write spec file content not just path: `bundle exec rspec spec/[path]_spec.rb`→verify RED failure with observed output→implement→verify GREEN with observed result, use Observed RED/GREEN labels as proof, never use illustrative `e.g.` comments as evidence), output MUST include tests-first proof before implementation with actual spec code + exact command + Observed RED/GREEN output per layer, layers testable in isolation (model/query→service→controller/request→view/Turbo→Stimulus→Tailwind, Layer isolation section with focused spec per layer, "not applicable" for unchanged), apply Devise+Pundit on access-controlled resources. Covers MVC structure, ActiveRecord queries, Turbo Frames/Streams, Stimulus controllers, Tailwind patterns. Not for general Rails design principles — scoped to this specific stack.
+  Use when writing new Rails code for the PostgreSQL + Hotwire + Tailwind stack — must write specs and validate them RED BEFORE implementation, verify they pass GREEN after, show spec file content (not just spec path), include a Tests-first proof before implementation section showing actual spec code, the run command (bundle exec rspec spec/[path]_spec.rb), and the Observed RED output and Observed GREEN output labels, keeping steps testable in isolation. MVC structure, ActiveRecord queries, Turbo Frames/Streams, Stimulus controllers, and Tailwind patterns. Not for general Rails design principles — scoped to this specific stack.
 metadata:
   version: 1.0.0
   user-invocable: "true"
 ---
+
 # Apply Stack Conventions
 
 ## Quick Reference
 
 | Stack area | Default convention |
-|------------|--------------------|
+|------------|------------------|
 | Rails MVC | Thin controllers; move non-trivial business logic into service objects |
 | PostgreSQL | Avoid N+1s with `includes`; use database constraints for integrity |
 | Hotwire | Prefer Turbo Frames/Streams before Stimulus |
@@ -89,18 +90,14 @@ respond_to do |format|
 end
 ```
 
-#### Avoiding N+1 — Eager Loading
+#### Eager Loading
 
 ```ruby
-# BAD — triggers one query per order
-@orders = Order.where(user: current_user)
-@orders.each { |o| o.line_items.count }
-
-# GOOD — single JOIN via includes
+# Single JOIN via includes — avoids one query per record in the loop
 @orders = Order.includes(:line_items).where(user: current_user)
 ```
 
-#### Service Object (complex business logic out of the controller)
+#### Service Object
 
 ```ruby
 # Controller stays thin — delegate to service
@@ -123,7 +120,7 @@ This project uses **Devise** for authentication and **Pundit** for authorization
 
 | Issue | Correct approach |
 |-------|------------------|
-| Client-side interactivity reached for before Turbo | Use Turbo Frames/Streams first; add a Stimulus controller only when Turbo cannot handle it |
+| Reaching for Stimulus before trying Turbo | Use Turbo Frames/Streams first |
 | N+1 queries in loops over associations | Eager load with `includes` before the loop |
 | Controller action with 15+ lines of business logic | Extract to a service object using the `.call` pattern |
 | Accessing a protected resource without an authorisation check | Apply a Pundit policy on every action that touches access-controlled data |
@@ -133,11 +130,11 @@ This project uses **Devise** for authentication and **Pundit** for authorization
 When applying stack conventions, your output MUST include:
 
 1. **Stack decisions** — State which Rails, PostgreSQL, Hotwire, Stimulus, Tailwind, auth, and service-object conventions apply.
-2. **Tests-first proof before implementation** — Put this section before any implementation code. For each layer, include the actual spec code written or updated, the exact command (`bundle exec rspec spec/[path]_spec.rb`), and the **Observed RED output** proving the feature is absent rather than misconfigured. Do not use placeholder or illustrative `e.g.` failure lines.
-3. **Layer isolation** — Include a dedicated section stating how model/query, service, controller/request, view/Turbo, Stimulus, and Tailwind changes remain independently testable before wiring them together. Name the focused spec/check for each changed layer; mark unchanged layers "not applicable" instead of omitting them.
+2. **Tests-first proof before implementation** — Follow the HARD-GATE cycle above. Put this section before any implementation code, with actual spec code, exact command, and Observed RED/GREEN output per layer.
+3. **Layer isolation** — Dedicated section naming the focused spec/check for each changed layer (model/query, service, controller/request, view/Turbo, Stimulus, Tailwind); mark unchanged layers "not applicable".
 4. **Layered implementation** — Separate model/query, service, controller, view, Stimulus, and Tailwind changes when applicable.
 5. **Performance and security checks** — Call out N+1 prevention, authorization policy use, and unsafe params/content handling.
-6. **Verification** — For every layer, repeat the focused spec command after implementation and show the **Observed GREEN output** result line from that run. Then list Rails specs, system tests, linting, and any browser/manual checks run.
+6. **Verification** — For every layer, show the Observed GREEN output after implementation per the HARD-GATE. Then list Rails specs, system tests, linting, and any browser/manual checks run.
 7. **Language** — Must be in English unless explicitly requested otherwise.
 
 ## Integration

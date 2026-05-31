@@ -2,7 +2,7 @@
 name: implement-hotwire
 license: MIT
 description: >
-  Creates Hotwire UIs with progressive enhancement — ALWAYS start with plain HTML, NEVER use Turbo Frames for full page navigation, output MUST include Verification: verify degraded mode without JavaScript (disable JS in browser or run `rails test:system` with Capybara `:rack_test` driver, checklist must confirm forms submit/links navigate/data persists after reload), plus system/browser checks for frame/stream/Stimulus behavior, use Turbo Frames for replacing page sections, Turbo Streams for broadcasting, Stimulus only when beyond Turbo. Trigger words: Hotwire, Turbo, Stimulus, Turbo Frames, Turbo Streams, progressive enhancement.
+  Use when creating Hotwire UIs with progressive enhancement in Rails — must verify degraded mode by disabling JavaScript (or running rails test:system with Capybara rack_test driver) and confirming forms submit, links navigate, and data persists after reload, and include a Verification section with these explicit no-JavaScript checks. Stimulus, Turbo, Turbo Frames, Turbo Streams.
 metadata:
   version: 1.0.0
   user-invocable: "true"
@@ -32,14 +32,13 @@ ALWAYS test without JavaScript first
 ## Core Process
 
 1. **Build plain HTML** — implement the feature with standard Rails forms and links, no Hotwire.
-2. **Identify update regions** — decide which parts of the page need partial updates and wrap them in `turbo_frame_tag`. Validate: load the page and confirm the `<turbo-frame>` element appears in the DOM with the correct `id`.
-3. **Add Turbo Frames / Streams** — scope frame navigation or broadcast server-side changes via ActionCable. Validate: open browser DevTools Network tab and confirm frame requests return `text/vnd.turbo-stream.html` or a full frame response; for ActionCable, verify the subscription appears in the Action Cable log before proceeding.
-4. **Layer Stimulus** — attach controllers only where JavaScript behaviour is needed beyond what Turbo handles. Validate: confirm `application.getControllerForElementAndIdentifier(el, 'name')` returns the controller instance in the browser console.
-5. **Verify degraded mode** — disable JavaScript in browser DevTools (or run `rails test:system` with a headless driver set to `no_js`) and confirm forms submit, links navigate, and data persists correctly without JS.
+2. **Identify update regions** — wrap partial-update areas in `turbo_frame_tag`. Validate: confirm `<turbo-frame>` appears in the DOM with the correct `id`.
+3. **Add Turbo Frames / Streams** — scope frame navigation or broadcast via ActionCable. Validate: confirm frame requests return `text/vnd.turbo-stream.html` in DevTools Network tab; for ActionCable, verify the subscription appears in the Action Cable log.
+4. **Layer Stimulus** — attach controllers only where JavaScript behaviour is needed beyond Turbo. Validate: confirm `application.getControllerForElementAndIdentifier(el, 'name')` returns the controller instance in the browser console.
+5. **Verify degraded mode** — disable JavaScript in browser DevTools (or run `rails test:system` with the Capybara `:rack_test` driver) and confirm all hold without JS: forms submit, links navigate, data persists after reload.
 
-## Extended Resources
+## Code Examples
 
-**Quick Examples**
 ### Turbo Frame
 ```erb
 <%= turbo_frame_tag "post_#{@post.id}" do %>
@@ -62,31 +61,21 @@ export default class extends Controller {
   greet() { alert(`Hello ${this.nameTarget.value}!`) }
 }
 ```
-Register the controller in `app/javascript/controllers/index.js`:
+Register in `app/javascript/controllers/index.js`:
 ```javascript
 import GreetController from "./greet_controller"
 application.register("greet", GreetController)
 ```
 
-**Advanced Patterns**
-- **ActionCable broadcasting** — Server-push streams with `broadcasts_to`. See [EXAMPLES.md](EXAMPLES.md#actioncable-broadcasting).
-- **Turbo Stream morphing** — DOM diffing (Turbo 8+). See [EXAMPLES.md](EXAMPLES.md#turbo-stream-morphing).
-- **Nested frames** — Scoped frame navigation. See [EXAMPLES.md](EXAMPLES.md#nested-frames).
-- **Stimulus values & classes API** — Configurable controllers. See [EXAMPLES.md](EXAMPLES.md#stimulus-values-classes-api).
-
-- [SKILL.md](./SKILL.md)
-- [EXAMPLES.md](./EXAMPLES.md)
-- [references/workflow.md](./references/workflow.md)
-
 ## Output Style
 
 When implementing Hotwire, your output MUST include:
-1. **Progressive baseline** — State how the feature works with normal HTML before Hotwire enhancement.
-2. **Chosen primitive** — Name Turbo Frame, Turbo Stream, Stimulus, or a combination, and why.
-3. **DOM contract** — List frame IDs, stream targets, Stimulus controller names, targets, values, and actions.
-4. **Server contract** — State controller response formats, broadcast triggers, partial names, and ActionCable channel/log checks when used.
-5. **Verification** — Include no-JavaScript degraded-mode check plus system/browser checks for frame, stream, or Stimulus behavior. The degraded-mode checklist must explicitly include: `rails test:system` with the Capybara `:rack_test` driver, or the equivalent driver name in the test configuration, forms submit, links navigate, and data persists after reload.
-6. Language — Must be in English unless explicitly requested otherwise.
+1. **Progressive baseline** — how the feature works with plain HTML before enhancement.
+2. **Chosen primitive** — Turbo Frame, Turbo Stream, Stimulus, or combination, and why.
+3. **DOM contract** — frame IDs, stream targets, Stimulus controller names, targets, values, and actions.
+4. **Server contract** — controller response formats, broadcast triggers, partial names, and ActionCable channel/log checks when used.
+5. **Verification** — degraded-mode checklist from Core Process step 5, plus system/browser checks for frame, stream, or Stimulus behavior.
+6. **Language** — English unless explicitly requested otherwise.
 
 ## Integration
 

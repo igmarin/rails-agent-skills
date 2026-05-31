@@ -1,5 +1,5 @@
 {
-  "context": "Checks whether the final artifact follows the upgrade-engine instructions from the published Rails Agent Skills tile.",
+  "context": "Checks whether the final artifact follows the upgrade-engine instructions from the published Rails Agent Skills plugin.",
   "type": "weighted_checklist",
   "checklist": [
     {
@@ -14,17 +14,17 @@
     },
     {
       "name": "instruction-3",
-      "description": "The submitted artifact follows this skill instruction: Run `bundle exec rake zeitwerk:check` — file paths must match constant names exactly.",
+      "description": "The submitted artifact follows this skill instruction: Run `bundle exec rake zeitwerk:check` — file paths must match constant names exactly (e.g. `my_engine/widget_policy.rb` → `MyEngine::WidgetPolicy`).",
       "max_score": 14
     },
     {
       "name": "instruction-4",
-      "description": "The submitted artifact follows this skill instruction: Check initializer behavior across boot and reload — use `config.to_prepare` for reload-sensitive hooks.",
+      "description": "The submitted artifact follows this skill instruction: Check initializer behavior across boot and reload — use `config.to_prepare` for reload-sensitive hooks; hooks placed at load time are reload-unsafe in development.",
       "max_score": 14
     },
     {
       "name": "instruction-5",
-      "description": "The submitted artifact follows this skill instruction: Verify gemspec dependency bounds match tested versions: `spec.add_dependency \"rails\", \">= 7.0\", \"< 8.0\"` — bounds must match what CI actually tests.",
+      "description": "The submitted artifact follows this skill instruction: Verify gemspec dependency bounds match tested versions: `spec.add_dependency \"rails\", \">= 7.0\", \"< 8.0\"` — bounds must reflect what CI actually tests. Unbounded or overclaiming constraints (`>= 5.2` without testing 5.2/6.x) are silent incompatibilities.",
       "max_score": 14
     },
     {

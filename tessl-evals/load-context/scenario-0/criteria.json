@@ -1,26 +1,21 @@
 {
-  "context": "Checks whether the final artifact follows the load-context instructions from the published Rails Agent Skills tile.",
+  "context": "Checks whether the final artifact follows the load-context instructions from the published Rails Agent Skills plugin.",
   "type": "weighted_checklist",
   "checklist": [
     {
       "name": "instruction-1",
       "description": "The submitted artifact follows this skill instruction: Load minimum context before any code, spec, or PRD in an existing Rails codebase. A fifteen-second read of `db/schema.rb`, `config/routes.rb`, and one neighbor saves a full retry.",
-      "max_score": 25
+      "max_score": 34
     },
     {
       "name": "instruction-2",
-      "description": "The submitted artifact follows this skill instruction: Use the `get_project_context` tool to retrieve:",
-      "max_score": 25
+      "description": "The submitted artifact follows this skill instruction: **Load baseline Rails context:** Read at minimum:",
+      "max_score": 33
     },
     {
       "name": "instruction-3",
-      "description": "The submitted artifact follows this skill instruction: **Load baseline Rails context:** Read at minimum:",
-      "max_score": 25
-    },
-    {
-      "name": "instruction-4",
       "description": "The submitted artifact follows this skill instruction: **Load one neighbor of each kind:** For each Rails layer touched, open the nearest sibling that already solves a similar problem — a comparable controller, service, spec, factory. Use grep to find: `grep -r \"class.*Controller\" app/controllers`, `grep -r \"class.*Service\" app/services`, etc.",
-      "max_score": 25
+      "max_score": 33
     }
   ]
 }

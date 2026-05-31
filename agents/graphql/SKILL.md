@@ -18,22 +18,19 @@ metadata:
 ---
 # GraphQL Agent
 
-Orchestrates systematic GraphQL API development with Domain-Driven Design principles, ensuring proper domain boundaries, type-safe schemas, TDD implementation, and security best practices.
-
 ## Agent Phases
 
 ### Phase 1: Domain Modeling
 
 **Steps:**
-1. Define ubiquitous language for the GraphQL domain (bounded contexts, aggregates, entity relationships)
-2. Map domain entities to GraphQL types and relationships
+1. Map entities → Types, actions → Mutations, read paths → Queries (e.g. `Order` entity → `OrderType`, `placeOrder` action → `PlaceOrderMutation`, order lookup → `orderQuery`)
+2. Assign each type to a bounded context and define which context owns and exposes it
 
 **HARD GATE — Domain Language:**
-- Core domain terms defined and documented
-- Bounded contexts identified with entity relationships mapped
-- Language consistent across team
+- Core GraphQL types and their owning bounded contexts identified
+- Entity relationships mapped to GraphQL connections or nested types
 
-**If gate fails:** Return to domain discovery. A schema without a clear domain model will be inconsistent.
+**If gate fails:** Return to domain discovery.
 
 ---
 
@@ -45,7 +42,6 @@ Orchestrates systematic GraphQL API development with Domain-Driven Design princi
 3. Validate schema correctness
 
 **Schema Design Guidelines:**
-- Use the GraphQL type system to enforce domain boundaries
 - Implement authorization at field level
 - Use cursor-based or offset pagination for list fields
 - Include structured error handling in mutation responses
@@ -95,12 +91,11 @@ end
 ### Phase 3: TDD Implementation
 
 **For every resolver or mutation:**
-1. Choose test type: resolver spec, mutation spec, or integration spec
-2. Write a failing test
-3. Confirm the test FAILS for the right reason (missing functionality, not syntax error)
-4. Propose implementation and wait for explicit user approval
-5. Implement resolver/mutation code
-6. Confirm test PASSES, then run full suite to check for regressions
+1. Write a failing test (resolver spec, mutation spec, or integration spec)
+2. Confirm the test FAILS for the right reason (missing functionality, not syntax error)
+3. Propose implementation and wait for explicit user approval
+4. Implement resolver/mutation code
+5. Confirm test PASSES, then run full suite to check for regressions
 
 **HARD GATE — Test Verification:**
 - Test EXISTS and RUNS
@@ -110,7 +105,7 @@ end
 
 **If test fails for wrong reason:** Fix the test (not the implementation) to accurately reflect intended behavior.
 
-**Example Resolver Test:**
+**Example Resolver Test + Implementation:**
 ```ruby
 # spec/graphql/resolvers/order_resolver_spec.rb
 RSpec.describe Resolvers::OrderResolver do
@@ -123,15 +118,11 @@ RSpec.describe Resolvers::OrderResolver do
   end
 
   it 'returns nil for unauthorized user' do
-    unauthorized_user = create(:user)
-    result = described_class.new(object: nil, context: { current_user: unauthorized_user }).resolve(id: order.id)
+    result = described_class.new(object: nil, context: { current_user: create(:user) }).resolve(id: order.id)
     expect(result).to be_nil
   end
 end
-```
 
-**Example Resolver Implementation:**
-```ruby
 # app/graphql/resolvers/order_resolver.rb
 module Resolvers
   class OrderResolver < GraphQL::Schema::Resolver

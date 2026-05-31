@@ -2,11 +2,12 @@
 name: code-review
 license: MIT
 description: >
-  Reviews Rails pull requests — core principle: review early and often, self-review before PR, re-review after significant changes; use ONLY three severity labels: Critical (security/data loss/crash/Always Critical — blocks merge), Suggestion, Nice to have; Always Critical flags: `permit!`, `html_safe` on user content, business logic in controller actions, unparameterized SQL, destructive migrations; ground every finding in a real file:line from the diff — do not present a simulated PR review; follow Review Order: Configuration→Routing→Controllers→Views→Models→Associations→Queries→Migrations→Validations→I18n→Sessions→Security→Caching→Jobs→Tests; always include `Code review before merge` task. Use when reviewing existing Rails code for quality.
+  Use when reviewing Rails pull requests and diffs — must state "Review early, review often.Self-review before PR.Re-review after significant changes." as the review principle, ground every finding from the actual diff in a real file:line, use ONLY three severity labels (Critical, Suggestion, Nice to have) where Critical includes security/data loss/crash and Always Critical flags (permit!, html_safe on user content, business logic in controllers, unparameterized SQL, destructive migrations), and always include a "Code review before merge" task or task-list line. Reviews Rails (Ruby on Rails) pull requests, PRs, merge requests, and diffs. Use when reviewing existing Rails code for quality, when asked to do a PR review, review my diff, review my merge request, or code review of Ruby on Rails code.
 metadata:
   version: 1.0.0
   user-invocable: "true"
 ---
+
 # Code Review
 
 ## Quick Reference
@@ -34,11 +35,9 @@ After green tests + linters pass + YARD + doc updates:
 
 When **reviewing** Rails code, analyze it against the following areas. When **writing** new code, follow **apply-code-conventions** and **apply-stack-conventions**.
 
-**Core principle:** Review early, review often. Self-review before PR. Re-review after significant changes.
-
 ### Review Order
 
-Work through the diff in this sequence. Detailed criteria: [REVIEW_CHECKLIST.md](./REVIEW_CHECKLIST.md).
+Work through the diff in this sequence. Detailed criteria are in [assets/checklist.md](assets/checklist.md).
 Ground every finding in a real changed file/line from the branch diff. If the task does not provide a diff or file contents, say that no concrete findings can be made yet and list the exact diff/files needed.
 
 Configuration → Routing → Controllers → Views → Models → Associations → Queries → Migrations → Validations → I18n → Sessions → Security → Caching → Jobs → Tests
@@ -73,15 +72,14 @@ Re-diff the branch after:
 
 ## Extended Resources
 
-- [assets/checklist.md](assets/checklist.md)
-- [assets/examples.md](assets/examples.md)
+- [assets/checklist.md](assets/checklist.md) — detailed per-area review criteria (referenced as the Review Order checklist above)
+- [assets/examples.md](assets/examples.md) — full JSON and PR-comment output shape examples
 
 ## Output Style
 
-Group findings by severity. See [assets/examples.md](./assets/examples.md) for JSON/PR comment shapes.
+Group findings by severity. The canonical output shape is shown below; [assets/examples.md](./assets/examples.md) contains additional JSON and PR-comment variants if available.
 
-0. **Review principle** — State: "Review early, review often. Self-review before PR. Re-review after significant changes."
-1. **Findings Format**: 
+1. **Findings Format**:
    ```text
    ## Review — <PR title or area>
 
@@ -91,13 +89,36 @@ Group findings by severity. See [assets/examples.md](./assets/examples.md) for J
    ### Suggestion
    - [path/to/file.rb:LINE] (Area) ... **Mitigation:** ...
 
+   ### Nice to have
+   - [path/to/file.rb:LINE] (Area) ... **Mitigation:** ...
+
    **Actions required:** <one line per severity level found — e.g. Critical -> block merge>
+
+   **Re-review required:** <yes/no and reason per Re-review Criteria>
+
+   - [ ] Code review before merge
+   ```
+   Example (inline):
+   ```text
+   ## Review — Add discount pricing
+
+   ### Critical
+   - [app/controllers/orders_controller.rb:42] (Security) `params.permit!` allows mass-assignment of all attributes. **Mitigation:** Replace with explicit `permit(:product_id, :quantity)`.
+   - [app/controllers/orders_controller.rb:58] (Controllers) Discount calculation lives in controller action — domain logic belongs in a model or service object. **Mitigation:** Extract to `Order#apply_discount`.
+
+   ### Suggestion
+   - [app/models/order.rb:17] (Queries) `Order.where(user: current_user)` inside loop causes N+1. **Mitigation:** Add `.includes(:orders)` to the parent query.
+
+   **Actions required:** Critical → block merge; Suggestion → fix before approval.
+
+   **Re-review required:** Yes — Critical fixes must be re-diffed before approval.
+
+   - [ ] Code review before merge
    ```
    Findings must come from an actual diff or provided file contents. Do not present a simulated PR review as if it were a completed review of real code.
 2. **Tagging**: Tag (Area) from Controllers, Routing, Views, Models, Queries, Migrations, Validations, Security, Caching, Jobs, Tests. Cover **≥4** distinct areas if applicable.
 3. **Task-list handoff** — Always include a `Code review before merge` task or task-list line.
-4. **Re-review trigger** — State whether Critical fixes, more than three Suggestion fixes, architecture changes, query changes, auth changes, or migration changes require a re-diff before PR approval.
-5. **Language**: Must be in English unless explicitly requested otherwise.
+4. **Language**: Must be in English unless explicitly requested otherwise.
 
 ## Integration
 

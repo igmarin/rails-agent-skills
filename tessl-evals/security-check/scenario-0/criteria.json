@@ -1,46 +1,21 @@
 {
-  "context": "Checks whether the final artifact follows the security-check instructions from the published Rails Agent Skills tile.",
+  "context": "Checks whether the final artifact follows the security-check instructions from the published Rails Agent Skills plugin.",
   "type": "weighted_checklist",
   "checklist": [
     {
       "name": "instruction-1",
-      "description": "The submitted artifact follows this skill instruction: Check authentication and authorization boundaries.",
-      "max_score": 13
+      "description": "The submitted artifact follows this skill instruction: Review in this sequence, and produce output sections in this same order (see Output Style):",
+      "max_score": 34
     },
     {
       "name": "instruction-2",
-      "description": "The submitted artifact follows this skill instruction: Check parameter handling and sensitive attribute assignment.",
-      "max_score": 13
+      "description": "The submitted artifact follows this skill instruction: **Verify each finding:** Confirm it is exploitable with a concrete attack scenario before reporting. Exclude false positives (e.g., `html_safe` on a developer-defined constant, not user input).",
+      "max_score": 33
     },
     {
       "name": "instruction-3",
-      "description": "The submitted artifact follows this skill instruction: Check redirects, rendering, and output encoding.",
-      "max_score": 13
-    },
-    {
-      "name": "instruction-4",
-      "description": "The submitted artifact follows this skill instruction: Check file handling, network calls, and background job inputs.",
-      "max_score": 13
-    },
-    {
-      "name": "instruction-5",
-      "description": "The submitted artifact follows this skill instruction: Check secrets, logging, and operational exposure.",
-      "max_score": 12
-    },
-    {
-      "name": "instruction-6",
-      "description": "The submitted artifact follows this skill instruction: **Verify each finding:** Confirm it is exploitable with a concrete attack scenario before reporting. Exclude false positives (e.g., `html_safe` on a developer-defined constant, not user input).",
-      "max_score": 12
-    },
-    {
-      "name": "instruction-7",
-      "description": "The submitted artifact follows this skill instruction: **Format**: Sections must appear in the order below, even when empty — write \"No issues found\" and state what evidence would be needed to verify the category.",
-      "max_score": 12
-    },
-    {
-      "name": "instruction-8",
       "description": "The submitted artifact follows this skill instruction: Do not use representative file paths as if they were confirmed evidence.",
-      "max_score": 12
+      "max_score": 33
     }
   ]
 }

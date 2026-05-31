@@ -55,12 +55,6 @@
       "original_snippets": "When applying stack conventions, your output MUST include:",
       "relevant_when": "When a user asks for Rails work that should trigger apply-stack-conventions.",
       "why_given": "preference"
-    },
-    {
-      "instruction": "**Tests-first proof before implementation** — Put this section before any implementation code. For each layer, include the actual spec code written or updated, the exact command (`bundle exec rspec spec/[path]_spec.rb`), and the **Observed RED output** proving the feature is absent rather than misconfigured. Do not use placeholder or illustrative `e.g.` failure lines.",
-      "original_snippets": "**Tests-first proof before implementation** — Put this section before any implementation code. For each layer, include the actual spec code written or updated, the exact command (`bundle exec rspec spec/[path]_spec.rb`), and the **Observed RED output** proving the feature is absent rather than misconfigured. Do not use placeholder or illustrative `e.g.` failure lines.",
-      "relevant_when": "When a user asks for Rails work that should trigger apply-stack-conventions.",
-      "why_given": "preference"
     }
   ]
 }

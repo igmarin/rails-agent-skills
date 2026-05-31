@@ -1,5 +1,5 @@
 {
-  "context": "Checks whether the final artifact follows the extract-engine instructions from the published Rails Agent Skills tile.",
+  "context": "Checks whether the final artifact follows the extract-engine instructions from the published Rails Agent Skills plugin.",
   "type": "weighted_checklist",
   "checklist": [
     {
@@ -24,7 +24,7 @@
     },
     {
       "name": "instruction-5",
-      "description": "The submitted artifact follows this skill instruction: Verify regression coverage still passes before proceeding to the next slice:",
+      "description": "The submitted artifact follows this skill instruction: Verify regression coverage still passes before proceeding:",
       "max_score": 20
     }
   ]

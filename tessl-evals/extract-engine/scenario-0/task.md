@@ -4,7 +4,7 @@
 
 A Rails team needs help with a task in this area:
 
-Use when extracting existing Rails app code into a reusable engine — DO NOT extract and change behavior in the same step, preserve existing behavior first then refactor separately, move stable domain logic first (POROs/services/value objects), add adapters or configuration seams for host dependencies before moving controllers/routes/views, keep regression coverage green throughout each slice, one bounded slice per step with one coherent responsibility and minimal new public API.
+Use when extracting existing Rails app code into a reusable engine — must extract incrementally over big-bang, preserve existing behavior first and verify regression coverage passes before proceeding (do not extract and change behavior in the same step), ensure each slice has one coherent responsibility, minimal new public API, passing regression tests, and a clear next step.
 
 The team has asked for a concise implementation artifact that a reviewer can inspect without needing to observe the agent's process.
 

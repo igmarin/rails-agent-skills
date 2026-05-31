@@ -4,7 +4,7 @@
 
 A Rails team needs help with a task in this area:
 
-Use to write and configure RSpec tests for Rails engines.
+Use when writing and configuring RSpec tests for Rails engines — must ensure that a dummy app exists for testing, add the smallest integration test that proves mounting and boot and verify it passes before continuing, and run the full test suite via bundle exec rspec to verify all specs pass.
 
 The team has asked for a concise implementation artifact that a reviewer can inspect without needing to observe the agent's process.
 

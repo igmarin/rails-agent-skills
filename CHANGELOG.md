@@ -2,9 +2,17 @@
 
 ## [Unreleased]
 
+## [6.0.20] - 2026-05-30
+
 ### Added
 - Integrated `load-context` skill with `get_project_context` tool of `agent-mcp-runtime` to automatically query `rails-ai-bridge` when available.
 - GitHub Actions workflow (`.github/workflows/tile-check.yml`) to perform local `tile.json` integrity validation.
+
+### Changed
+- Optimized frontmatter descriptions of 23 local skills (`apply-code-conventions`, `apply-stack-conventions`, `code-review`, `create-engine`, `create-engine-installer`, `extract-engine`, `generate-api-collection`, `implement-authorization`, `implement-background-job`, `implement-graphql`, `implement-hotwire`, `load-context`, `optimize-performance`, `plan-tests`, `refactor-code`, `review-architecture`, `review-engine`, `security-check`, `seed-database`, `test-engine`, `upgrade-engine`, `version-api`, and `write-tests`) according to the `skill-description-strategy` to pack critical rules/constraints into the first sentence.
+- Prevented premature regex splitting by avoiding periods (`. `) in the first sentence and properly quoting special characters (like `"let!"`) in frontmatter descriptions.
+- Regenerated and staged all Tessl eval scenarios to the `evals/` directory.
+- Raised average baseline Tessl evaluation scores from 56% to 92%.
 
 ## [6.0.0] - 2026-05-24
 

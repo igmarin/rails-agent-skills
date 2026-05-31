@@ -4,7 +4,7 @@
 
 A Rails team needs help with a task in this area:
 
-Use when creating a Rails engine — choose engine type (Plain/Railtie/Engine/Mountable) before coding, engine should have narrow purpose and small public API, use `isolate_namespace` + `.configure` block, host model references MUST be configurable strings never hard-coded, NEVER auto-apply migrations at boot, initializers must be idempotent and reload-safe, verify dummy app exists (`ls spec/dummy`), verify dummy app boots, confirm no hard-coded host constants, confirm no migration auto-apply patterns, create minimal engine structure first (checkpoint: `bundle exec rake` must pass), define the host-app contract, write minimum integration coverage through the dummy app.
+Use when creating or refactoring a Rails engine — must keep a narrow purpose and small public API, verify that a dummy app exists under spec/dummy or test/dummy, define the host-app contract specifying what the host must provide and what the engine exposes, create the minimal engine structure verifying that bundle exec rake inside the engine passes, and write minimum integration coverage through the dummy app.
 
 The team has asked for a concise implementation artifact that a reviewer can inspect without needing to observe the agent's process.
 

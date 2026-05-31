@@ -35,8 +35,6 @@ DO NOT implement the service before step 1 is written and failing for the right 
 
 ## Core Process
 
-Use this skill when writing tests for service classes under `spec/services/`.
-
 **Core principle:** Test the public contract (`.call`, `.find`, `.search`), not internal implementation. Use `instance_double` for isolation, `create` for integration.
 
 ### Spec Template
@@ -142,16 +140,6 @@ let(:api_response) { build(:api_animal_response, tag_number: 'TAG002') }
 - [PATTERNS.md](./PATTERNS.md) for the full pattern and factory placement guidance.
 - [assets/spec_examples.md](assets/spec_examples.md)
 - [assets/testing_checklist.md](assets/testing_checklist.md)
-
-## Output Style
-
-1. **Clear structure**: Write tests with properly structured `describe` and `context` blocks.
-2. **Public contract**: Name the public method under test (`.call`, `.find`, `.search`) and avoid assertions against private implementation.
-3. **Tests-first proof**: Show the spec file, focused command, and expected RED failure before implementation or fix.
-4. **GREEN checkpoint**: Show the focused rerun and the broader `spec/services/` command when available.
-5. **Collaborator strategy**: State where `instance_double` is used for injected collaborators and where `create` is used for DB-backed integration.
-6. **Failure coverage**: Include happy path, error shape, blank/invalid input, and external failure cases when relevant.
-7. **Language**: Must be in English unless explicitly requested otherwise.
 
 ## Integration
 

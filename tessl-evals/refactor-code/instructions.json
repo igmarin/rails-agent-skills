@@ -15,14 +15,14 @@
       "why_given": "reminder"
     },
     {
-      "instruction": "**Write this before touching any production file.** No refactoring step begins until this test exists and passes on the current (un-refactored) code.",
-      "original_snippets": "**Write this before touching any production file.** No refactoring step begins until this test exists and passes on the current (un-refactored) code.",
+      "instruction": "**Write this before touching any production file.** No refactoring step begins until this test exists and passes on the current (un-refactored) code. If the characterization spec fails, do not continue — stop and fix the test or the behavior mismatch.",
+      "original_snippets": "**Write this before touching any production file.** No refactoring step begins until this test exists and passes on the current (un-refactored) code. If the characterization spec fails, do not continue — stop and fix the test or the behavior mismatch.",
       "relevant_when": "When a user asks for Rails work that should trigger refactor-code.",
       "why_given": "new knowledge"
     },
     {
-      "instruction": "Run it: `bundle exec rspec spec/requests/orders_spec.rb` — it must pass on the **current** code. If it fails, stop and fix the characterization test or current behavior mismatch before refactoring.",
-      "original_snippets": "Run it: `bundle exec rspec spec/requests/orders_spec.rb` — it must pass on the **current** code. If it fails, stop and fix the characterization test or current behavior mismatch before refactoring.",
+      "instruction": "Run it: `bundle exec rspec spec/requests/orders_spec.rb` — it must pass on the **current** code.",
+      "original_snippets": "Run it: `bundle exec rspec spec/requests/orders_spec.rb` — it must pass on the **current** code.",
       "relevant_when": "When a user asks for Rails work that should trigger refactor-code.",
       "why_given": "preference"
     },
@@ -39,38 +39,8 @@
       "why_given": "new knowledge"
     },
     {
-      "instruction": "Use an **Observed output** label only for output copied from an actual run. Never label planned or desired results as \"Required output\", \"Expected output\", or \"Expected final output\".",
-      "original_snippets": "Use an **Observed output** label only for output copied from an actual run. Never label planned or desired results as \"Required output\", \"Expected output\", or \"Expected final output\".",
-      "relevant_when": "When a user asks for Rails work that should trigger refactor-code.",
-      "why_given": "preference"
-    },
-    {
-      "instruction": "Do not write \"required exit condition\", \"must produce 0 failures\", or \"must still report 0 failures\" as evidence; run the command and paste the observed final line, or state that verification has not been run yet.",
-      "original_snippets": "Do not write \"required exit condition\", \"must produce 0 failures\", or \"must still report 0 failures\" as evidence; run the command and paste the observed final line, or state that verification has not been run yet.",
-      "relevant_when": "When a user asks for Rails work that should trigger refactor-code.",
-      "why_given": "preference"
-    },
-    {
-      "instruction": "Load these files only when their specific content is needed:",
-      "original_snippets": "Load these files only when their specific content is needed:",
-      "relevant_when": "When a user asks for Rails work that should trigger refactor-code.",
-      "why_given": "new knowledge"
-    },
-    {
-      "instruction": "When asked to refactor, your output MUST include:",
-      "original_snippets": "When asked to refactor, your output MUST include:",
-      "relevant_when": "When a user asks for Rails work that should trigger refactor-code.",
-      "why_given": "preference"
-    },
-    {
-      "instruction": "**Stable behavior statement** — State the stable behavior that must not change.",
-      "original_snippets": "**Stable behavior statement** — State the stable behavior that must not change.",
-      "relevant_when": "When a user asks for Rails work that should trigger refactor-code.",
-      "why_given": "preference"
-    },
-    {
-      "instruction": "**Verification evidence** — Follow Verification Protocol after each step — report actual command output evidence mid-sequence AND at the end under **Observed output**. Do not substitute expected output, required output, planned output, \"Expected final output\", \"required exit condition\", \"must produce 0 failures\", \"must still report 0 failures\", or \"must show 0 failures\" language for observed evidence from the actual run.",
-      "original_snippets": "**Verification evidence** — Follow Verification Protocol after each step — report actual command output evidence mid-sequence AND at the end under **Observed output**. Do not substitute expected output, required output, planned output, \"Expected final output\", \"required exit condition\", \"must produce 0 failures\", \"must still report 0 failures\", or \"must show 0 failures\" language for observed evidence from the actual run.",
+      "instruction": "**Evidence labelling rules:** Label actual run output as **Observed output** only. Never use labels such as \"Expected output\", \"Required output\", \"Planned output\", or \"Must produce 0 failures\" as substitutes for actual observed run output. If you have not run the tests, you have no observed output to report — do not fabricate it.",
+      "original_snippets": "**Evidence labelling rules:** Label actual run output as **Observed output** only. Never use labels such as \"Expected output\", \"Required output\", \"Planned output\", or \"Must produce 0 failures\" as substitutes for actual observed run output. If you have not run the tests, you have no observed output to report — do not fabricate it.",
       "relevant_when": "When a user asks for Rails work that should trigger refactor-code.",
       "why_given": "preference"
     }

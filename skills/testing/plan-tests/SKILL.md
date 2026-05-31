@@ -2,11 +2,12 @@
 name: plan-tests
 license: MIT
 description: >
-  Choose the best first failing RSpec spec for a Rails change — start at the highest-value boundary that proves behavior with least setup, pick one smallest strong slice: choose spec type that proves the behavior without dragging in unrelated layers (don't start at a lower-level unit if the real risk is request/job/engine/persistence), write exactly ONE failing example for the initial TDD gate (list additional cases as follow-up coverage), confirm failure is for missing behavior not broken setup, present the test design checkpoint: answer right behavior/correct boundary/edge cases represented/failure reason before handing off to write-tests. Covers spec selection by change type, vertical slice planning, TDD sequencing. Trigger words: where to start testing, what test to write first, TDD, first failing test.
+  Use when planning tests for a Rails change — must present a Test Design Review checkpoint, pick the smallest strong slice matched to where the real risk lives, write exactly one minimal failing example as the initial TDD gate (list additional cases as follow-up), verify that the test fails because behavior is missing rather than broken setup, and use assets/first_slice_template.md to document the plan. TDD, first failing test, spec selection, vertical slice planning.
 metadata:
   version: 1.0.0
   user-invocable: "true"
 ---
+
 # Plan Tests
 
 ## Quick Reference
@@ -38,19 +39,16 @@ CHECKPOINT: Test Design Review
 
 ## Core Process
 
-Use this skill when the hardest part of the task is deciding where TDD should start.
+Start at the highest-value boundary that proves the behavior with the least unnecessary setup.
 
-**Core principle:** Start at the highest-value boundary that proves the behavior with the least unnecessary setup.
-
-### Process
+### Steps
 
 1. **Name the behavior:** State the user-visible outcome or invariant to prove.
-2. **Locate the boundary:** Decide where the behavior is observed first: HTTP request, service entry point, model rule, job execution, engine integration, or external adapter.
-3. **Pick the smallest strong slice:** Choose the spec type that proves the behavior without dragging in unrelated layers. Do not choose the first spec based on convenience alone — do not start with a lower-level unit if the real risk is request, job, engine, or persistence wiring.
-4. **Suggest the path:** Name the likely spec path using normal Rails conventions (for example `spec/requests/...`, `spec/services/...`, `spec/jobs/...`, `spec/models/...`).
-5. **Write one failing example:** Keep it minimal; one example is enough to open the gate. Do not include multiple opening examples unless the user explicitly asks for expanded coverage; list additional cases as follow-up coverage instead.
-6. **Run and validate:** Confirm the failure is because the behavior is missing, not because the setup is broken.
-7. **Hand off:** Continue with `write-tests`, `test-service`, `test-engine`, or the implementation skill that fits the slice.
+2. **Locate the boundary:** Decide where the behavior is observed first — HTTP request, service entry point, model rule, job execution, engine integration, or external adapter. Use the Quick Reference table to map the change type to the right spec type.
+3. **Write one failing example:** Keep it minimal; one example is enough to open the gate. List additional cases as follow-up coverage.
+4. **Suggest the path:** Name the likely spec path using normal Rails conventions (e.g. `spec/requests/...`, `spec/services/...`, `spec/jobs/...`, `spec/models/...`).
+5. **Run and validate:** Confirm the failure is because the behavior is missing, not because the setup is broken.
+6. **Hand off:** Continue with `write-tests`, `test-service`, `test-engine`, or the implementation skill that fits the slice.
 
 ### Examples
 
@@ -101,36 +99,6 @@ end
 |---------|------------|
 | Starting with a PORO spec because it is easy | Easy ≠ high-signal — choose the boundary that proves the real behavior |
 | Writing three spec types before running any | Pick one slice, run it, prove the failure, then proceed |
-| Defaulting to request specs for everything | Some domain rules are better proven at the model or service layer |
-| Defaulting to model specs for controller behavior | Controllers and APIs need request-level proof |
-| Using controller specs as the default HTTP entry point | Prefer request specs unless the repo has an existing reason |
+| Defaulting to one spec type for everything | Match the spec type to the layer where the real risk lives (HTTP, domain, async, browser) |
 | Jumping to system specs too early | Reserve for critical browser flows that lower layers cannot prove |
-| "We'll add the request spec later" | The spec is the gate — implement only after the first slice is failing for the right reason |
-| First spec requires excessive factory setup | Excessive setup = wrong boundary. Simplify or move the slice. |
-
-## Extended Resources
-
-Load only when needed:
-
-- [assets/first_slice_template.md](assets/first_slice_template.md) — Use when producing a complete first-slice decision artifact with boundary table, one opening example, RED proof, follow-up coverage, and HARD-GATE answers.
-
-## Output Style
-
-1. **Test Proposal**: Clearly present the proposed failing spec with the correct boundary context.
-2. **Opening gate**: Include exactly one first failing `it` example for the initial TDD gate. Put happy path, edge cases, enqueue checks, and validation errors under "Follow-up coverage" unless one of them is the chosen first slice.
-3. **Failure proof**: Show the focused command and the expected RED reason before implementation.
-4. **Design checkpoint**: Answer the four HARD-GATE review questions before handing off.
-5. **Template use**: If the answer needs a full planning artifact, load `assets/first_slice_template.md` and follow its structure.
-6. **Language**: Must be in English unless explicitly requested otherwise.
-
-## Integration
-
-| Skill | When to chain |
-|-------|---------------|
-| **write-tests** | After choosing the first slice, to enforce the TDD loop correctly |
-| **test-service** | When the first slice is a service object spec |
-| **test-engine** | When the first slice belongs to an engine |
-| **triage-bug** | When the starting point is an existing bug report |
-| **refactor-code** | When the task is mostly structural and needs characterization tests first |
-
-| **test-planning-process** *(from ruby-core-skills)* | Process discipline: test type decision framework, coverage strategy |
+| 

@@ -9,12 +9,6 @@
       "why_given": "new knowledge"
     },
     {
-      "instruction": "**Core principle:** Review early, review often. Self-review before PR. Re-review after significant changes.",
-      "original_snippets": "**Core principle:** Review early, review often. Self-review before PR. Re-review after significant changes.",
-      "relevant_when": "When a user asks for Rails work that should trigger code-review.",
-      "why_given": "new knowledge"
-    },
-    {
       "instruction": "Use **only** these labels:",
       "original_snippets": "Use **only** these labels:",
       "relevant_when": "When a user asks for Rails work that should trigger code-review.",
@@ -33,10 +27,16 @@
       "why_given": "reminder"
     },
     {
-      "instruction": "**Review principle** — State: \"Review early, review often. Self-review before PR. Re-review after significant changes.\"",
-      "original_snippets": "**Review principle** — State: \"Review early, review often. Self-review before PR. Re-review after significant changes.\"",
+      "instruction": "[assets/checklist.md](assets/checklist.md) — detailed per-area review criteria (referenced as the Review Order checklist above)",
+      "original_snippets": "[assets/checklist.md](assets/checklist.md) — detailed per-area review criteria (referenced as the Review Order checklist above)",
       "relevant_when": "When a user asks for Rails work that should trigger code-review.",
       "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**Re-review required:** Yes — Critical fixes must be re-diffed before approval.",
+      "original_snippets": "**Re-review required:** Yes — Critical fixes must be re-diffed before approval.",
+      "relevant_when": "When a user asks for Rails work that should trigger code-review.",
+      "why_given": "preference"
     },
     {
       "instruction": "Findings must come from an actual diff or provided file contents. Do not present a simulated PR review as if it were a completed review of real code.",

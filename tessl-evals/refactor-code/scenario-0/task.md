@@ -4,7 +4,7 @@
 
 A Rails team needs help with a task in this area:
 
-Use when changing structure without changing behavior — write characterization tests BEFORE touching any production file (must pass on current un-refactored code, if it fails stop and fix the test or behavior mismatch), NEVER mix behavior changes with structural refactors, identify exact inputs/outputs, keep public interfaces stable until callers migrate, ONE boundary per step, run verification after EVERY step plus full test suite at end, use ONLY Observed output for actual run output (NEVER substitute expected/required/planned output or "must produce 0 failures" as evidence), include stable behavior statement.
+Use when refactoring Rails code to change structure without changing behavior — must write characterization tests and verify they pass on the current code BEFORE touching any production files, identify inputs/outputs keeping public interfaces stable, run verification after every step and the full suite at the end, and include a Stable behavior statement and Verification evidence showing actual command output under the Observed output label.
 
 The team has asked for a concise implementation artifact that a reviewer can inspect without needing to observe the agent's process.
 
