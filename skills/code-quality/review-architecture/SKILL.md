@@ -2,7 +2,13 @@
 name: review-architecture
 license: MIT
 description: >
+<<<<<<< HEAD
   Use when reviewing Rails application structure, MVC boundaries, or architecture — including when the user mentions tech debt, fat controllers, fat models, service objects, refactoring, monolith structure, or Rails best practices. Prioritizes boundary problems over style, evaluates where domain logic lives, and for every High-severity finding verifies it by reading the actual code and stating concrete code-level evidence (redacting any secret-like literal, without using representative file paths or fabricated line numbers).
+||||||| parent of 9640c5f (Applying Antigravity CLI strategy)
+  Use to perform structural audits, code reviews, and architecture reviews for Ruby on Rails applications. Use when the user asks for a Rails code review, architecture review, refactoring advice, or wants feedback on their Rails app structure. Trigger words and natural phrasings include: code review, architecture, refactor, Rails app, MVC, fat models, fat controllers, tech debt, Rails audit, application structure review. Key checks: prioritize boundary problems over style, verify High-severity findings with concrete code-level evidence, inspect models and controllers for logic leakage, evaluate callback chains, and suggest clean abstractions like service objects.
+=======
+  Use when reviewing Rails application structure or architecture — must prioritize boundary problems over style, evaluate where domain logic lives, and for every High-severity finding verify it by reading the actual code and stating the concrete code-level evidence read (redacting any secret-like literal, without using representative file paths or fabricated line numbers). Tech debt, fat controllers, fat models.
+>>>>>>> 9640c5f (Applying Antigravity CLI strategy)
 metadata:
   version: 1.0.0
   user-invocable: "true"

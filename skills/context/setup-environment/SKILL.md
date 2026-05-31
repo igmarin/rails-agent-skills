@@ -46,6 +46,7 @@ See [references/steps.md](references/steps.md) for the detailed per-step templat
   ```
 - **Action**: User edits `.env` with local secrets/settings.
 
+<<<<<<< HEAD
 **Step 3 — Docker & Services Setup**
 - **Decision Gate**: If project is Dockerized:
   ```bash
@@ -54,6 +55,20 @@ See [references/steps.md](references/steps.md) for the detailed per-step templat
   ```
   - **Action**: If any container status is unhealthy, print logs using `docker compose logs` to debug before proceeding.
 - **Decision Gate**: If project is Local-only, skip this step.
+||||||| parent of 9640c5f (Applying Antigravity CLI strategy)
+**Step 2 — Environment Variables**
+```bash
+cp .env.example .env
+# User edits .env with local values
+```
+The agent never reads filled-in `.env` content and never echoes secret values back.
+=======
+**Step 2 — Environment Variables**
+```bash
+cp .env.example .env
+# User edits .env with local values
+```
+>>>>>>> 9640c5f (Applying Antigravity CLI strategy)
 
 **Step 4 — Dependency Installation**
 - **Action**: Run Ruby installation:
@@ -103,6 +118,7 @@ See [references/steps.md](references/steps.md) for the detailed per-step templat
 ## Output Style
 
 When asked to prepare environment setup, output `answer.md` following the Runbook structure above (Steps 1–7 plus Final Verification), with these additional sections:
+<<<<<<< HEAD
 
 1. **Scope & Boundary Acknowledgment** — Explicitly state the boundaries and triggers of the `setup-environment` skill (e.g. that this is a generic onboarding runbook not customized for a specific checkout, unless manifests were explicitly read). State this is a generic Rails development-environment runbook for the user to execute locally; do not present it as repo-specific proof unless files were actually inspected.
 2. **No Appendices or IDE Reference Sections**: Do NOT include generic reference appendices (such as Appendix A-C) or IDE integration detail sections unless explicitly requested. Focus the runbook strictly on the gate-driven steps (Steps 1–7 and Final Verification) to keep the documentation concise, focused, and action-oriented.
@@ -110,7 +126,23 @@ When asked to prepare environment setup, output `answer.md` following the Runboo
 4. **Language** — Must be in English unless explicitly requested otherwise.
 
 
+||||||| parent of 9640c5f (Applying Antigravity CLI strategy)
+When asked to prepare environment setup, output `answer.md` with these sections:
+=======
+>>>>>>> 9640c5f (Applying Antigravity CLI strategy)
 
+<<<<<<< HEAD
+||||||| parent of 9640c5f (Applying Antigravity CLI strategy)
+1. **Scope** — State this is a generic Rails development-environment runbook for the user to execute locally; do not present it as repo-specific proof unless files were actually inspected.
+2. **Short plan** — Summarize the workflow in order: inspect files, copy environment variables, start services, install dependencies, prepare database, run linters, verify tests/server.
+3. **Runbook artifact** — Provide concrete copy-paste commands for each setup step, including Docker health checks, dependency install, database setup with `rails db:create db:migrate db:seed` unless a split is justified, linter run, `bundle exec rspec`, and `rails server`.
+4. **Constraints and assumptions** — State that the agent does not execute setup commands, does not read filled `.env` secrets, does not echo credentials, and that the user supplies local values and decides whether to proceed on mismatches.
+5. **Verification gates** — Include the expected final checks and recovery steps: healthy `docker compose ps`, passing `bundle exec rspec`, app reachable at `http://localhost:3000`, and `rails db:migrate RAILS_ENV=test` before retrying specs when test DB setup fails.
+6. **Language** — Must be in English unless explicitly requested otherwise.
+=======
+1. **Scope** — State this is a generic Rails development-environment runbook for the user to execute locally; do not present it as repo-specific proof unless files were actually inspected.
+2. **Language** — Must be in English unless explicitly requested otherwise.
+>>>>>>> 9640c5f (Applying Antigravity CLI strategy)
 
 ## Integration
 

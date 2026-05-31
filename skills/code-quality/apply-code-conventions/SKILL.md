@@ -2,7 +2,13 @@
 name: apply-code-conventions
 license: MIT
 description: >
+<<<<<<< HEAD
   Applies code conventions to Ruby on Rails files. Use when writing, reviewing, or refactoring Ruby on Rails code — including code review, refactoring, linting, RuboCop configuration, RSpec/specs/test setup, or improving clean code and best practices in a Rails app. Detects and runs the configured linter (.rubocop.yml/.standard.yml), applies area-specific architecture and behaviour rules per file path, enforces a tests-gate (failing spec before implementation), applies structured logging and comment discipline, recommends let_it_be only when test-prof is already in Gemfile.lock, and chains to specialised skills for deeper guidance. Trigger words: code review, refactor, RoR, Ruby code, Rails app, rubocop, linting, rspec, specs, test setup, clean code, best practices.
+||||||| parent of 9640c5f (Applying Antigravity CLI strategy)
+  Daily checklist for clean Rails code — Detect→run→defer: run linter (detect `.rubocop.yml`/`.standard.yml`→run→note absence), never invent style rules, style/formatting defers to detected config, apply area-specific rules per path (models→eager load/pluck, controllers→strong params/thin, services→.call, jobs→idempotency/retries, specs→let>let!), verify tests gate BEFORE new behavior (RED→implement→GREEN), enforce structured logging: every Rails.logger call MUST use static string first arg + hash with event: key second arg + no interpolation, enforce comment discipline: TODO/FIXME tags MUST carry actionable context, chain to specialised skills, only recommend let_it_be if test-prof already in Gemfile.lock, progressive disclosure: load extended resources only when needed. Use when writing, reviewing, or refactoring Ruby on Rails code. Trigger words: code review, refactor, RoR, clean code, best practices.
+=======
+  Use when applying code conventions to Rails files — must run linter (detect .rubocop.yml/.standard.yml, note absence, and state which linter was detected and that style defers to it), apply area-specific rules per path with concrete per-path recommendations, verify tests gate (state the failing spec, run command, expected failure, minimal implementation step, and passing rerun) BEFORE new behavior, chain to specialised skills, only recommend let_it_be if test-prof already in Gemfile.lock (otherwise default to let, reach for "let!" only if lazy evaluation breaks example, do not introduce test-prof), and load extended files (assets/checklist.md, assets/snippets.md) only when needed. Use when writing, reviewing, or refactoring Ruby on Rails code. Trigger words: code review, refactor, RoR, clean code, best practices.
+>>>>>>> 9640c5f (Applying Antigravity CLI strategy)
 metadata:
   version: 1.0.0
   user-invocable: "true"

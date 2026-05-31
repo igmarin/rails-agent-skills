@@ -27,42 +27,41 @@ NEVER optimize without a baseline measurement
 ALWAYS write a regression spec before optimizing (query count assertion)
 ALWAYS verify with EXPLAIN ANALYZE for database changes
 
-The spec MUST be written and shown failing BEFORE the fix appears in your
-output — reordering for narrative flow fails the audit.
+NEVER write the report as "I applied includes(:author), then wrote a spec
+to lock it in." The spec MUST be written and shown failing BEFORE the fix
+appears in your output. Reordering for narrative flow fails the audit even
+when the underlying work was correct.
 ```
 
 **Required report order — each step must appear in output:**
 
 1. **Baseline** — timing or query count with source (log line, profiler output, EXPLAIN row).
 2. **Bottleneck** — specific cause + the tool that surfaced it (`bullet`, `rack-mini-profiler`, or `EXPLAIN ANALYZE` — at least one named).
-3. **Regression spec — RED** — spec asserting the target/optimized query count (e.g. `expect { ... }.to make_database_queries(count: <optimized_count>)` where `optimized_count` is the expected count after the fix), shown failing on the unoptimized code (since the unoptimized code executes more queries than the target count).
+3. **Regression spec — RED** — spec with `make_database_queries(count: <unoptimized>)`, shown failing.
 4. **Fix** — minimal code change (eager load, index, cache, scope rewrite).
-5. **Regression spec — GREEN** — rerun output at the new count (confirming that with the fix applied, the exact same spec asserting the target/optimized count now passes).
+5. **Regression spec — GREEN** — rerun output at the new count.
 6. **EXPLAIN ANALYZE** — actual output rows for any DB-touching change; call out `Seq Scan → Index Scan` or `actual time` delta.
 7. **Quantified improvement** — `queries: N → M`, `p95: X ms → Y ms`. Numbers, not adjectives.
-
 
 Language: English unless explicitly requested otherwise.
 
 ## Extended Resources
 
-### Less-Obvious Optimizations
-
+**Less-Obvious Optimizations**
 ```ruby
-# Avoid loading full objects when only a column is needed
+# Use pluck to avoid loading full objects when only a column is needed
 Post.where(published: true).pluck(:id, :title)
 
-# Limit loaded columns on large tables
+# Use select to limit loaded columns on large tables
 Post.select(:id, :title, :author_id).where(published: true)
 
-# counter_cache avoids COUNT queries in loops
-# Migration: add_column :users, :posts_count, :integer, default: 0
-# Post model: belongs_to :user, counter_cache: true
+# Use counter_cache to avoid COUNT queries in loops
+# In migration: add_column :users, :posts_count, :integer, default: 0
+# In Post model: belongs_to :user, counter_cache: true
 user.posts_count  # no extra query
 ```
 
-### Regression Spec (Query Count Assertion)
-
+**Regression Spec (Query Count Assertion)**
 ```ruby
 RSpec.describe "Post index performance" do
   it "loads posts with authors in a fixed number of queries" do
@@ -75,8 +74,6 @@ RSpec.describe "Post index performance" do
 end
 ```
 Use the `db-query-matchers` gem or a custom `make_database_queries` matcher.
-
-### EXPLAIN ANALYZE Verification
 
 Run directly in `rails dbconsole` (PostgreSQL) after applying an index or query change:
 ```sql

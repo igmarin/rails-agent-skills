@@ -18,19 +18,19 @@ metadata:
 ---
 # GraphQL Agent
 
-> **Hard Gate Convention:** Every phase ends with a HARD GATE. All gates block progression — fix all issues in the current phase before advancing.
-
 ## Agent Phases
 
 ### Phase 1: Domain Modeling
 
 **Steps:**
-1. Map entities → Types, actions → Mutations, read paths → Queries (e.g. `Order` → `OrderType`, `placeOrder` → `PlaceOrderMutation`)
+1. Map entities → Types, actions → Mutations, read paths → Queries (e.g. `Order` entity → `OrderType`, `placeOrder` action → `PlaceOrderMutation`, order lookup → `orderQuery`)
 2. Assign each type to a bounded context and define which context owns and exposes it
 
 **HARD GATE — Domain Language:**
 - Core GraphQL types and their owning bounded contexts identified
 - Entity relationships mapped to GraphQL connections or nested types
+
+**If gate fails:** Return to domain discovery.
 
 ---
 
