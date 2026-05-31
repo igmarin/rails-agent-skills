@@ -66,34 +66,6 @@ Load these files only when their specific content is needed:
 - **[TESTING.md](./TESTING.md)** — For the spec template, paths, and checklist.
 - **[EXAMPLES.md](EXAMPLES.md)** — For detailed code examples of dataloaders, mutations, and types.
 
-<<<<<<< HEAD
-## Output Style
-
-When building or reviewing GraphQL APIs, your output `answer.md` MUST include:
-1. **Short Plan**: Step-by-step implementation/review plan.
-2. **GraphQL Schema & Types**: Code blocks defining Types, Query, and Mutation entry points.
-3. **Resolvers & Mutations**: Code blocks for dedicated resolver and mutation classes delegating to services.
-4. **Specs**: RSpec code block in `spec/graphql/` using `AppSchema.execute` (never HTTP dispatch), covering happy path, auth, and validation error cases.
-5. **Quality Gates & Verification**: Exact commands to verify the schema, N+1 detection, and mutation shapes.
-6. **Resource Loading & Reference**: Include a short section in `answer.md` documenting which specific assets (e.g. `TESTING.md`, `EXAMPLES.md`) were loaded conditionally and why. This makes the process instruction verifiable.
-7. **Language**: Must be in English unless explicitly requested otherwise.
-
-||||||| parent of 9640c5f (Applying Antigravity CLI strategy)
-## Output Style
-
-When implementing GraphQL, your output MUST include:
-
-1. **Schema contract** — Types, fields, arguments, nullability, descriptions, and connection shape.
-2. **Resolver/mutation structure** — Dedicated class names and service-object delegation points.
-3. **N+1 prevention** — Dataloader source and every association load it protects.
-4. **Authorization and limits** — Field-level guards, Pundit checks, introspection/depth/complexity decisions.
-5. **Error shape** — Mutation `{ result, errors }` or equivalent structured failure behavior.
-6. **Verification** — `spec/graphql/` commands covering happy path, auth, validation errors, N+1 counts, and schema limits.
-7. **Hard-gate checklist** — Explicitly verify all hard-gate items, including resolver structure, type conventions, and dataloader priming.
-8. **Language** — Must be in English unless explicitly requested otherwise.
-
-=======
->>>>>>> 9640c5f (Applying Antigravity CLI strategy)
 ## Integration
 
 | Skill | When to chain |
