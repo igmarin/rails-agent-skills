@@ -1,5 +1,6 @@
 ---
 name: optimize-performance
+type: atomic
 license: MIT
 description: >
   Use when optimizing Rails performance — must follow a strict workflow where the report order matches the work order (measure baseline, identify bottleneck, write and run failing RED regression spec asserting query count using db-query-matchers, apply fix, verify spec is GREEN, check with EXPLAIN ANALYZE in rails dbconsole, and report quantified improvements), and write the regression spec before applying any optimization. Caching, Bullet, profiling, slow query, database query. Trigger words: performance, optimize, N+1, slow query, caching, Bullet, profiling.

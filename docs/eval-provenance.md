@@ -1,20 +1,17 @@
 # Eval Provenance Policy
 
-This repository uses two public eval source areas and one generated staging area.
+This repository uses one public eval source area.
 
 | Path | Purpose | Commit policy |
 |------|---------|---------------|
-| `tessl-evals/` | Tessl-native scenarios for publishable skills in `tile.json`. | Tracked. |
-| `personal-evals/` | Open examples for the upcoming `ruby-skill-bench` full-context evaluator. | Tracked. |
-| `evals/` | Generated Tessl staging output produced from `tessl-evals/`. | Ignored; do not commit. |
+| `evals/` | Tessl-native scenarios for publishable skills in `directory.json`. | Tracked. |
+| `personal-evals/` | Open examples for the `ruby-skill-bench` full-context evaluator. | Tracked. |
 
-Tessl currently validates skills, not repository workflows. Tessl-native scenarios must target only publishable skills from `tile.json`.
+Tessl currently validates skills, not repository personas. Tessl-native scenarios must target only publishable skills from `directory.json`.
 
 `ruby-skill-bench` is planned as a Ruby gem for validating skills and workflows with full context. Its `personal-evals/` examples load `SKILL.md` plus companion resources as XML. They do not need to be Tessl-compatible while Tessl only consumes `SKILL.md`.
 
 Generated scenarios from third-party services or private workflows must stay out of tracked paths. Store them locally in ignored directories such as `private-evals/` when needed for private validation.
-
-Root `evals/` is generated Tessl staging output only. The release workflow stages `tessl-evals/` into `evals/` immediately before publishing.
 
 Public eval examples must meet one of these criteria:
 

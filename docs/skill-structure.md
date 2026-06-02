@@ -39,7 +39,7 @@ description: >
 **Rules:**
 - `name` MUST equal the directory name (validator enforces this).
 - `description` is single-paragraph, ≤ ~120 words, ends with a comma-separated list of trigger phrases.
-- No other frontmatter keys are required for the cross-platform manifest layer; tile.json carries the rest.
+- No other frontmatter keys are required for the cross-platform manifest layer; `directory.json` carries the rest.
 
 ## 2. Quick Reference
 
@@ -97,7 +97,7 @@ Closes the loop with the rest of the library:
 | **Comes after** | The skill(s) typically invoked before this one. |
 | **Comes before** | The next skill in the chain (named, not described). |
 | **See also** | Related skills the model should consider but not auto-load. |
-| **Agent Stage refs** | Links to `docs/agent-guide.md` and the relevant `docs/agents/<stage>.md` page. |
+| **Persona Stage refs** | Links to `docs/persona-guide.md` and the relevant `docs/personas/<stage>.md` page. |
 
 ---
 
@@ -107,8 +107,8 @@ Closes the loop with the rest of the library:
 
 - Frontmatter `name` matches directory name
 - Frontmatter has `name` and `description` keys
-- Skill directory is registered in `tile.json.skills`
-- `tile.json ↔ disk` inventory is bidirectionally in sync
+- Skill directory is registered in `directory.json.skills`
+- `directory.json ↔ disk` inventory is bidirectionally in sync
 
 The validator does **not** yet enforce the presence of HARD-GATE, Output Style, or Integration sections. Tessl evals catch the behavioural consequences of missing those sections — that is the loop the [optimization guide](skill-optimization-guide.md) describes.
 

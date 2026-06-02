@@ -1,14 +1,13 @@
-# Tracked source for Tessl-native scenarios. The publish workflow flattens this
-# into root evals/ so every direct child is a runnable scenario.
-tessl-evals/
+# Tracked source for Tessl-native scenarios.
+evals/
 lean-ctx/
 plans/
 for-openai.md
 docs/lessons-learned-from-tessl.md
-docs/agent-template.md
+docs/persona-template.md
 /SKILL.md
 /CONTEXT.md
 
 # Local scratch output from validation and packaging checks.
 tmp/
-agents/README.md
+skills/personas/README.md

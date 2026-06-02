@@ -34,7 +34,7 @@ plan-tests → write failing test
   → PR
 ```
 
-See [docs/agent-guide.md](docs/agent-guide.md) for all workflow diagrams.
+See [docs/persona-guide.md](docs/persona-guide.md) for all workflow diagrams.
 
 ## Available Skills
 
@@ -105,10 +105,10 @@ Skills are located in subdirectories of this plugin. Read the relevant `SKILL.md
 |-------|-------------|
 | `refactor-code` | Restructuring code while preserving behavior |
 
-### Primary Agents
+### Primary Personas
 
-| Agent | Use when... |
-|-------|-------------|
+| Persona | Use when... |
+|---------|-------------|
 | `tdd` | Full TDD feature cycle: test → implement → review → PR |
 | `review` | Systematic PR review: review → deep dive → response |
 | `setup` | New project setup: context → onboarding → CI/CD |
@@ -180,6 +180,9 @@ Generated artifacts (YARD docs, Postman collections, READMEs) must be in **Engli
 
 Skills are scored on two axes: **skill-specific criteria** AND **model performance baseline-vs-with-context**. A skill that only beats baseline marginally is under-specified — it should change the model's output meaningfully. See [docs/skill-optimization-guide.md](docs/skill-optimization-guide.md) for the optimization loop and per-skill targets.
 
-## Canonical Reference
+<!-- lean-ctx -->
+## lean-ctx
 
-For the complete skill category table, workflow chaining rules, and all constraints, see [AGENTS.md](AGENTS.md) — the single source of truth for agent guidance across all platforms.
+Prefer lean-ctx tools over native equivalents for token savings.
+Full rules: @LEAN-CTX.md
+<!-- /lean-ctx -->

@@ -1,5 +1,6 @@
 ---
 name: load-context
+type: atomic
 license: MIT
 description: >
   Use before writing code, tests, or PRDs in an existing Rails project — must load baseline context by reading db/schema.rb, config/routes.rb, or using the get_project_context tool, and load one neighbor of each kind for each layer touched (such as a controller, service, or spec) by running a grep command to find and inspect sibling implementations. Cite files read (path:line), re-check context when scope changes. Trigger words: load context, gather context, context engineering, read the code first, before I code, existing patterns, ambiguous requirements, spec vs code drift.

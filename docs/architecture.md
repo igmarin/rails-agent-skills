@@ -3,15 +3,12 @@
 Conventions and structure for every `SKILL.md` in this library.
 
 - **Overview and catalog:** [README](../README.md)
-- **Agent chains:** [agent-guide.md](agent-guide.md)
+- **Persona chains:** [persona-guide.md](persona-guide.md)
 
 ## Directory Structure
 
 ```text
 rails-agent-skills/
-├── agents/                  # Orchestrated agent skills
-│   └── <agent-name>/        # One directory per agent
-│       └── SKILL.md         # Agent definition
 ├── docs/                    # Documentation
 ├── lean-ctx/                # Lean context configuration
 ├── personal-evals/          # Tracked open custom evals
@@ -21,9 +18,8 @@ rails-agent-skills/
 │       └── <skill-name>/    # One directory per skill
 │           ├── SKILL.md     # Main skill file (required)
 │           └── EXAMPLES.md  # Optional reference/examples material
-├── tessl-evals/             # Tracked Tessl evals
-├── tile.json                # Tessl/MCP manifest
-├── AGENTS.md                # Agent guidance document
+├── evals/                   # Tessl eval scenarios
+├── directory.json           # Skill directory manifest
 ├── CLAUDE.md                # Claude Code setup instructions
 └── README.md                # Root README
 ```
@@ -37,6 +33,7 @@ Every skill follows this structure:
 ```yaml
 ---
 name: skill-name
+type: atomic|persona|catalog
 description: >
   Use when [concrete trigger conditions]. Covers [key topics].
   [Additional trigger words for discovery].
@@ -46,6 +43,7 @@ description: >
 **Rules:**
 
 - `name`: kebab-case, matches directory name
+- `type`: `atomic` for standalone skills, `persona` for orchestrating personas, `catalog` for root SKILL.md
 - `description`: starts with "Use when...", third person
 - Include concrete trigger words (error symptoms, tools, scenarios)
 - Do NOT summarize the workflow (prevents model from skipping the skill body)
@@ -183,7 +181,7 @@ Produce findings with severity levels.
 - `review-engine`
 - `review-domain-boundaries`
 
-## Agent Checkpoints
+## Checkpoints
 
 Beyond HARD-GATEs (which block entirely), some skills use **checkpoints** — explicit pause-and-confirm steps that require user approval before continuing. Checkpoints differ from gates in that they pause for collaboration, not to enforce a rule.
 
@@ -211,7 +209,7 @@ Wait for confirmation before writing code. This prevents surprise implementation
 
 ### Linters + Full Test Suite Gate
 
-Defined in: `docs/agent-guide.md` (TDD Feature Loop), `code-review`.
+Defined in: `docs/persona-guide.md` (TDD Feature Loop), `code-review`.
 
 Purpose: Run linters (`bundle exec rubocop` or project equivalent) and the full test suite before proceeding to YARD documentation or PR. Fix all failures before continuing.
 

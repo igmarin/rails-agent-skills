@@ -5,9 +5,8 @@ tessl_generations.log
 # Claude Code internal state (worktrees, plans, session data)
 .claude/
 .antigravitycli/
-# Root evals/ is generated Tessl staging output. Keep canonical examples in personal-evals/.
-evals/
 private-evals/
+tessl-evals/
 tmp/
 .lean-ctx/
 lean-ctx/

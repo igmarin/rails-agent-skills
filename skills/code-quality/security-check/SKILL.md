@@ -1,5 +1,6 @@
 ---
 name: security-check
+type: atomic
 license: MIT
 description: >
   Use when performing security audits on Rails application code — must check authentication/authorization, parameter handling, redirects/rendering, file/network/job inputs, and secrets/logging, verify each finding is exploitable with a concrete attack scenario before reporting (excluding false positives without using representative file paths), and present sections in the exact order specified, even if empty. Code review for XSS, CSRF, SSRF, SQL injection, open redirects, secrets.

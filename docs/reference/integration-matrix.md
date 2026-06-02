@@ -214,4 +214,4 @@ Review?
 ## See also
 
 - [Skill Catalog](skill-catalog.md) — Complete skills list
-- [Agent Guides Index](../agents/) — Step-by-step agent stages
+- [Persona Guides Index](../personas/) — Step-by-step persona stages

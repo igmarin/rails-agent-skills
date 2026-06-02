@@ -1,8 +1,8 @@
 {
   "name": "igmarin/rails-agent-skills",
-  "version": "6.0.18",
+  "version": "7.0.0",
   "license": "MIT",
-  "summary": "Curated library of 28 public AI agent skills for Ruby on Rails development. Organized by category: testing, code-quality, engines, infrastructure, api, and context. Covers code review, architecture, security, testing (RSpec), engines, Hotwire, and TDD automation. Shared Ruby skills (YARD docs, DDD, service objects) have moved to ruby-core-skills. Repository agents remain documented in GitHub but are intentionally excluded from the Tessl tile.",
+  "summary": "Curated library of 28 atomic skills and 9 personas for Ruby on Rails development. Organized by category: testing, code-quality, engines, infrastructure, api, context, and personas. Covers code review, architecture, security, testing (RSpec), engines, Hotwire, and TDD automation. Shared Ruby skills (YARD docs, DDD, service objects) have moved to ruby-core-skills.",
   "depends_on": [
     "igmarin/ruby-core-skills"
   ],
@@ -90,6 +90,33 @@
     },
     "test-service": {
       "path": "skills/testing/test-service/SKILL.md"
+    },
+    "tdd": {
+      "path": "skills/personas/tdd/SKILL.md"
+    },
+    "review": {
+      "path": "skills/personas/review/SKILL.md"
+    },
+    "setup": {
+      "path": "skills/personas/setup/SKILL.md"
+    },
+    "quality": {
+      "path": "skills/personas/quality/SKILL.md"
+    },
+    "engine": {
+      "path": "skills/personas/engine/SKILL.md"
+    },
+    "bug-fix": {
+      "path": "skills/personas/bug-fix/SKILL.md"
+    },
+    "graphql": {
+      "path": "skills/personas/graphql/SKILL.md"
+    },
+    "migration": {
+      "path": "skills/personas/migration/SKILL.md"
+    },
+    "background-job": {
+      "path": "skills/personas/background-job/SKILL.md"
     }
   },
   "deprecated_skills": {
