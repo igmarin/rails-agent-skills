@@ -6,7 +6,7 @@ require "json"
 require "yaml"
 
 ROOT = File.expand_path("..", __dir__)
-OUTPUT_ROOT = File.join(ROOT, "tessl-evals")
+OUTPUT_ROOT = File.join(ROOT, "evals")
 SKILLS_DIR = File.join(ROOT, "skills")
 
 Instruction = Struct.new(:text, :snippet, :why_given, keyword_init: true)
@@ -179,7 +179,7 @@ def write_skill_eval(skill_name, skill_path)
 end
 
 skills = Dir.glob("**/SKILL.md", base: SKILLS_DIR).each_with_object({}) do |path, hash|
-  next if path.start_with?("workflows/") || path.start_with?("agents/")
+  next if path.start_with?("workflows/") || path.start_with?("personas/")
   name = File.basename(File.dirname(path))
   hash[name] = { "path" => "skills/#{path}" }
 end
@@ -191,4 +191,4 @@ skills.each do |skill_name, spec|
   write_skill_eval(skill_name, skill_path)
 end
 
-puts "Generated Tessl eval source for #{skills.length} publishable skills in tessl-evals/"
+puts "Generated Tessl eval source for #{skills.length} publishable skills in evals/"

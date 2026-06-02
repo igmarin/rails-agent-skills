@@ -61,7 +61,7 @@ Generate a bundle for inspection:
 
 ```bash
 ruby scripts/eval_context_builder.rb skills/patterns/create-service-object
-ruby scripts/eval_context_builder.rb agents/tdd
+ruby scripts/eval_context_builder.rb skills/personas/tdd
 ```
 
 ## Best Practices
@@ -69,7 +69,7 @@ ruby scripts/eval_context_builder.rb agents/tdd
 - **Read-Only:** These scenarios are for evaluation only. Do not "fix" the provided messy code in the `task.md` inputs.
 - **Representative:** Scenarios should mimic the actual work a Senior Rails Engineer would do.
 - **Isolation:** Each folder should test exactly one skill or workflow.
-- **Tessl isolation:** Keep root `evals/` disposable. Use it only as generated staging output when intentionally testing a Tessl override.
+- **Tessl isolation:** Keep `personal-evals/` independent from the `evals/` Tessl scenario source.
 
 ## Running Evaluations
 

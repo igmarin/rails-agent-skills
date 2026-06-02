@@ -153,4 +153,4 @@ act push  # GitHub Actions local runner (optional)
 |-------------|------------|-----------|
 | None (entry point) | setup | tdd (start developing) |
 
-**From AGENTS.md:** This is the setup agent loop. For development, chain to tdd.
+**From setup persona:** This is the setup workflow. For development, chain to tdd.
