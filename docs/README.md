@@ -21,7 +21,7 @@ For the high-level project value proposition, start with the [root README](../RE
 
 The repository uses a hybrid model to keep context focused:
 
-1. **Atomic skills** are single-capability expert instructions such as `code-review`, `plan-tests`, or `create-service-object`. Agents load them on demand through an installed skill host.
+1. **Atomic skills** are single-capability expert instructions such as `code-review`, `plan-tests`, or `create-service-object`. Personas load them on demand through an installed skill host.
 2. **Personas** are orchestrated multi-step processes that chain multiple skills together into a complete development loop, such as TDD feature work, code review, setup, quality checks, or engine development.
 
 ## Master Stage Index

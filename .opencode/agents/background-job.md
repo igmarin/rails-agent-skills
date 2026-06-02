@@ -5,7 +5,7 @@ description: >
 mode: subagent
 prompt: "{file:./skills/personas/background-job/SKILL.md}"
 permission:
-  bash: deny
+  bash: allow
   edit: allow
   write: allow
   task: allow

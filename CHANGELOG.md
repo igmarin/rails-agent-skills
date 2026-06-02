@@ -26,7 +26,7 @@ All 9 callable agents have been migrated from `agents/` to `skills/personas/` wi
   - Updated `directory.json` to v7.0.0 with 9 personas under `"skills"`
   - Updated `.tessl-plugin/plugin.json` to v7.0.0
   - Pinned CI workflows from `@latest` → `@github-v1.2.24`
-  - Added `GITHUB_TOKEN` env + `use_github_token: true` to both workflows
+  - Added `GITHUB_TOKEN` env + `use_github_token: true` to both workflows (GitHub capitalization in env var name)
   - Fixed `opencode-review.yml` permissions: `pull-requests: read` → `write`
 
 - **Documentation:**

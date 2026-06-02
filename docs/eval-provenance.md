@@ -1,6 +1,6 @@
 # Eval Provenance Policy
 
-This repository uses one public eval source area.
+This repository uses two public eval source areas.
 
 | Path | Purpose | Commit policy |
 |------|---------|---------------|

@@ -39,6 +39,7 @@ description: >
 **Rules:**
 - `name` MUST equal the directory name (validator enforces this).
 - `description` is single-paragraph, ≤ ~120 words, ends with a comma-separated list of trigger phrases.
+- `type` must be `atomic` for standalone skills, `persona` for orchestrating workflows, or `catalog` for root SKILL.md (enforced by architecture spec).
 - No other frontmatter keys are required for the cross-platform manifest layer; `directory.json` carries the rest.
 
 ## 2. Quick Reference
@@ -106,7 +107,7 @@ Closes the loop with the rest of the library:
 `scripts/validate-plugins.sh` checks the structural pieces the validator can verify deterministically:
 
 - Frontmatter `name` matches directory name
-- Frontmatter has `name` and `description` keys
+- Frontmatter has `name`, `type`, and `description` keys
 - Skill directory is registered in `directory.json.skills`
 - `directory.json ↔ disk` inventory is bidirectionally in sync
 

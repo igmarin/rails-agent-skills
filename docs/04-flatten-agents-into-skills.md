@@ -97,7 +97,7 @@ Create `mode: subagent` wrappers for opencode users. One per persona, with:
 - [x] `README.md` — counts, tables, terminology
 - [x] `CLAUDE.md` / `GEMINI.md` — agent → persona, add new skills
 - [x] `docs/architecture.md` — directory tree, skill types
-- [x] `docs/persona-guide.md` → `docs/persona-guide.md` — rename + content update
+- [x] `docs/agent-guide.md` → `docs/persona-guide.md` — rename + content update
 - [x] `docs/calling-skills.md` — agents → personas
 - [x] `docs/reference/skill-catalog.md` — agents → personas, add new skills
 - [x] `docs/index.md` — counts, terminology
@@ -183,6 +183,7 @@ Some rules resist first-sentence compression — e.g., Plan Tickets instruction-
 Copy this plan and run through these steps for each target repo:
 
 ### Structural migration
+
 - [ ] Add `type: atomic` to all existing atomic skills
 - [ ] Move agents/ → skills/personas/ with `type: persona`
 - [ ] Delete `agents/`, `agents.json`, `AGENTS.md`

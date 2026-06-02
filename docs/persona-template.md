@@ -111,7 +111,7 @@ Brief paragraph (2-3 sentences) explaining what this persona orchestrates and it
 Proceed to successor-persona or manual next action
 ```
 
-## Complexity Metrics (For Refactoring/Quality Agents)
+## Complexity Metrics (For Refactoring/Quality Personas)
 
 When evaluating code complexity, use these concrete metrics:
 
@@ -121,7 +121,7 @@ When evaluating code complexity, use these concrete metrics:
 - **Nesting Depth:** > 3 levels indicates potential extraction need
 - **Duplication:** > 3 similar code blocks indicate DRY violation
 
-## Example Violations (For Refactoring/Quality Agents)
+## Example Violations (For Refactoring/Quality Personas)
 
 Include concrete before/after examples for common violations:
 

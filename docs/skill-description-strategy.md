@@ -42,7 +42,7 @@ Persona skills (orchestrating multi-phase workflows) are especially vulnerable t
 
 **Strategy for personas:** Lead with hard gates and non-negotiable rules. What the persona *does* is implicit from its name — the first sentence must encode *how* it enforces quality:
 
-```
+```text
 Bad:  "Orchestrates the full delivery pipeline from idea to retrospective..."
 Good: "Full delivery pipeline with hard gates at PRD approval (explicit sign-off, loop-back on needs-revision), sprint commitment (capacity ≤80% with goal), and retrospective (every what-didn't needs action item); phases scope→plan→prioritize→sprint→execute→retrospect, on timeout resume from last completed phase."
 ```
@@ -276,7 +276,7 @@ This strategy applies to any repo with Tessl evals that use `sentence_from_descr
 |------|-------------|--------|-------------|
 | ruby-core-skills | Ruby + process skills | 16 | `"skills": "./skills/"` |
 | agnostic-planning-skills | PM + planning skills | 11 + 4 personas | `"skills": "./skills/"` |
-| rails-agent-skills | Rails-specific skills | 28 + 9 agents (not yet migrated) | `"skills": "./skills/"` |
+| rails-agent-skills | Rails-specific skills | 28 atomic + 9 personas (migrated) | `"skills": "./skills/"` |
 | hanakai-yaku | Hanami/dry-rb/ROM skills | 35 + 10 personas | `"skills": "./skills/"` |
 
 ### Migration checklist for each repo:

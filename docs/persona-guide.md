@@ -6,7 +6,7 @@ Companion to the [README](../README.md): **how to chain skills** using Rails per
 
 ## How to Invoke a Persona: A Practical Guide
 
-The key to using this skill library effectively is to guide the AI by **stating your goal** and then **explicitly referencing the agent or skill** you want it to follow. This tells the AI *what* to do and *how* to do it according to the expert rules we've defined.
+The key to using this skill library effectively is to guide the AI by **stating your goal** and then **explicitly referencing the persona or skill** you want it to follow. This tells the AI *what* to do and *how* to do it according to the expert rules we've defined.
 
 ### The Golden Rule: State the Goal, and Name the Persona or Skill
 
@@ -144,7 +144,7 @@ See **`write-tests`** for the full gate cycle (red → green → refactor).
 
 ## Primary Persona: TDD Feature Loop
 
-This is the most-used daily agent loop. It covers everything from a task to a merged PR.
+This is the most-used daily persona loop. It covers everything from a task to a merged PR.
 
 ```mermaid
 flowchart TD

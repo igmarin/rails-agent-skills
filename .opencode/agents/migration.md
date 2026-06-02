@@ -5,7 +5,7 @@ description: >
 mode: subagent
 prompt: "{file:./skills/personas/migration/SKILL.md}"
 permission:
-  bash: deny
+  bash: allow
   edit: allow
   write: allow
   task: allow
