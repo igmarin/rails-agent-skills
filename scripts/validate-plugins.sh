@@ -127,7 +127,7 @@ if [ "$SKILLS_TYPE" = 'string' ]; then
 
   # Validate all discovered skills have SKILL.md
   # Normalize paths: strip trailing /SKILL.md and leading ./ for comparison
-  DISCOVERED_SKILLS=$(find "$SKILLS_DIR" -name "SKILL.md" -not -path "*/.tessl/*" | sed 's#/[^/]*$##' | sed 's/^\.\///' | sort -u)
+  DISCOVERED_SKILLS=$(find "$SKILLS_DIR" -name "SKILL.md" -not -path "*/.tessl/*" | sed 's#/[^/]*$##' | sed 's/^\.\///' | sort)
   DISK_SKILL_DIRS=$(find skills -name "SKILL.md" -not -path "*/.tessl/*" | sed 's#/[^/]*$##' | sed 's/^\.\///' | sort)
 
   while IFS= read -r path; do
