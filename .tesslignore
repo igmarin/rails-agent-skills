@@ -1,5 +1,3 @@
-# Tracked source for Tessl-native scenarios.
-evals/
 lean-ctx/
 plans/
 for-openai.md
