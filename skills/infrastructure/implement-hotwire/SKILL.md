@@ -78,6 +78,13 @@ When implementing Hotwire, your output MUST include:
 5. **Verification** — degraded-mode checklist from Core Process step 5, plus system/browser checks for frame, stream, or Stimulus behavior.
 6. **Language** — English unless explicitly requested otherwise.
 
+## Extended Resources (Progressive Disclosure)
+
+Load these files only when their specific content is needed:
+
+- **[EXAMPLES.md](EXAMPLES.md)** — Use when you need full worked examples of Turbo Frames, Streams, and Stimulus patterns
+- **[references/workflow.md](references/workflow.md)** — Use when you need the step-by-step Hotwire implementation workflow and decision tree
+
 ## Integration
 
 | Skill | When to chain |

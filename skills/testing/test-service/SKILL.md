@@ -145,11 +145,36 @@ let(:api_response) { build(:api_animal_response, tag_number: 'TAG002') }
 | Huge factory setup | Keep factories minimal — only attributes required for the test |
 | Spec breaks when implementation changes but behavior is unchanged | Tests that break on refactoring are testing internals, not contracts |
 
-## Extended Resources
+## Extended Resources (Progressive Disclosure)
 
-- [PATTERNS.md](./PATTERNS.md) for the full pattern and factory placement guidance.
-- [assets/spec_examples.md](assets/spec_examples.md)
-- [assets/testing_checklist.md](assets/testing_checklist.md)
+Load these files only when their specific content is needed:
+
+- **[PATTERNS.md](./PATTERNS.md)** — Use when you need the full pattern catalog and factory placement guidance
+- **[assets/spec_examples.md](assets/spec_examples.md)** — Use when you need additional worked examples beyond the spec template above
+- **[assets/testing_checklist.md](assets/testing_checklist.md)** — Use when reviewing a completed service spec for completeness
+
+## Output Style
+
+When completing a service test, output MUST include:
+
+```markdown
+# Service Spec — [ServiceName]
+
+## Spec File
+- Path: spec/services/<module>/<service>_spec.rb
+- Subject: `described_class.call(params)`
+
+## Coverage
+- Happy path: ✓ (<n> examples)
+- Error cases: ✓ (<n> examples — list error classes/conditions)
+- Edge cases: ✓ (<n> examples — blank input, boundary values)
+- Isolation: instance_double for <collaborator list>
+
+## TDD Gate
+- RED: <failure message confirming missing behavior>
+- GREEN: <all examples pass>
+- Suite: <full spec/services/ suite status>
+```
 
 ## Integration
 

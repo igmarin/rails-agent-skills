@@ -77,7 +77,7 @@ RSpec.describe MyEngine::Configuration do
 end
 ```
 
-## Extended Resources
+## Extended Resources (Progressive Disclosure)
 
 **Pitfalls**
 | Pitfall | What to do |
@@ -87,12 +87,33 @@ end
 | Request specs use stubs instead of real wiring | Mount the engine in dummy and call through it |
 | Install generators without file assertions | Assert copied files and idempotency in generator specs |
 
-For generator and reload-safety spec examples, see [assets/examples.md](assets/examples.md).
-For a basic spec template to verify engine loading, see [assets/spec_template.md](assets/spec_template.md).
+Load these files only when their specific content is needed:
 
-- [assets/dummy_app_instructions.md](assets/dummy_app_instructions.md)
-- [assets/examples.md](assets/examples.md)
-- [assets/spec_template.md](assets/spec_template.md)
+- **[assets/dummy_app_instructions.md](assets/dummy_app_instructions.md)** — Use when setting up the dummy app from scratch or troubleshooting boot failures
+- **[assets/examples.md](assets/examples.md)** — Use when writing generator, reload-safety, or integration specs
+- **[assets/spec_template.md](assets/spec_template.md)** — Use as starting point when creating the first engine spec file
+
+## Output Style
+
+When completing engine test setup, output MUST include:
+
+```markdown
+# Engine Test Report — [Engine Name]
+
+## Dummy App
+- Location: test/dummy/ or spec/dummy/
+- Boot: ✓ (rails server starts without errors)
+- Migrations: ✓ (engine migrations installed and run)
+
+## Specs
+- Engine mounting: ✓ tested
+- Generators: ✓ tested (if applicable)
+- Core functionality: ✓ (<n> examples, 0 failures)
+- Reload safety: ✓ tested in development mode
+
+## Suite
+- Full run: bundle exec rspec — <n> examples, 0 failures
+```
 
 ## Integration
 

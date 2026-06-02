@@ -155,6 +155,17 @@ When applying stack conventions, your output MUST include:
 6. **Verification** — For every layer, show the Observed GREEN output after implementation per the HARD-GATE. Then list Rails specs, system tests, linting, and any browser/manual checks run.
 7. **Language** — Must be in English unless explicitly requested otherwise.
 
+## Extended Resources (Progressive Disclosure)
+
+Load these files only when their specific content is needed:
+
+- **[assets/snippets/eager_loading.rb](assets/snippets/eager_loading.rb)** — Use when applying eager loading patterns to fix N+1 queries
+- **[assets/snippets/n_plus_one_fix_example.rb](assets/snippets/n_plus_one_fix_example.rb)** — Use when you need a complete N+1 fix example with before/after
+- **[assets/snippets/service_object.rb](assets/snippets/service_object.rb)** — Use when extracting controller logic into a service object
+- **[assets/snippets/turbo_frame.html.erb](assets/snippets/turbo_frame.html.erb)** — Use when implementing Turbo Frame patterns
+- **[assets/snippets/stimulus_controller.js](assets/snippets/stimulus_controller.js)** — Use when adding Stimulus controllers
+- **[assets/snippets/tailwind_component.html.erb](assets/snippets/tailwind_component.html.erb)** — Use when building Tailwind-styled view components
+
 ## Integration
 
 | Skill | When to chain |

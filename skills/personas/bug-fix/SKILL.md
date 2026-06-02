@@ -4,7 +4,7 @@ type: persona
 tags: [personas]
 license: MIT
 description: >
-  Orchestrates systematic bug fixing loop: triage bug report → create failing reproduction test → implement minimal fix → verify resolution and no regressions. Use when fixing reported bugs, addressing production issues, resolving test failures, or implementing fixes for code review findings. Trigger: bug report, production issue, failing test, fix bug, resolve issue, address critical finding.
+  Orchestrates systematic bug fixing with hard gates: triage bug report and form root cause hypothesis → create failing reproduction test that MUST fail for the right reason (reproduces bug, not syntax error) → propose minimal fix and wait for user approval → verify reproduction test PASSES and full suite has no regressions; phases triage→reproduction→fix→verification. Use when fixing reported bugs, addressing production issues, resolving test failures, or implementing fixes for code review findings. Trigger: bug report, production issue, failing test, fix bug, resolve issue, address critical finding.
 metadata:
   version: 1.0.0
   user-invocable: "true"
@@ -251,6 +251,26 @@ bundle exec rspec  # Full test suite must pass
 ## Status
 **RESOLVED** — No regressions detected
 ```
+
+## Error Recovery
+
+**Cannot reproduce the bug:**
+1. Verify the environment matches the bug report (Ruby version, database, config)
+2. Check if the bug is data-dependent — seed the specific data pattern described
+3. If still unreproducible, request more details from the reporter and mark as "needs info"
+
+**Fix introduces regressions:**
+1. Run the full regression suite to identify which tests broke
+2. Determine if the fix changes a contract other code depends on
+3. If the contract change is correct, update the dependent tests
+4. If the contract change is incorrect, revise the fix to be more targeted
+
+**Multiple root causes:**
+1. If the bug has more than one contributing cause, fix them in separate commits
+2. Each commit should have its own reproduction test
+3. Verify each fix independently before combining
+
+---
 
 ## Anti-Patterns to Avoid
 

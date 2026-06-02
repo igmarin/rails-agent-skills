@@ -4,12 +4,7 @@ type: persona
 tags: [personas]
 license: MIT
 description: >
-  Complete code quality loop for Rails projects. Enforces naming conventions, reduces duplication,
-  extracts methods and service objects, reduces complexity, and generates YARD docstrings and inline
-  comments across the full codebase. Use this composite end-to-end loop instead of individual
-  refactoring or documentation skills when the full three-phase production-readiness review is needed
-  together in one pass. Use when: code review prep, before PR, full Rails quality sweep, quality audit,
-  production-ready review, end-to-end quality check.
+  Complete code quality loop for Rails projects with hard gates: enforce naming conventions and linter compliance (rubocop/brakeman/erblint must pass) → refactor only after characterization tests PASS on current code, verify behavior preserved after each extraction → generate YARD docstrings for all public APIs → NEVER open PR before linter, ERB linter, full test suite, security scan, and YARD docs all pass; phases conventions review→refactoring→documentation. Use this composite end-to-end loop instead of individual refactoring or documentation skills when full three-phase production-readiness review is needed in one pass. Trigger: code review prep, before PR, full Rails quality sweep, quality audit, production-ready review, end-to-end quality check.
 metadata:
   version: 1.0.0
   user-invocable: "true"
@@ -136,3 +131,34 @@ Plus: YARD docs complete for all public APIs.
 - YARD coverage: 87% (improved from 65%)
 - README updated: YES
 ```
+
+---
+
+## Error Recovery
+
+**RuboCop offenses after refactoring:**
+1. Run `bundle exec rubocop -a` for auto-correctable offenses
+2. Fix remaining offenses manually — refactoring may have introduced style violations
+3. Re-run full suite to ensure fixes don't break behavior
+
+**Characterization test fails after refactoring:**
+1. The refactoring changed behavior — this is a regression, not a test problem
+2. Revert the refactoring change
+3. Re-examine the extraction — ensure the new method/class preserves the exact contract
+4. Try a smaller, more focused refactoring step
+
+**YARD generation errors:**
+1. Check for syntax errors in YARD tags (`@param`, `@return`, `@raise`)
+2. Verify method signatures match YARD annotations
+3. Run `yard stats` to identify undocumented public methods
+
+---
+
+## Anti-Patterns to Avoid
+
+- **Refactoring without tests:** NEVER refactor without characterization tests passing first
+- **Fixing tests to match refactoring:** If a test fails after refactoring, the refactoring broke behavior — fix the code, not the test
+- **Scope creep during quality pass:** Don't add features during a quality review — only fix conventions, refactor, and document
+- **Skipping ERB linter:** `erblint` catches view-layer issues that RuboCop misses
+- **Ignoring Brakeman warnings:** Every Brakeman warning MUST be assessed — false positives should be annotated, not silently ignored
+- **Partial YARD coverage:** All public methods MUST have YARD docs — don't skip "obvious" methods

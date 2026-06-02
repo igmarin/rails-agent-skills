@@ -4,7 +4,7 @@ type: persona
 tags: [personas]
 license: MIT
 description: >
-  Orchestrates robust background job implementation: design job → TDD implementation → configure retry/discard strategies → test failure scenarios → production monitoring. Use when adding async processing, implementing background jobs, or configuring job queues. Trigger: background job, async processing, sidekiq, solid queue, active job, job queue, worker.
+  Orchestrates robust background job implementation with hard gates: design job with idempotency strategy and error classification (transient→retry, permanent→discard) → TDD implementation where test MUST fail before code → configure retry_on/discard_on strategies → test failure scenarios covering idempotency/retry/error handling → production monitoring; phases design→TDD→retry config→failure testing→monitoring. Use when adding async processing, implementing background jobs, or configuring job queues. Trigger: background job, async processing, sidekiq, solid queue, active job, job queue, worker.
 metadata:
   version: 1.0.0
   user-invocable: "true"
@@ -227,6 +227,55 @@ end
 1. Scale worker processes/threads.
 2. Promote critical jobs to a higher-priority queue.
 3. Optimise job execution time or batch size.
+
+## Output Style
+
+When completing a background job implementation, output MUST include:
+
+```markdown
+# Background Job Report — [Job Name]
+
+## Design
+- Job class: <path>
+- Purpose: <one-line description>
+- Idempotency strategy: <database unique constraint / Redis lock / conditional check>
+- Error classification: transient (<list>) / permanent (<list>)
+
+## TDD
+- Spec: <spec file path>
+- RED: <failure message confirming job behavior missing>
+- GREEN: <spec passes after implementation>
+
+## Retry Configuration
+- retry_on: <error classes, backoff strategy, attempt cap>
+- discard_on: <error classes, logging>
+- Timeouts: <job-level and worker-level>
+
+## Failure Scenarios Tested
+- Transient error → retries: ✓
+- Permanent error → discards: ✓
+- Idempotency → no duplicate side effects: ✓
+- Timeout handling: ✓
+
+## Monitoring
+- Metrics: <StatsD/Datadog counters for success/failure/duration>
+- Error tracking: <Sentry/Honeybadger integration>
+- Queue depth alerts: <configured threshold>
+```
+
+---
+
+## Integration
+
+| Predecessor | This Persona | Successor |
+|-------------|--------------|-----------|
+| load-context | background-job | code-review |
+| tdd | background-job | quality |
+| None (standalone) | background-job | PR submission |
+
+**Use `implement-background-job` alone** if the job design is already decided and you only need to implement the job class and specs.
+
+---
 
 ## Anti-Patterns to Avoid
 

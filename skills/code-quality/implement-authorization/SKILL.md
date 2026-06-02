@@ -133,7 +133,9 @@ When asked to implement or review authorization, your output `answer.md` MUST fo
 |-------|---------------|
 | **write-tests** | When implementing authorization tests. |
 
-## Additional Resources
+## Extended Resources (Progressive Disclosure)
 
-- [EXAMPLES.md](EXAMPLES.md) — Complete code examples for Pundit and CanCanCan implementations
-- [references/workflow.md](references/workflow.md) — Authorization implementation workflow
+Load these files only when their specific content is needed:
+
+- **[EXAMPLES.md](EXAMPLES.md)** — Use when you need complete Pundit or CanCanCan implementation examples beyond the inline samples
+- **[references/workflow.md](references/workflow.md)** — Use when you need the step-by-step authorization implementation workflow diagram
