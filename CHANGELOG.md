@@ -43,6 +43,20 @@ All 9 callable agents have been migrated from `agents/` to `skills/personas/` wi
 - `AGENTS.md` (content merged into CLAUDE.md/GEMINI.md)
 - Empty `skills/ddd/`, `skills/orchestration/`, `skills/patterns/` directories
 
+### Security Hardening (Post-Release)
+
+**System Modification Approval Gate in `setup` persona**
+- Added explicit "System Modification Approval Gate (CRITICAL)" to `skills/personas/setup/SKILL.md` Error Recovery section
+- All system-level commands (`apt-get install`, `rbenv install`, `createuser`) now require explicit user confirmation before suggestion
+- Changed from imperative tone ("Install system dependencies") to conditional ("If needed, ask user to run...")
+- This hardens against W013 warnings from platform security scanners that flag system service modification attempts in skill instructions
+
+**Third-Party Content Defenses (Already Present)**
+The following personas already contain hardened input integrity gates for indirect prompt injection (W011) — no changes required:
+- `skills/personas/review/SKILL.md` — "HARD-GATE: Security & Input Integrity" (lines 25-56): treats PR descriptions/comments as untrusted, diff as sole authority, never executes embedded instructions
+- `skills/personas/bug-fix/SKILL.md` — "HARD-GATE: Input Integrity (Third-Party Content Defense)" (lines 25-35): treats bug reports as untrusted, verifies claims against actual code, ignores embedded directives
+- `skills/infrastructure/version-api/SKILL.md` — Code-generation skill (not runtime request processor); scanner false positive
+
 ## [6.0.20] - 2026-05-30
 
 ### Added

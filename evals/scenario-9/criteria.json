@@ -1,0 +1,86 @@
+{
+  "context": "Tests overall convention adherence across the full output_checklist: frozen string literal, file path mirroring, subject(:result), no 'and', let vs let!, queue adapter, aggregate_failures, self-audit, and resource loading.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Frozen string literal",
+      "description": "Spec file starts with `# frozen_string_literal: true`",
+      "max_score": 5
+    },
+    {
+      "name": "Mirrored file path",
+      "description": "Spec at `spec/services/teams/add_member_spec.rb` mirroring `app/services/teams/add_member.rb`",
+      "max_score": 5
+    },
+    {
+      "name": "RSpec.describe constant",
+      "description": "Uses `RSpec.describe Teams::AddMember` (constant, not string)",
+      "max_score": 5
+    },
+    {
+      "name": "describe '.call' block",
+      "description": "Uses `describe '.call' do` for the class method",
+      "max_score": 5
+    },
+    {
+      "name": "subject(:result) defined",
+      "description": "Defines `subject(:result)` invoking `.call` on the described class",
+      "max_score": 6
+    },
+    {
+      "name": "No 'and' in descriptions",
+      "description": "No `it` or `specify` description contains 'and'",
+      "max_score": 6
+    },
+    {
+      "name": "context 'when' naming",
+      "description": "All contexts use `context 'when ...'` or `context 'with ...'` phrasing",
+      "max_score": 5
+    },
+    {
+      "name": "let vs let! correct",
+      "description": "Uses `let` by default; `let!` only where objects must exist before the action",
+      "max_score": 5
+    },
+    {
+      "name": "No let_it_be",
+      "description": "Does NOT use `let_it_be` anywhere in the spec",
+      "max_score": 5
+    },
+    {
+      "name": "queue_adapter :test for job",
+      "description": "Sets `queue_adapter = :test` and asserts job enqueuing with `have_enqueued_job` rather than running the job",
+      "max_score": 8
+    },
+    {
+      "name": "aggregate_failures used",
+      "description": "Uses `aggregate_failures` in at least one example with multiple expectations",
+      "max_score": 6
+    },
+    {
+      "name": "No updated_at assertion",
+      "description": "Does NOT assert on `updated_at` in any example",
+      "max_score": 5
+    },
+    {
+      "name": "Self-audit checklist",
+      "description": "answer.md includes a self-audit section that explicitly checks: no 'and' descriptions, let! justification, shared examples referenced, factory persistence choices",
+      "max_score": 8
+    },
+    {
+      "name": "Resource loading documented",
+      "description": "answer.md lists which assets (e.g., output_checklist.md, tdd_proof_checklist.md) were consulted and why",
+      "max_score": 8
+    },
+    {
+      "name": "Observed RED output label",
+      "description": "TDD proof uses literal `Observed RED output` label",
+      "max_score": 6
+    },
+    {
+      "name": "Three Observed GREEN blocks",
+      "description": "Presents three separate Observed GREEN output blocks at different verification scopes",
+      "max_score": 12
+    }
+  ]
+}
