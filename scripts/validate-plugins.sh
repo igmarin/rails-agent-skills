@@ -118,17 +118,18 @@ if [ "$SKILLS_TYPE" = 'string' ]; then
   # Auto-discovery format: "skills": "./skills/"
   SKILLS_DIR=$(jq -r '.skills' "$PLUGIN_FILE" 2>/dev/null)
   info "Auto-discovery mode: skills = $SKILLS_DIR"
-  
+
   if [ -d "$SKILLS_DIR" ]; then
     check_pass "Skills directory exists: $SKILLS_DIR"
   else
     check_fail "Skills directory not found: $SKILLS_DIR"
   fi
-  
+
   # Validate all discovered skills have SKILL.md
-  DISCOVERED_SKILLS=$(find "$SKILLS_DIR" -name "SKILL.md" -not -path "*/.tessl/*" | sed 's#/[^/]*$##' | sed 's/^\.\.//' | sed 's/^\.\///' | sort -u)
-  DISK_SKILL_DIRS=$(find skills -name "SKILL.md" -not -path "*/.tessl/*" | sed 's#/[^/]*$##' | sed 's/^\.\.//' | sed 's/^\.\///' | sort)
-  
+  # Normalize paths: strip trailing /SKILL.md and leading ./ for comparison
+  DISCOVERED_SKILLS=$(find "$SKILLS_DIR" -name "SKILL.md" -not -path "*/.tessl/*" | sed 's#/[^/]*$##' | sed 's/^\.\///' | sort -u)
+  DISK_SKILL_DIRS=$(find skills -name "SKILL.md" -not -path "*/.tessl/*" | sed 's#/[^/]*$##' | sed 's/^\.\///' | sort)
+
   while IFS= read -r path; do
     [ -z "$path" ] && continue
     if printf '%s\n' "$DISCOVERED_SKILLS" | grep -Fxq "$path"; then
@@ -137,18 +138,22 @@ if [ "$SKILLS_TYPE" = 'string' ]; then
       check_fail "Not auto-discovered: $path"
     fi
   done <<< "$DISK_SKILL_DIRS"
-else
+elif [ "$SKILLS_TYPE" = 'array' ]; then
   # Explicit array format: "skills": ["./skills/..."]
-  PLUGIN_SKILL_PATHS=$(jq -r '.skills[]' "$PLUGIN_FILE" 2>/dev/null | sort)
-  DISK_SKILL_DIRS=$(find skills -name "SKILL.md" -not -path "*/.tessl/*" | sed 's#/[^/]*$##' | sed 's/^\.\.//' | sort)
-  
+  # Normalize plugin.json paths: strip leading ./ for comparison
+  PLUGIN_SKILL_PATHS=$(jq -r '.skills[]' "$PLUGIN_FILE" 2>/dev/null | sed 's/^\.\///' | sort)
+  DISK_SKILL_DIRS=$(find skills -name "SKILL.md" -not -path "*/.tessl/*" | sed 's#/[^/]*$##' | sed 's/^\.\///' | sort)
+
   while IFS= read -r path; do
+    [ -z "$path" ] && continue
     if printf '%s\n' "$PLUGIN_SKILL_PATHS" | grep -Fxq "$path"; then
       check_pass "plugin.json includes: $path"
     else
       check_fail "plugin.json missing: $path"
     fi
   done <<< "$DISK_SKILL_DIRS"
+else
+  check_fail "Unsupported .skills type in plugin.json: $SKILLS_TYPE (expected 'string' or 'array')"
 fi
 
 PERSONA_PATHS=$(find skills/personas -name "SKILL.md" -not -path "*/.tessl/*" | sort)
