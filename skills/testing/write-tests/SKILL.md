@@ -13,6 +13,7 @@ metadata:
 
 Use this skill when the task is to write, review, or clean up RSpec tests.
 
+
 **Core principle:** Prefer behavioral confidence over implementation coupling. Good specs are readable, deterministic, and cheap to maintain.
 
 ## Quick Reference
