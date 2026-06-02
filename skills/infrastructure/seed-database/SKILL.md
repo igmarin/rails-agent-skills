@@ -105,7 +105,9 @@ end
 | **write-tests** | When setting up test scenarios |
 | **review-migration** | When ensuring DB schema is aligned |
 
-## Additional Resources
+## Additional Resources (Progressive Disclosure)
 
-- [EXAMPLES.md](EXAMPLES.md) — Complete seeding examples and patterns
-- [references/workflow.md](references/workflow.md) — Seeding workflow and best practices
+Load these files only when their specific content is needed:
+
+- **[EXAMPLES.md](EXAMPLES.md)** — Use when you need complete seeding examples and patterns beyond the inline snippets
+- **[references/workflow.md](references/workflow.md)** — Use when you need the step-by-step seeding workflow and decision tree

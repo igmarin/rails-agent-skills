@@ -75,6 +75,14 @@ ALWAYS version in URL path (/api/v1/) or Accept header, never in body
 4. Include compatibility specs to prevent breakage.
 5. Language — Must be in English unless explicitly requested otherwise.
 
+## Extended Resources (Progressive Disclosure)
+
+Load these files only when their specific content is needed:
+
+- **[EXAMPLES.md](EXAMPLES.md)** — Use when you need complete API versioning examples with route definitions and controller inheritance
+- **[references/strategies.md](references/strategies.md)** — Use when comparing versioning strategies (URL path vs header vs query param)
+- **[references/workflow.md](references/workflow.md)** — Use when implementing the deprecation communication workflow and sunset scheduling
+
 ## Integration
 
 | Skill | When to chain |

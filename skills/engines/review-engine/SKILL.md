@@ -120,7 +120,10 @@ When asked to review an engine, your output `answer.md` MUST comply with:
 - Missing dummy app coverage check (dummy app must exist and be used).
 - Ignoring `engine.rb` (often contains boot-time side effects).
 
-## Additional Resources
+## Extended Resources (Progressive Disclosure)
 
-- [FINDINGS.md](FINDINGS.md) — Sample engine review findings
-- [assets/examples.md](assets/examples.md) — Engine review examples
+Load these files only when their specific content is needed:
+
+- **[FINDINGS.md](FINDINGS.md)** — Use when you need sample findings format and severity classification examples
+- **[assets/examples.md](assets/examples.md)** — Use when you need complete engine review examples with findings and recommendations
+- **[assets/finding-schema.json](assets/finding-schema.json)** — Use when you need the structured schema for engine review findings output

@@ -102,4 +102,40 @@ end
 | Writing three spec types before running any | Pick one slice, run it, prove the failure, then proceed |
 | Defaulting to one spec type for everything | Match the spec type to the layer where the real risk lives (HTTP, domain, async, browser) |
 | Jumping to system specs too early | Reserve for critical browser flows that lower layers cannot prove |
-| 
+|
+
+## Extended Resources (Progressive Disclosure)
+
+Load these files only when their specific content is needed:
+
+- **[assets/first_slice_template.md](assets/first_slice_template.md)** — Use when documenting the test plan; provides a structured template for behavior, boundary decision, opening gate spec, and follow-up coverage
+
+## Output Style
+
+When completing test planning, output MUST include:
+
+```markdown
+# Test Plan — [Feature/Change Name]
+
+## Behavior
+- User-visible outcome: <description>
+
+## First Slice
+- Spec type: <request / model / service / job / system>
+- Path: <spec/path/to_spec.rb>
+- Boundary rationale: <why this layer proves the behavior>
+
+## Opening Gate
+- Expected RED failure: <error class and message>
+- Failure reason: feature missing (not setup error)
+
+## Follow-up Coverage
+- [ ] <additional test case 1>
+- [ ] <additional test case 2>
+
+## Design Checkpoint
+- Behavior covered: ✓
+- Boundary correct: ✓
+- Edge cases listed: ✓
+- Failure reason validated: ✓
+```

@@ -91,8 +91,10 @@ Post this block before proposing any code, spec, or PRD:
 | Neighbor file is the file being changed | Skip self-reference; pick the next closest sibling that is not the target file |
 | Requirements change mid-conversation | Re-run steps 1–4 for the new scope and post a fresh Context Summary before continuing |
 
-## Additional Resources
+## Extended Resources (Progressive Disclosure)
 
-- [EXAMPLES.md](EXAMPLES.md) — Worked examples showing Context Summary and Confusion Block templates
-- [references/confusion-management.md](references/confusion-management.md) — Detailed guidance on handling ambiguity
-- [references/context-sources.md](references/context-sources.md) — Comprehensive list of context sources by Rails layer
+Load these files only when their specific content is needed:
+
+- **[EXAMPLES.md](EXAMPLES.md)** — Use when you need worked examples showing Context Summary and Confusion Block templates
+- **[references/confusion-management.md](references/confusion-management.md)** — Use when you encounter ambiguity or conflicting signals between code layers
+- **[references/context-sources.md](references/context-sources.md)** — Use when you need the comprehensive list of context sources by Rails layer beyond the Quick Reference table

@@ -94,7 +94,9 @@ Use this skill when the task is to review or improve the structure of a Rails ap
 |-------|---------------|
 | **code-review** | For smaller scopes and PR reviews |
 
-## Additional Resources
+## Extended Resources (Progressive Disclosure)
 
-- [assets/examples.md](assets/examples.md) — Complete architecture review examples
-- [assets/findings_schema.json](assets/findings_schema.json) — JSON schema for architecture review findings
+Load these files only when their specific content is needed:
+
+- **[assets/examples.md](assets/examples.md)** — Use when you need complete architecture review examples with findings and recommendations
+- **[assets/findings_schema.json](assets/findings_schema.json)** — Use when you need the structured JSON schema for architecture review findings output

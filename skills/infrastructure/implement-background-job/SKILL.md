@@ -92,8 +92,10 @@ end
 ```
 
 - [BACKENDS.md](./BACKENDS.md) — Solid Queue vs Sidekiq setup, configuration details, and Redis requirements.
-- [assets/job_patterns.md](assets/job_patterns.md) — Additional job patterns including multi-step orchestration and batch jobs.
-- [assets/retry_examples.md](assets/retry_examples.md) — Extended `retry_on`/`discard_on` examples for common error classes.
+Load these files only when their specific content is needed:
+
+- **[assets/job_patterns.md](assets/job_patterns.md)** — Use when implementing multi-step orchestration or batch job patterns
+- **[assets/retry_examples.md](assets/retry_examples.md)** — Use when configuring `retry_on`/`discard_on` for specific error classes beyond the basic patterns above
 
 ## Output Checklist
 

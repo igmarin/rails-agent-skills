@@ -85,9 +85,52 @@ EXPLAIN ANALYZE
   WHERE posts.published = true;
 ```
 
+## Extended Resources (Progressive Disclosure)
+
+Load these files only when their specific content is needed:
+
+- **[references/tools.md](references/tools.md)** — Use when you need detailed Bullet, rack-mini-profiler, or EXPLAIN ANALYZE configuration and installation steps
+
+External references:
 - [Active Record Querying](https://guides.rubyonrails.org/active_record_querying.html)
 - [rack-mini-profiler](https://github.com/MiniProfiler/rack-mini-profiler)
 - [Bullet gem](https://github.com/flyerhzm/bullet)
+
+## Output Style
+
+When completing a performance optimization, output MUST include all seven items from the required report order above. Example structure:
+
+```markdown
+# Performance Optimization — [Description]
+
+## 1. Baseline
+- Query count: <N> queries for <endpoint/action>
+- Source: <log line / profiler output>
+
+## 2. Bottleneck
+- Cause: <N+1 on association X / missing index on column Y / full table scan>
+- Tool: <bullet / rack-mini-profiler / EXPLAIN ANALYZE>
+
+## 3. Regression Spec — RED
+- Spec: <path>:<line>
+- Assertion: `make_database_queries(count: <N>)`
+- Failure: expected <M> queries, got <N>
+
+## 4. Fix
+- File: <path>:<line>
+- Change: <includes(:association) / add_index / cache block>
+
+## 5. Regression Spec — GREEN
+- Spec passes: ✓ (<M> queries)
+
+## 6. EXPLAIN ANALYZE
+- Before: Seq Scan, actual time=<X>ms
+- After: Index Scan, actual time=<Y>ms
+
+## 7. Quantified Improvement
+- Queries: <N> → <M>
+- p95: <X>ms → <Y>ms
+```
 
 ## Integration
 
