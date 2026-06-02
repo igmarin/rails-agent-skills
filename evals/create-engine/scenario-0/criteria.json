@@ -5,52 +5,32 @@
     {
       "name": "instruction-1",
       "description": "The submitted artifact follows this skill instruction: Use this skill when the task is to create, scaffold, or refactor a Rails engine, Rails plugin, or engine gem.",
-      "max_score": 10
+      "max_score": 17
     },
     {
       "name": "instruction-2",
       "description": "The submitted artifact follows this skill instruction: A good engine has a narrow purpose, a clear host-app integration story, and a small public API. Keep this skill focused on structure and design. Use adjacent skills for installer details, deep test coverage, release workflow, or documentation work.",
-      "max_score": 10
+      "max_score": 17
     },
     {
       "name": "instruction-3",
       "description": "The submitted artifact follows this skill instruction: Dummy app exists: `ls spec/dummy` or `ls test/dummy` should return the app directory.",
-      "max_score": 10
+      "max_score": 17
     },
     {
       "name": "instruction-4",
       "description": "The submitted artifact follows this skill instruction: Define the host-app contract (what the host must provide, what the engine exposes, which extension points are supported). See [reference.md](reference.md) for the full contract template.",
-      "max_score": 10
+      "max_score": 17
     },
     {
       "name": "instruction-5",
       "description": "The submitted artifact follows this skill instruction: Create the minimal engine structure. **Checkpoint:** `bundle exec rake` inside the engine must pass.",
-      "max_score": 10
+      "max_score": 16
     },
     {
       "name": "instruction-6",
       "description": "The submitted artifact follows this skill instruction: Write minimum integration coverage through the dummy app. See [TESTING.md](TESTING.md) for coverage requirements.",
-      "max_score": 10
-    },
-    {
-      "name": "instruction-7",
-      "description": "The submitted artifact follows this skill instruction: When asked to create or scaffold a Rails engine, your output `answer.md` MUST follow this style:",
-      "max_score": 10
-    },
-    {
-      "name": "instruction-8",
-      "description": "The submitted artifact follows this skill instruction: The concrete recommendation/artifact MUST explicitly display the full generated `.gemspec` file contents and the `Rakefile` contents.",
-      "max_score": 10
-    },
-    {
-      "name": "instruction-9",
-      "description": "The submitted artifact follows this skill instruction: The files MUST be namespaced correctly under the engine namespace.",
-      "max_score": 10
-    },
-    {
-      "name": "instruction-10",
-      "description": "The submitted artifact follows this skill instruction: The verification plan MUST explicitly state that running `bundle exec rake` inside the engine passes (exits 0) with a simulated passing output block.",
-      "max_score": 10
+      "max_score": 16
     }
   ]
 }

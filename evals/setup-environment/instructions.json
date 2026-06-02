@@ -4,25 +4,25 @@
   "instructions": [
     {
       "instruction": "Use the setup-environment skill only for tasks that match its documented trigger and scope.",
-      "original_snippets": "Emit a generic Rails development-environment setup runbook for the user to execute locally — agent reads .ruby-version, Gemfile, docker-compose.yml, .env.example and flags mismatches but NEVER executes commands or reads filled-in .env or echoes secrets; covers Docker, environment variables, database, test suite, linters, and IDE in Steps 1–7 plus Final Verification.",
+      "original_snippets": "Emit a generic Rails development-environment setup runbook for the user to execute locally.",
       "relevant_when": "When a user asks for Rails work that should trigger setup-environment.",
       "why_given": "preference"
     },
     {
       "instruction": "Follow the skill-specific workflow and gates instead of giving generic Rails advice.",
-      "original_snippets": "Emit a generic Rails development-environment setup runbook for the user to execute locally — agent reads .ruby-version, Gemfile, docker-compose.yml, .env.example and flags mismatches but NEVER executes commands or reads filled-in .env or echoes secrets; covers Docker, environment variables, database, test suite, linters, and IDE in Steps 1–7 plus Final Verification.",
+      "original_snippets": "Emit a generic Rails development-environment setup runbook for the user to execute locally.",
       "relevant_when": "When a user asks for Rails work that should trigger setup-environment.",
       "why_given": "preference"
     },
     {
       "instruction": "Produce concrete artifacts requested by the task in English unless another language is explicitly requested.",
-      "original_snippets": "Emit a generic Rails development-environment setup runbook for the user to execute locally — agent reads .ruby-version, Gemfile, docker-compose.yml, .env.example and flags mismatches but NEVER executes commands or reads filled-in .env or echoes secrets; covers Docker, environment variables, database, test suite, linters, and IDE in Steps 1–7 plus Final Verification.",
+      "original_snippets": "Emit a generic Rails development-environment setup runbook for the user to execute locally.",
       "relevant_when": "When a user asks for Rails work that should trigger setup-environment.",
       "why_given": "preference"
     },
     {
       "instruction": "Call out assumptions, constraints, and verification steps that matter for the task.",
-      "original_snippets": "Emit a generic Rails development-environment setup runbook for the user to execute locally — agent reads .ruby-version, Gemfile, docker-compose.yml, .env.example and flags mismatches but NEVER executes commands or reads filled-in .env or echoes secrets; covers Docker, environment variables, database, test suite, linters, and IDE in Steps 1–7 plus Final Verification.",
+      "original_snippets": "Emit a generic Rails development-environment setup runbook for the user to execute locally.",
       "relevant_when": "When a user asks for Rails work that should trigger setup-environment.",
       "why_given": "preference"
     }

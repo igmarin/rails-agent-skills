@@ -1,7 +1,5 @@
 {
   "target_skill": "test-service",
   "total_infeasible": 0,
-  "infeasible_scenarios": [
-
-  ]
+  "infeasible_scenarios": []
 }

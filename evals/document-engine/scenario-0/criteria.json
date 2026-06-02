@@ -5,22 +5,17 @@
     {
       "name": "instruction-1",
       "description": "The submitted artifact follows this skill instruction: Use this skill when writing or maintaining documentation for Rails engines.",
-      "max_score": 25
+      "max_score": 34
     },
     {
       "name": "instruction-2",
       "description": "The submitted artifact follows this skill instruction: > **Hard gate:** All generated documentation MUST satisfy points 1, 3, and 4 above before proceeding to optional sections.",
-      "max_score": 25
+      "max_score": 33
     },
     {
       "name": "instruction-3",
       "description": "The submitted artifact follows this skill instruction: Validate against CHECKLIST.md: a checklist item **passes** when the docs contain a corresponding section with at least one copyable code example or explicit prose statement. A checklist item **fails** when the section is absent, incomplete, or lacks a concrete example. For each failing item: add the missing section or example, then re-run the checklist from the top. Do not finalize until all critical items pass.",
-      "max_score": 25
-    },
-    {
-      "name": "instruction-4",
-      "description": "The submitted artifact follows this skill instruction: **No Mounting Redundancy**: Show the engine route mounting command (`mount MyEngine::Engine ...`) only once in the primary installation/mounting section. Do not duplicate it across multiple sections.",
-      "max_score": 25
+      "max_score": 33
     }
   ]
 }

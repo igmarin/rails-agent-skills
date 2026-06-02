@@ -4,33 +4,18 @@
   "checklist": [
     {
       "name": "instruction-1",
-      "description": "The submitted artifact follows this skill instruction: You MUST use your filesystem and search tools (like listing directories and searching patterns) to locate any source files in the workspace. Only if the workspace is completely empty may you return a checklist and state that no source files were provided.",
-      "max_score": 17
+      "description": "The submitted artifact follows this skill instruction: Review in this sequence, and produce output sections in this same order (see Output Style):",
+      "max_score": 34
     },
     {
       "name": "instruction-2",
-      "description": "The submitted artifact follows this skill instruction: Before writing any findings or analysis, you MUST run search and directory listing tools to find source files in the workspace (e.g. controllers, models, config files). Perform a code-level security review on the actual files found. Do not claim no source code was provided without first checking the workspace.",
-      "max_score": 17
+      "description": "The submitted artifact follows this skill instruction: **Verify each finding:** Confirm it is exploitable with a concrete attack scenario before reporting. Exclude false positives (e.g., `html_safe` on a developer-defined constant, not user input).",
+      "max_score": 33
     },
     {
       "name": "instruction-3",
-      "description": "The submitted artifact follows this skill instruction: Review in this sequence, and produce output sections in this same order (see Output Style):",
-      "max_score": 17
-    },
-    {
-      "name": "instruction-4",
-      "description": "The submitted artifact follows this skill instruction: **Verify each finding:** Confirm it is exploitable with a concrete attack scenario before reporting. Exclude false positives (e.g., `html_safe` on a developer-defined constant, not user input).",
-      "max_score": 17
-    },
-    {
-      "name": "instruction-5",
       "description": "The submitted artifact follows this skill instruction: Do not use representative file paths as if they were confirmed evidence.",
-      "max_score": 16
-    },
-    {
-      "name": "instruction-6",
-      "description": "The submitted artifact follows this skill instruction: **Hypothetical Exploitability Proof**: Even if no source files are provided and no vulnerabilities are found, you MUST include a **Hypothetical Exploitability Verification** sub-section inside the **Verification Steps & Quality Gates** section of the output `answer.md` (never as a separate top-level section interleaving the findings and the gates). Show a concrete example of a hypothetical vulnerability (e.g. an unscoped SQL query or open redirect) and detail exactly what the corresponding concrete attack scenario (exploit request/payload) would look like, proving how to confirm exploitability in practice.",
-      "max_score": 16
+      "max_score": 33
     }
   ]
 }

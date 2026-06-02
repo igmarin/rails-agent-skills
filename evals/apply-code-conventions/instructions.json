@@ -49,18 +49,6 @@
       "original_snippets": "**[assets/snippets.md](assets/snippets.md)** — Use for quick code snippets of common patterns.",
       "relevant_when": "When a user asks for Rails work that should trigger apply-code-conventions.",
       "why_given": "new knowledge"
-    },
-    {
-      "instruction": "When applying code conventions, your output `answer.md` MUST include:",
-      "original_snippets": "When applying code conventions, your output `answer.md` MUST include:",
-      "relevant_when": "When a user asks for Rails work that should trigger apply-code-conventions.",
-      "why_given": "preference"
-    },
-    {
-      "instruction": "**Comment Discipline Verification**: Verify that all `TODO:`/`FIXME:`/`NOTE:` tags contain owner and ticket context.",
-      "original_snippets": "**Comment Discipline Verification**: Verify that all `TODO:`/`FIXME:`/`NOTE:` tags contain owner and ticket context.",
-      "relevant_when": "When a user asks for Rails work that should trigger apply-code-conventions.",
-      "why_given": "new knowledge"
     }
   ]
 }

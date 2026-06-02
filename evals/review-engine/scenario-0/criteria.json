@@ -5,52 +5,47 @@
     {
       "name": "instruction-1",
       "description": "The submitted artifact follows this skill instruction: Use this skill when the task is to review an existing Rails engine or propose improvements.",
-      "max_score": 10
+      "max_score": 12
     },
     {
       "name": "instruction-2",
       "description": "The submitted artifact follows this skill instruction: **Inspect the namespace and public API surface.** Check for `isolate_namespace` and unqualified top-level constant references.",
-      "max_score": 10
+      "max_score": 11
     },
     {
       "name": "instruction-3",
       "description": "The submitted artifact follows this skill instruction: **Check host-app integration points.** Flag direct host constant references. Verify host dependencies flow through config seams.",
-      "max_score": 10
+      "max_score": 11
     },
     {
       "name": "instruction-4",
       "description": "The submitted artifact follows this skill instruction: **Check initialization and reload behavior.** Inspect `initializer`, `config.to_prepare`, and `ActiveSupport.on_load`. Flag anything that mutates global state at `require` time outside an initializer block.",
-      "max_score": 10
+      "max_score": 11
     },
     {
       "name": "instruction-5",
       "description": "The submitted artifact follows this skill instruction: **Check migrations, generators, and install flow.** Confirm migrations are copied via a generator. Check for destructive or irreversible migrations.",
-      "max_score": 10
+      "max_score": 11
     },
     {
       "name": "instruction-6",
       "description": "The submitted artifact follows this skill instruction: **Check dummy-app and integration tests.** Confirm `spec/dummy/` exists and exercises the mount point.",
-      "max_score": 10
+      "max_score": 11
     },
     {
       "name": "instruction-7",
       "description": "The submitted artifact follows this skill instruction: **Summarize findings by severity.** Flag High findings first. Do not surface Low findings before architecture issues.",
-      "max_score": 10
+      "max_score": 11
     },
     {
       "name": "instruction-8",
-      "description": "The submitted artifact follows this skill instruction: When asked to review an engine, your output `answer.md` MUST comply with:",
-      "max_score": 10
+      "description": "The submitted artifact follows this skill instruction: Write findings first. For each finding include severity, affected file/area, risk, and smallest credible fix.",
+      "max_score": 11
     },
     {
       "name": "instruction-9",
-      "description": "The submitted artifact follows this skill instruction: **Findings First**: Write the findings section (ordered HIGH -> MEDIUM -> LOW) as the very first section in the concrete artifact `answer.md` (or immediately after the short plan if a plan is requested). For each finding include severity, affected file/area, risk, and smallest credible fix.",
-      "max_score": 10
-    },
-    {
-      "name": "instruction-10",
       "description": "The submitted artifact follows this skill instruction: Missing dummy app coverage check (dummy app must exist and be used).",
-      "max_score": 10
+      "max_score": 11
     }
   ]
 }

@@ -5,42 +5,37 @@
     {
       "name": "instruction-1",
       "description": "The submitted artifact follows this skill instruction: Use this skill when the task is to change structure without changing intended behavior.",
-      "max_score": 13
+      "max_score": 15
     },
     {
       "name": "instruction-2",
       "description": "The submitted artifact follows this skill instruction: Identify the exact inputs and outputs of the logic being refactored. Keep public interfaces stable until callers are migrated. Prefer adapters, facades, or wrappers for transitional states.",
-      "max_score": 13
+      "max_score": 15
     },
     {
       "name": "instruction-3",
       "description": "The submitted artifact follows this skill instruction: **Write this before touching any production file.** No refactoring step begins until this test exists and passes on the current (un-refactored) code. If the characterization spec fails, do not continue — stop and fix the test or the behavior mismatch.",
-      "max_score": 13
+      "max_score": 14
     },
     {
       "name": "instruction-4",
       "description": "The submitted artifact follows this skill instruction: Run it: `bundle exec rspec spec/requests/orders_spec.rb` — it must pass on the **current** code.",
-      "max_score": 13
+      "max_score": 14
     },
     {
       "name": "instruction-5",
-      "description": "The submitted artifact follows this skill instruction: Load these files only when their specific content is needed:",
-      "max_score": 12
+      "description": "The submitted artifact follows this skill instruction: Run verification after every refactoring step:",
+      "max_score": 14
     },
     {
       "name": "instruction-6",
-      "description": "The submitted artifact follows this skill instruction: Run verification after every refactoring step:",
-      "max_score": 12
+      "description": "The submitted artifact follows this skill instruction: Run the full test suite.",
+      "max_score": 14
     },
     {
       "name": "instruction-7",
-      "description": "The submitted artifact follows this skill instruction: Run the full test suite.",
-      "max_score": 12
-    },
-    {
-      "name": "instruction-8",
       "description": "The submitted artifact follows this skill instruction: **Evidence labelling rules:** Label actual run output as **Observed output** only. Never use labels such as \"Expected output\", \"Required output\", \"Planned output\", or \"Must produce 0 failures\" as substitutes for actual observed run output. If you have not run the tests, you have no observed output to report — do not fabricate it.",
-      "max_score": 12
+      "max_score": 14
     }
   ]
 }

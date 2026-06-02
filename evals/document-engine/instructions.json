@@ -19,12 +19,6 @@
       "original_snippets": "Validate against CHECKLIST.md: a checklist item **passes** when the docs contain a corresponding section with at least one copyable code example or explicit prose statement. A checklist item **fails** when the section is absent, incomplete, or lacks a concrete example. For each failing item: add the missing section or example, then re-run the checklist from the top. Do not finalize until all critical items pass.",
       "relevant_when": "When a user asks for Rails work that should trigger document-engine.",
       "why_given": "preference"
-    },
-    {
-      "instruction": "**No Mounting Redundancy**: Show the engine route mounting command (`mount MyEngine::Engine ...`) only once in the primary installation/mounting section. Do not duplicate it across multiple sections.",
-      "original_snippets": "**No Mounting Redundancy**: Show the engine route mounting command (`mount MyEngine::Engine ...`) only once in the primary installation/mounting section. Do not duplicate it across multiple sections.",
-      "relevant_when": "When a user asks for Rails work that should trigger document-engine.",
-      "why_given": "preference"
     }
   ]
 }
