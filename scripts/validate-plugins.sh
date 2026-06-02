@@ -95,6 +95,12 @@ while IFS= read -r skill_file; do
     check_fail "$skill_name: Missing 'name' field"
   fi
 
+  if grep -q "^type:" "$skill_file"; then
+    check_pass "$skill_name: Has 'type' field"
+  else
+    check_fail "$skill_name: Missing 'type' field"
+  fi
+
   fm_name=$(awk '/^---$/{f++; next} f==1 && /^name:/{sub(/^name:[[:space:]]*/, ""); gsub(/^["'"'"']|["'"'"']$/, ""); print; exit}' "$skill_file")
   if [ -n "$fm_name" ] && [ "$fm_name" != "$skill_name" ]; then
     check_fail "$skill_name: frontmatter name ('$fm_name') does not match directory name"
@@ -116,12 +122,19 @@ while IFS= read -r path; do
   fi
 done <<< "$DISK_SKILL_DIRS"
 
-AGENT_PATHS=$(find agents -name "SKILL.md" -not -path "*/.tessl/*" | sort)
-if [ -n "$AGENT_PATHS" ]; then
-  info "Agent SKILL.md files found (not expected in plugin.json):"
+PERSONA_PATHS=$(find skills/personas -name "SKILL.md" -not -path "*/.tessl/*" | sort)
+if [ -n "$PERSONA_PATHS" ]; then
+  info "Persona SKILL.md files:"
   while IFS= read -r path; do
     info "  $path"
-  done <<< "$AGENT_PATHS"
+  done <<< "$PERSONA_PATHS"
+  has_type_field=$(grep -l "^type: persona" $PERSONA_PATHS 2>/dev/null | wc -l)
+  persona_count=$(echo "$PERSONA_PATHS" | wc -l | tr -d ' ')
+  if [ "$has_type_field" -eq "$persona_count" ]; then
+    check_pass "All persona SKILL.md files have type: persona"
+  else
+    check_fail "Some persona SKILL.md files missing type: persona"
+  fi
 fi
 
 section "Summary"

@@ -1,5 +1,6 @@
 ---
 name: plan-tests
+type: atomic
 license: MIT
 description: >
   Use when planning tests for a Rails change — must present a Test Design Review checkpoint, pick the smallest strong slice matched to where the real risk lives, write exactly one minimal failing example as the initial TDD gate (list additional cases as follow-up), verify that the test fails because behavior is missing rather than broken setup, and use assets/first_slice_template.md to document the plan. TDD, first failing test, spec selection, vertical slice planning.

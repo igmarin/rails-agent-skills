@@ -1,8 +1,8 @@
 {
   "name": "igmarin/rails-agent-skills",
-  "version": "6.0.24",
+  "version": "7.0.0",
   "license": "MIT",
-  "description": "Curated library of 28 public AI agent skills for Ruby on Rails development. Organized by category: testing, code-quality, engines, infrastructure, api, and context. Covers code review, architecture, security, testing (RSpec), engines, Hotwire, and TDD automation. Shared Ruby skills (YARD docs, DDD, service objects) have moved to ruby-core-skills. Repository agents remain documented in GitHub but are intentionally excluded from the Tessl tile.",
+  "description": "Curated library of 28 atomic skills and 9 personas for Ruby on Rails development. Organized by category: testing, code-quality, engines, infrastructure, api, context, and personas. Covers code review, architecture, security, testing (RSpec), engines, Hotwire, and TDD automation. Shared Ruby skills (YARD docs, DDD, service objects) have moved to ruby-core-skills.",
   "skills": [
     "./skills/api/generate-api-collection",
     "./skills/api/implement-graphql",
@@ -29,6 +29,15 @@
     "./skills/infrastructure/review-migration",
     "./skills/infrastructure/seed-database",
     "./skills/infrastructure/version-api",
+    "./skills/personas/background-job",
+    "./skills/personas/bug-fix",
+    "./skills/personas/engine",
+    "./skills/personas/graphql",
+    "./skills/personas/migration",
+    "./skills/personas/quality",
+    "./skills/personas/review",
+    "./skills/personas/setup",
+    "./skills/personas/tdd",
     "./skills/testing/plan-tests",
     "./skills/testing/test-service",
     "./skills/testing/write-tests"

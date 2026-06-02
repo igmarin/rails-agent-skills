@@ -1,5 +1,6 @@
 ---
 name: version-api
+type: atomic
 license: MIT
 description: >
   Use when implementing REST API versioning strategies in Rails — must maintain backward compatibility by inheriting new version controllers from the previous version's controller overriding only changed actions, and run compatibility specs via bundle exec rspec spec/requests/api/backward_compatibility_spec.rb to confirm no regressions before merging. REST API versioning, URL path versioning, Deprecation headers.

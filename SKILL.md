@@ -1,5 +1,6 @@
 ---
 name: rails-agent-skills
+type: catalog
 description: >
   Entry point for Rails development workflows covering TDD, RSpec, Service Objects, DDD, GraphQL,
   Engines, and Code Quality. Use when the user asks about Ruby on Rails development patterns,
@@ -92,12 +93,12 @@ Step 5 — apply-code-conventions + write-yard-docs + code-review
 | **Patterns** | `create-service-object`, `write-yard-docs` | Inherit `ApplicationService`, expose `.call`, document with `@param`/`@return` YARD tags |
 | **Setup** | `setup-environment` | Verify Ruby version, `bundle install`, and `bin/rails db:setup` |
 
-*The complete list of all 28 local atomic skills is defined in `tile.json` at the project root. This repository also depends on `igmarin/ruby-core-skills` for 15 additional core skills (Process, Code Quality, Orchestration, DDD, and Ruby patterns).*
+*The complete list of all 28 local atomic skills and 9 personas is defined in `directory.json` at the project root. This repository also depends on `igmarin/ruby-core-skills` for 15 additional core skills (Process, Code Quality, Orchestration, DDD, and Ruby patterns).*
 
 ## Integration
 
-- **`tile.json`** (project root): Canonical registry of all 28 local atomic skills — names, file paths, and metadata. This is the source of truth for skill discovery.
-- **`docs/reference/skill-catalog.md`**: Human-readable reference with usage notes for each skill; useful for manual lookup when `tile.json` is unavailable.
+- **`directory.json`** (project root): Canonical registry of all 28 local atomic skills and 9 personas — names, file paths, and metadata. This is the source of truth for skill discovery.
+- **`docs/reference/skill-catalog.md`**: Human-readable reference with usage notes for each skill; useful for manual lookup when `directory.json` is unavailable.
 - **`skill-router`**: Orchestration layer that maps incoming tasks to the correct atomic skill sequence; invoked automatically when this entry-point skill is activated.
 
 ## Core Dependencies

@@ -1,6 +1,6 @@
 # Skill Catalog — Rails Agent Skills
 
-Complete catalog of 28 public skills and 9 callable agents organized by development lifecycle stage and by category.
+Complete catalog of 28 public skills and 9 callable personas organized by development lifecycle stage and by category.
 
 ---
 
@@ -8,7 +8,7 @@ Complete catalog of 28 public skills and 9 callable agents organized by developm
 
 **By Stage:** [00 — Discovery](#00--discovery--context) · [30 — Development](#30--development) · [40 — Quality](#40--code-quality) · [50 — Review](#50--review--validation) · [60 — Engines](#60--engines)
 
-**By Category:** [API](#api) · [Context](#context) · [Code Quality](#code-quality) · [DDD](#ddd) · [Documentation](#documentation) · [Engines](#engines) · [Infrastructure](#infrastructure) · [Orchestration](#orchestration) · [Patterns](#patterns) · [Testing](#testing) · [Agents](#agents)
+**By Category:** [API](#api) · [Context](#context) · [Code Quality](#code-quality) · [DDD](#ddd) · [Documentation](#documentation) · [Engines](#engines) · [Infrastructure](#infrastructure) · [Orchestration](#orchestration) · [Patterns](#patterns) · [Testing](#testing) · [Personas](#personas)
 
 *Note: DDD, Documentation, Orchestration, and Patterns skills have moved to `igmarin/ruby-core-skills`. Install the core dependency to access them.*
 
@@ -140,7 +140,7 @@ Complete catalog of 28 public skills and 9 callable agents organized by developm
 ## See also
 
 - [Integration Matrix](integration-matrix.md) — Which skill connects to which
-- [Agents Index](../../agents/) — Complete orchestrated step-by-step flows
+- [Personas Index](../../docs/personas/) — Complete orchestrated step-by-step flows
 - Orchestration skill `skill-router` (from ruby-core-skills) — Entry skill when you don't know which to use
 
 ---
@@ -241,16 +241,16 @@ Skills are organized in category folders (`skills/<category>/`) with frequent en
 
 *Note: `triage-bug` has moved to `igmarin/ruby-core-skills`*
 
-### Agents
+### Personas
 
-| Agent | Path | Description |
-|-------|------|-------------|
-| **tdd** | `agents/tdd/` | TDD feature loop: test → implement → review → PR |
-| **review** | `agents/review/` | Systematic PR review: review → deep dive → response |
-| **setup** | `agents/setup/` | Project setup: context → onboarding → CI/CD |
-| **quality** | `agents/quality/` | Quality check: conventions → refactor → docs |
-| **engine** | `agents/engine/` | Engine development: author → test → review → release |
-| **bug-fix** | `agents/bug-fix/` | Bug resolution: triage → reproduce → fix → verify |
-| **graphql** | `agents/graphql/` | GraphQL API: domain → schema → TDD → security |
-| **migration** | `agents/migration/` | Database migration: plan → test → deploy |
-| **background-job** | `agents/background-job/` | Background job: design → TDD → retry → monitor |
+| Persona | Path | Description |
+|---------|------|-------------|
+| **tdd** | `skills/personas/tdd/` | TDD feature loop: test → implement → review → PR |
+| **review** | `skills/personas/review/` | Systematic PR review: review → deep dive → response |
+| **setup** | `skills/personas/setup/` | Project setup: context → onboarding → CI/CD |
+| **quality** | `skills/personas/quality/` | Quality check: conventions → refactor → docs |
+| **engine** | `skills/personas/engine/` | Engine development: author → test → review → release |
+| **bug-fix** | `skills/personas/bug-fix/` | Bug resolution: triage → reproduce → fix → verify |
+| **graphql** | `skills/personas/graphql/` | GraphQL API: domain → schema → TDD → security |
+| **migration** | `skills/personas/migration/` | Database migration: plan → test → deploy |
+| **background-job** | `skills/personas/background-job/` | Background job: design → TDD → retry → monitor |

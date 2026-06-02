@@ -1,5 +1,6 @@
 ---
 name: document-engine
+type: atomic
 license: MIT
 description: >
   Use when documenting Rails engines — show the minimum working install path first (gem add→bundle→install generator→mount in routes), document ALL configuration options with defaults (required vs optional), state host model/auth assumptions explicitly, keep examples copyable, satisfy minimum install path + config options + host assumptions before optional sections, validate against CHECKLIST.md with at least one copyable code example per section before finalizing. Generates README templates, installation guides, configuration docs, mount instructions, extension API docs, and migration notes. Trigger words: engine README, installation guide, configuration docs, mount instructions, migration notes, host integration examples.

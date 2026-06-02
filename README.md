@@ -2,7 +2,7 @@
 
 ![Rails Agent Skills Logo](https://github.com/user-attachments/assets/d5f7b2e0-c651-41f2-a75f-df21349c883d)
 
-It is a curated library of **public Rails agent skills** and **callable agents** that teach AI tools how to test, implement, document, and review Rails work using production-minded conventions. This repository acts as a pure **Domain Knowledge Registry** and asset catalog of specialized Rails & Ruby AI Skills/Agents, consumable by external MCP or CLI runtimes.
+It is a curated library of **public Rails agent skills** and **callable personas** that teach AI tools how to test, implement, document, and review Rails work using production-minded conventions. This repository acts as a pure **Domain Knowledge Registry** and asset catalog of specialized Rails & Ruby AI Skills/Personas, consumable by external MCP or CLI runtimes.
 
 The project is built around one non-negotiable rule:
 
@@ -10,7 +10,7 @@ The project is built around one non-negotiable rule:
 Write test -> run test -> verify it fails for the right reason -> implement -> verify it passes
 ```
 
-That TDD gate is encoded directly into the skills and agents, so agents do not just produce plausible Rails code. They follow a repeatable engineering process.
+That TDD gate is encoded directly into the skills and personas, so agents do not just produce plausible Rails code. They follow a repeatable engineering process.
 
 ## Part of the AI Skill Ecosystem
 
@@ -19,9 +19,9 @@ This repo is one of 6 in a composable AI skill ecosystem:
 | Repo | Role |
 |------|------|
 | [`ruby-core-skills`](https://github.com/igmarin/ruby-core-skills) | 15 shared Ruby skills + process discipline |
-| [**`rails-agent-skills`**](https://github.com/igmarin/rails-agent-skills) | 28 Rails-specific skills + 9 agents |
-| [`hanakai-yaku`](https://github.com/igmarin/hanakai-yaku) | 35 Hanami/dry-rb skills + 10 agents |
-| [`agnostic-planning-skills`](https://github.com/igmarin/agnostic-planning-skills) | 10 planning skills + 4 agents |
+| [**`rails-agent-skills`**](https://github.com/igmarin/rails-agent-skills) | 28 atomic skills + 9 personas |
+| [`hanakai-yaku`](https://github.com/igmarin/hanakai-yaku) | 35 atomic skills + 10 personas |
+| [`agnostic-planning-skills`](https://github.com/igmarin/agnostic-planning-skills) | 10 atomic skills + 4 personas |
 | [`agent-mcp-runtime`](https://github.com/igmarin/agent-mcp-runtime) | Rust CLI runtime (pack resolution, MCP) |
 | [`ruby-skill-bench`](https://github.com/igmarin/ruby-skill-bench) | Benchmark/eval engine |
 
@@ -74,9 +74,9 @@ npx skills add igmarin/rails-agent-skills
 | Area | Purpose |
 |------|---------|
 | `skills/` | 28 public atomic skills for Rails-specific development. Each skill has a `SKILL.md` entry point with task-specific instructions. |
-| `agents/` | Callable agents that chain skills into full development loops (tdd, quality, review, setup, engine, bug-fix, graphql, migration, background-job). |
-| `docs/` | Public documentation, architecture, agent guides, skill catalog, and evaluation policy. |
-| `tessl-evals/` | Tessl-native eval scenarios for publishable skills in `tile.json`. |
+| `skills/personas/` | 9 callable personas that chain skills into full development loops (tdd, quality, review, setup, engine, bug-fix, graphql, migration, background-job). |
+| `docs/` | Public documentation, architecture, persona guides, skill catalog, and evaluation policy. |
+| `evals/` | Tessl-native eval scenarios for publishable skills in `directory.json`. |
 | `personal-evals/` | Open examples for the upcoming `ruby-skill-bench` full-context evaluator. |
 
 **Core Dependency:** This repository depends on `igmarin/ruby-core-skills` for 15 foundational Ruby skills (DDD, Ruby patterns, process skills, code quality, orchestration). Install both repositories for the complete skill set.
@@ -124,7 +124,7 @@ background-job (design -> TDD -> retry config -> monitoring)
 create-engine -> test-engine -> document-engine -> review-engine -> release-engine
 ```
 
-See [docs/agent-guide.md](docs/agent-guide.md) and [docs/agents/](docs/agents/) for the full process guide containing detailed Mermaid diagrams of each phase.
+See [docs/persona-guide.md](docs/persona-guide.md) and [docs/personas/](docs/personas/) for the full process guide containing detailed Mermaid diagrams of each phase.
 
 ## Skill Catalog
 
@@ -152,10 +152,10 @@ This repo uses two complementary evaluation layers.
 
 | Layer | Status | What it validates |
 |-------|--------|-------------------|
-| Tessl | Public and active | Tessl-native scenarios in `tessl-evals/` validate the quality of publishable skills from `tile.json`. Tessl does not validate repository agents today. |
+| Tessl | Public and active | Tessl-native scenarios in `evals/` validate the quality of publishable skills from `directory.json`. Tessl does not validate repository personas today. |
 | `ruby-skill-bench` | Coming soon | The upcoming Ruby gem will run `personal-evals/` examples with full skill or agent context, including `SKILL.md` plus companion resources bundled as XML. |
 
-Root `evals/` is generated Tessl staging output and must stay untracked. `tessl-evals/` is the tracked Tessl source. `personal-evals/` is the tracked source for open custom-evaluator examples.
+`evals/` is the tracked Tessl eval source for publishable skills. `personal-evals/` is the tracked source for open custom-evaluator examples.
 
 See [docs/eval-provenance.md](docs/eval-provenance.md) for the canonical eval ownership policy and [docs/skill-optimization-guide.md](docs/skill-optimization-guide.md) for the baseline-vs-context optimization loop.
 
@@ -211,20 +211,19 @@ Pinning to a tag or commit SHA gives you reproducible installs. Provenance metad
 | Understand the docs system | [docs/README.md](docs/README.md) |
 | Browse all skills | [docs/reference/skill-catalog.md](docs/reference/skill-catalog.md) |
 | Understand skill chaining | [docs/reference/integration-matrix.md](docs/reference/integration-matrix.md) |
-| Follow agent guides | [docs/agent-guide.md](docs/agent-guide.md) |
+| Follow persona guides | [docs/persona-guide.md](docs/persona-guide.md) |
 | Understand repository structure | [docs/architecture.md](docs/architecture.md) |
 | Understand eval ownership | [docs/eval-provenance.md](docs/eval-provenance.md) |
 | Optimize skill eval quality | [docs/skill-optimization-guide.md](docs/skill-optimization-guide.md) |
 
 ## Contributing
 
-When contributing skills, agents, or docs:
+When contributing skills, personas, or docs:
 
 - Keep generated artifacts in English unless a user explicitly asks for another language.
 - Preserve the tests-gate-implementation rule for every code-producing skill.
 - Do not add tickets unless the user asks for ticket generation.
-- Do not commit generated root `evals/` output.
-- Keep public docs consistent with `tile.json` and the latest release tag.
+- Keep public docs consistent with `directory.json` and the latest release tag.
 
 ## Acknowledgments
 

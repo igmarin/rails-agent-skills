@@ -1,5 +1,6 @@
 ---
 name: test-engine
+type: atomic
 license: MIT
 description: >
   Use when writing and configuring RSpec tests for Rails engines — must ensure that a dummy app exists for testing, add the smallest integration test that proves mounting and boot and verify it passes before continuing, and run the full test suite via bundle exec rspec to verify all specs pass. Key capabilities: request and routing specs with namespace scoping, generator idempotency, configuration testing.

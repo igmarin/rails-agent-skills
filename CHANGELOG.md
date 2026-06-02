@@ -1,6 +1,47 @@
 # Changelog
 
-## [Unreleased]
+## [7.0.0] - 2026-06-01
+
+### Breaking Changes
+
+**Flatten Agents into Personas with Type Taxonomy**
+
+All 9 callable agents have been migrated from `agents/` to `skills/personas/` with `type: persona` frontmatter. This is a structural reorganization — skill names and invocation patterns remain the same.
+
+### Added
+- `type: atomic` frontmatter to all 28 atomic skills
+- `type: catalog` to root SKILL.md
+- `type: persona` to all 9 persona skills
+- `tags: [personas]` to all persona skills
+- `.opencode/agents/` wrappers for all 9 personas (OpenCode subagent support)
+
+### Changed
+- **Structural:**
+  - Moved `agents/<name>/SKILL.md` → `skills/personas/<name>/SKILL.md`
+  - Renamed "Agent" → "Persona" in all persona SKILL.md titles
+  - Switched `.tessl-plugin/plugin.json` to `"skills": "./skills/"` auto-discovery
+  - Merged `tessl-evals/` → `evals/` directory (plugin-mode compatible)
+
+- **Configuration:**
+  - Updated `directory.json` to v7.0.0 with 9 personas under `"skills"`
+  - Updated `.tessl-plugin/plugin.json` to v7.0.0
+  - Pinned CI workflows from `@latest` → `@github-v1.2.24`
+  - Added `GITHUB_TOKEN` env + `use_github_token: true` to both workflows (GitHub capitalization in env var name)
+  - Fixed `opencode-review.yml` permissions: `pull-requests: read` → `write`
+
+- **Documentation:**
+  - Renamed `docs/agent-guide.md` → `docs/persona-guide.md`
+  - Renamed `docs/agent-template.md` → `docs/persona-template.md`
+  - Renamed `docs/agents/` → `docs/personas/`
+  - Updated all references: `agents/` → `skills/personas/`, `tile.json` → `directory.json`, `tessl-evals/` → `evals/`
+  - Updated ~20 doc files with current directory tree and terminology
+  - Added `type:` field documentation to `docs/architecture.md`
+
+### Removed
+- `agents/` directory (moved to `skills/personas/`)
+- `agents.json` (merged into `directory.json`)
+- `AGENTS.md` (content merged into CLAUDE.md/GEMINI.md)
+- Empty `skills/ddd/`, `skills/orchestration/`, `skills/patterns/` directories
 
 ## [6.0.20] - 2026-05-30
 

@@ -1,5 +1,6 @@
 ---
 name: generate-api-collection
+type: atomic
 license: MIT
 description: >
   Use when creating or modifying REST API endpoints — must create or update the corresponding API collection JSON file using the {{base_url}} variable, ensure each request includes a description and at least one basic test script, validate the collection JSON using python -m json.tool or jq, and verify it imports into compatible API clients without errors. Sync API collections with REST endpoints. Trigger words: endpoint, API route, controller action, API collection, request collection.

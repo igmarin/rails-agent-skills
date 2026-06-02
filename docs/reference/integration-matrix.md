@@ -205,7 +205,7 @@ Review?
 |------|------|------------|---------|
 | Test Feedback | checkpoint | plan-tests | Confirm correct test before implementing |
 | Implementation Proposal | checkpoint | write-tests | Approve approach before code |
-| Linters + Suite | gate | agent-guide.md | All linters and tests pass |
+| Linters + Suite | gate | persona-guide.md | All linters and tests pass |
 | Characterization Tests | gate | refactor-code | Tests pass on current code before refactor |
 | Engine Specs | gate | create-engine | Specs fail before implementing engine |
 
@@ -214,4 +214,5 @@ Review?
 ## See also
 
 - [Skill Catalog](skill-catalog.md) — Complete skills list
-- [Agent Guides Index](../agents/) — Step-by-step agent stages
+- [Persona Guide](../persona-guide.md) — Narrative workflows and variations
+- [Persona Guides Index](../personas/) — Step-by-step persona stages

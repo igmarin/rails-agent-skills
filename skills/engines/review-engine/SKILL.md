@@ -1,5 +1,6 @@
 ---
 name: review-engine
+type: atomic
 license: MIT
 description: >
   Use when reviewing a Rails engine — must inspect namespace isolation (isolate_namespace), verify configuration seams and check host-app integration (flagging host constant references), verify initialization reload safety (use config.to_prepare, flag load-time global mutations), check that migrations are copied via generator without destructive/irreversible changes, confirm spec/dummy exists and is used for integration specs, and summarize findings by severity flagging High findings first. Suitable for engine code review, engine architecture review, and gem review.

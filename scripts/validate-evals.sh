@@ -19,15 +19,9 @@ pass() {
   printf '✓ %s\n' "$1"
 }
 
-section "Validating eval ownership"
+section "Validating eval source"
 
-tracked_root_evals="$(git ls-files 'evals/**')"
-if [[ -n "$tracked_root_evals" ]]; then
-  fail "root evals/ is generated Tessl staging output and must not be tracked"
-  printf '%s\n' "$tracked_root_evals"
-else
-  pass "root evals/ has no tracked files"
-fi
+pass "root evals/ is the tracked Tessl eval source (plugin mode)"
 
 section "Validating personal eval scenarios"
 
@@ -72,7 +66,7 @@ while IFS= read -r scenario_dir; do
       abort "missing required keys: #{missing.join(", ")}" unless missing.empty?
 
       abort "id must match directory name" unless data.fetch("id") == File.basename(scenario_dir)
-      abort "target_type must be skill or agent" unless %w[skill agent].include?(data.fetch("target_type"))
+      abort "target_type must be skill or persona" unless %w[skill persona].include?(data.fetch("target_type"))
       abort "context_mode must be skill_bundle_xml" unless data.fetch("context_mode") == "skill_bundle_xml"
       abort "requires_companion_resources must be boolean" unless [true, false].include?(data.fetch("requires_companion_resources"))
 

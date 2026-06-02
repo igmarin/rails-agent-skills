@@ -1,5 +1,6 @@
 ---
 name: setup-environment
+type: atomic
 license: MIT
 description: >
   Emit a generic Rails development-environment setup runbook for the user to execute

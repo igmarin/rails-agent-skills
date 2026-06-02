@@ -5,7 +5,7 @@ require "json"
 require "set"
 
 ROOT = File.expand_path("..", __dir__)
-EVAL_ROOT = File.join(ROOT, "tessl-evals")
+EVAL_ROOT = File.join(ROOT, "evals")
 SKILLS_DIR = File.join(ROOT, "skills")
 
 def read_json(path)
@@ -26,18 +26,18 @@ end
 $failures = 0
 
 publishable_skill_paths = Dir.glob("**/SKILL.md", base: SKILLS_DIR).reject { |path|
-  path.start_with?("workflows/") || path.start_with?("agents/")
+  path.start_with?("workflows/") || path.start_with?("personas/")
 }
 expected_names = publishable_skill_paths.map { |path| File.basename(File.dirname(path)) }.to_set
 
 unless Dir.exist?(EVAL_ROOT)
-  abort "Missing tessl-evals/ directory"
+  abort "Missing evals/ directory"
 end
 
 actual_names = Dir.children(EVAL_ROOT).select { |entry| File.directory?(File.join(EVAL_ROOT, entry)) }.to_set
 
-(expected_names - actual_names).sort.each { |name| fail_with("missing tessl-evals/#{name}") }
-(actual_names - expected_names).sort.each { |name| fail_with("unexpected tessl-evals/#{name}") }
+(expected_names - actual_names).sort.each { |name| fail_with("missing evals/#{name}") }
+(actual_names - expected_names).sort.each { |name| fail_with("unexpected evals/#{name}") }
 
 expected_names.sort.each do |name|
   dir = File.join(EVAL_ROOT, name)

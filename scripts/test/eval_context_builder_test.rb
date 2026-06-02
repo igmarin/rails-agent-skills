@@ -60,11 +60,11 @@ module McpSkills
       ], resource_paths
     end
 
-    def test_infers_agent_target_type
-      xml = EvalContextBuilder.new(repo_root: @root).call(target_path: 'agents/tdd')
+    def test_infers_persona_target_type
+      xml = EvalContextBuilder.new(repo_root: @root).call(target_path: 'skills/personas/tdd')
       document = REXML::Document.new(xml)
 
-      assert_equal 'agent', document.root.attributes['target_type']
+      assert_equal 'persona', document.root.attributes['target_type']
       assert_equal 'tdd', document.root.attributes['target_name']
     end
   end

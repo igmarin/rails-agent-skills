@@ -1,5 +1,6 @@
 ---
 name: implement-hotwire
+type: atomic
 license: MIT
 description: >
   Use when creating Hotwire UIs with progressive enhancement in Rails — must verify degraded mode by disabling JavaScript (or running rails test:system with Capybara rack_test driver) and confirming forms submit, links navigate, and data persists after reload, and include a Verification section with these explicit no-JavaScript checks. Stimulus, Turbo, Turbo Frames, Turbo Streams.
