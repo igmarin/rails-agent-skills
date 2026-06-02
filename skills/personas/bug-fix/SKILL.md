@@ -252,6 +252,26 @@ bundle exec rspec  # Full test suite must pass
 **RESOLVED** — No regressions detected
 ```
 
+## Error Recovery
+
+**Cannot reproduce the bug:**
+1. Verify the environment matches the bug report (Ruby version, database, config)
+2. Check if the bug is data-dependent — seed the specific data pattern described
+3. If still unreproducible, request more details from the reporter and mark as "needs info"
+
+**Fix introduces regressions:**
+1. Run the full regression suite to identify which tests broke
+2. Determine if the fix changes a contract other code depends on
+3. If the contract change is correct, update the dependent tests
+4. If the contract change is incorrect, revise the fix to be more targeted
+
+**Multiple root causes:**
+1. If the bug has more than one contributing cause, fix them in separate commits
+2. Each commit should have its own reproduction test
+3. Verify each fix independently before combining
+
+---
+
 ## Anti-Patterns to Avoid
 
 - **Fixing without reproduction:** Never fix a bug without a failing test that reproduces it

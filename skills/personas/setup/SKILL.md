@@ -148,3 +148,71 @@ act push  # GitHub Actions local runner (optional)
 | None (entry point) | setup | tdd (start developing) |
 
 **From setup persona:** This is the setup workflow. For development, chain to tdd.
+
+---
+
+## Output Style
+
+When completing project setup, output MUST include:
+
+```markdown
+# Setup Report — [Project Name]
+
+## Environment
+- Ruby: <version> (matches .ruby-version: ✓/✗)
+- Bundler: <version>
+- Database: <PostgreSQL version, connection status>
+- Env vars: <loaded from .env / credentials>
+
+## Dependencies
+- bundle install: ✓ (<n> gems installed)
+- db:create: ✓
+- db:migrate: ✓ (<n> migrations)
+- rspec --dry-run: ✓ (<n> examples detected)
+
+## CI/CD
+- CI workflow: .github/workflows/ci.yml
+- CD workflow: .github/workflows/cd.yml
+- Actions pinned to SHA: ✓ (all uses: entries use commit SHAs)
+- Pipeline: lint → test → security scan → deploy
+
+## Validation
+- Local server starts: ✓ (rails server on port 3000)
+- Full test suite: ✓ (<n> examples, 0 failures)
+- SETUP_CHECKLIST.md: ✓ written
+```
+
+---
+
+## Error Recovery
+
+**Ruby version mismatch:**
+1. Check `.ruby-version` for expected version
+2. Install correct version via `rbenv install` or `asdf install ruby`
+3. Verify with `ruby -v`
+
+**Bundle install fails:**
+1. Check for native extension requirements (`libpq-dev`, `libssl-dev`, etc.)
+2. Install system dependencies: `apt-get install -y libpq-dev`
+3. Retry `bundle install`
+
+**Database connection fails:**
+1. Verify PostgreSQL is running: `pg_isready`
+2. Check `config/database.yml` credentials match actual database user/password
+3. Create role if missing: `createuser -s <username>`
+
+**CI actions use mutable tags:**
+1. Find the commit SHA for each tag: `git ls-remote https://github.com/<owner>/<repo> refs/tags/<tag>`
+2. Replace `@v4` with `@<full-sha>` in workflow files
+3. Verify CI still passes after pinning
+
+---
+
+## Anti-Patterns to Avoid
+
+- **Mutable CI action tags:** NEVER use `@v4`, `@v1`, etc. — always pin to immutable commit SHAs
+- **Skipping database verification:** Always confirm `db:create` and `db:migrate` succeed before proceeding
+- **Missing .env.example:** Always create `.env.example` with placeholder values for all required environment variables
+- **Hardcoded Ruby version:** Always read from `.ruby-version` — never hardcode in CI workflows
+- **Skipping security scanning:** CI MUST include `brakeman` and `bundle-audit` alongside tests
+- **No SETUP_CHECKLIST.md:** Always produce a checklist so the next developer can verify setup

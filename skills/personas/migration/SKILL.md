@@ -166,3 +166,47 @@ curl https://api.example.com/api/orders
 | None (standalone) | migration | quality |
 
 **Use `review-migration` alone** if you only need to assess migration safety without running the full deployment lifecycle.
+
+---
+
+## Output Style
+
+When completing a migration cycle, output MUST include:
+
+```markdown
+# Migration Report — [Description]
+
+## Plan
+- Change: <description of schema change>
+- Pattern: expand-contract / phased rollout / direct
+- Rollback: <rollback strategy>
+- Lock assessment: <expected lock duration and impact>
+
+## Development
+- Migration file: <path>
+- Idempotent cycle: ✓ migrate → rollback → re-migrate
+- Test suite: ✓ (<n> examples, 0 failures)
+- N+1 check: ✓ no new queries introduced
+
+## Staging
+- Migration time: <duration on production-like data>
+- Smoke tests: ✓ pass
+- Rollback tested: ✓
+
+## Production
+- Deployed: <timestamp>
+- Error rate: <post-migration rate vs baseline>
+- p99 latency: <ms>
+- Monitoring: ✓ first 15 minutes clear
+```
+
+---
+
+## Anti-Patterns to Avoid
+
+- **Non-reversible migrations:** Every migration MUST have a working `down` method
+- **Schema + data in one migration:** Never combine `add_column` and bulk `update_all` in a single migration — use separate migrations
+- **Skipping staging:** Never deploy a migration to production without staging verification on production-like data
+- **Large-table ALTER without expand-contract:** Adding a NOT NULL column with default on a million-row table will lock it — always expand first, backfill, then constrain
+- **Missing EXPLAIN:** Always run `EXPLAIN ANALYZE` on queries affected by schema changes before deploying
+- **Deploying during peak traffic:** Schedule migrations during low-traffic windows

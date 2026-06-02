@@ -174,3 +174,80 @@ class MySchema < GraphQL::Schema
   end
 end
 ```
+
+---
+
+## Output Style
+
+When asked to implement a GraphQL feature, output MUST include:
+
+```markdown
+# GraphQL Implementation — [Feature Name]
+
+## Domain Model
+- Entities mapped: <list of entity → Type mappings>
+- Bounded context: <owning context>
+- Connections: <relationship mappings>
+
+## Schema Changes
+- Types added/modified: <list>
+- Queries added: <list with arguments>
+- Mutations added: <list with input/payload types>
+- Authorization: <field-level guards applied>
+
+## Tests
+- Specs created: <list of spec files>
+- RED confirmation: <failure message confirming missing functionality>
+- GREEN confirmation: <all specs pass>
+- Regression: <full suite status>
+
+## Security
+- Authorization: ✓ field-level `authorized?` on all sensitive types
+- Depth limit: ✓ max_depth configured
+- Complexity limit: ✓ max_complexity configured
+- Rate limiting: ✓ implemented at application layer
+- N+1: ✓ dataloader/batch-loader configured
+- Error sanitization: ✓ rescue_from returns generic messages
+```
+
+---
+
+## Integration
+
+| Predecessor | This Persona | Successor |
+|-------------|--------------|-----------|
+| define-domain-language | graphql | security-check |
+| load-context | graphql | code-review |
+| None (standalone) | graphql | PR submission |
+
+**Chaining:** For DDD-first workflow, invoke `define-domain-language` → `review-domain-boundaries` → `model-domain` before this persona.
+
+---
+
+## Error Recovery
+
+**Schema validation fails:**
+1. Check for circular type references with `MySchema.to_definition`
+2. Verify all referenced types are defined
+3. Confirm field return types match actual model attributes
+
+**Authorization bypass detected:**
+1. Add `authorized?` to the affected type
+2. Write spec confirming unauthorized access returns nil/error
+3. Re-run security review phase
+
+**N+1 queries in resolvers:**
+1. Identify the resolver with `QueryLog` or `bullet` gem
+2. Add `GraphQL::Batch` loader or `dataloader` for the association
+3. Verify with `ActiveSupport::Notifications` that query count drops
+
+---
+
+## Anti-Patterns to Avoid
+
+- **God schema:** Putting all types in one file — use `app/graphql/types/`, `app/graphql/mutations/`, `app/graphql/resolvers/`
+- **Missing authorization:** Every type with sensitive data MUST have `authorized?` — no exceptions
+- **Unbounded queries:** Always set `max_depth` and `max_complexity` on the schema class
+- **Leaking internals:** Never expose ActiveRecord column names directly — map to domain-appropriate field names
+- **Fat resolvers:** Extract business logic to service objects; resolvers should only coordinate
+- **Skipping TDD:** Never implement a resolver without a failing test first

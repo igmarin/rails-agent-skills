@@ -130,3 +130,71 @@ Not sure?          → skill-router
 2. Namespace properly isolated
 3. Migrations won't conflict
 4. Dependencies clearly declared
+
+---
+
+## Output Style
+
+When completing an engine development cycle, output MUST include:
+
+```markdown
+# Engine Report — [Engine Name]
+
+## Structure
+- Namespace: <ModuleName>::Engine
+- Isolated: ✓ isolate_namespace configured
+- Gemspec: ✓ validates cleanly
+- Dummy app: ✓ configured and boots
+
+## Tests
+- Specs: <n> examples, 0 failures
+- Engine mounting: ✓ tested
+- Generators: ✓ tested (if applicable)
+- Core functionality: ✓ tested
+
+## Review
+- Dependencies audited: ✓ (bundler-audit clean)
+- Namespace isolation: ✓ no leakage
+- Migration safety: ✓ no conflicts with host
+
+## Release (if applicable)
+- Version: <SemVer>
+- Changelog: ✓ updated
+- Git tag: ✓ v<version>
+- Gem published: ✓ / pending
+```
+
+---
+
+## Error Recovery
+
+**Engine tests fail to load:**
+1. Check `spec/spec_helper.rb` or `test/test_helper.rb` — ensure it requires the engine and dummy app correctly
+2. Verify `test/dummy/config/application.rb` requires the engine
+3. Check for missing factory definitions — engine factories must be self-contained
+
+**Namespace collision with host app:**
+1. Verify `isolate_namespace MyEngine` is present in `lib/my_engine/engine.rb`
+2. Check all models, controllers, and routes use the `MyEngine::` prefix
+3. Rename conflicting classes to use engine-prefixed names
+
+**Migration conflicts:**
+1. Ensure migration timestamps don't collide with host app migrations
+2. Use `install_generator` to copy migrations rather than requiring engine migrations directly
+3. Namespace migration class names: `MyEngine::CreateOrders` not just `CreateOrders`
+
+**Gem dependency conflicts:**
+1. Use pessimistic version constraints in gemspec: `~> 7.0` not `>= 7.0`
+2. Run `bundle exec rake dependencies` to check for version conflicts
+3. Consider adding the conflicting gem as a development dependency only
+
+---
+
+## Anti-Patterns to Avoid
+
+- **Missing isolate_namespace:** Every mountable engine MUST call `isolate_namespace` — without it, models and routes leak into the host app
+- **Host-dependent tests:** Engine specs MUST pass with only the dummy app — never depend on host app code
+- **Hardcoded paths:** Use `MyEngine::Engine.root` not `Rails.root` for engine-internal paths
+- **Unpinned dependencies:** Always use pessimistic version constraints (`~>`) in gemspec
+- **Skipping dummy app:** Every engine MUST have a dummy app for integration testing
+- **Direct integration before testing:** NEVER mount engine in host until standalone tests pass
