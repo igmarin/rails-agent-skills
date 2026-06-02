@@ -2,12 +2,12 @@
   "target_skill": "review-architecture",
   "total_scenarios": 1,
   "instructions_coverage": {
-    "total_instructions": 8,
-    "instructions_tested": 8,
-    "coverage_percentage": 100
+    "total_instructions": 11,
+    "instructions_tested": 10,
+    "coverage_percentage": 91
   },
   "reason_distribution": {
-    "new knowledge": 4,
+    "new knowledge": 7,
     "preference": 3,
     "reminder": 1
   }

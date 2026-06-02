@@ -5,7 +5,37 @@
     {
       "name": "instruction-1",
       "description": "The submitted artifact follows this skill instruction: **Verify authorization** — attempt an unauthorized action in the browser or console and confirm it raises `Pundit::NotAuthorizedError` or `CanCan::AccessDenied` as expected",
-      "max_score": 100
+      "max_score": 15
+    },
+    {
+      "name": "instruction-2",
+      "description": "The submitted artifact follows this skill instruction: When asked to implement or review authorization, your output `answer.md` MUST follow this style:",
+      "max_score": 15
+    },
+    {
+      "name": "instruction-3",
+      "description": "The submitted artifact follows this skill instruction: In the verification steps, you MUST include a dedicated **Manual Denied-Action Verification** section.",
+      "max_score": 14
+    },
+    {
+      "name": "instruction-4",
+      "description": "The submitted artifact follows this skill instruction: **CRITICAL**: Do NOT use unsaved records (e.g., `User.new` or `Post.new`) in the console examples; you MUST use persisted records (e.g., `User.create!` or `Post.create!`) to accurately reflect real Rails console verification.",
+      "max_score": 14
+    },
+    {
+      "name": "instruction-5",
+      "description": "The submitted artifact follows this skill instruction: Load these files only when their specific content is needed:",
+      "max_score": 14
+    },
+    {
+      "name": "instruction-6",
+      "description": "The submitted artifact follows this skill instruction: **[EXAMPLES.md](EXAMPLES.md)** — Use when you need complete Pundit or CanCanCan implementation examples beyond the inline samples",
+      "max_score": 14
+    },
+    {
+      "name": "instruction-7",
+      "description": "The submitted artifact follows this skill instruction: **[references/workflow.md](references/workflow.md)** — Use when you need the step-by-step authorization implementation workflow diagram",
+      "max_score": 14
     }
   ]
 }

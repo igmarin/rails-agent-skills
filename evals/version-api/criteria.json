@@ -5,12 +5,32 @@
     {
       "name": "instruction-1",
       "description": "The submitted artifact follows this skill instruction: **Create controllers** — Inherit from the previous version's controller and override only changed actions:",
-      "max_score": 50
+      "max_score": 17
     },
     {
       "name": "instruction-2",
       "description": "The submitted artifact follows this skill instruction: **Run compatibility specs** — Execute `bundle exec rspec spec/requests/api/backward_compatibility_spec.rb` to confirm no regressions before merging.",
-      "max_score": 50
+      "max_score": 17
+    },
+    {
+      "name": "instruction-3",
+      "description": "The submitted artifact follows this skill instruction: Load these files only when their specific content is needed:",
+      "max_score": 17
+    },
+    {
+      "name": "instruction-4",
+      "description": "The submitted artifact follows this skill instruction: **[EXAMPLES.md](EXAMPLES.md)** — Use when you need complete API versioning examples with route definitions and controller inheritance",
+      "max_score": 17
+    },
+    {
+      "name": "instruction-5",
+      "description": "The submitted artifact follows this skill instruction: **[references/strategies.md](references/strategies.md)** — Use when comparing versioning strategies (URL path vs header vs query param)",
+      "max_score": 16
+    },
+    {
+      "name": "instruction-6",
+      "description": "The submitted artifact follows this skill instruction: **[references/workflow.md](references/workflow.md)** — Use when implementing the deprecation communication workflow and sunset scheduling",
+      "max_score": 16
     }
   ]
 }

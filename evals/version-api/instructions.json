@@ -13,6 +13,30 @@
       "original_snippets": "**Run compatibility specs** — Execute `bundle exec rspec spec/requests/api/backward_compatibility_spec.rb` to confirm no regressions before merging.",
       "relevant_when": "When a user asks for Rails work that should trigger version-api.",
       "why_given": "new knowledge"
+    },
+    {
+      "instruction": "Load these files only when their specific content is needed:",
+      "original_snippets": "Load these files only when their specific content is needed:",
+      "relevant_when": "When a user asks for Rails work that should trigger version-api.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**[EXAMPLES.md](EXAMPLES.md)** — Use when you need complete API versioning examples with route definitions and controller inheritance",
+      "original_snippets": "**[EXAMPLES.md](EXAMPLES.md)** — Use when you need complete API versioning examples with route definitions and controller inheritance",
+      "relevant_when": "When a user asks for Rails work that should trigger version-api.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**[references/strategies.md](references/strategies.md)** — Use when comparing versioning strategies (URL path vs header vs query param)",
+      "original_snippets": "**[references/strategies.md](references/strategies.md)** — Use when comparing versioning strategies (URL path vs header vs query param)",
+      "relevant_when": "When a user asks for Rails work that should trigger version-api.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**[references/workflow.md](references/workflow.md)** — Use when implementing the deprecation communication workflow and sunset scheduling",
+      "original_snippets": "**[references/workflow.md](references/workflow.md)** — Use when implementing the deprecation communication workflow and sunset scheduling",
+      "relevant_when": "When a user asks for Rails work that should trigger version-api.",
+      "why_given": "new knowledge"
     }
   ]
 }

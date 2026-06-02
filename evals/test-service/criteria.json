@@ -5,22 +5,52 @@
     {
       "name": "instruction-1",
       "description": "The submitted artifact follows this skill instruction: WRITE:   Write the spec (happy path + error cases + edge cases)",
-      "max_score": 25
+      "max_score": 10
     },
     {
       "name": "instruction-2",
       "description": "The submitted artifact follows this skill instruction: **Core principle:** Test the public contract (`.call`, `.find`, `.search`), not internal implementation. Use `instance_double` for isolation, `create` for integration.",
-      "max_score": 25
+      "max_score": 10
     },
     {
       "name": "instruction-3",
       "description": "The submitted artifact follows this skill instruction: Use `instance_double` for unit isolation:",
-      "max_score": 25
+      "max_score": 10
     },
     {
       "name": "instruction-4",
+      "description": "The submitted artifact follows this skill instruction: **CRITICAL**: Collaborators (such as API clients, external services, or other domain objects) MUST be stubbed using `instance_double` to ensure true unit isolation.",
+      "max_score": 10
+    },
+    {
+      "name": "instruction-5",
+      "description": "The submitted artifact follows this skill instruction: DO NOT use class-level stubs (e.g., `allow(CarrierApi::Client).to receive(:notify)`) as a fallback or workaround. If a collaborator is called via class methods, you must wrap/instantiate it, inject it, or stub `.new` to return the doubled instance.",
+      "max_score": 10
+    },
+    {
+      "name": "instruction-6",
       "description": "The submitted artifact follows this skill instruction: Use `create` for integration tests:",
-      "max_score": 25
+      "max_score": 10
+    },
+    {
+      "name": "instruction-7",
+      "description": "The submitted artifact follows this skill instruction: Load these files only when their specific content is needed:",
+      "max_score": 10
+    },
+    {
+      "name": "instruction-8",
+      "description": "The submitted artifact follows this skill instruction: **[PATTERNS.md](./PATTERNS.md)** — Use when you need the full pattern catalog and factory placement guidance",
+      "max_score": 10
+    },
+    {
+      "name": "instruction-9",
+      "description": "The submitted artifact follows this skill instruction: **[assets/spec_examples.md](assets/spec_examples.md)** — Use when you need additional worked examples beyond the spec template above",
+      "max_score": 10
+    },
+    {
+      "name": "instruction-10",
+      "description": "The submitted artifact follows this skill instruction: **[assets/testing_checklist.md](assets/testing_checklist.md)** — Use when reviewing a completed service spec for completeness",
+      "max_score": 10
     }
   ]
 }

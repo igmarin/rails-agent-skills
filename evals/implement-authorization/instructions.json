@@ -7,6 +7,42 @@
       "original_snippets": "**Verify authorization** — attempt an unauthorized action in the browser or console and confirm it raises `Pundit::NotAuthorizedError` or `CanCan::AccessDenied` as expected",
       "relevant_when": "When a user asks for Rails work that should trigger implement-authorization.",
       "why_given": "new knowledge"
+    },
+    {
+      "instruction": "When asked to implement or review authorization, your output `answer.md` MUST follow this style:",
+      "original_snippets": "When asked to implement or review authorization, your output `answer.md` MUST follow this style:",
+      "relevant_when": "When a user asks for Rails work that should trigger implement-authorization.",
+      "why_given": "preference"
+    },
+    {
+      "instruction": "In the verification steps, you MUST include a dedicated **Manual Denied-Action Verification** section.",
+      "original_snippets": "In the verification steps, you MUST include a dedicated **Manual Denied-Action Verification** section.",
+      "relevant_when": "When a user asks for Rails work that should trigger implement-authorization.",
+      "why_given": "preference"
+    },
+    {
+      "instruction": "**CRITICAL**: Do NOT use unsaved records (e.g., `User.new` or `Post.new`) in the console examples; you MUST use persisted records (e.g., `User.create!` or `Post.create!`) to accurately reflect real Rails console verification.",
+      "original_snippets": "**CRITICAL**: Do NOT use unsaved records (e.g., `User.new` or `Post.new`) in the console examples; you MUST use persisted records (e.g., `User.create!` or `Post.create!`) to accurately reflect real Rails console verification.",
+      "relevant_when": "When a user asks for Rails work that should trigger implement-authorization.",
+      "why_given": "preference"
+    },
+    {
+      "instruction": "Load these files only when their specific content is needed:",
+      "original_snippets": "Load these files only when their specific content is needed:",
+      "relevant_when": "When a user asks for Rails work that should trigger implement-authorization.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**[EXAMPLES.md](EXAMPLES.md)** — Use when you need complete Pundit or CanCanCan implementation examples beyond the inline samples",
+      "original_snippets": "**[EXAMPLES.md](EXAMPLES.md)** — Use when you need complete Pundit or CanCanCan implementation examples beyond the inline samples",
+      "relevant_when": "When a user asks for Rails work that should trigger implement-authorization.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**[references/workflow.md](references/workflow.md)** — Use when you need the step-by-step authorization implementation workflow diagram",
+      "original_snippets": "**[references/workflow.md](references/workflow.md)** — Use when you need the step-by-step authorization implementation workflow diagram",
+      "relevant_when": "When a user asks for Rails work that should trigger implement-authorization.",
+      "why_given": "new knowledge"
     }
   ]
 }

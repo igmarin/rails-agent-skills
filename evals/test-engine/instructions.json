@@ -25,6 +25,36 @@
       "original_snippets": "Run the full test suite (`bundle exec rspec`) to verify all specs pass.",
       "relevant_when": "When a user asks for Rails work that should trigger test-engine.",
       "why_given": "new knowledge"
+    },
+    {
+      "instruction": "Load these files only when their specific content is needed:",
+      "original_snippets": "Load these files only when their specific content is needed:",
+      "relevant_when": "When a user asks for Rails work that should trigger test-engine.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**[assets/dummy_app_instructions.md](assets/dummy_app_instructions.md)** — Use when setting up the dummy app from scratch or troubleshooting boot failures",
+      "original_snippets": "**[assets/dummy_app_instructions.md](assets/dummy_app_instructions.md)** — Use when setting up the dummy app from scratch or troubleshooting boot failures",
+      "relevant_when": "When a user asks for Rails work that should trigger test-engine.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**[assets/examples.md](assets/examples.md)** — Use when writing generator, reload-safety, or integration specs",
+      "original_snippets": "**[assets/examples.md](assets/examples.md)** — Use when writing generator, reload-safety, or integration specs",
+      "relevant_when": "When a user asks for Rails work that should trigger test-engine.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**[assets/spec_template.md](assets/spec_template.md)** — Use as starting point when creating the first engine spec file",
+      "original_snippets": "**[assets/spec_template.md](assets/spec_template.md)** — Use as starting point when creating the first engine spec file",
+      "relevant_when": "When a user asks for Rails work that should trigger test-engine.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "When completing engine test setup, output MUST include:",
+      "original_snippets": "When completing engine test setup, output MUST include:",
+      "relevant_when": "When a user asks for Rails work that should trigger test-engine.",
+      "why_given": "preference"
     }
   ]
 }

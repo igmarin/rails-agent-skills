@@ -5,37 +5,52 @@
     {
       "name": "instruction-1",
       "description": "The submitted artifact follows this skill instruction: Use this skill when the task is to design or review how a host app installs and configures a Rails engine — generating initializers, copying migrations, mounting routes, or exposing a single install command.",
-      "max_score": 15
+      "max_score": 10
     },
     {
       "name": "instruction-2",
       "description": "The submitted artifact follows this skill instruction: GENERATE:  Run the generator against a clean host app",
-      "max_score": 15
+      "max_score": 10
     },
     {
       "name": "instruction-3",
       "description": "The submitted artifact follows this skill instruction: VERIFY:    Check output files exist in the correct host paths",
-      "max_score": 14
+      "max_score": 10
     },
     {
       "name": "instruction-4",
       "description": "The submitted artifact follows this skill instruction: RERUN:     Run the generator a second time",
-      "max_score": 14
+      "max_score": 10
     },
     {
       "name": "instruction-5",
       "description": "The submitted artifact follows this skill instruction: DOCUMENT:  List what was generated vs. what the user must do manually",
-      "max_score": 14
+      "max_score": 10
     },
     {
       "name": "instruction-6",
       "description": "The submitted artifact follows this skill instruction: **Minimal rerun spec (must always pass):**",
-      "max_score": 14
+      "max_score": 10
     },
     {
       "name": "instruction-7",
-      "description": "The submitted artifact follows this skill instruction: Use idiomatic Rails Thor generator commands.",
-      "max_score": 14
+      "description": "The submitted artifact follows this skill instruction: When asked to create or review an engine installer/install generator, your output `answer.md` MUST include:",
+      "max_score": 10
+    },
+    {
+      "name": "instruction-8",
+      "description": "The submitted artifact follows this skill instruction: **Idiomatic generator code**: Use idiomatic Rails/Thor generator commands (inheriting from `Rails::Generators::Base`, with `source_root`, `desc`, etc.).",
+      "max_score": 10
+    },
+    {
+      "name": "instruction-9",
+      "description": "The submitted artifact follows this skill instruction: **CRITICAL: Even if running in static evaluation or mock environments without a live Ruby/Rails runtime, you MUST generate and present realistic, concrete terminal execution output under the literal label `Observed output`. Do NOT copy the exact timing values or example counts verbatim from templates; you MUST generate unique, scenario-specific numbers.**",
+      "max_score": 10
+    },
+    {
+      "name": "instruction-10",
+      "description": "The submitted artifact follows this skill instruction: **Rollback & Manual steps**: Clear list of what the generator does vs what the user must do manually.",
+      "max_score": 10
     }
   ]
 }

@@ -2,11 +2,12 @@
   "target_skill": "test-service",
   "total_scenarios": 1,
   "instructions_coverage": {
-    "total_instructions": 4,
-    "instructions_tested": 4,
-    "coverage_percentage": 100
+    "total_instructions": 11,
+    "instructions_tested": 10,
+    "coverage_percentage": 91
   },
   "reason_distribution": {
-    "new knowledge": 4
+    "new knowledge": 8,
+    "preference": 3
   }
 }

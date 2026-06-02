@@ -55,6 +55,24 @@
       "original_snippets": "Run the full test suite.",
       "relevant_when": "When a user asks for Rails work that should trigger implement-background-job.",
       "why_given": "new knowledge"
+    },
+    {
+      "instruction": "Load these files only when their specific content is needed:",
+      "original_snippets": "Load these files only when their specific content is needed:",
+      "relevant_when": "When a user asks for Rails work that should trigger implement-background-job.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**[assets/job_patterns.md](assets/job_patterns.md)** — Use when implementing multi-step orchestration or batch job patterns",
+      "original_snippets": "**[assets/job_patterns.md](assets/job_patterns.md)** — Use when implementing multi-step orchestration or batch job patterns",
+      "relevant_when": "When a user asks for Rails work that should trigger implement-background-job.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**[assets/retry_examples.md](assets/retry_examples.md)** — Use when configuring `retry_on`/`discard_on` for specific error classes beyond the basic patterns above",
+      "original_snippets": "**[assets/retry_examples.md](assets/retry_examples.md)** — Use when configuring `retry_on`/`discard_on` for specific error classes beyond the basic patterns above",
+      "relevant_when": "When a user asks for Rails work that should trigger implement-background-job.",
+      "why_given": "new knowledge"
     }
   ]
 }

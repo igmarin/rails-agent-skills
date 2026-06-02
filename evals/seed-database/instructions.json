@@ -37,6 +37,24 @@
       "original_snippets": "Use idiomatic Rails seeding patterns.",
       "relevant_when": "When a user asks for Rails work that should trigger seed-database.",
       "why_given": "new knowledge"
+    },
+    {
+      "instruction": "Load these files only when their specific content is needed:",
+      "original_snippets": "Load these files only when their specific content is needed:",
+      "relevant_when": "When a user asks for Rails work that should trigger seed-database.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**[EXAMPLES.md](EXAMPLES.md)** — Use when you need complete seeding examples and patterns beyond the inline snippets",
+      "original_snippets": "**[EXAMPLES.md](EXAMPLES.md)** — Use when you need complete seeding examples and patterns beyond the inline snippets",
+      "relevant_when": "When a user asks for Rails work that should trigger seed-database.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**[references/workflow.md](references/workflow.md)** — Use when you need the step-by-step seeding workflow and decision tree",
+      "original_snippets": "**[references/workflow.md](references/workflow.md)** — Use when you need the step-by-step seeding workflow and decision tree",
+      "relevant_when": "When a user asks for Rails work that should trigger seed-database.",
+      "why_given": "new knowledge"
     }
   ]
 }

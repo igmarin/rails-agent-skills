@@ -5,47 +5,52 @@
     {
       "name": "instruction-1",
       "description": "The submitted artifact follows this skill instruction: Use this skill when the task is to add, configure, or review background jobs in a Rails application.",
-      "max_score": 12
+      "max_score": 10
     },
     {
       "name": "instruction-2",
       "description": "The submitted artifact follows this skill instruction: EVERY job MUST have its test written and validated BEFORE implementation:",
-      "max_score": 11
+      "max_score": 10
     },
     {
       "name": "instruction-3",
       "description": "The submitted artifact follows this skill instruction: Write the job spec (idempotency, retry, error handling)",
-      "max_score": 11
+      "max_score": 10
     },
     {
       "name": "instruction-4",
       "description": "The submitted artifact follows this skill instruction: Run the spec — verify it fails",
-      "max_score": 11
+      "max_score": 10
     },
     {
       "name": "instruction-5",
       "description": "The submitted artifact follows this skill instruction: Load the record from the passed ID",
-      "max_score": 11
+      "max_score": 10
     },
     {
       "name": "instruction-6",
       "description": "The submitted artifact follows this skill instruction: EVERY job that performs a side effect (charge, email, API call) MUST have",
-      "max_score": 11
+      "max_score": 10
     },
     {
       "name": "instruction-7",
       "description": "The submitted artifact follows this skill instruction: Write the job spec first — idempotency, retry, and error handling — and run it to confirm it fails.",
-      "max_score": 11
+      "max_score": 10
     },
     {
       "name": "instruction-8",
       "description": "The submitted artifact follows this skill instruction: Write the job class following the perform contract in HARD-GATE.",
-      "max_score": 11
+      "max_score": 10
     },
     {
       "name": "instruction-9",
       "description": "The submitted artifact follows this skill instruction: Run the full test suite.",
-      "max_score": 11
+      "max_score": 10
+    },
+    {
+      "name": "instruction-10",
+      "description": "The submitted artifact follows this skill instruction: Load these files only when their specific content is needed:",
+      "max_score": 10
     }
   ]
 }

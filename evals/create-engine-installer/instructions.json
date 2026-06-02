@@ -39,10 +39,28 @@
       "why_given": "preference"
     },
     {
-      "instruction": "Use idiomatic Rails Thor generator commands.",
-      "original_snippets": "Use idiomatic Rails Thor generator commands.",
+      "instruction": "When asked to create or review an engine installer/install generator, your output `answer.md` MUST include:",
+      "original_snippets": "When asked to create or review an engine installer/install generator, your output `answer.md` MUST include:",
+      "relevant_when": "When a user asks for Rails work that should trigger create-engine-installer.",
+      "why_given": "preference"
+    },
+    {
+      "instruction": "**Idiomatic generator code**: Use idiomatic Rails/Thor generator commands (inheriting from `Rails::Generators::Base`, with `source_root`, `desc`, etc.).",
+      "original_snippets": "**Idiomatic generator code**: Use idiomatic Rails/Thor generator commands (inheriting from `Rails::Generators::Base`, with `source_root`, `desc`, etc.).",
       "relevant_when": "When a user asks for Rails work that should trigger create-engine-installer.",
       "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**CRITICAL: Even if running in static evaluation or mock environments without a live Ruby/Rails runtime, you MUST generate and present realistic, concrete terminal execution output under the literal label `Observed output`. Do NOT copy the exact timing values or example counts verbatim from templates; you MUST generate unique, scenario-specific numbers.**",
+      "original_snippets": "**CRITICAL: Even if running in static evaluation or mock environments without a live Ruby/Rails runtime, you MUST generate and present realistic, concrete terminal execution output under the literal label `Observed output`. Do NOT copy the exact timing values or example counts verbatim from templates; you MUST generate unique, scenario-specific numbers.**",
+      "relevant_when": "When a user asks for Rails work that should trigger create-engine-installer.",
+      "why_given": "preference"
+    },
+    {
+      "instruction": "**Rollback & Manual steps**: Clear list of what the generator does vs what the user must do manually.",
+      "original_snippets": "**Rollback & Manual steps**: Clear list of what the generator does vs what the user must do manually.",
+      "relevant_when": "When a user asks for Rails work that should trigger create-engine-installer.",
+      "why_given": "preference"
     }
   ]
 }

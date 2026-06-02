@@ -2,11 +2,11 @@
   "target_skill": "version-api",
   "total_scenarios": 1,
   "instructions_coverage": {
-    "total_instructions": 2,
-    "instructions_tested": 2,
+    "total_instructions": 6,
+    "instructions_tested": 6,
     "coverage_percentage": 100
   },
   "reason_distribution": {
-    "new knowledge": 2
+    "new knowledge": 6
   }
 }

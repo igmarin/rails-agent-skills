@@ -25,6 +25,24 @@
       "original_snippets": "**Run and validate:** Confirm the failure is because the behavior is missing, not because the setup is broken.",
       "relevant_when": "When a user asks for Rails work that should trigger plan-tests.",
       "why_given": "new knowledge"
+    },
+    {
+      "instruction": "Load these files only when their specific content is needed:",
+      "original_snippets": "Load these files only when their specific content is needed:",
+      "relevant_when": "When a user asks for Rails work that should trigger plan-tests.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**[assets/first_slice_template.md](assets/first_slice_template.md)** — Use when documenting the test plan; provides a structured template for behavior, boundary decision, opening gate spec, and follow-up coverage",
+      "original_snippets": "**[assets/first_slice_template.md](assets/first_slice_template.md)** — Use when documenting the test plan; provides a structured template for behavior, boundary decision, opening gate spec, and follow-up coverage",
+      "relevant_when": "When a user asks for Rails work that should trigger plan-tests.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "When completing test planning, output MUST include:",
+      "original_snippets": "When completing test planning, output MUST include:",
+      "relevant_when": "When a user asks for Rails work that should trigger plan-tests.",
+      "why_given": "preference"
     }
   ]
 }

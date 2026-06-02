@@ -2,12 +2,12 @@
   "target_skill": "create-engine-installer",
   "total_scenarios": 1,
   "instructions_coverage": {
-    "total_instructions": 7,
-    "instructions_tested": 7,
+    "total_instructions": 10,
+    "instructions_tested": 10,
     "coverage_percentage": 100
   },
   "reason_distribution": {
     "new knowledge": 5,
-    "preference": 2
+    "preference": 5
   }
 }

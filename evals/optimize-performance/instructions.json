@@ -25,6 +25,24 @@
       "original_snippets": "Run directly in `rails dbconsole` (PostgreSQL) after applying an index or query change:",
       "relevant_when": "When a user asks for Rails work that should trigger optimize-performance.",
       "why_given": "new knowledge"
+    },
+    {
+      "instruction": "Load these files only when their specific content is needed:",
+      "original_snippets": "Load these files only when their specific content is needed:",
+      "relevant_when": "When a user asks for Rails work that should trigger optimize-performance.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "**[references/tools.md](references/tools.md)** — Use when you need detailed Bullet, rack-mini-profiler, or EXPLAIN ANALYZE configuration and installation steps",
+      "original_snippets": "**[references/tools.md](references/tools.md)** — Use when you need detailed Bullet, rack-mini-profiler, or EXPLAIN ANALYZE configuration and installation steps",
+      "relevant_when": "When a user asks for Rails work that should trigger optimize-performance.",
+      "why_given": "new knowledge"
+    },
+    {
+      "instruction": "When completing a performance optimization, output MUST include all seven items from the required report order above. Example structure:",
+      "original_snippets": "When completing a performance optimization, output MUST include all seven items from the required report order above. Example structure:",
+      "relevant_when": "When a user asks for Rails work that should trigger optimize-performance.",
+      "why_given": "preference"
     }
   ]
 }

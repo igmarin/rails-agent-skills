@@ -187,25 +187,25 @@ When completing project setup, output MUST include:
 ## Error Recovery
 
 **System Modification Approval Gate (CRITICAL):**
-The commands below modify the host system state and may require elevated privileges. Before suggesting ANY of these commands:
-1. Explain what the command does and why it is needed
+The items below may require installing system packages or configuring local services. Before suggesting ANY action that modifies the host system:
+1. Explain why it is needed
 2. Ask the user for explicit confirmation
-3. Only proceed if the user approves — never suggest system-level changes unprompted
+3. Only proceed if the user approves
 
 **Ruby version mismatch:**
 1. Check `.ruby-version` for expected version
-2. If installation is needed, ask user to run: `rbenv install <version>` or `asdf install ruby <version>`
+2. If the correct version is not installed, direct the user to their Ruby version manager documentation (e.g., rbenv, asdf, rvm) to install it
 3. Verify with `ruby -v`
 
 **Bundle install fails:**
-1. Check for native extension requirements (`libpq-dev`, `libssl-dev`, etc.)
-2. If system packages are needed, ask user to run: `sudo apt-get install -y libpq-dev` (or equivalent for their OS)
+1. Check error output for missing native extension dependencies
+2. Direct the user to install required system packages for their OS (e.g., PostgreSQL development headers)
 3. Retry `bundle install`
 
 **Database connection fails:**
 1. Verify PostgreSQL is running: `pg_isready`
 2. Check `config/database.yml` credentials match actual database user/password
-3. If role is missing, ask user to run: `createuser -s <username>`
+3. If the database role does not exist, direct the user to create it via their database administration tool or documentation
 
 **CI actions use mutable tags:**
 1. Find the commit SHA for each tag: `git ls-remote https://github.com/<owner>/<repo> refs/tags/<tag>`

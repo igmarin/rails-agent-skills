@@ -5,17 +5,47 @@
     {
       "name": "instruction-1",
       "description": "The submitted artifact follows this skill instruction: Load minimum context before any code, spec, or PRD in an existing Rails codebase. A fifteen-second read of `db/schema.rb`, `config/routes.rb`, and one neighbor saves a full retry.",
-      "max_score": 34
+      "max_score": 12
     },
     {
       "name": "instruction-2",
       "description": "The submitted artifact follows this skill instruction: **Load baseline Rails context:** Read at minimum:",
-      "max_score": 33
+      "max_score": 11
     },
     {
       "name": "instruction-3",
       "description": "The submitted artifact follows this skill instruction: **Load one neighbor of each kind:** For each Rails layer touched, open the nearest sibling that already solves a similar problem — a comparable controller, service, spec, factory. Use grep to find: `grep -r \"class.*Controller\" app/controllers`, `grep -r \"class.*Service\" app/services`, etc.",
-      "max_score": 33
+      "max_score": 11
+    },
+    {
+      "name": "instruction-4",
+      "description": "The submitted artifact follows this skill instruction: When asked to load project context, your output `answer.md` MUST follow the template below.",
+      "max_score": 11
+    },
+    {
+      "name": "instruction-5",
+      "description": "The submitted artifact follows this skill instruction: You MUST explicitly state the **fifteen-second read** principle as a motivating principle before the summary (e.g. \"To ensure a rapid setup and avoid retries, we follow the fifteen-second read principle of schema, routes, and one neighbor before proposing any changes\").",
+      "max_score": 11
+    },
+    {
+      "name": "instruction-6",
+      "description": "The submitted artifact follows this skill instruction: Load these files only when their specific content is needed:",
+      "max_score": 11
+    },
+    {
+      "name": "instruction-7",
+      "description": "The submitted artifact follows this skill instruction: **[EXAMPLES.md](EXAMPLES.md)** — Use when you need worked examples showing Context Summary and Confusion Block templates",
+      "max_score": 11
+    },
+    {
+      "name": "instruction-8",
+      "description": "The submitted artifact follows this skill instruction: **[references/confusion-management.md](references/confusion-management.md)** — Use when you encounter ambiguity or conflicting signals between code layers",
+      "max_score": 11
+    },
+    {
+      "name": "instruction-9",
+      "description": "The submitted artifact follows this skill instruction: **[references/context-sources.md](references/context-sources.md)** — Use when you need the comprehensive list of context sources by Rails layer beyond the Quick Reference table",
+      "max_score": 11
     }
   ]
 }
