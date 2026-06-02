@@ -43,34 +43,51 @@ expected_names.sort.each do |name|
   dir = File.join(EVAL_ROOT, name)
   next unless Dir.exist?(dir)
 
-  %w[instructions.json summary.json summary_infeasible.json].each do |file|
-    path = File.join(dir, file)
-    File.file?(path) ? read_json(path) : fail_with("#{name} missing #{file}")
-  end
-
+  # Support both flat (hanakai-yaku style) and nested (scenario-0/) eval formats
   scenarios = Dir.children(dir).grep(/\Ascenario-\d+\z/).sort
-  fail_with("#{name} has no scenario directories") if scenarios.empty?
 
-  scenarios.each_with_index do |scenario, index|
-    fail_with("#{name} scenario numbering has a gap at scenario-#{index}") unless scenario == "scenario-#{index}"
-
-    scenario_dir = File.join(dir, scenario)
+  if scenarios.empty?
+    # Flat format: files directly under evals/<skill-name>/
     %w[capability.txt task.md criteria.json].each do |file|
-      path = File.join(scenario_dir, file)
-      File.file?(path) ? pass_with("#{name}/#{scenario} has #{file}") : fail_with("#{name}/#{scenario} missing #{file}")
+      path = File.join(dir, file)
+      File.file?(path) ? pass_with("#{name} has #{file}") : fail_with("#{name} missing #{file}")
     end
 
-    criteria_path = File.join(scenario_dir, "criteria.json")
-    next unless File.file?(criteria_path)
+    criteria_path = File.join(dir, "criteria.json")
+    if File.file?(criteria_path)
+      criteria = read_json(criteria_path)
+      fail_with("#{name} criteria type must be weighted_checklist") unless criteria["type"] == "weighted_checklist"
+      checklist = criteria["checklist"]
+      if checklist.is_a?(Array) && checklist.any?
+        total = checklist.sum { |item| item.fetch("max_score") }
+        total == 100 ? pass_with("#{name} criteria total is 100") : fail_with("#{name} criteria total is #{total}")
+      else
+        fail_with("#{name} criteria checklist is empty")
+      end
+    end
+  else
+    # Nested format: files under evals/<skill-name>/scenario-0/
+    scenarios.each_with_index do |scenario, index|
+      fail_with("#{name} scenario numbering has a gap at scenario-#{index}") unless scenario == "scenario-#{index}"
 
-    criteria = read_json(criteria_path)
-    fail_with("#{name}/#{scenario} criteria type must be weighted_checklist") unless criteria["type"] == "weighted_checklist"
-    checklist = criteria["checklist"]
-    if checklist.is_a?(Array) && checklist.any?
-      total = checklist.sum { |item| item.fetch("max_score") }
-      total == 100 ? pass_with("#{name}/#{scenario} criteria total is 100") : fail_with("#{name}/#{scenario} criteria total is #{total}")
-    else
-      fail_with("#{name}/#{scenario} criteria checklist is empty")
+      scenario_dir = File.join(dir, scenario)
+      %w[capability.txt task.md criteria.json].each do |file|
+        path = File.join(scenario_dir, file)
+        File.file?(path) ? pass_with("#{name}/#{scenario} has #{file}") : fail_with("#{name}/#{scenario} missing #{file}")
+      end
+
+      criteria_path = File.join(scenario_dir, "criteria.json")
+      next unless File.file?(criteria_path)
+
+      criteria = read_json(criteria_path)
+      fail_with("#{name}/#{scenario} criteria type must be weighted_checklist") unless criteria["type"] == "weighted_checklist"
+      checklist = criteria["checklist"]
+      if checklist.is_a?(Array) && checklist.any?
+        total = checklist.sum { |item| item.fetch("max_score") }
+        total == 100 ? pass_with("#{name}/#{scenario} criteria total is 100") : fail_with("#{name}/#{scenario} criteria total is #{total}")
+      else
+        fail_with("#{name}/#{scenario} criteria checklist is empty")
+      end
     end
   end
 end
