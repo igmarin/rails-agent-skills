@@ -45,8 +45,14 @@
       "why_given": "preference"
     },
     {
-      "instruction": "Write findings first. For each finding include severity, affected file/area, risk, and smallest credible fix.",
-      "original_snippets": "Write findings first. For each finding include severity, affected file/area, risk, and smallest credible fix.",
+      "instruction": "When asked to review an engine, your output `answer.md` MUST comply with:",
+      "original_snippets": "When asked to review an engine, your output `answer.md` MUST comply with:",
+      "relevant_when": "When a user asks for Rails work that should trigger review-engine.",
+      "why_given": "preference"
+    },
+    {
+      "instruction": "**Findings First**: Write the findings section (ordered HIGH -> MEDIUM -> LOW) as the very first section in the concrete artifact `answer.md` (or immediately after the short plan if a plan is requested). For each finding include severity, affected file/area, risk, and smallest credible fix.",
+      "original_snippets": "**Findings First**: Write the findings section (ordered HIGH -> MEDIUM -> LOW) as the very first section in the concrete artifact `answer.md` (or immediately after the short plan if a plan is requested). For each finding include severity, affected file/area, risk, and smallest credible fix.",
       "relevant_when": "When a user asks for Rails work that should trigger review-engine.",
       "why_given": "new knowledge"
     },

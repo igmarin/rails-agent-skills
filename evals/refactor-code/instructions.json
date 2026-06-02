@@ -27,6 +27,12 @@
       "why_given": "preference"
     },
     {
+      "instruction": "Load these files only when their specific content is needed:",
+      "original_snippets": "Load these files only when their specific content is needed:",
+      "relevant_when": "When a user asks for Rails work that should trigger refactor-code.",
+      "why_given": "new knowledge"
+    },
+    {
       "instruction": "Run verification after every refactoring step:",
       "original_snippets": "Run verification after every refactoring step:",
       "relevant_when": "When a user asks for Rails work that should trigger refactor-code.",

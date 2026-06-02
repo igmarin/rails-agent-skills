@@ -7,6 +7,24 @@
       "original_snippets": "**Verify authorization** — attempt an unauthorized action in the browser or console and confirm it raises `Pundit::NotAuthorizedError` or `CanCan::AccessDenied` as expected",
       "relevant_when": "When a user asks for Rails work that should trigger implement-authorization.",
       "why_given": "new knowledge"
+    },
+    {
+      "instruction": "When asked to implement or review authorization, your output `answer.md` MUST follow this style:",
+      "original_snippets": "When asked to implement or review authorization, your output `answer.md` MUST follow this style:",
+      "relevant_when": "When a user asks for Rails work that should trigger implement-authorization.",
+      "why_given": "preference"
+    },
+    {
+      "instruction": "In the verification steps, you MUST include a dedicated **Manual Denied-Action Verification** section.",
+      "original_snippets": "In the verification steps, you MUST include a dedicated **Manual Denied-Action Verification** section.",
+      "relevant_when": "When a user asks for Rails work that should trigger implement-authorization.",
+      "why_given": "preference"
+    },
+    {
+      "instruction": "**CRITICAL**: Do NOT use unsaved records (e.g., `User.new` or `Post.new`) in the console examples; you MUST use persisted records (e.g., `User.create!` or `Post.create!`) to accurately reflect real Rails console verification.",
+      "original_snippets": "**CRITICAL**: Do NOT use unsaved records (e.g., `User.new` or `Post.new`) in the console examples; you MUST use persisted records (e.g., `User.create!` or `Post.create!`) to accurately reflect real Rails console verification.",
+      "relevant_when": "When a user asks for Rails work that should trigger implement-authorization.",
+      "why_given": "preference"
     }
   ]
 }

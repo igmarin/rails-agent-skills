@@ -4,12 +4,7 @@ type: persona
 tags: [personas]
 license: MIT
 description: >
-  Complete code quality loop for Rails projects. Enforces naming conventions, reduces duplication,
-  extracts methods and service objects, reduces complexity, and generates YARD docstrings and inline
-  comments across the full codebase. Use this composite end-to-end loop instead of individual
-  refactoring or documentation skills when the full three-phase production-readiness review is needed
-  together in one pass. Use when: code review prep, before PR, full Rails quality sweep, quality audit,
-  production-ready review, end-to-end quality check.
+  Complete code quality loop for Rails projects with hard gates: enforce naming conventions and linter compliance (rubocop/brakeman/erblint must pass) → refactor only after characterization tests PASS on current code, verify behavior preserved after each extraction → generate YARD docstrings for all public APIs → NEVER open PR before linter, ERB linter, full test suite, security scan, and YARD docs all pass; phases conventions review→refactoring→documentation. Use this composite end-to-end loop instead of individual refactoring or documentation skills when full three-phase production-readiness review is needed in one pass. Trigger: code review prep, before PR, full Rails quality sweep, quality audit, production-ready review, end-to-end quality check.
 metadata:
   version: 1.0.0
   user-invocable: "true"

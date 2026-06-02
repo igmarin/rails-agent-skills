@@ -21,6 +21,18 @@
       "why_given": "new knowledge"
     },
     {
+      "instruction": "**CRITICAL**: Collaborators (such as API clients, external services, or other domain objects) MUST be stubbed using `instance_double` to ensure true unit isolation.",
+      "original_snippets": "**CRITICAL**: Collaborators (such as API clients, external services, or other domain objects) MUST be stubbed using `instance_double` to ensure true unit isolation.",
+      "relevant_when": "When a user asks for Rails work that should trigger test-service.",
+      "why_given": "preference"
+    },
+    {
+      "instruction": "DO NOT use class-level stubs (e.g., `allow(CarrierApi::Client).to receive(:notify)`) as a fallback or workaround. If a collaborator is called via class methods, you must wrap/instantiate it, inject it, or stub `.new` to return the doubled instance.",
+      "original_snippets": "DO NOT use class-level stubs (e.g., `allow(CarrierApi::Client).to receive(:notify)`) as a fallback or workaround. If a collaborator is called via class methods, you must wrap/instantiate it, inject it, or stub `.new` to return the doubled instance.",
+      "relevant_when": "When a user asks for Rails work that should trigger test-service.",
+      "why_given": "preference"
+    },
+    {
       "instruction": "Use `create` for integration tests:",
       "original_snippets": "Use `create` for integration tests:",
       "relevant_when": "When a user asks for Rails work that should trigger test-service.",

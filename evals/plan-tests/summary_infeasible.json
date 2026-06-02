@@ -1,5 +1,7 @@
 {
   "target_skill": "plan-tests",
   "total_infeasible": 0,
-  "infeasible_scenarios": []
+  "infeasible_scenarios": [
+
+  ]
 }

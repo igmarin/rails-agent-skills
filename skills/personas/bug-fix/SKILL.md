@@ -4,7 +4,7 @@ type: persona
 tags: [personas]
 license: MIT
 description: >
-  Orchestrates systematic bug fixing loop: triage bug report → create failing reproduction test → implement minimal fix → verify resolution and no regressions. Use when fixing reported bugs, addressing production issues, resolving test failures, or implementing fixes for code review findings. Trigger: bug report, production issue, failing test, fix bug, resolve issue, address critical finding.
+  Orchestrates systematic bug fixing with hard gates: triage bug report and form root cause hypothesis → create failing reproduction test that MUST fail for the right reason (reproduces bug, not syntax error) → propose minimal fix and wait for user approval → verify reproduction test PASSES and full suite has no regressions; phases triage→reproduction→fix→verification. Use when fixing reported bugs, addressing production issues, resolving test failures, or implementing fixes for code review findings. Trigger: bug report, production issue, failing test, fix bug, resolve issue, address critical finding.
 metadata:
   version: 1.0.0
   user-invocable: "true"

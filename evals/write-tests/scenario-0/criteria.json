@@ -49,7 +49,7 @@
     },
     {
       "name": "instruction-10",
-      "description": "The submitted artifact follows this skill instruction: When asked to write or review RSpec specs, the output must comply with all RSpec conventions, TDD proof steps, and self-audit checks.",
+      "description": "The submitted artifact follows this skill instruction: When asked to write or review RSpec specs, the output `answer.md` must comply with all RSpec conventions, TDD proof steps, and self-audit checks.",
       "max_score": 10
     }
   ]

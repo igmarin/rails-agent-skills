@@ -4,7 +4,7 @@ type: persona
 tags: [personas]
 license: MIT
 description: >
-  Orchestrates the full Rails test-driven development cycle: generates a failing spec first, implements minimal code to pass, refactors, then produces YARD documentation and a self-reviewed PR. Use when practicing test-driven development, red-green-refactor, TDD workflow, writing tests before code, adding tests first, or building a Rails feature where specs must gate implementation.
+  Orchestrates the full Rails TDD cycle with hard gates: test MUST exist, be run, and FAIL for the correct reason (e.g. undefined method, not syntax error) before any implementation code — propose minimal implementation and wait for user approval → verify test PASSES → run full suite with rubocop, brakeman, rspec all green → produce YARD documentation and self-reviewed PR; phases context/test design→implementation→iterate→finish. Use when practicing test-driven development, red-green-refactor, TDD workflow, writing tests before code, adding tests first, or building a Rails feature where specs must gate implementation.
 metadata:
   version: 1.0.0
   user-invocable: "true"

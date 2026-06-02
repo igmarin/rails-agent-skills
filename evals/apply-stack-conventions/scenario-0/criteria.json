@@ -4,48 +4,33 @@
   "checklist": [
     {
       "name": "instruction-1",
-      "description": "The submitted artifact follows this skill instruction: ALL new code MUST have its test written and validated BEFORE implementation.",
-      "max_score": 12
+      "description": "The submitted artifact follows this skill instruction: All new code **must** have its test written and validated **before** implementation. Follow this exact cycle for every layer:",
+      "max_score": 17
     },
     {
       "name": "instruction-2",
-      "description": "The submitted artifact follows this skill instruction: Write the spec file content, not only the spec path: bundle exec rspec spec/[path]_spec.rb",
-      "max_score": 11
+      "description": "The submitted artifact follows this skill instruction: Write the spec file — show the full file content, not only the path",
+      "max_score": 17
     },
     {
       "name": "instruction-3",
-      "description": "The submitted artifact follows this skill instruction: Verify it FAILS — output must show the observed failure proving the feature does not exist yet",
-      "max_score": 11
+      "description": "The submitted artifact follows this skill instruction: Run: `bundle exec rspec spec/[path]_spec.rb` — verify it **FAILS** (**Observed RED output**)",
+      "max_score": 17
     },
     {
       "name": "instruction-4",
       "description": "The submitted artifact follows this skill instruction: Write the implementation code",
-      "max_score": 11
+      "max_score": 17
     },
     {
       "name": "instruction-5",
-      "description": "The submitted artifact follows this skill instruction: Verify it PASSES — run the same spec and include the observed green result line",
-      "max_score": 11
+      "description": "The submitted artifact follows this skill instruction: Each step should remain testable in isolation before wiring to the next layer.",
+      "max_score": 16
     },
     {
       "name": "instruction-6",
-      "description": "The submitted artifact follows this skill instruction: The final artifact must show the test proof before implementation code.",
-      "max_score": 11
-    },
-    {
-      "name": "instruction-7",
-      "description": "The submitted artifact follows this skill instruction: Use **Observed RED output** and **Observed GREEN output** labels for proof",
-      "max_score": 11
-    },
-    {
-      "name": "instruction-8",
-      "description": "The submitted artifact follows this skill instruction: Each step should remain testable in isolation before wiring to the next layer.",
-      "max_score": 11
-    },
-    {
-      "name": "instruction-9",
       "description": "The submitted artifact follows this skill instruction: When applying stack conventions, your output MUST include:",
-      "max_score": 11
+      "max_score": 16
     }
   ]
 }

@@ -2,13 +2,13 @@
   "target_skill": "write-tests",
   "total_scenarios": 1,
   "instructions_coverage": {
-    "total_instructions": 11,
+    "total_instructions": 12,
     "instructions_tested": 10,
-    "coverage_percentage": 91
+    "coverage_percentage": 83
   },
   "reason_distribution": {
     "new knowledge": 6,
     "reminder": 1,
-    "preference": 4
+    "preference": 5
   }
 }

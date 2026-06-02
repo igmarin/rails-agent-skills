@@ -4,7 +4,7 @@ type: persona
 tags: [personas]
 license: MIT
 description: >
-  Orchestrates end-to-end GraphQL API development with DDD principles: domain modeling → schema design → TDD implementation → security review. Use when building GraphQL APIs, adding GraphQL endpoints, or implementing GraphQL features with proper domain boundaries and security. Trigger: GraphQL API, GraphQL schema, GraphQL mutation, GraphQL query, add GraphQL endpoint, implement GraphQL.
+  Orchestrates end-to-end GraphQL API development with hard gates: domain modeling mapping entities→Types and actions→Mutations with bounded context ownership → schema design with field-level authorization, cursor pagination, and structured error handling → TDD implementation where test MUST fail before code and full suite MUST pass after → security review checking authorization at field level, query depth/complexity limits, and rate limiting; phases domain modeling→schema design→TDD→security review. Use when building GraphQL APIs, adding GraphQL endpoints, or implementing GraphQL features with proper domain boundaries and security. Trigger: GraphQL API, GraphQL schema, GraphQL mutation, GraphQL query, add GraphQL endpoint, implement GraphQL.
 metadata:
   version: 1.0.0
   user-invocable: "true"

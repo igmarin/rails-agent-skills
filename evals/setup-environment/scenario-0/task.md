@@ -4,7 +4,7 @@
 
 A Rails team needs help with a task in this area:
 
-Emit a generic Rails development-environment setup runbook for the user to execute locally.
+Emit a generic Rails development-environment setup runbook for the user to execute locally — agent reads .ruby-version, Gemfile, docker-compose.yml, .env.example and flags mismatches but NEVER executes commands or reads filled-in .env or echoes secrets; covers Docker, environment variables, database, test suite, linters, and IDE in Steps 1–7 plus Final Verification.
 
 The team has asked for a concise implementation artifact that a reviewer can inspect without needing to observe the agent's process.
 

@@ -3,44 +3,26 @@
   "source_path": "skills/code-quality/apply-stack-conventions/SKILL.md",
   "instructions": [
     {
-      "instruction": "ALL new code MUST have its test written and validated BEFORE implementation.",
-      "original_snippets": "ALL new code MUST have its test written and validated BEFORE implementation.",
+      "instruction": "All new code **must** have its test written and validated **before** implementation. Follow this exact cycle for every layer:",
+      "original_snippets": "All new code **must** have its test written and validated **before** implementation. Follow this exact cycle for every layer:",
       "relevant_when": "When a user asks for Rails work that should trigger apply-stack-conventions.",
       "why_given": "preference"
     },
     {
-      "instruction": "Write the spec file content, not only the spec path: bundle exec rspec spec/[path]_spec.rb",
-      "original_snippets": "Write the spec file content, not only the spec path: bundle exec rspec spec/[path]_spec.rb",
+      "instruction": "Write the spec file — show the full file content, not only the path",
+      "original_snippets": "Write the spec file — show the full file content, not only the path",
       "relevant_when": "When a user asks for Rails work that should trigger apply-stack-conventions.",
       "why_given": "new knowledge"
     },
     {
-      "instruction": "Verify it FAILS — output must show the observed failure proving the feature does not exist yet",
-      "original_snippets": "Verify it FAILS — output must show the observed failure proving the feature does not exist yet",
+      "instruction": "Run: `bundle exec rspec spec/[path]_spec.rb` — verify it **FAILS** (**Observed RED output**)",
+      "original_snippets": "Run: `bundle exec rspec spec/[path]_spec.rb` — verify it **FAILS** (**Observed RED output**)",
       "relevant_when": "When a user asks for Rails work that should trigger apply-stack-conventions.",
-      "why_given": "preference"
+      "why_given": "new knowledge"
     },
     {
       "instruction": "Write the implementation code",
       "original_snippets": "Write the implementation code",
-      "relevant_when": "When a user asks for Rails work that should trigger apply-stack-conventions.",
-      "why_given": "new knowledge"
-    },
-    {
-      "instruction": "Verify it PASSES — run the same spec and include the observed green result line",
-      "original_snippets": "Verify it PASSES — run the same spec and include the observed green result line",
-      "relevant_when": "When a user asks for Rails work that should trigger apply-stack-conventions.",
-      "why_given": "new knowledge"
-    },
-    {
-      "instruction": "The final artifact must show the test proof before implementation code.",
-      "original_snippets": "The final artifact must show the test proof before implementation code.",
-      "relevant_when": "When a user asks for Rails work that should trigger apply-stack-conventions.",
-      "why_given": "preference"
-    },
-    {
-      "instruction": "Use **Observed RED output** and **Observed GREEN output** labels for proof",
-      "original_snippets": "Use **Observed RED output** and **Observed GREEN output** labels for proof",
       "relevant_when": "When a user asks for Rails work that should trigger apply-stack-conventions.",
       "why_given": "new knowledge"
     },

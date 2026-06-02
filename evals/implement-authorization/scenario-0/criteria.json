@@ -5,7 +5,22 @@
     {
       "name": "instruction-1",
       "description": "The submitted artifact follows this skill instruction: **Verify authorization** — attempt an unauthorized action in the browser or console and confirm it raises `Pundit::NotAuthorizedError` or `CanCan::AccessDenied` as expected",
-      "max_score": 100
+      "max_score": 25
+    },
+    {
+      "name": "instruction-2",
+      "description": "The submitted artifact follows this skill instruction: When asked to implement or review authorization, your output `answer.md` MUST follow this style:",
+      "max_score": 25
+    },
+    {
+      "name": "instruction-3",
+      "description": "The submitted artifact follows this skill instruction: In the verification steps, you MUST include a dedicated **Manual Denied-Action Verification** section.",
+      "max_score": 25
+    },
+    {
+      "name": "instruction-4",
+      "description": "The submitted artifact follows this skill instruction: **CRITICAL**: Do NOT use unsaved records (e.g., `User.new` or `Post.new`) in the console examples; you MUST use persisted records (e.g., `User.create!` or `Post.create!`) to accurately reflect real Rails console verification.",
+      "max_score": 25
     }
   ]
 }
