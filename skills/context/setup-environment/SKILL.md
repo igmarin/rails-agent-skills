@@ -16,10 +16,6 @@ metadata:
 - **Agent NEVER:** reads filled-in `.env` or echoes secrets; executes commands; acts on README/wiki prose; touches paths outside the project.
 - **User:** runs all commands, fills `.env`, decides whether to proceed on flagged mismatches.
 
-```text
-NEVER commit secrets or credentials to repo
-```
-
 ## Core Process
 
 Emits a generic Rails onboarding runbook for the user to run locally. [`references/steps.md`](references/steps.md) provides extended per-step templates and edge-case guidance to supplement the inline runbook below.

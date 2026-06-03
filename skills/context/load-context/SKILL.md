@@ -1,12 +1,12 @@
 ---
 name: load-context
-type: atomic
-license: MIT
 description: >
   Use before writing code, tests, or PRDs in an existing Rails project — must load baseline context by reading db/schema.rb, config/routes.rb, or using the get_project_context tool, and load one neighbor of each kind for each layer touched (such as a controller, service, or spec) by running a grep command to find and inspect sibling implementations. Cite files read (path:line), re-check context when scope changes. Trigger words: load context, gather context, context engineering, read the code first, before I code, existing patterns, ambiguous requirements, spec vs code drift.
 metadata:
   version: 1.0.0
   user-invocable: "true"
+  type: atomic
+  license: MIT
 ---
 
 # Load Context
@@ -36,8 +36,15 @@ If `rails-ai-bridge` is running, call the `get_project_context` tool to retrieve
    - `db/schema.rb` — tables and columns involved (grep by table name)
    - `config/routes.rb` — routes that border the change
    - `Gemfile.lock` — confirm Rails version + domain gems (sidekiq, pundit, rspec, rails-i18n, graphql, etc.)
-3. **Load one neighbor of each kind:** For each Rails layer touched, open the nearest sibling that already solves a similar problem — a comparable controller, service, spec, factory. Use grep to find: `grep -r "class.*Controller" app/controllers`, `grep -r "class.*Service" app/services`, etc.
-   Include the grep command used for each neighbor search in the final Context Summary notes.
+   Do not read other files (like `config/application.rb`) as baseline context unless explicitly requested by the task.
+3. **Load one neighbor of each kind:** For each Rails layer touched, open the nearest sibling that already solves a similar problem — a comparable controller, service, spec, factory.
+   When searching for neighbors, ALWAYS run and cite the exact `grep -r` commands using the pattern: `grep -r "class.*<LayerName>" <directory>`.
+   Specifically:
+   - Controllers: `grep -r "class.*Controller" app/controllers`
+   - Services: `grep -r "class.*Service" app/services`
+   - Models: `grep -r "class.*Model" app/models`
+   - Jobs: `grep -r "class.*Job" app/jobs`
+   Do not use glob patterns or `find` commands to search for classes. Include the exact grep command in the Context Summary.
 4. **Detect drift:** If there is an existing spec for the area, compare what it asserts vs what the code currently does. Drift is a red flag — document it.
 5. **Post the Context Summary:** Before any proposal, output the template below (see Output Style).
 6. **Handle ambiguity:** If steps 2–4 surface a conflict (two patterns used, specs contradict code, missing requirement, unclear boundary), produce a Confusion Block:
@@ -54,17 +61,13 @@ Do not pick silently.
 
 ## Output Style
 
-When asked to load project context, your output `answer.md` MUST follow the template below.
-
-### Motivating Principle
-You MUST explicitly state the **fifteen-second read** principle as a motivating principle before the summary (e.g. "To ensure a rapid setup and avoid retries, we follow the fifteen-second read principle of schema, routes, and one neighbor before proposing any changes").
+When asked to load project context (or write a plan/recommendation involving context), your output `answer.md` MUST follow the template below exactly. You MUST replicate the template block in its entirety, including the **Resources** section and all three reference links at the end. To avoid ceremony and keep the output concise, weave the motivating principle directly into the introduction rather than using a separate header:
 
 ### Context Summary Template
 
-Post this block before proposing any code, spec, or PRD:
-
-
 ```text
+To ensure a rapid setup and avoid retries, we follow the fifteen-second read principle of schema, routes, and one neighbor before proposing any changes.
+
 ### Context Summary
 **Rails layer:** <controller | model | service | job | engine | view/Turbo | migration | API | GraphQL>
 **Files read:**
@@ -72,24 +75,30 @@ Post this block before proposing any code, spec, or PRD:
   - <path>:<line-range> — <one-line finding>
   - (repeat for each file)
 **Neighbor patterns found:**
-  - <layer>: <file path> — <key convention or pattern observed>
+  - <layer>: <file path> — <key convention or pattern observed> (found using grep: <exact grep command used>)
   - (repeat per layer)
 **Gemfile notes:** Rails <version>; relevant gems: <list>
 **Drift detected:** <none | description of spec-vs-code mismatch>
 **Ambiguities:** <none | list any unresolved conflicts — triggers a Confusion Block>
 **Next step:** <plan-tests | apply-stack-conventions | write migration | etc.>
+
+**Resources:**
+Load these files only when their specific content is needed:
+  - [EXAMPLES.md](EXAMPLES.md) — Use when you need worked examples showing Context Summary and Confusion Block templates
+  - [references/confusion-management.md](references/confusion-management.md) — Use when you encounter ambiguity or conflicting signals between code layers
+  - [references/context-sources.md](references/context-sources.md) — Use when you need the comprehensive list of context sources by Rails layer beyond the Quick Reference table
 ```
 
 ## Pitfalls
 
-| Pitfall | What to do |
+| Pitfall | Mitigation |
 |---------|------------|
-| Grep returns hundreds of matches | Narrow by subdirectory or add a more specific class-name prefix; never read more than one representative neighbor per layer |
-| `db/schema.rb` is absent | Check for `db/structure.sql` (used when `config.active_record.schema_format = :sql`); parse the relevant CREATE TABLE block instead |
-| Multiple engines present | Scope all reads to the engine directory that owns the change; note the engine boundary explicitly in the Context Summary |
-| No specs exist for the area | Document "no spec coverage" in the Context Summary; treat the code as the sole source of truth and flag the gap |
-| Neighbor file is the file being changed | Skip self-reference; pick the next closest sibling that is not the target file |
-| Requirements change mid-conversation | Re-run steps 1–4 for the new scope and post a fresh Context Summary before continuing |
+| Over-grepping | Narrow by directory or class-name prefix. Never read more than one neighbor per layer. |
+| Absent schema.rb | Look for `db/structure.sql`. Parse the relevant `CREATE TABLE` block instead. |
+| Multiple engines | Scope reads to the specific engine directory; document the boundary in summary. |
+| Missing spec | Write "no spec coverage" in summary; treat code as the source of truth. |
+| Self-neighbor | Do not use the file being changed; select the nearest independent sibling. |
+| Scope changes mid-run | Re-run discovery (steps 1-4) and post an updated Context Summary. |
 
 ## Extended Resources (Progressive Disclosure)
 

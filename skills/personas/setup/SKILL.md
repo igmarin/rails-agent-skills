@@ -22,11 +22,7 @@ metadata:
 
 ### Phase 1: Context & Onboarding
 
-**Load project context first (if sub-skills are available in the bundle):**
-1. **skills/context/load-context** — Understand existing codebase structure
-2. **skills/context/setup-environment** — Complete dev environment setup
-
-**Inline fallback (always applicable; use this if sub-skills are unavailable):**
+**Inline setup (always applicable):**
 ```bash
 # Verify Ruby version matches .ruby-version
 ruby -v
@@ -60,8 +56,9 @@ cp .env.example .env 2>/dev/null || true
    - Staging vs production environments?
    - Deployment strategy (basic, blue-green, canary)?
 
-**Shared job preamble** (pin SHAs, never mutable tags):
+**Shared job preamble** (pin SHAs, never mutable tags — reuse these steps in every job below):
 ```yaml
+# shared-preamble (reference in all jobs)
 steps:
   - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
   - uses: ruby/setup-ruby@ff740bc00a01b3a50fffc55a1071b1060eeae9dc
@@ -70,7 +67,9 @@ steps:
       bundler-cache: true
 ```
 
-2. **Configure CI pipeline** — write to `.github/workflows/ci.yml` using the shared preamble above, then add:
+2. **Configure CI pipeline** — write to `.github/workflows/ci.yml` (save a reusable copy as `docs/ci-template.yml`).
+
+   Start each job with the shared preamble above, then add:
 ```yaml
       - run: bundle exec rails db:create db:migrate
       - run: bundle exec rspec
@@ -78,11 +77,35 @@ steps:
       - run: bundle exec brakeman --no-pager
       - run: bundle exec bundle-audit check --update
 ```
-Full template: save as `ci-template.yml` in project docs if reuse is needed.
 
-3. **Configure CD pipeline** — write to `.github/workflows/cd.yml`. The pattern is: a `deploy-staging` job using the shared preamble, followed by a `deploy-production` job with `needs: deploy-staging` and `environment: production` (manual approval gate). Each job runs `bundle exec rails db:migrate` with the appropriate `RAILS_ENV` and `DATABASE_URL` secret, then invokes the platform deploy CLI (e.g., Heroku, Fly.io, or Kamal). Staging and production jobs are structurally identical — copy the staging job and swap environment name and secret references.
+3. **Configure CD pipeline** — write to `.github/workflows/cd.yml` (save a reusable copy as `docs/cd-template.yml`).
 
-Full template: save as `cd-template.yml` in project docs if reuse is needed.
+   Each job starts with the shared preamble above. Replace `<platform-deploy-cli>` with your target (e.g., Heroku, Fly.io, or Kamal).
+```yaml
+jobs:
+  deploy-staging:
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      # <shared preamble — see above>
+      - run: bundle exec rails db:migrate
+        env:
+          RAILS_ENV: staging
+          DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
+      - run: <platform-deploy-cli> deploy --app ${{ secrets.STAGING_APP_NAME }}
+
+  deploy-production:
+    runs-on: ubuntu-latest
+    needs: deploy-staging
+    environment: production
+    steps:
+      # <shared preamble — see above>
+      - run: bundle exec rails db:migrate
+        env:
+          RAILS_ENV: production
+          DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
+      - run: <platform-deploy-cli> deploy --app ${{ secrets.PRODUCTION_APP_NAME }}
+```
 
 ---
 
@@ -98,7 +121,7 @@ rails server
 bundle exec rspec
 
 # CI simulation (if possible locally)
-act push  # GitHub Actions local runner (optional)
+act push  # GitHub Actions local runner
 ```
 
 **Write `SETUP_CHECKLIST.md`** with the final state of all HARD GATE items (see Phase 1) plus:

@@ -20,6 +20,8 @@ metadata:
 ---
 # Engine Persona
 
+> **Note on sub-skills:** References to `skills/engines/create-engine`, `test-engine`, `review-engine`, etc. throughout this file are expected sub-skill files that must be created separately (or provided as bundle files). They are invoked by name as specialist skills within this persona's workflow.
+
 ## Agent Phases
 
 ### Phase 1: Engine Authoring
@@ -168,6 +170,8 @@ When completing an engine development cycle, output MUST include:
 
 ## Error Recovery
 
+> **Tip:** For extensive troubleshooting detail, consider extracting this section into a dedicated `ENGINE-TROUBLESHOOTING.md` reference file.
+
 **Engine tests fail to load:**
 1. Check `spec/spec_helper.rb` or `test/test_helper.rb` — ensure it requires the engine and dummy app correctly
 2. Verify `test/dummy/config/application.rb` requires the engine
@@ -191,6 +195,8 @@ When completing an engine development cycle, output MUST include:
 ---
 
 ## Anti-Patterns to Avoid
+
+> **Tip:** This section can be extracted into `ENGINE-TROUBLESHOOTING.md` alongside Error Recovery to keep this file lean.
 
 - **Missing isolate_namespace:** Every mountable engine MUST call `isolate_namespace`
 - **Host-dependent tests:** Engine specs MUST pass with only the dummy app

@@ -25,7 +25,7 @@ metadata:
 ### Phase 1: Domain Modeling
 
 **Steps:**
-1. Map entities → Types, actions → Mutations, read paths → Queries (e.g. `Order` entity → `OrderType`, `placeOrder` action → `PlaceOrderMutation`, order lookup → `orderQuery`)
+1. Map entities → Types, actions → Mutations, read paths → Queries
 2. Assign each type to a bounded context and define which context owns and exposes it
 
 **HARD GATE — Domain Language:**
@@ -52,7 +52,6 @@ metadata:
 
 Verify schema validity using graphql-ruby's built-in tools:
 ```ruby
-# lib/tasks/graphql.rake
 namespace :graphql do
   task validate: :environment do
     puts MySchema.to_definition
@@ -70,7 +69,6 @@ bundle exec rake graphql:validate
 
 **Example Type:**
 ```ruby
-# app/graphql/types/order_type.rb
 module Types
   class OrderType < Types::BaseObject
     field :id, ID, null: false
@@ -107,7 +105,6 @@ end
 
 **Example Resolver Test + Implementation:**
 ```ruby
-# spec/graphql/resolvers/order_resolver_spec.rb
 RSpec.describe Resolvers::OrderResolver do
   let(:user) { create(:user) }
   let(:order) { create(:order, customer: user) }
@@ -123,7 +120,6 @@ RSpec.describe Resolvers::OrderResolver do
   end
 end
 
-# app/graphql/resolvers/order_resolver.rb
 module Resolvers
   class OrderResolver < GraphQL::Schema::Resolver
     type Types::OrderType, null: true
@@ -159,7 +155,6 @@ end
 
 **Example Security Configuration:**
 ```ruby
-# app/graphql/schema.rb
 class MySchema < GraphQL::Schema
   use GraphQL::Batch
 
@@ -177,17 +172,11 @@ end
 
 ---
 
-## Output Style
-
-When asked to implement a GraphQL feature, output MUST include sections for: **Domain Model** (entity→Type mappings, bounded context, connections), **Schema Changes** (types/queries/mutations added, authorization applied), **Tests** (specs created, RED/GREEN/regression confirmations), and **Security** (authorization, depth/complexity limits, rate limiting, N+1 resolution, error sanitization).
-
----
-
 ## Error Recovery
 
 - **Schema validation fails:** Check circular type references with `MySchema.to_definition`, verify all referenced types are defined, confirm field return types match model attributes.
 - **Authorization bypass detected:** Add `authorized?` to the affected type, write a spec confirming unauthorized access returns nil/error, re-run security review phase.
-- **N+1 queries in resolvers:** Identify with `QueryLog` or `bullet` gem, add `GraphQL::Batch` loader or `dataloader` for the association, verify with `ActiveSupport::Notifications` that query count drops.
+- **N+1 queries:** Identify with `bullet` gem, add `GraphQL::Batch` loader or `dataloader` for the association, verify query count drops via `ActiveSupport::Notifications`.
 
 ---
 

@@ -19,7 +19,7 @@ metadata:
 | PostgreSQL | Avoid N+1s with `includes`; use database constraints for integrity |
 | Hotwire | Prefer Turbo Frames/Streams before Stimulus; only reach for Stimulus when Turbo cannot handle the interactivity |
 | Tailwind | Use utilities in views; extract repeated UI into partials/components |
-| Auth | Apply Devise authentication and Pundit authorization to protected resources |
+| Auth | Apply Devise authentication and Pundit authorization to every action that touches access-controlled resources |
 
 ## HARD-GATE: TDD Cycle
 
@@ -31,7 +31,7 @@ All new code **must** have its test written and validated **before** implementat
 4. Re-run the same command — verify it **PASSES** (**Observed GREEN output**)
 5. Refactor if needed, keeping tests green
 
-**CRITICAL:** Execute all test commands using your shell/terminal tools. Do **not** fabricate, mock, or simulate terminal output. Copy-paste the actual observed output. If the environment does not support running tests, stop and tell the user — do not proceed to implementation without verified RED output. See **write-tests** for the full gate cycle.
+**CRITICAL:** Execute all test commands using your shell/terminal tools. Do **not** fabricate, mock, or simulate terminal output. Copy-paste the actual observed output. If the environment does not support running tests, stop and tell the user — do not proceed to implementation without verified RED output.
 
 ### Red-Green Cycle Example
 
@@ -89,7 +89,7 @@ Each step should remain testable in isolation before wiring to the next layer. I
 
 ### Service Object Pattern
 
-Controllers delegate to a service via `.call`; the service returns a result hash. See **create-service-object** and `assets/snippets/service_object.rb` for the full pattern.
+Controllers delegate to a service via `.call`; the service returns a result hash. See **create-service-object** and `assets/snippets/service_object.rb` for the full pattern and implementation details.
 
 ```ruby
 # app/controllers/orders_controller.rb
@@ -105,15 +105,10 @@ end
 
 For eager loading patterns and N+1 fixes, see the Extended Resources section below.
 
-### Security
-
-This project uses **Devise** for authentication and **Pundit** for authorization. Apply these on every feature that introduces access-controlled resources.
-
 ### Pitfalls to Avoid
 
 | Issue | Correct approach |
 |-------|------------------|
-| N+1 queries in loops over associations | Eager load with `includes` before the loop |
 | Controller action with 15+ lines of business logic | Extract to a service object using the `.call` pattern |
 | Accessing a protected resource without an authorisation check | Apply a Pundit policy on every action that touches access-controlled data |
 
@@ -122,7 +117,7 @@ This project uses **Devise** for authentication and **Pundit** for authorization
 Every response **must** include these sections in order:
 
 1. **Stack decisions** — which Rails, PostgreSQL, Hotwire, Stimulus, Tailwind, auth, and service-object conventions apply.
-2. **Tests-first proof before implementation** — HARD-GATE cycle per layer (spec file content → RED output → implementation → GREEN output).
+2. **Tests-first proof before implementation** — follow the HARD-GATE cycle per layer (spec file content → RED output → implementation → GREEN output).
 3. **Layer isolation** — focused spec/check for each changed layer; mark unchanged layers "not applicable".
 4. **Layered implementation** — separate model/query, service, controller, view, Stimulus, and Tailwind changes.
 5. **Performance and security checks** — N+1 prevention, authorization policy use, unsafe params/content handling.

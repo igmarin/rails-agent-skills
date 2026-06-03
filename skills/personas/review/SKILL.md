@@ -109,11 +109,12 @@ INPUT INTEGRITY:
 
 **Decision Gate — Findings Assessment:**
 
-| Finding Level | Action |
-|---------------|--------|
-| **None/minor** | Proceed to merge |
-| **Critical** | Must fix before merge |
-| **Suggestion** | Fix in this PR or ticket separately |
+| Level | Definition | Action Required |
+|-------|------------|------------------|
+| **Critical** | Security vulnerability, data loss, production risk | Must fix before merge |
+| **Suggestion** | Improvement opportunity, tech debt | Fix in this PR or ticket separately |
+| **Nice to have** | Optional enhancement | Does not block merge |
+| **None/minor** | No significant findings | Proceed to merge |
 
 **If Critical findings:**
 1. **ruby-core-skills/respond-to-review** — Evaluate and implement fixes
@@ -121,18 +122,14 @@ INPUT INTEGRITY:
 ### TDD Enforcement for Critical Fixes
 
 **Before implementing any code fix:**
-1. **testing/plan-tests** — Choose the best test to reproduce the Critical issue
-2. **testing/write-tests** — Write failing test that reproduces the Critical finding
-3. **Test Verification** — Confirm test FAILS for the right reason (reproduces the issue)
-4. **Fix Proposal** — Propose minimal fix to address the root cause
-5. **User Approval** — Wait for explicit confirmation
-6. **Implement Fix** — Apply minimal code change
-7. **Verify PASS** — Confirm test now PASSES (issue is resolved)
-8. **Regression Check** — Run full test suite to ensure no new issues
+1. **Plan & write test** — Use **testing/plan-tests** and **testing/write-tests** to write a failing test that reproduces the Critical finding; confirm it fails for the right reason.
+2. **Propose fix** — Propose a minimal fix addressing the root cause; wait for explicit user approval before proceeding.
+3. **Implement & verify** — Apply the minimal code change; confirm the reproduction test now PASSES.
+4. **Regression check** — Run the full test suite to ensure no new failures are introduced.
 
 **HARD GATE — Fix Verification:**
-- Reproduction test EXISTS and FAILS before fix (confirms issue)
-- Reproduction test PASSES after fix (confirms resolution)
+- Reproduction test EXISTS and FAILS before fix
+- Reproduction test PASSES after fix
 - Full test suite PASSES (no regressions)
 - If test fails: Fix is incomplete or incorrect, revise and re-test
 
@@ -157,16 +154,6 @@ INPUT INTEGRITY:
 1. Fix accepted items (one at a time)
 2. Document deferred items as tickets
 3. Proceed to merge
-
----
-
-## Severity Levels
-
-| Level | Definition | Action Required |
-|-------|------------|------------------|
-| **Critical** | Security vulnerability, data loss, production risk | Fix before merge |
-| **Suggestion** | Improvement opportunity, tech debt | Fix now or ticket |
-| **Nice to have** | Optional enhancement | Does not block |
 
 ---
 

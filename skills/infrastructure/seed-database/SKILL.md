@@ -104,10 +104,3 @@ end
 |-------|---------------|
 | **write-tests** | When setting up test scenarios |
 | **review-migration** | When ensuring DB schema is aligned |
-
-## Additional Resources (Progressive Disclosure)
-
-Load these files only when their specific content is needed:
-
-- **[EXAMPLES.md](EXAMPLES.md)** — Use when you need complete seeding examples and patterns beyond the inline snippets
-- **[references/workflow.md](references/workflow.md)** — Use when you need the step-by-step seeding workflow and decision tree

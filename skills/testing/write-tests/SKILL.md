@@ -19,7 +19,7 @@ Use this skill when the task is to write, review, or clean up RSpec tests.
 
 | Aspect | Rule |
 |--------|------|
-| Spec types | Model: domain logic; Request: HTTP endpoints; Job: background processing; Service/PORO: clean Ruby; System: E2E |
+| Spec types | Model: domain logic / pure domain → start here; Request: HTTP endpoints; Job: background processing; Service/PORO: clean Ruby; System: E2E cross-layer journey (sparingly) |
 | Assertions | Test behavior, not implementation |
 | Factories | Minimal attributes; traits for options; prefer `build`/`build_stubbed` over `create` |
 | Mocking | Stub external boundaries at class level (e.g. `allow(Client).to receive`); no Active Record mocking |
@@ -33,22 +33,13 @@ Use this skill when the task is to write, review, or clean up RSpec tests.
 
 When driving new behaviour with RSpec, follow this sequence:
 
-1. **Write the failing spec** — pick the smallest spec type that exercises the intended behaviour (model > service > request > system). See table below for guidance.
+1. **Write the failing spec** — pick the smallest spec type that exercises the intended behaviour (model > service > request > system), as shown in the Spec types row above.
 2. **Run it and confirm the failure message** — show the concrete RED failure class/message. Do not leave this as a placeholder template; do not use illustrative `e.g.` failure examples in the final artifact.
 3. **Implement the minimum code** to make the spec pass.
 4. **Refactor** — clean up duplication and naming while keeping the suite green.
 5. **Verify** — run the full relevant spec file, then the suite, before committing.
 
 For output format and RED/GREEN proof requirements, see **[assets/tdd_proof_checklist.md](assets/tdd_proof_checklist.md)**.
-
-### Choosing the best first failing spec for a Rails change
-
-| Change type | Start with |
-|-------------|------------|
-| Pure domain logic | Model or PORO service spec |
-| HTTP endpoint behaviour | Request spec |
-| Background processing | Job spec |
-| Cross-layer user journey | System spec (sparingly) |
 
 ### Service Spec (anchor pattern)
 ```ruby
@@ -99,13 +90,7 @@ Load these files only when their specific content is needed:
 - **[assets/examples.md](assets/examples.md)** — For code examples of service specs, shared examples, and factory design.
 - **[assets/spec_templates.md](assets/spec_templates.md)** — Standard templates for different types of specs.
 - **[assets/tdd_proof_checklist.md](assets/tdd_proof_checklist.md)** — Use when the task involves new behavior; defines RED/GREEN proof format, output formatting rules, and GREEN progress bar requirements.
-- **[assets/output_checklist.md](assets/output_checklist.md)** — Complete 18-point checklist for RSpec output structure, conventions, and self-auditing.
-
-## Output Style
-
-When asked to write or review RSpec specs, the output `answer.md` must comply with all RSpec conventions defined in the Quick Reference above and self-audit checks from `assets/output_checklist.md`. For TDD proof format (exact `bundle exec rspec` command, `Observed RED output` / `Observed GREEN output` labels, GREEN progress bar rules, and asset-loading documentation), follow **[assets/tdd_proof_checklist.md](assets/tdd_proof_checklist.md)**.
-
-- **Spec structure**: File paths must mirror the source, use `# frozen_string_literal: true`, and define `subject(:result)` for service specs.
+- **[assets/output_checklist.md](assets/output_checklist.md)** — Complete 18-point checklist for RSpec output structure, conventions, and self-auditing; also defines all output style rules (spec structure, file path mirroring, `frozen_string_literal`, `subject(:result)`, and TDD proof format).
 
 ## Integration
 

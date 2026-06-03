@@ -50,13 +50,13 @@ Review in this sequence, and produce output sections in this same order:
 - **Missing/bypassable authorization** — unprotected sensitive actions
 - **Injection** — SQL, shell, YAML, or constantization via user input
 - **Unsafe redirects / SSRF** — outbound requests or redirects driven by user-controlled values
-- **Blind file upload trust** — filename, content type, or destination not validated
+- **Blind file upload trust** — filename, content type, or destination unvalidated
 - **Secrets in code/logs** — tokens or credentials committed or printed
 
 #### Medium
 
 - **Weak parameter filtering** — `permit!` or unscoped mass assignment
-- **Unsanitized HTML output** — user-controlled content rendered without clear sanitization
+- **Unsanitized HTML output** — user-controlled content rendered without sanitization
 - **Plaintext sensitive logging** — PII or credentials in log statements
 - **Hidden security behavior** — auth logic buried in callbacks or jobs without guardrails
 - **Brittle custom auth** — reimplements what framework primitives provide safely
@@ -88,17 +88,15 @@ params.require(:user).permit(:name, :email)
 
 ## Output Style
 
-1. **Format**: Produce one section per review area (in the order listed above), even when empty — write "No issues found" and state what evidence would be needed to verify the category.
-2. **Finding details & Exploitability**: Each finding carries:
+1. **Format**: One section per review area in order; write "No issues found" for empty sections and note what evidence would be needed to verify that category.
+2. **Finding details**: Each finding carries:
    - **Severity:** **High** or **Medium** (not "Critical")
    - **Attack path:** input → reach → impact
    - **Affected file:** path + line, e.g. `app/controllers/documents_controller.rb:42`
    - **Mitigation:** smallest credible fix
-   - Do not use representative file paths as if they were confirmed evidence.
-   - **Verification Steps & Quality Gates**: Include a **Hypothetical Exploitability Verification** sub-section showing a concrete example vulnerability and its corresponding exploit request/payload to prove exploitability in practice. This sub-section belongs inside Verification Steps & Quality Gates, never as a top-level section.
+   - **Hypothetical Exploitability Verification** sub-section: concrete example vulnerability and exploit request/payload proving exploitability. This sub-section belongs inside Verification Steps & Quality Gates, never as a top-level section.
 3. **No Implied Paths**: When no source code is analyzed, use generic placeholders like `SRC_DIR/` or `HYPOTHETICAL_DIR/hypothetical_controller.rb`.
 4. **Language**: Must be in English unless explicitly requested otherwise.
-
 
 ## Integration
 
@@ -107,6 +105,4 @@ params.require(:user).permit(:name, :email)
 | **code-review** | For full code review including non-security concerns |
 | **review-architecture** | When security issues stem from architectural problems |
 | **review-migration** | When reviewing migration security (data exposure, constraints) |
-
-
 | **security-review-process** *(from ruby-core-skills)* | Process discipline: OWASP checklist, Ruby-level security concerns |
