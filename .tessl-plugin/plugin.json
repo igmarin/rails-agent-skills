@@ -1,6 +1,6 @@
 {
   "name": "igmarin/rails-agent-skills",
-  "version": "7.0.10",
+  "version": "7.0.11",
   "license": "MIT",
   "description": "Curated library of 28 atomic skills and 9 personas for Ruby on Rails development. Organized by category: testing, code-quality, engines, infrastructure, api, context, and personas. Covers code review, architecture, security, testing (RSpec), engines, Hotwire, and TDD automation. Shared Ruby skills (YARD docs, DDD, service objects) have moved to ruby-core-skills.",
   "skills": [
