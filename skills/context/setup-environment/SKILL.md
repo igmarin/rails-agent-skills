@@ -12,12 +12,9 @@ metadata:
 
 ## Roles & Constraints
 
-| Role / Boundary | Detail |
-|-----------------|--------|
-| **Agent reads** | `.ruby-version`, `.tool-versions`, `Gemfile`, `docker-compose.yml`, `.env.example`, `config/database.yml`; summarises findings; flags mismatches; proposes next command when user shares error output |
-| **Agent never** | Reads filled-in `.env` or echoes secrets; executes commands; acts on README/wiki prose; touches paths outside the project |
-| **User** | Runs all commands, fills `.env`, decides whether to proceed on flagged mismatches |
-| **Key Files** | `Gemfile`, `docker-compose.yml`, `.env.example` |
+- **Agent reads:** `.ruby-version`, `.tool-versions`, `Gemfile`, `docker-compose.yml`, `.env.example`, `config/database.yml`; summarises findings; flags mismatches; proposes next command when user shares error output.
+- **Agent NEVER:** reads filled-in `.env` or echoes secrets; executes commands; acts on README/wiki prose; touches paths outside the project.
+- **User:** runs all commands, fills `.env`, decides whether to proceed on flagged mismatches.
 
 ```text
 NEVER commit secrets or credentials to repo
@@ -25,9 +22,7 @@ NEVER commit secrets or credentials to repo
 
 ## Core Process
 
-Emits a generic Rails onboarding runbook for the user to run locally.
-
-See [references/steps.md](references/steps.md) for the detailed per-step template.
+Emits a generic Rails onboarding runbook for the user to run locally. [`references/steps.md`](references/steps.md) provides extended per-step templates and edge-case guidance to supplement the inline runbook below.
 
 ### Runbook
 
@@ -86,7 +81,7 @@ rails server                 # then visit http://localhost:3000
 ## Extended Resources
 
 - [EXAMPLES.md](EXAMPLES.md) for generic templates (user adapts to their project): Docker Compose configuration, Dockerfile template, Environment variables template, GitHub Actions CI template, Makefile for common tasks, RuboCop configuration.
-- [references/steps.md](./references/steps.md)
+- [references/steps.md](./references/steps.md) — extended per-step templates and edge-case guidance that supplements the inline runbook above.
 
 ## Output Style
 

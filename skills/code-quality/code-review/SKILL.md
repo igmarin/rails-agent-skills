@@ -3,25 +3,13 @@ name: code-review
 type: atomic
 license: MIT
 description: >
-  Use when reviewing Rails pull requests and diffs — must state "Review early, review often.Self-review before PR.Re-review after significant changes." as the review principle, ground every finding from the actual diff in a real file:line, use ONLY three severity labels (Critical, Suggestion, Nice to have) where Critical includes security/data loss/crash and Always Critical flags (permit!, html_safe on user content, business logic in controllers, unparameterized SQL, destructive migrations), and always include a "Code review before merge" task or task-list line. Reviews Rails (Ruby on Rails) pull requests, PRs, merge requests, and diffs. Use when reviewing existing Rails code for quality, when asked to do a PR review, review my diff, review my merge request, or code review of Ruby on Rails code.
+  Reviews Rails (Ruby on Rails) pull requests, diffs, and merge requests for quality, security, and conventions. Use when asked to do a PR review, review my diff, review my merge request, or code review of Ruby on Rails code. Grounds every finding in a real file:line from the actual diff, applies exactly three severity labels (Critical, Suggestion, Nice to have) where Critical covers security/data loss/crash and Always Critical flags (permit!, html_safe on user-supplied content, business logic in controllers, unparameterized SQL, destructive migrations), and always includes a "Code review before merge" task line. Follows the principle: review early, review often; self-review before PR; re-review after significant changes.
 metadata:
   version: 1.0.0
   user-invocable: "true"
 ---
 
 # Code Review
-
-## Quick Reference
-
-| Area | Key Checks |
-|------|------------|
-| Routing | RESTful, shallow nesting, named routes |
-| Controllers | Skinny, strong params, scoped `before_action` |
-| Models | Structure order, enums, scopes, `inverse_of` |
-| Queries | N+1 prevention, `exists?`, `find_each` batches |
-| Migrations | Reversible, concurrent indexes on large tables |
-| Security | Strong params, no `html_safe` on user input |
-| Jobs | Idempotent, retriable, appropriate backend |
 
 ## HARD-GATE
 
@@ -52,6 +40,16 @@ Work through the diff in this sequence. Detailed criteria are in [assets/checkli
 Ground every finding in a real changed file/line from the branch diff. If the task does not provide a diff or file contents, say that no concrete findings can be made yet and list the exact diff/files needed.
 
 Configuration → Routing → Controllers → Views → Models → Associations → Queries → Migrations → Validations → I18n → Sessions → Security → Caching → Jobs → Tests
+
+| Area | Key Checks |
+|------|------------|
+| Routing | RESTful, shallow nesting, named routes |
+| Controllers | Skinny, strong params, scoped `before_action` |
+| Models | Structure order, enums, scopes, `inverse_of` |
+| Queries | N+1 prevention, `exists?`, `find_each` batches |
+| Migrations | Reversible, concurrent indexes on large tables |
+| Security | Strong params, no `html_safe` on user input |
+| Jobs | Idempotent, retriable, appropriate backend |
 
 **Edge case handling:**
 - **Empty diff**: State "No code changes to review" and stop.
@@ -138,5 +136,4 @@ Group findings by severity. The canonical output shape is shown below; [assets/e
 | **respond-to-review** | When receiving feedback and deciding implementation |
 | **review-architecture** | When review reveals structural problems |
 | **review-migration** | When reviewing migrations on large tables |
-
 | **review-process** *(from ruby-core-skills)* | Process discipline: severity levels, structured findings format, re-review criteria |

@@ -151,21 +151,10 @@ end
 
 When asked to create or scaffold a Rails engine, your output `answer.md` MUST follow this style:
 
-1. **Concrete Artifact Files**:
-   - The concrete recommendation/artifact MUST explicitly display the full generated `.gemspec` file contents and the `Rakefile` contents.
-   - The files MUST be namespaced correctly under the engine namespace.
-2. **Verification & Rake Status**:
-   - The verification plan MUST explicitly state that running `bundle exec rake` inside the engine passes (exits 0) with a simulated passing output block.
-3. **Integration Test Coverage**:
-   - Under the integration coverage section, you MUST write and present 5 distinct integration spec files:
-     - **Configuration Spec**: (e.g. `spec/lib/my_engine/configuration_spec.rb`) verifying default config values and configure block overrides.
-     - **Routing Spec**: (e.g. `spec/routing/my_engine/routes_spec.rb`) verifying engine routes load.
-     - **Request Spec**: (e.g. `spec/requests/my_engine/widgets_spec.rb`) verifying HTTP request flow.
-     - **Service/Public Object Spec**: (e.g. `spec/services/my_engine/some_service_spec.rb`) verifying domain services.
-     - **Host-Integration Spec**: (e.g. `spec/lib/my_engine/host_integration_spec.rb`) verifying configurable class reference hooks (e.g., stubbing a configured `CustomUser` model).
-4. **No Mixed Assertions**:
-   - Do NOT mix request-type and unit-type assertions in a single describe block. Keep unit tests for models/services separate from request/integration specs.
-5. **Language**: Must be in English unless explicitly requested otherwise.
+1. **Concrete Artifact Files**: Display the full generated `.gemspec` and `Rakefile` contents, correctly namespaced under the engine namespace.
+2. **Verification & Rake Status**: Explicitly state that `bundle exec rake` inside the engine passes (exits 0), with a simulated passing output block.
+3. **Integration Test Coverage**: Write integration specs covering configuration, routing, HTTP request flow, domain services, and host-integration hooks. See [TESTING.md](TESTING.md) for the required spec categories and paths. Keep unit tests for models/services separate from request/integration specs.
+4. **Language**: Must be in English unless explicitly requested otherwise.
 
 ## Integration
 

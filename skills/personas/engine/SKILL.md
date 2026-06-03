@@ -181,7 +181,7 @@ When completing an engine development cycle, output MUST include:
 **Migration conflicts:**
 1. Ensure migration timestamps don't collide with host app migrations
 2. Use `install_generator` to copy migrations rather than requiring engine migrations directly
-3. Namespace migration class names: `MyEngine::CreateOrders` not just `CreateOrders`
+3. Namespace migration class names: `MyEngine::CreateOrders` not `CreateOrders`
 
 **Gem dependency conflicts:**
 1. Use pessimistic version constraints in gemspec: `~> 7.0` not `>= 7.0`
@@ -192,8 +192,8 @@ When completing an engine development cycle, output MUST include:
 
 ## Anti-Patterns to Avoid
 
-- **Missing isolate_namespace:** Every mountable engine MUST call `isolate_namespace` — without it, models and routes leak into the host app
-- **Host-dependent tests:** Engine specs MUST pass with only the dummy app — never depend on host app code
+- **Missing isolate_namespace:** Every mountable engine MUST call `isolate_namespace`
+- **Host-dependent tests:** Engine specs MUST pass with only the dummy app
 - **Hardcoded paths:** Use `MyEngine::Engine.root` not `Rails.root` for engine-internal paths
 - **Unpinned dependencies:** Always use pessimistic version constraints (`~>`) in gemspec
 - **Skipping dummy app:** Every engine MUST have a dummy app for integration testing

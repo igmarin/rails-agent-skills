@@ -22,29 +22,21 @@ Use this skill when the task is to design or review how a host app installs and 
 | Initializer | Provides configuration defaults | Generated once, editable by host |
 | Routes | Adds `mount Engine, at: '/path'` | Check for existing mount before injecting |
 
-## HARD-GATE
+## Validation Workflow (HARD-GATE)
 
-```text
-Validation Workflow WHEN building or reviewing an install generator:
+When building or reviewing an install generator, follow these steps in order:
 
-1. GENERATE:  Run the generator against a clean host app
-2. VERIFY:    Check output files exist in the correct host paths
-3. RERUN:     Run the generator a second time
-4. CONFIRM:   No duplicate files, routes, or initializer blocks inserted
-5. DOCUMENT:  List what was generated vs. what the user must do manually
-6. TEST:      Cover both single-run and rerun behavior in generator specs
+1. **GENERATE**: Run the generator against a clean host app. Provide the command and a simulated but realistic terminal execution output under the literal label **Observed output** showing the generator running for the first time.
+2. **VERIFY**: Check output files exist in the correct host paths. List shell commands confirming the initializer, routes, and migrations exist.
+3. **RERUN**: Run the generator a second time; confirm no duplicate files, routes, or initializer blocks are inserted. Provide a command and realistic terminal output showing idempotent behavior (skipping/conflict resolution). Always generate unique, scenario-specific numbers rather than copying verbatim from templates.
+4. **TEST**: Cover both single-run and rerun behavior in generator specs (see spec template below).
+5. **DOCUMENT**: List what was generated vs. what the user must do manually, including required env vars and rollback steps.
 
-DO NOT ship a generator without completing steps 3 and 4.
-```
+**DO NOT ship a generator without completing steps 3 and 4.**
 
-## Core Process
-
-1. Ensure setup is explicit, repeatable, and safe to rerun.
-2. Configure only in initializers (avoid boot-time mutation).
-3. Guard operations with `File.exist?` or Thor's `inject_into_file` with a marker to ensure idempotency.
-4. Copy migrations to host `db/migrate`; let the host run them.
-5. Document rollback steps and required env vars.
-6. Ensure install docs match generator behavior exactly.
+Key implementation rules not covered above:
+- Configure only in initializers (avoid boot-time mutation).
+- Document all required env vars alongside rollback steps.
 
 **Idempotency guards — check before creating or injecting:**
 
@@ -76,29 +68,23 @@ it 'does not duplicate the route mount on rerun' do
 end
 ```
 
-## Extended Resources
-
-**Generator Checklist**
-- [ ] Files created in correct host paths
-- [ ] No duplicate inserts on rerun (validated manually and in specs)
-- [ ] Sensible defaults that are easy to edit
-- [ ] Clear output telling the user what remains manual
-- [ ] Rollback steps documented
-- [ ] Install docs match what the generator actually produces
-
 ## Output Style
 
 When asked to create or review an engine installer/install generator, your output `answer.md` MUST include:
 
 1. **Idiomatic generator code**: Use idiomatic Rails/Thor generator commands (inheriting from `Rails::Generators::Base`, with `source_root`, `desc`, etc.).
-2. **Step-by-Step Validation & Observed Outputs**:
-   - **GENERATE**: Provide a command and a simulated but realistic terminal execution output under the literal label **Observed output** showing the generator running for the first time.
-   - **VERIFY**: List shell commands checking that the initializer, routes, and migrations exist in the correct host paths.
-   - **RERUN**: Provide a command and a simulated but realistic terminal execution output showing the generator running a second time and confirming it is idempotent (skipping/conflict resolution).
-   - **CRITICAL: Even if running in static evaluation or mock environments without a live Ruby/Rails runtime, you MUST generate and present realistic, concrete terminal execution output under the literal label `Observed output`. Do NOT copy the exact timing values or example counts verbatim from templates; you MUST generate unique, scenario-specific numbers.**
+2. **Step-by-Step Validation & Observed Outputs**: Follow the five steps defined in the [Validation Workflow](#validation-workflow-hard-gate) section above, producing realistic terminal output for each applicable step.
 3. **Rollback & Manual steps**: Clear list of what the generator does vs what the user must do manually.
-4. **Generator Spec**: A complete, minimal RSpec spec using generator testing helpers (destination, run_generator, etc.) testing both single-run and rerun idempotency behavior.
+4. **Generator Spec**: A complete, minimal RSpec spec using generator testing helpers (`destination`, `run_generator`, etc.) testing both single-run and rerun idempotency behavior.
 5. **Language**: Must be in English unless explicitly requested otherwise.
+
+**Generator Checklist** (verify before shipping):
+- [ ] Files created in correct host paths
+- [ ] No duplicate inserts on rerun (validated manually and in specs)
+- [ ] Sensible defaults that are easy to edit
+- [ ] Clear output telling the user what remains manual
+- [ ] Rollback steps and required env vars documented
+- [ ] Install docs match what the generator actually produces
 
 ## Integration
 

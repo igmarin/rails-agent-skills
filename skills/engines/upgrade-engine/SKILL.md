@@ -3,7 +3,7 @@ name: upgrade-engine
 type: atomic
 license: MIT
 description: >
-  Use when making a Rails engine stable across Rails and Ruby versions — must ensure every claimed version is in the CI matrix and passes, run bundle exec rake zeitwerk:check verifying that file paths match constant names exactly, verify gemspec dependency bounds match what CI actually tests, check initializer reloading safety using config.to_prepare, and check and state the status of optional integrations per version even if they are absent. Zeitwerk autoloading, gemspec dependency bounds, CI matrix.
+  Use when making a Rails engine stable across Rails and Ruby versions, performing a Rails upgrade, verifying gem compatibility, adding version support, or setting up cross-version testing — must ensure every claimed version is in the CI matrix and passes, run bundle exec rake zeitwerk:check verifying that file paths match constant names exactly, verify gemspec dependency bounds match what CI actually tests, check initializer reloading safety using config.to_prepare, and check and state the status of optional integrations per version even if they are absent. Zeitwerk autoloading, gemspec dependency bounds, CI matrix, Rails upgrade, gem compatibility, version support.
 metadata:
   version: 1.0.0
   user-invocable: "true"

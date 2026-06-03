@@ -18,25 +18,17 @@ metadata:
 | **Pundit** | Explicit policy classes | Complex per-resource rules |
 | **CanCanCan** | Centralized Ability class | Simple role-based permissions |
 
-## HARD-GATE
-
-```text
-ALWAYS test authorization with multiple roles (admin, user, guest)
-NEVER rely on presence checks alone — check specific permissions
-ALWAYS use policy objects, never inline authorization logic in controllers
-```
-
 ## Core Process
 
 ### Implementation Workflow
 
 1. **Add gem** — add `pundit` or `cancancan` to Gemfile and run `bundle install`
 2. **Generate base** — run the gem's installer (`rails g pundit:install` or `rails g cancan:ability`)
-3. **Define policies/abilities** — create policy classes (Pundit) or populate the Ability class (CanCanCan)
+3. **Define policies/abilities** — create policy classes (Pundit) or populate the Ability class (CanCanCan); always use policy objects, never inline authorization logic in controllers
 4. **Authorize in controllers** — call `authorize @record` (Pundit) or `authorize! :action, @record` (CanCanCan) in each action
-5. **Verify authorization** — attempt an unauthorized action in the browser or console and confirm it raises `Pundit::NotAuthorizedError` or `CanCan::AccessDenied` as expected
+5. **Verify authorization** — attempt an unauthorized action in the browser or console and confirm it raises `Pundit::NotAuthorizedError` or `CanCan::AccessDenied` as expected; use persisted records (e.g., `User.create!`) not unsaved ones
 6. **Scope queries** — use `policy_scope(Model)` or `accessible_by(current_ability)` for index actions
-7. **Test all roles** — write policy specs and request specs covering admin, owner, and guest
+7. **Test all roles** — write policy specs and request specs covering admin, owner, and guest; check specific permissions, never presence checks alone
 
 ### Patterns
 
@@ -103,29 +95,13 @@ end
 
 ## Output Style
 
-When asked to implement or review authorization, your output `answer.md` MUST follow this style:
+When implementing or reviewing authorization, the output `answer.md` must include:
 
-1. **Simulated Console Exception Output**:
-   - In the verification steps, you MUST include a dedicated **Manual Denied-Action Verification** section.
-   - Show simulated Rails console output blocks demonstrating Pundit or CanCanCan actually raising the appropriate authorization exception when an unauthorized action is attempted.
-   - **CRITICAL**: Do NOT use unsaved records (e.g., `User.new` or `Post.new`) in the console examples; you MUST use persisted records (e.g., `User.create!` or `Post.create!`) to accurately reflect real Rails console verification.
-   - Example format for Pundit:
-     ```
-     irb(main):001:0> user = User.create!(role: :guest)
-     irb(main):002:0> post = Post.create!(user: User.create!(role: :admin))
-     irb(main):003:0> Pundit.authorize(user, post, :update?)
-     Pundit::NotAuthorizedError: not allowed to update? this #<Post...>
-     ```
-   - Example format for CanCanCan:
-     ```
-     irb(main):001:0> ability = Ability.new(User.create!(role: :guest))
-     irb(main):002:0> post = Post.create!(user: User.create!(role: :admin))
-     irb(main):003:0> ability.authorize!(:update, post)
-     CanCan::AccessDenied: You are not authorized to access this page.
-     ```
-2. **HTTP and Policy Verification**:
-   - Provide concrete `curl` requests or controller test commands with expected HTTP response codes (e.g. `403 Forbidden` or `302 Found` redirecting to unauthorized alerts) when access is denied.
-3. **Language**: Must be in English unless explicitly requested otherwise.
+1. **Manual Denied-Action Verification** — a dedicated section with simulated Rails console output showing the authorization exception raised when an unauthorized action is attempted. Always use persisted records (`User.create!`, `Post.create!`), never unsaved ones.
+2. **HTTP and Policy Verification** — concrete `curl` requests or controller test commands with expected HTTP response codes (e.g. `403 Forbidden` or `302 Found`) when access is denied.
+3. **Language** — English unless explicitly requested otherwise.
+
+See **[references/output-style.md](references/output-style.md)** for full formatting examples including Pundit and CanCanCan console output templates.
 
 ## Integration
 
@@ -139,3 +115,4 @@ Load these files only when their specific content is needed:
 
 - **[EXAMPLES.md](EXAMPLES.md)** — Use when you need complete Pundit or CanCanCan implementation examples beyond the inline samples
 - **[references/workflow.md](references/workflow.md)** — Use when you need the step-by-step authorization implementation workflow diagram
+- **[references/output-style.md](references/output-style.md)** — Use when you need full formatting templates for console verification output

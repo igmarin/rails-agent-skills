@@ -3,7 +3,7 @@ name: review-architecture
 type: atomic
 license: MIT
 description: >
-  Use when reviewing Rails application structure or architecture — must prioritize boundary problems over style, evaluate where domain logic lives, and for every High-severity finding verify it by reading the actual code and stating the concrete code-level evidence read (redacting any secret-like literal, without using representative file paths or fabricated line numbers). Tech debt, fat controllers, fat models.
+  Use when reviewing Rails application structure, architecture, or design — including identifying tech debt, fat controllers, fat models, MVC violations, service object boundaries, and Rails concerns. Evaluates where domain logic lives, whether abstractions clarify design or only move code, and whether controller orchestration and model responsibilities are correctly bounded. For every High-severity finding, verifies by reading actual code and stating concrete code-level evidence. Use when asked to refactor a Rails app, audit application design, review service objects, inspect concerns, or assess overall Rails codebase health.
 metadata:
   version: 1.0.0
   user-invocable: "true"

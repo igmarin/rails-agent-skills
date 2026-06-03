@@ -3,7 +3,7 @@ name: implement-hotwire
 type: atomic
 license: MIT
 description: >
-  Use when creating Hotwire UIs with progressive enhancement in Rails — must verify degraded mode by disabling JavaScript (or running rails test:system with Capybara rack_test driver) and confirming forms submit, links navigate, and data persists after reload, and include a Verification section with these explicit no-JavaScript checks. Stimulus, Turbo, Turbo Frames, Turbo Streams.
+  Use when creating Hotwire UIs with progressive enhancement in Rails — generates Stimulus controllers, Turbo Frame markup, Turbo Stream responses, and ActionCable broadcast setups, then verifies degraded mode by disabling JavaScript (or running rails test:system with Capybara rack_test driver) and confirming forms submit, links navigate, and data persists after reload. Includes a Verification section with explicit no-JavaScript checks. Stimulus, Turbo, Turbo Frames, Turbo Streams.
 metadata:
   version: 1.0.0
   user-invocable: "true"

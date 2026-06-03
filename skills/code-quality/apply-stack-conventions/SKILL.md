@@ -17,7 +17,7 @@ metadata:
 |------------|------------------|
 | Rails MVC | Thin controllers; move non-trivial business logic into service objects |
 | PostgreSQL | Avoid N+1s with `includes`; use database constraints for integrity |
-| Hotwire | Prefer Turbo Frames/Streams before Stimulus (see Pitfalls) |
+| Hotwire | Prefer Turbo Frames/Streams before Stimulus; only reach for Stimulus when Turbo cannot handle the interactivity |
 | Tailwind | Use utilities in views; extract repeated UI into partials/components |
 | Auth | Apply Devise authentication and Pundit authorization to protected resources |
 
@@ -34,8 +34,6 @@ All new code **must** have its test written and validated **before** implementat
 **CRITICAL:** Execute all test commands using your shell/terminal tools. Do **not** fabricate, mock, or simulate terminal output. Copy-paste the actual observed output. If the environment does not support running tests, stop and tell the user — do not proceed to implementation without verified RED output. See **write-tests** for the full gate cycle.
 
 ### Red-Green Cycle Example
-
-The output blocks below are **illustrative templates** — replace them with copy-pasted output from your actual terminal execution.
 
 **Spec file — `spec/models/order_spec.rb`**
 
@@ -58,10 +56,7 @@ end
 bundle exec rspec spec/models/order_spec.rb
 ```
 
-**Observed RED output (pre-implementation — expect failure)**
-```
-# paste actual terminal output here showing the failure
-```
+**Observed RED output** — paste actual terminal output here (expect failure)
 
 **Model implementation — `app/models/order.rb`**
 
@@ -71,14 +66,11 @@ class Order < ApplicationRecord
 end
 ```
 
-**Observed GREEN output (post-implementation — expect pass)**
-```
-# paste actual terminal output here showing 1 example, 0 failures
-```
+**Observed GREEN output** — paste actual terminal output here (expect pass)
 
 ## Core Process
 
-When **writing or generating** code for this project, follow these conventions. Stack: Ruby on Rails, PostgreSQL, Hotwire (Turbo + Stimulus), Tailwind CSS.
+Stack: Ruby on Rails, PostgreSQL, Hotwire (Turbo + Stimulus), Tailwind CSS.
 
 **Style:** If the project uses a linter, treat it as the source of truth for formatting. For cross-cutting design principles (DRY, YAGNI, structured logging, rules by directory), use **apply-code-conventions**.
 
@@ -93,25 +85,13 @@ For a typical feature, compose stack patterns in this order:
 5. **Stimulus** — add a controller only when client-side interactivity cannot be handled by Turbo alone
 6. **Tailwind** — apply utility classes to the view; extract repeated patterns into partials or Stimulus targets
 
-Each step should remain testable in isolation before wiring to the next layer.
-In the final artifact, make this explicit in a **Layer isolation** section:
-name the focused spec or check for model/query, service, controller/request,
-view/Turbo, Stimulus, and Tailwind. If a layer is not changed, mark it "not
-applicable"; do not silently omit view, Stimulus, or Tailwind isolation.
+Each step should remain testable in isolation before wiring to the next layer. In the final artifact, include a **Layer isolation** section naming the focused spec or check for model/query, service, controller/request, view/Turbo, Stimulus, and Tailwind. If a layer is not changed, mark it "not applicable"; do not silently omit any layer.
 
 ### Service Object Pattern
 
-Controllers delegate to a service via `.call`; the service returns a result hash. See **create-service-object** for the full pattern and response format.
+Controllers delegate to a service via `.call`; the service returns a result hash. See **create-service-object** and `assets/snippets/service_object.rb` for the full pattern.
 
 ```ruby
-# app/services/create_order_service.rb
-class CreateOrderService
-  def self.call(params)
-    order = Order.new(params)
-    order.save ? { success: true, record: order } : { success: false, record: order }
-  end
-end
-
 # app/controllers/orders_controller.rb
 def create
   result = CreateOrderService.call(order_params)
@@ -123,12 +103,7 @@ def create
 end
 ```
 
-#### Eager Loading
-
-```ruby
-# Single JOIN via includes — avoids one query per record in the loop
-@orders = Order.includes(:line_items).where(user: current_user)
-```
+For eager loading patterns and N+1 fixes, see the Extended Resources section below.
 
 ### Security
 
@@ -138,22 +113,19 @@ This project uses **Devise** for authentication and **Pundit** for authorization
 
 | Issue | Correct approach |
 |-------|------------------|
-| Reaching for Stimulus before trying Turbo | Use Turbo Frames/Streams first; only add a Stimulus controller when Turbo cannot handle the interactivity |
 | N+1 queries in loops over associations | Eager load with `includes` before the loop |
 | Controller action with 15+ lines of business logic | Extract to a service object using the `.call` pattern |
 | Accessing a protected resource without an authorisation check | Apply a Pundit policy on every action that touches access-controlled data |
 
 ## Output Style
 
-When applying stack conventions, your output MUST include:
+Every response **must** include these sections in order:
 
-1. **Stack decisions** — State which Rails, PostgreSQL, Hotwire, Stimulus, Tailwind, auth, and service-object conventions apply.
-2. **Tests-first proof before implementation** — Follow the HARD-GATE cycle above (spec code, exact command, Observed RED output per layer). Put this section before any implementation code.
-3. **Layer isolation** — Dedicated section naming the focused spec/check for each changed layer (model/query, service, controller/request, view/Turbo, Stimulus, Tailwind); mark unchanged layers "not applicable".
-4. **Layered implementation** — Separate model/query, service, controller, view, Stimulus, and Tailwind changes when applicable.
-5. **Performance and security checks** — Call out N+1 prevention, authorization policy use, and unsafe params/content handling.
-6. **Verification** — For every layer, show the Observed GREEN output after implementation per the HARD-GATE. Then list Rails specs, system tests, linting, and any browser/manual checks run.
-7. **Language** — Must be in English unless explicitly requested otherwise.
+1. **Stack decisions** — which Rails, PostgreSQL, Hotwire, Stimulus, Tailwind, auth, and service-object conventions apply.
+2. **Tests-first proof before implementation** — HARD-GATE cycle per layer (spec file content → RED output → implementation → GREEN output).
+3. **Layer isolation** — focused spec/check for each changed layer; mark unchanged layers "not applicable".
+4. **Layered implementation** — separate model/query, service, controller, view, Stimulus, and Tailwind changes.
+5. **Performance and security checks** — N+1 prevention, authorization policy use, unsafe params/content handling.
 
 ## Extended Resources (Progressive Disclosure)
 

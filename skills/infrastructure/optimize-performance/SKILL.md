@@ -3,7 +3,7 @@ name: optimize-performance
 type: atomic
 license: MIT
 description: >
-  Use when optimizing Rails performance — must follow a strict workflow where the report order matches the work order (measure baseline, identify bottleneck, write and run failing RED regression spec asserting query count using db-query-matchers, apply fix, verify spec is GREEN, check with EXPLAIN ANALYZE in rails dbconsole, and report quantified improvements), and write the regression spec before applying any optimization. Caching, Bullet, profiling, slow query, database query. Trigger words: performance, optimize, N+1, slow query, caching, Bullet, profiling.
+  Use when optimizing Rails performance — follows a strict workflow: measure baseline, identify bottleneck, write failing RED regression spec asserting query count with db-query-matchers, apply fix, verify spec GREEN, check with EXPLAIN ANALYZE in rails dbconsole, and report quantified improvements. Regression spec must be written before any optimization is applied. Trigger words: performance, optimize, N+1, slow query, caching, Bullet, profiling.
 metadata:
   version: 1.0.0
   user-invocable: "true"
@@ -34,28 +34,41 @@ appears in your output. Reordering for narrative flow fails the audit even
 when the underlying work was correct.
 ```
 
-**Required report order — each step must appear in output:**
+## Output Style
 
-1. **Baseline** — timing or query count with source (log line, profiler output, EXPLAIN row).
-2. **Bottleneck** — specific cause + the tool that surfaced it (`bullet`, `rack-mini-profiler`, or `EXPLAIN ANALYZE` — at least one named).
-3. **Regression spec — RED** — spec with `make_database_queries(count: <unoptimized>)`, shown failing.
-4. **Fix** — minimal code change (eager load, index, cache, scope rewrite).
-5. **Regression spec — GREEN** — rerun output at the new count.
-6. **EXPLAIN ANALYZE** — actual output rows for any DB-touching change; call out `Seq Scan → Index Scan` or `actual time` delta.
-7. **Quantified improvement** — `queries: N → M`, `p95: X ms → Y ms`. Numbers, not adjectives.
+When completing a performance optimization, output MUST follow this seven-step report order. Each step must appear in output:
+
+```markdown
+# Performance Optimization — [Description]
+
+## 1. Baseline
+<N> queries for <endpoint/action> — source: <log line / profiler output>
+
+## 2. Bottleneck
+<N+1 on association X / missing index on column Y> — tool: <bullet / rack-mini-profiler / EXPLAIN ANALYZE>
+
+## 3. Regression Spec — RED
+`make_database_queries(count: <N>)` at <path>:<line> — failure: expected <M>, got <N>
+
+## 4. Fix
+<path>:<line> — <includes(:association) / add_index / cache block>
+
+## 5. Regression Spec — GREEN
+Spec passes ✓ (<M> queries)
+
+## 6. EXPLAIN ANALYZE
+Before: Seq Scan, actual time=<X>ms → After: Index Scan, actual time=<Y>ms
+
+## 7. Quantified Improvement
+Queries: <N> → <M> | p95: <X>ms → <Y>ms
+```
 
 Language: English unless explicitly requested otherwise.
 
 ## Extended Resources
 
-**Less-Obvious Optimizations**
+**Less-Obvious Optimization**
 ```ruby
-# Use pluck to avoid loading full objects when only a column is needed
-Post.where(published: true).pluck(:id, :title)
-
-# Use select to limit loaded columns on large tables
-Post.select(:id, :title, :author_id).where(published: true)
-
 # Use counter_cache to avoid COUNT queries in loops
 # In migration: add_column :users, :posts_count, :integer, default: 0
 # In Post model: belongs_to :user, counter_cache: true
@@ -85,7 +98,7 @@ EXPLAIN ANALYZE
   WHERE posts.published = true;
 ```
 
-## Extended Resources (Progressive Disclosure)
+**Reference Files and External Links**
 
 Load these files only when their specific content is needed:
 
@@ -95,42 +108,6 @@ External references:
 - [Active Record Querying](https://guides.rubyonrails.org/active_record_querying.html)
 - [rack-mini-profiler](https://github.com/MiniProfiler/rack-mini-profiler)
 - [Bullet gem](https://github.com/flyerhzm/bullet)
-
-## Output Style
-
-When completing a performance optimization, output MUST include all seven items from the required report order above. Example structure:
-
-```markdown
-# Performance Optimization — [Description]
-
-## 1. Baseline
-- Query count: <N> queries for <endpoint/action>
-- Source: <log line / profiler output>
-
-## 2. Bottleneck
-- Cause: <N+1 on association X / missing index on column Y / full table scan>
-- Tool: <bullet / rack-mini-profiler / EXPLAIN ANALYZE>
-
-## 3. Regression Spec — RED
-- Spec: <path>:<line>
-- Assertion: `make_database_queries(count: <N>)`
-- Failure: expected <M> queries, got <N>
-
-## 4. Fix
-- File: <path>:<line>
-- Change: <includes(:association) / add_index / cache block>
-
-## 5. Regression Spec — GREEN
-- Spec passes: ✓ (<M> queries)
-
-## 6. EXPLAIN ANALYZE
-- Before: Seq Scan, actual time=<X>ms
-- After: Index Scan, actual time=<Y>ms
-
-## 7. Quantified Improvement
-- Queries: <N> → <M>
-- p95: <X>ms → <Y>ms
-```
 
 ## Integration
 

@@ -3,7 +3,7 @@ name: extract-engine
 type: atomic
 license: MIT
 description: >
-  Use when extracting existing Rails app code into a reusable engine — must extract incrementally over big-bang, preserve existing behavior first and verify regression coverage passes before proceeding (do not extract and change behavior in the same step), ensure each slice has one coherent responsibility, minimal new public API, passing regression tests, and a clear next step. Scaffolds engine structure, increments through extraction slices, creates adapter interfaces to decouple host dependencies, and preserves regression coverage throughout. Trigger words: extract to engine, move feature to engine, host coupling, adapters, extraction slices, preserve behavior, incremental extraction.
+  Extracts existing Rails app code into a reusable engine incrementally — scaffolds engine structure, moves stable domain logic first, creates adapter interfaces to decouple host dependencies, and preserves regression coverage throughout each extraction slice. Each slice has one coherent responsibility, minimal new public API, passing regression tests, and a clear next step. Use when a developer needs to extract a feature into a Rails engine, move code out of a host app, decouple host coupling via adapters, or perform incremental extraction while preserving existing behavior. Trigger words: extract to engine, move feature to engine, host coupling, adapters, extraction slices, preserve behavior, incremental extraction.
 metadata:
   version: 1.0.0
   user-invocable: "true"
@@ -92,8 +92,6 @@ end
 # usage
 OrderCreator.for_request(request) # resolves via MyEngine.current_user_for(request)
 ```
-
-See [assets/examples.md](assets/examples.md) and [references/adapter_examples.md](references/adapter_examples.md) for extended examples.
 
 ## Output Style
 

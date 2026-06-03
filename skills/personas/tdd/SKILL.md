@@ -88,51 +88,25 @@ All green → write YARD docs → self-review → open PR.
 
 ## Output Style
 
-When completing a TDD cycle, output MUST include:
+When completing a TDD cycle, produce a report following the template in [assets/tdd-report-template.md](assets/tdd-report-template.md). At minimum the report must include:
 
-```markdown
-# TDD Report — [Feature Name]
-
-## Context
-- Schema/routes loaded: <relevant files>
-- Feature: <description>
-
-## Test Cycle
-### RED
-- Spec: <spec file path>:<line>
-- Failure: <exact error class and message, e.g. "NoMethodError: undefined method 'full_name'">
-- Correct reason: ✓ (feature missing, not syntax/config error)
-
-### Proposal
-- Approach: <one-line summary of implementation>
-- User approved: ✓
-
-### GREEN
-- Implementation: <file path>:<line range>
-- Spec passes: ✓ (<n> examples, 0 failures)
-
-### Iterate
-- Additional cycles: <n> (list each RED→GREEN if multiple)
-
-## Quality Gate
-- RuboCop: ✓ no offenses
-- Brakeman: ✓ no warnings
-- Full RSpec suite: ✓ (<total> examples, 0 failures)
-- YARD docs: ✓ generated for public API
-- Self-review: ✓ no Critical findings
-```
+- **RED**: spec file path and line, exact failure class and message, confirmation the failure is for the correct reason.
+- **Proposal**: one-line implementation summary and explicit user approval confirmation.
+- **GREEN**: implementation file path and line range, spec pass confirmation.
+- **Iterate**: number of additional RED→GREEN cycles and a summary of each.
+- **Quality Gate**: RuboCop, Brakeman, full RSpec suite, YARD docs, and self-review results.
 
 ---
 
 ## Integration
 
 | Predecessor | This Persona | Successor |
-|-------------|--------------|-----------|
+|-------------|--------------|----------|
 | load-context | tdd | code-review |
 | define-domain-language | tdd | quality |
 | None (standalone) | tdd | PR submission |
 
-**Use `plan-tests` alone** if you only need to decide which test to write next without running the full TDD cycle.
+**Use `plan-tests` alone** if you only need to decide which test to write next.
 
 **Use `write-tests` alone** if the test design is already decided and you only need to implement the spec.
 
@@ -141,28 +115,14 @@ When completing a TDD cycle, output MUST include:
 ## Error Recovery
 
 **Test fails for the wrong reason (syntax/config error):**
-1. Read the error carefully — `SyntaxError`, `NameError`, `LoadError` indicate test problems, not missing features
-2. Fix the test to correctly target the missing behavior
-3. Re-run and confirm failure is now the correct class (e.g., `NoMethodError`, `undefined method`)
+1. Identify error class — `SyntaxError`, `NameError`, `LoadError` indicate test problems, not missing features.
+2. Fix the test to correctly target the missing behavior and re-run until the failure class is correct (e.g., `NoMethodError`).
 
 **Implementation makes test pass but breaks other tests:**
-1. Run full suite to identify regressions: `bundle exec rspec`
-2. Examine the failing specs — your implementation may violate an existing contract
-3. Revise implementation to satisfy both the new test and existing tests
-4. If impossible, the feature conflicts with existing behavior — discuss with user before proceeding
+1. Run `bundle exec rspec` to identify regressions.
+2. Revise implementation to satisfy both the new test and existing tests.
+3. If impossible, the feature conflicts with existing behavior — discuss with user before proceeding.
 
 **Quality gate fails (RuboCop/Brakeman):**
-1. Run `bundle exec rubocop -a` for auto-correctable offenses
-2. Fix remaining offenses manually
-3. For Brakeman warnings, assess whether they are false positives — if real, fix before proceeding
-
----
-
-## Anti-Patterns to Avoid
-
-- **Writing implementation before test:** Delete it and start over — no exceptions
-- **Test passes immediately (false green):** Test is not testing the right thing; rewrite to actually exercise the new behavior
-- **Fixing tests to match implementation:** Tests define the contract — if a test fails, fix the implementation
-- **Giant test cycles:** Each RED→GREEN should cover one behavior; break large features into small incremental tests
-- **Skipping the proposal:** Always propose and wait for user approval before implementing
-- **Ignoring quality gate:** Never open a PR with RuboCop offenses or Brakeman warnings
+1. Run `bundle exec rubocop -a` for auto-correctable offenses; fix remaining ones manually.
+2. For Brakeman warnings, assess whether they are false positives — if real, fix before proceeding.

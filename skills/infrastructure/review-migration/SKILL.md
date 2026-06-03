@@ -3,7 +3,7 @@ name: review-migration
 type: atomic
 license: MIT
 description: >
-  Use when reviewing production database migrations, performing a migration safety review, planning zero-downtime migration, or deploying database changes safely — DO NOT combine schema change and data backfill in one migration, DO NOT add NOT NULL before backfill completes, DO NOT drop columns before removing all code references, add nullable-first then backfill then enforce NOT NULL, add indexes with `algorithm: :concurrently` + `disable_ddl_transaction!` on large tables, check lock behavior for indexes/constraints/defaults/rewrites, use multi-step rollouts for renames/type changes/unique constraints, list risks first with explicit phased patterns per finding, mark patterns "Not applicable" with explanation when unused, backfill in batches outside migration transaction, deploy code tolerating both old and new schemas during transitions. Covers phased rollouts, lock behavior, rollback strategy, strong_migrations, and deployment ordering.
+  Use when reviewing production database migrations, performing a migration safety review, planning zero-downtime migration, or deploying database changes safely. Reviews phased rollouts, lock behavior, rollback strategy, strong_migrations, and deployment ordering. Enforces: add nullable-first then backfill then enforce NOT NULL; add indexes with `algorithm: :concurrently` + `disable_ddl_transaction!` on large tables; backfill in batches outside migration transaction; check lock behavior for indexes/constraints/defaults/rewrites; use multi-step rollouts for renames/type changes/unique constraints; deploy code tolerating both old and new schemas during transitions. Never combines schema change and data backfill in one migration, never adds NOT NULL before backfill completes, never drops columns before removing all code references.
 metadata:
   version: 1.0.0
   user-invocable: "true"
@@ -41,7 +41,7 @@ If the project uses `strong_migrations`, follow it. If it does not, apply the sa
 | Rename column | Add new, copy data, migrate callers, drop old | Rename column directly | Breaks running app during deploy |
 | Add NOT NULL | After backfill confirms all rows have values | Enforce NOT NULL before backfill completes | Fails or locks on rows missing values |
 | Add foreign key | After cleaning orphaned records | Add FK without cleaning orphans | Constraint violation at migration time |
-| Remove column | Remove code references first, deploy, then drop column | Drop column while code still reads it | Runtime `unknown attribute` errors |
+| Remove column | Remove code references first, deploy, then drop column | Drop column while code still reads it | `unknown attribute` errors at runtime |
 
 For every step, state the expected lock or table-rewrite risk explicitly; if negligible, say why.
 
@@ -87,15 +87,13 @@ class ChangeConfirmedAtNotNull < ActiveRecord::Migration[7.1]
 end
 ```
 
-**Type change rollout pattern:**
+**Type change rollout (5-step):**
 
-```text
-1. Add the new typed column as nullable.
+1. Add new typed column as nullable.
 2. Dual-write old and new columns from application code.
 3. Backfill in batches outside the migration transaction.
-4. Read from the new column after parity checks pass.
-5. Stop writing the old column, then drop it in a later deploy.
-```
+4. Read from new column after parity checks pass.
+5. Stop writing old column, then drop it in a later deploy.
 
 ## Output Style
 

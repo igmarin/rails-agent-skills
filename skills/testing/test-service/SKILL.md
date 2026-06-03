@@ -36,8 +36,6 @@ DO NOT implement the service before step 1 is written and failing for the right 
 
 ## Core Process
 
-**Core principle:** Test the public contract (`.call`, `.find`, `.search`), not internal implementation. Use `instance_double` for isolation, `create` for integration.
-
 ### Spec Template
 
 ```ruby
@@ -91,14 +89,10 @@ let(:client) { instance_double(Api::Client) }
 before { allow(client).to receive(:execute_query).and_return(api_response) }
 ```
 
-- **CRITICAL**: Collaborators (such as API clients, external services, or other domain objects) MUST be stubbed using `instance_double` to ensure true unit isolation.
-- If the collaborator is instantiated inside the service under test, stub its `.new` constructor to return the `instance_double`:
-  ```ruby
-  let(:client) { instance_double(CarrierApi::Client) }
-  before { allow(CarrierApi::Client).to receive(:new).and_return(client) }
-  ```
-- Alternatively, design the service to accept the collaborator as an injected dependency, and pass the `instance_double` in the params.
-- DO NOT use class-level stubs (e.g., `allow(CarrierApi::Client).to receive(:notify)`) as a fallback or workaround. If a collaborator is called via class methods, you must wrap/instantiate it, inject it, or stub `.new` to return the doubled instance.
+**CRITICAL** — Collaborators MUST be stubbed via `instance_double`. Three patterns:
+- **Inject dependency:** pass the double in params directly.
+- **Stub `.new`:** `allow(CarrierApi::Client).to receive(:new).and_return(client)` when the service instantiates internally.
+- **Avoid class-level stubs:** do not use `allow(CarrierApi::Client).to receive(:notify)` — always double the instance.
 
 Use `create` for integration tests:
 
@@ -134,16 +128,15 @@ let(:api_response) { build(:api_animal_response, tag_number: 'TAG002') }
 - [ ] `shared_examples` for repeated patterns
 - [ ] `aggregate_failures` for multi-assertion tests
 - [ ] `change` matchers for state verification
-- [ ] Logger expectations for error logging
 
 ### Common Mistakes
 
 | Mistake | Correct approach |
 |---------|------------------|
-| No error scenario tests | Happy path only = false confidence — always test failures |
-| `let!` everywhere | Use `let` (lazy) unless the value is needed unconditionally for setup |
-| Huge factory setup | Keep factories minimal — only attributes required for the test |
-| Spec breaks when implementation changes but behavior is unchanged | Tests that break on refactoring are testing internals, not contracts |
+| No error scenario tests | Always test failures alongside the happy path |
+| `let!` everywhere | Use `let` (lazy) unless the value is unconditionally required for setup |
+| Huge factory setup | Keep factories minimal — only attributes the test requires |
+| Spec breaks on refactor with unchanged behavior | Tests that break on refactoring are testing internals, not contracts |
 
 ## Extended Resources (Progressive Disclosure)
 

@@ -18,7 +18,7 @@ metadata:
 ---
 # Migration Persona
 
-Orchestrates safe database migration development and deployment with safety checks, testing at each stage, and production monitoring to ensure schema changes don't cause downtime or data loss.
+Safe database migration orchestration with hard gates, testing at each stage, and production monitoring to ensure schema changes don't cause downtime or data loss.
 
 ## Key Safety Rules
 
@@ -29,9 +29,7 @@ Orchestrates safe database migration development and deployment with safety chec
 
 ## Phase 1: Migration Planning
 
-**Objective:** Plan migration for production safety before writing code.
-
-1. **Invoke `skills/infrastructure/review-migration`** — This skill assesses lock behavior, rollback strategy, backfill requirements, and performance impact (`EXPLAIN` queries). If the skill is unavailable, perform these checks manually: identify table lock duration, confirm a rollback path exists, enumerate any backfill steps, and run `EXPLAIN ANALYZE` on affected queries.
+1. **Invoke `skills/infrastructure/review-migration`** — assesses lock behavior, rollback strategy, backfill requirements, and performance impact (`EXPLAIN` queries). If unavailable, perform these checks manually: identify table lock duration, confirm a rollback path exists, enumerate backfill steps, and run `EXPLAIN ANALYZE` on affected queries.
 2. **Choose deployment pattern:**
    - *Expand-contract* for column changes: add nullable column → batch backfill → add constraint → remove old default
    - *Phased rollout* for table-level changes
@@ -48,20 +46,16 @@ Orchestrates safe database migration development and deployment with safety chec
 
 ## Phase 2: Development Testing
 
-**Objective:** Create the migration and verify it in development.
-
 1. **Generate migration:**
    ```bash
    rails generate migration AddStatusToOrders status:string
    ```
-2. **Implement using safe expand-contract pattern** (example: adding a non-nullable column to a large table):
+2. **Implement using safe expand-contract pattern** (each step runs as a **separate migration** in production; shown together here for development clarity):
    ```ruby
    class AddStatusToOrders < ActiveRecord::Migration[7.1]
-     # Step 1 of expand-contract: add nullable, no default
      def up
        add_column :orders, :status, :string
        add_index :orders, :status
-       # Backfill in batches before adding constraint
        Order.in_batches(of: 10_000).update_all(status: 'pending')
        change_column_null :orders, :status, false
        change_column_default :orders, :status, 'pending'
@@ -88,16 +82,12 @@ Orchestrates safe database migration development and deployment with safety chec
 
 ## Phase 3: Staging Deployment
 
-**Objective:** Verify migration on production-like data.
-
 **Prerequisites:** Staging DB must match production in size, data shape, and PostgreSQL version.
 
 ```bash
 RAILS_ENV=staging bundle exec rails db:migrate
-# Run smoke tests
 curl https://staging.example.com/api/health
 curl https://staging.example.com/api/orders
-# Test rollback
 RAILS_ENV=staging bundle exec rails db:rollback
 ```
 
@@ -110,8 +100,6 @@ RAILS_ENV=staging bundle exec rails db:rollback
 ---
 
 ## Phase 4: Production Deployment
-
-**Objective:** Deploy with monitoring and rollback readiness.
 
 **Pre-deployment checklist:**
 - Staging deployment verified
@@ -157,56 +145,14 @@ curl https://api.example.com/api/orders
 
 ---
 
-## Integration
-
-| Predecessor | This Agent | Successor |
-|-------------|------------|-----------|
-| review-migration | migration | deployment |
-| load-context | migration | production-monitoring |
-| None (standalone) | migration | quality |
-
-**Use `review-migration` alone** if you only need to assess migration safety without running the full deployment lifecycle.
-
----
-
 ## Output Style
 
-When completing a migration cycle, output MUST include:
-
-```markdown
-# Migration Report — [Description]
-
-## Plan
-- Change: <description of schema change>
-- Pattern: expand-contract / phased rollout / direct
-- Rollback: <rollback strategy>
-- Lock assessment: <expected lock duration and impact>
-
-## Development
-- Migration file: <path>
-- Idempotent cycle: ✓ migrate → rollback → re-migrate
-- Test suite: ✓ (<n> examples, 0 failures)
-- N+1 check: ✓ no new queries introduced
-
-## Staging
-- Migration time: <duration on production-like data>
-- Smoke tests: ✓ pass
-- Rollback tested: ✓
-
-## Production
-- Deployed: <timestamp>
-- Error rate: <post-migration rate vs baseline>
-- p99 latency: <ms>
-- Monitoring: ✓ first 15 minutes clear
-```
+When completing a migration cycle, produce a **Migration Report** covering: **Plan** (change description, pattern used, rollback strategy, lock assessment), **Development** (migration file path, idempotent cycle result, test suite result, N+1 check), **Staging** (migration time, smoke test result, rollback tested), and **Production** (deploy timestamp, post-migration error rate vs baseline, p99 latency, monitoring result).
 
 ---
 
 ## Anti-Patterns to Avoid
 
-- **Non-reversible migrations:** Every migration MUST have a working `down` method
-- **Schema + data in one migration:** Never combine `add_column` and bulk `update_all` in a single migration — use separate migrations
-- **Skipping staging:** Never deploy a migration to production without staging verification on production-like data
-- **Large-table ALTER without expand-contract:** Adding a NOT NULL column with default on a million-row table will lock it — always expand first, backfill, then constrain
-- **Missing EXPLAIN:** Always run `EXPLAIN ANALYZE` on queries affected by schema changes before deploying
-- **Deploying during peak traffic:** Schedule migrations during low-traffic windows
+- **Non-reversible migrations:** Every migration MUST have a working `down` method.
+- **Missing EXPLAIN:** Always run `EXPLAIN ANALYZE` on queries affected by schema changes before deploying.
+- **Deploying during peak traffic:** Schedule migrations during low-traffic windows.

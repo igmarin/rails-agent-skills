@@ -35,9 +35,9 @@ No implementation code before a failing test. See write-tests.
 
 When reviewing or refactoring Rails code, follow this sequence. Each step maps to a required checkpoint in your output.
 
-1. **Run linter** — Detect config (for example `.rubocop.yml` or `.standard.yml`), run the appropriate tool, note absence if none found. Do not invent style rules; all style/formatting defers to the detected config. *Output: state which linter was detected (or absent) and that style defers to it.*
-2. **Apply area-specific rules** — Check path patterns (e.g., models, background jobs, controllers) and apply targeted guidance from the Apply by area table below. *Output: concrete per-path recommendations for every relevant changed file.*
-3. **Verify tests gate** — Confirm failing tests exist before any new behavior; run specs and checkpoints. *Output: state the failing spec, run command, expected failure, minimal implementation step, and passing rerun.*
+1. **Run linter** — Detect config (e.g. `.rubocop.yml` or `.standard.yml`), run the appropriate tool, note absence if none found. *Output: linter detected (or absent); style defers to it.*
+2. **Apply area-specific rules** — Check path patterns and apply targeted guidance from the Apply by area table. *Output: concrete per-path recommendations for every relevant changed file.*
+3. **Verify tests gate** — Confirm failing tests exist before any new behavior. *Output: failing spec, run command, expected failure, minimal implementation step, passing rerun.*
 4. **Enforce structured logging** — Ensure all `Rails.logger` calls use static strings + structured hashes with an `event:` key, plus backtrace for errors. *Output: apply structured logging rules from Sub-Rules below.*
 5. **Enforce comment discipline** — Ensure all tags (`TODO:`, `FIXME:`) have actionable context (owner, ticket). *Output: apply comment discipline rules from Sub-Rules below.*
 6. **Chain to specialised skills** — Use the Integration table to pull in deeper guidance (security, jobs, specs) as needed.
@@ -47,7 +47,7 @@ When reviewing or refactoring Rails code, follow this sequence. Each step maps t
 ## Sub-Rules
 
 ### Comments and tagged notes
-Comment **why**, not **what**. Tagged notes — `TODO:` / `FIXME:` / `HACK:` / `NOTE:` / `OPTIMIZE:` — are MANDATORY in these triggers; every tag carries actionable context. Naked tags (`# TODO: fix this`) fail review.
+Comment **why**, not **what**. Tags — `TODO:` / `FIXME:` / `HACK:` / `NOTE:` / `OPTIMIZE:` — must carry actionable context (owner, ticket, next step). Naked tags fail review.
 ```ruby
 # BAD — naked tag, no context
 # TODO: fix this
@@ -93,15 +93,7 @@ Load these files only when their specific content is needed:
 - **[assets/checklist.md](assets/checklist.md)** — Use for detailed code review checklists.
 - **[assets/snippets.md](assets/snippets.md)** — Use for quick code snippets of common patterns.
 
-## Output Style
-
-When applying code conventions, your output `answer.md` MUST include:
-1. **Linter Detection**: State which linter configuration was detected in the project (e.g. `.rubocop.yml` or `.standard.yml`), or note its absence.
-2. **Applied Area-Specific Rules**: State the concrete per-path recommendations for each changed/reviewed file path using the Apply by area guidelines.
-3. **Structured Logging Verification**: Confirm that all logger calls follow the mandatory static string + domain fields hash shape.
-4. **Comment Discipline Verification**: Verify that all `TODO:`/`FIXME:`/`NOTE:` tags contain owner and ticket context.
-5. **Resource Loading & Reference**: Include a short section in `answer.md` documenting which specific assets (e.g. `assets/checklist.md`, `assets/snippets.md`) were loaded conditionally and why. This makes the process instruction verifiable.
-6. **Language**: Must be in English unless explicitly requested otherwise.
+Document which assets were loaded and why in your output so the process is verifiable.
 
 ## Integration
 

@@ -70,53 +70,19 @@ steps:
       bundler-cache: true
 ```
 
-2. **Configure CI pipeline** — write to `.github/workflows/ci.yml`:
-
+2. **Configure CI pipeline** — write to `.github/workflows/ci.yml` using the shared preamble above, then add:
 ```yaml
-name: CI
-on: [push, pull_request]
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      # <shared preamble above>
       - run: bundle exec rails db:create db:migrate
       - run: bundle exec rspec
       - run: bundle exec rubocop
       - run: bundle exec brakeman --no-pager
       - run: bundle exec bundle-audit check --update
 ```
+Full template: save as `ci-template.yml` in project docs if reuse is needed.
 
-3. **Configure CD pipeline** — write to `.github/workflows/cd.yml`:
+3. **Configure CD pipeline** — write to `.github/workflows/cd.yml`. The pattern is: a `deploy-staging` job using the shared preamble, followed by a `deploy-production` job with `needs: deploy-staging` and `environment: production` (manual approval gate). Each job runs `bundle exec rails db:migrate` with the appropriate `RAILS_ENV` and `DATABASE_URL` secret, then invokes the platform deploy CLI (e.g., Heroku, Fly.io, or Kamal). Staging and production jobs are structurally identical — copy the staging job and swap environment name and secret references.
 
-```yaml
-name: CD
-on:
-  push:
-    branches: [main]
-jobs:
-  deploy-staging:
-    runs-on: ubuntu-latest
-    environment: staging
-    steps:
-      # <shared preamble above>
-      - run: bundle exec rails db:migrate
-        env:
-          RAILS_ENV: staging
-          DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
-      # Add deployment step (e.g. Heroku, Fly.io, or Kamal CLI)
-  deploy-production:
-    runs-on: ubuntu-latest
-    needs: deploy-staging
-    environment: production   # Requires manual approval gate in GitHub
-    steps:
-      # <shared preamble above>
-      - run: bundle exec rails db:migrate
-        env:
-          RAILS_ENV: production
-          DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
-      # Add deployment step matching staging; rollback via platform CLI
-```
+Full template: save as `cd-template.yml` in project docs if reuse is needed.
 
 ---
 
@@ -141,16 +107,6 @@ act push  # GitHub Actions local runner (optional)
 
 ---
 
-## Integration
-
-| Predecessor | This Skill | Successor |
-|-------------|------------|-----------|
-| None (entry point) | setup | tdd (start developing) |
-
-**From setup persona:** This is the setup workflow. For development, chain to tdd.
-
----
-
 ## Output Style
 
 When completing project setup, output MUST include:
@@ -166,18 +122,17 @@ When completing project setup, output MUST include:
 
 ## Dependencies
 - bundle install: ✓ (<n> gems installed)
-- db:create: ✓
-- db:migrate: ✓ (<n> migrations)
+- db:create: ✓ / db:migrate: ✓ (<n> migrations)
 - rspec --dry-run: ✓ (<n> examples detected)
 
 ## CI/CD
-- CI workflow: .github/workflows/ci.yml
-- CD workflow: .github/workflows/cd.yml
-- Actions pinned to SHA: ✓ (all uses: entries use commit SHAs)
+- CI: .github/workflows/ci.yml ✓
+- CD: .github/workflows/cd.yml ✓
+- Actions pinned to SHA: ✓
 - Pipeline: lint → test → security scan → deploy
 
 ## Validation
-- Local server starts: ✓ (rails server on port 3000)
+- Local server starts: ✓ (port 3000)
 - Full test suite: ✓ (<n> examples, 0 failures)
 - SETUP_CHECKLIST.md: ✓ written
 ```
@@ -216,8 +171,6 @@ The items below may require installing system packages or configuring local serv
 
 ## Anti-Patterns to Avoid
 
-- **Mutable CI action tags:** NEVER use `@v4`, `@v1`, etc. — always pin to immutable commit SHAs
-- **Skipping database verification:** Always confirm `db:create` and `db:migrate` succeed before proceeding
 - **Missing .env.example:** Always create `.env.example` with placeholder values for all required environment variables
 - **Hardcoded Ruby version:** Always read from `.ruby-version` — never hardcode in CI workflows
 - **Skipping security scanning:** CI MUST include `brakeman` and `bundle-audit` alongside tests
