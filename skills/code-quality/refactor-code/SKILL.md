@@ -34,6 +34,7 @@ NEVER mix behavior changes with structural refactors in the same step —
   then apply behavior changes in a separate step with its own test.
 ONE boundary per refactoring step — never extract two abstractions in the same step.
 If a public interface changes, document the compatibility shim and its removal condition.
+NEVER fabricate test output — label only actual run output as Observed output.
 ```
 
 ## Core Process
@@ -41,7 +42,9 @@ If a public interface changes, document the compatibility shim and its removal c
 ### 1. Define stable behavior
 Identify the exact inputs and outputs of the logic being refactored. Keep public interfaces stable until callers are migrated. Prefer adapters, facades, or wrappers for transitional states.
 
-Include an **Adapter/facade/wrapper decision** subsection before listing refactoring steps: either name the transitional shim and its removal condition, or state why no shim is needed because the public interface remains unchanged.
+Include in your output:
+- **Stable behavior statement:** an explicit statement of what must not change (inputs/outputs, public interfaces).
+- **Shim decision:** name any transitional adapter/facade/wrapper and its removal condition, or state why none is needed.
 
 ### 2. Add characterization tests
 **Write this before touching any production file.** No refactoring step begins until this test exists and passes on the current (un-refactored) code. If the characterization spec fails, do not continue — stop and fix the test or the behavior mismatch.
@@ -65,9 +68,7 @@ end
 Run it: `bundle exec rspec spec/requests/orders_spec.rb` — it must pass on the **current** code.
 
 ### 3. Choose the smallest safe slice
-Good first moves include: renaming unclear methods, isolating duplicated logic behind a shared object, or wrapping external integrations before moving call sites. Add narrow seams before deleting old code paths.
-
-All refactoring patterns (extracting services, splitting classes, reducing duplication) follow this same process — one boundary at a time, characterization tests first, verification after each step.
+Good first moves include: renaming unclear methods, isolating duplicated logic behind a shared object, or wrapping external integrations before moving call sites. Add narrow seams before deleting old code paths. One boundary at a time — characterization tests first, verification after each step.
 
 ### 4. Execute extraction/refactor (One step at a time)
 Extract, move, or rename logic. Stop and simplify if the refactor introduces more indirection than clarity.
@@ -107,4 +108,4 @@ Run verification after every refactoring step:
 
 Report test run output at EACH step — not only at the end. At least two separate **Observed output** entries at different sequence points are required.
 
-**Evidence labelling rules:** Label actual run output as **Observed output** only. Never use labels such as "Expected output", "Required output", "Planned output", or "Must produce 0 failures" as substitutes for actual observed run output. If you have not run the tests, you have no observed output to report — do not fabricate it.
+**Evidence labelling rules:** Label actual run output as **Observed output** only. Never use labels such as "Expected output", "Required output", "Planned output", or "Must produce 0 failures" as substitutes for actual observed run output. If you have not run the tests, you have no observed output to report.

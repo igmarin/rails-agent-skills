@@ -64,7 +64,9 @@ VERIFICATION COMMANDS:
 
 If the user does not specify the engine type, infer it from the requested behavior and say which type you chose.
 
-## Extended Resources
+## Extended Resources (Progressive Disclosure)
+
+Load these files only when their specific content is needed:
 
 > The sections below contain supplementary reference material. Core process steps above are sufficient to start; consult these for copy-paste scaffolding and structural guidance.
 

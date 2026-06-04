@@ -88,15 +88,23 @@ params.require(:user).permit(:name, :email)
 
 ## Output Style
 
-1. **Format**: One section per review area in order; write "No issues found" for empty sections and note what evidence would be needed to verify that category.
-2. **Finding details**: Each finding carries:
+When asked to perform a security audit, your output MUST include:
+
+1. **Section order** — One section per review area in the exact sequence specified; write "No issues found" for empty sections and note what evidence would be needed to verify that category
+2. **Finding details** — Each finding carries:
    - **Severity:** **High** or **Medium** (not "Critical")
    - **Attack path:** input → reach → impact
    - **Affected file:** path + line, e.g. `app/controllers/documents_controller.rb:42`
    - **Mitigation:** smallest credible fix
    - **Hypothetical Exploitability Verification** sub-section: concrete example vulnerability and exploit request/payload proving exploitability. This sub-section belongs inside Verification Steps & Quality Gates, never as a top-level section.
-3. **No Implied Paths**: When no source code is analyzed, use generic placeholders like `SRC_DIR/` or `HYPOTHETICAL_DIR/hypothetical_controller.rb`.
-4. **Language**: Must be in English unless explicitly requested otherwise.
+3. **No Implied Paths** — When no source code is analyzed, use generic placeholders like `SRC_DIR/` or `HYPOTHETICAL_DIR/hypothetical_controller.rb`
+4. **Language** — Must be in English unless explicitly requested otherwise
+
+## Extended Resources (Progressive Disclosure)
+
+Load these files only when their specific content is needed:
+
+- **[PITFALLS.md](PITFALLS.md)** — Use when you need detailed examples of common security pitfalls and false positives to avoid
 
 ## Integration
 

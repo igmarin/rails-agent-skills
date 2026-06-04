@@ -40,49 +40,39 @@ NEVER hardcode credentials (passwords, API keys, secrets) in seeds, factories, o
 4. **Validate idempotency** — run `rails db:seed` a second time and confirm no duplicates or errors.
 5. **Verify data** — open `rails console` and spot-check expected records exist with correct attributes.
 
-## Extended Resources
+## Minimal Inline Example
 
-### Environment-Specific Seeds
-
-Split seed logic across environment files to keep `db/seeds.rb` clean:
+A copy-paste ready `db/seeds.rb` covering idempotency, environment scoping, and safe credentials:
 
 ```ruby
 # db/seeds.rb
+
+# Static reference data — safe to run repeatedly
+Role.find_or_create_by!(name: 'admin') do |r|
+  r.description = 'Full system access'
+end
+
+Role.find_or_create_by!(name: 'member') do |r|
+  r.description = 'Standard user access'
+end
+
+# Development-only seed data — never runs in production
 if Rails.env.development?
-  require Rails.root.join('db/seeds/development')
-elsif Rails.env.test?
-  require Rails.root.join('db/seeds/test')
-end
-```
-
-```ruby
-# db/seeds/development.rb
-10.times do |i|
-  email = "dev_user_#{i + 1}@example.com"
-
-  User.find_or_create_by!(email: email) do |u|
-    u.password = ENV.fetch('DEFAULT_SEED_PASSWORD', SecureRandom.hex(16))
+  User.find_or_create_by!(email: 'admin@example.com') do |u|
+    u.role       = Role.find_by!(name: 'admin')
+    u.password   = ENV.fetch('DEFAULT_SEED_PASSWORD', SecureRandom.hex(16))
   end
 end
 ```
 
-### FactoryBot Factory
+For FactoryBot factory definitions and more complex relationship patterns, see **[EXAMPLES.md](EXAMPLES.md)**.
 
-Place factories under `spec/factories/` and use traits for role variants:
+## Extended Resources (Progressive Disclosure)
 
-```ruby
-# spec/factories/users.rb
-FactoryBot.define do
-  factory :user do
-    email { Faker::Internet.unique.email }
-    password { ENV.fetch('DEFAULT_SEED_PASSWORD', SecureRandom.hex(16)) }
+Load these files only when their specific content is needed:
 
-    trait :admin do
-      admin { true }
-    end
-  end
-end
-```
+- **[EXAMPLES.md](EXAMPLES.md)** — Use when you need complete seeding examples with environment-specific patterns and FactoryBot factory definitions
+- **[references/workflow.md](references/workflow.md)** — Use when implementing complex seeding workflows or migration-dependent seed data
 
 ### Reference Links
 
