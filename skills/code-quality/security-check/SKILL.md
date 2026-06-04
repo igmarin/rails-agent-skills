@@ -3,13 +3,28 @@ name: security-check
 type: atomic
 license: MIT
 description: >
-  Use when performing security audits on Rails application code — must check authentication/authorization, parameter handling, redirects/rendering, file/network/job inputs, and secrets/logging, verify each finding is exploitable with a concrete attack scenario before reporting (excluding false positives without using representative file paths), and present sections in the exact order specified, even if empty. Code review for XSS, CSRF, SSRF, SQL injection, open redirects, secrets.
+  Rails security audit with hard gates: NEVER reproduce credentials, tokens, API keys, or secrets verbatim in output — flag secrets by file path and line number only. Must check authentication/authorization, parameter handling, redirects/rendering, file/network/job inputs, and secrets/logging, verify each finding is exploitable with a concrete attack scenario before reporting (excluding false positives without using representative file paths), and present sections in the exact order specified, even if empty. Code review for XSS, CSRF, SSRF, SQL injection, open redirects, secrets.
 metadata:
   version: 1.0.0
   user-invocable: "true"
 ---
 
 # Security Check
+
+## HARD-GATE: Credential Handling
+
+```text
+CREDENTIAL HANDLING (W007 — Insecure Credential Exposure Defense):
+- NEVER reproduce credentials, tokens, API keys, passwords, or secrets verbatim
+  in output — flag by file path and line number only.
+- When a finding involves secrets in code or logs, report:
+    Affected file: app/config/initializers/foo.rb:12
+    Finding: API key present in plain text — move to Rails credentials or ENV
+  Do NOT quote the secret value itself.
+- Exploitability Verification sub-sections MUST use generic placeholder values
+  (e.g. "<REDACTED>", "<TOKEN>") — never the actual credential.
+- If a file scan returns a secret value, stop — report its location, not its content.
+```
 
 ## Quick Reference
 
