@@ -59,6 +59,12 @@ This repository follows the Agent Skills standard, meaning you can install the e
 npx skills add igmarin/rails-agent-skills
 ```
 
+ > **Note:** You may see a harmless warning at the end of the install:
+> `✗ rails-agent-skills → PromptScript: PromptScript does not support global skill installation`
+> This is a known bug in the skills.sh CLI where the PromptScript agent is incorrectly included in
+> the global install target list despite not supporting it. All 37 skills install successfully to
+> every other supported agent — the warning can be safely ignored.
+
 ## Who This Is For
 
 | Reader | What you get |

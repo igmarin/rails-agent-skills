@@ -1,0 +1,52 @@
+#!/bin/bash
+#
+# rs-guard pre-commit hook
+#
+# Runs an AI-powered review of staged changes using rs-guard before each commit.
+# Uses --dry-run so it never blocks the commit — output is informational only.
+#
+# Requirements:
+#   - rs-guard installed: cargo install rs-guard
+#   - DEEPSEEK_API_KEY set in your shell environment
+#
+# Usage: This script is invoked automatically by git via hooks/hooks.json.
+# To install manually: cp hooks/pre-commit-rs-guard .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
+
+set -euo pipefail
+
+RS_GUARD_BIN="${RS_GUARD_BIN:-rs-guard}"
+
+if ! command -v "$RS_GUARD_BIN" &>/dev/null; then
+  RS_GUARD_BIN="$HOME/.cargo/bin/rs-guard"
+fi
+
+if ! command -v "$RS_GUARD_BIN" &>/dev/null && [ ! -x "$RS_GUARD_BIN" ]; then
+  echo "[rs-guard] rs-guard not found — skipping pre-commit review."
+  echo "[rs-guard] Install with: cargo install rs-guard"
+  exit 0
+fi
+
+if [ -z "${DEEPSEEK_API_KEY:-}" ]; then
+  echo "[rs-guard] DEEPSEEK_API_KEY not set — skipping pre-commit review."
+  exit 0
+fi
+
+DIFF_FILE="$(mktemp /tmp/rs-guard-staged-XXXXXX.diff)"
+trap 'rm -f "$DIFF_FILE"' EXIT
+
+git diff --cached --unified=5 > "$DIFF_FILE"
+
+if [ ! -s "$DIFF_FILE" ]; then
+  exit 0
+fi
+
+echo "[rs-guard] Running AI review on staged changes..."
+
+"$RS_GUARD_BIN" \
+  --diff-file "$DIFF_FILE" \
+  --prompt-file ".github/review-prompt.md" \
+  --provider deepseek \
+  --dry-run \
+  2>&1 || true
+
+echo "[rs-guard] Review complete. Commit proceeding."

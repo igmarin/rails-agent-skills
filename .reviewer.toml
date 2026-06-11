@@ -1,0 +1,7 @@
+[review]
+prompt_file = ".github/review-prompt.md"
+provider = "deepseek"
+temperature = 0.1
+
+[provider.deepseek]
+model = "deepseek-chat"
