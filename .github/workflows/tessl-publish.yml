@@ -101,9 +101,11 @@ jobs:
       - name: Commit automatic version bump
         env:
           VERSION: ${{ steps.version.outputs.version }}
+          GH_PAT: ${{ secrets.GH_PAT }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin "https://x-access-token:${GH_PAT}@github.com/igmarin/rails-agent-skills.git"
           git add .tessl-plugin/plugin.json
           if git diff --cached --quiet; then
             echo "plugin.json already contains version $VERSION"
@@ -118,7 +120,9 @@ jobs:
       - name: Create matching Git tag
         env:
           VERSION: ${{ steps.version.outputs.version }}
+          GH_PAT: ${{ secrets.GH_PAT }}
         run: |
+          git remote set-url origin "https://x-access-token:${GH_PAT}@github.com/igmarin/rails-agent-skills.git"
           git fetch --tags
 
           tag="v$VERSION"
