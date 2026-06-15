@@ -49,4 +49,12 @@ node_modules/
 !build/SKILL.md
 LEAN-CTX.md
 AGENTS.md.lean-ctx.bak
+.rs-guard/
+report.json
+review-result.txt
+rs-guard-metrics.json
 docs/engineering/
+report.json
+.rs-guard/cache
+review-result.txt
+rs-guard-metrics.json

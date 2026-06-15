@@ -86,8 +86,8 @@ Safe database migration orchestration with hard gates, testing at each stage, an
 
 ```bash
 RAILS_ENV=staging bundle exec rails db:migrate
-curl https://staging.example.com/api/health
-curl https://staging.example.com/api/orders
+curl https://staging.example.local/api/health
+curl https://staging.example.local/api/orders
 RAILS_ENV=staging bundle exec rails db:rollback
 ```
 
@@ -114,8 +114,8 @@ tail -f log/production.log
 heroku pg:diagnostics --app production-app
 
 # Smoke tests
-curl https://api.example.com/health
-curl https://api.example.com/api/orders
+curl https://api.example.local/health
+curl https://api.example.local/api/orders
 
 # Rollback if needed
 # RAILS_ENV=production bundle exec rails db:rollback

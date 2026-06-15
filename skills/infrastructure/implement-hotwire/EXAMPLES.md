@@ -7,7 +7,6 @@ Complete code examples for Turbo and Stimulus implementations.
 ### Basic Frame
 
 ```erb
-<!-- app/views/posts/index.html.erb -->
 <h1>Posts</h1>
 
 <%= turbo_frame_tag "posts_list" do %>
@@ -18,7 +17,6 @@ Complete code examples for Turbo and Stimulus implementations.
 ### Frame with New Post Form
 
 ```erb
-<!-- app/views/posts/index.html.erb -->
 <%= turbo_frame_tag "new_post" do %>
   <%= link_to "New Post", new_post_path %>
 <% end %>
@@ -29,7 +27,6 @@ Complete code examples for Turbo and Stimulus implementations.
 ```
 
 ```erb
-<!-- app/views/posts/new.html.erb -->
 <%= turbo_frame_tag "new_post" do %>
   <%= render "form", post: @post %>
 <% end %>
@@ -38,7 +35,6 @@ Complete code examples for Turbo and Stimulus implementations.
 ### Lazy-Loaded Frame
 
 ```erb
-<!-- Load content when frame scrolls into view -->
 <%= turbo_frame_tag "comments", src: post_comments_path(@post), loading: :lazy do %>
   <p>Loading comments...</p>
 <% end %>
@@ -49,7 +45,6 @@ Complete code examples for Turbo and Stimulus implementations.
 ### Stream Template for Create
 
 ```erb
-<!-- app/views/posts/create.turbo_stream.erb -->
 <%= turbo_stream.append "posts_list", partial: "post", locals: { post: @post } %>
 <%= turbo_stream.update "new_post", partial: "posts/new_link" %>
 <%= turbo_stream.update "post_count", Post.count %>
@@ -58,14 +53,12 @@ Complete code examples for Turbo and Stimulus implementations.
 ### Stream Template for Update
 
 ```erb
-<!-- app/views/posts/update.turbo_stream.erb -->
 <%= turbo_stream.replace @post, partial: "post", locals: { post: @post } %>
 ```
 
 ### Stream Template for Destroy
 
 ```erb
-<!-- app/views/posts/destroy.turbo_stream.erb -->
 <%= turbo_stream.remove @post %>
 <%= turbo_stream.update "post_count", Post.count %>
 ```
@@ -82,7 +75,6 @@ end
 ```
 
 ```erb
-<!-- app/views/posts/index.html.erb -->
 <%= turbo_stream_from "posts" %>
 <%= turbo_frame_tag "posts_list" do %>
   <%= render @posts %>
@@ -111,7 +103,6 @@ export default class extends Controller {
 ```
 
 ```erb
-<!-- app/views/posts/show.html.erb -->
 <div data-controller="clipboard">
   <input data-clipboard-target="source" type="text" value="<%= post_url(@post) %>" readonly>
   <button data-action="clipboard#copy" data-clipboard-target="button">Copy</button>
@@ -195,7 +186,6 @@ export default class extends Controller {
 ### HTML-First Form
 
 ```erb
-<!-- Step 1: Plain HTML (works without JS) -->
 <%= form_with model: @post do |f| %>
   <%= f.text_field :title %>
   <%= f.text_area :body %>
@@ -206,7 +196,6 @@ export default class extends Controller {
 ### With Turbo Frame
 
 ```erb
-<!-- Step 2: Wrap in frame for partial updates -->
 <%= turbo_frame_tag "post_form" do %>
   <%= form_with model: @post do |f| %>
     <%= f.text_field :title %>

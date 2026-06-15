@@ -61,6 +61,8 @@ volumes:
 FROM ruby:3.2-slim
 
 # Install dependencies
+# Note: Command chaining with && is standard Docker practice for single RUN instructions
+# Clean apt cache for smaller image size
 RUN apt-get update -qq && apt-get install -y \
   build-essential \
   libpq-dev \
@@ -94,7 +96,7 @@ CMD ["bin/rails", "server", "-b", "0.0.0.0"]
 # Database
 DATABASE_URL=postgres://postgres:postgres@localhost:5432/myapp_development
 
-# Rails
+# Rails (development environment only - never use in production)
 RAILS_ENV=development
 SECRET_KEY_BASE=change_me_in_production
 
@@ -245,6 +247,8 @@ rails db:create
 ```
 
 ### Bundle Install Failures
+
+# Note: The commands below use rm -rf for development troubleshooting purposes only
 
 ```bash
 # Clear cache and reinstall

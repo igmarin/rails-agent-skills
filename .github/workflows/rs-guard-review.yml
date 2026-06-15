@@ -18,7 +18,8 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        # Pinned from actions/checkout@v5 (93cb6efe) to avoid Node.js 20 deprecation.
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
         with:
           fetch-depth: 0
           persist-credentials: false
@@ -35,23 +36,17 @@ jobs:
             exit 0
           fi
 
-      - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
-
-      - name: Cache cargo registry
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-            ~/.cargo/bin/rs-guard
-          key: ${{ runner.os }}-rs-guard-v1.0.0
-
-      - name: Install rs-guard
+      - name: Download rs-guard
         run: |
-          if ! command -v rs-guard &>/dev/null; then
-            cargo install rs-guard --version 1.0.0 --locked
-          fi
+          set -euo pipefail
+          BINARY="rs-guard-x86_64-unknown-linux-gnu"
+          curl -L --fail -o "${BINARY}" \
+            "https://github.com/nebulaideas/rs-guard/releases/latest/download/${BINARY}"
+          curl -L --fail -o "${BINARY}.sha256" \
+            "https://github.com/nebulaideas/rs-guard/releases/latest/download/${BINARY}.sha256"
+          sha256sum -c "${BINARY}.sha256"
+          chmod +x "${BINARY}"
+          mv "${BINARY}" /usr/local/bin/rs-guard
           rs-guard --version
 
       - name: Run rs-guard review
