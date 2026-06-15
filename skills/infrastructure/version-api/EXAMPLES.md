@@ -240,10 +240,10 @@ end
 
 ```bash
 # V1 endpoint
-curl http://api.example.local/api/v1/users
+curl https://api.example.local/api/v1/users
 
 # V2 endpoint
-curl http://api.example.local/api/v2/users
+curl https://api.example.local/api/v2/users
 ```
 
 ### Using Accept Header
@@ -251,18 +251,18 @@ curl http://api.example.local/api/v2/users
 ```bash
 # V1 via header
 curl -H "Accept: application/json; version=1" \
-     http://api.example.local/api/users
+     https://api.example.local/api/users
 
 # V2 via header
 curl -H "Accept: application/json; version=2" \
-     http://api.example.local/api/users
+     https://api.example.local/api/users
 ```
 
 ### Checking Deprecation Headers
 
 ```bash
 # V1 endpoint with deprecation
-curl -I http://api.example.local/api/v1/users
+curl -I https://api.example.local/api/v1/users
 
 # Response headers:
 # Deprecation: true
