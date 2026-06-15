@@ -85,6 +85,18 @@ RSpec.describe OrderConfirmationEmailJob do
     allow(EmailService).to receive(:send_confirmation).and_raise(EmailService::TimeoutError)
     expect { described_class.perform_now(order.id, order.customer_email, order.total) }.to raise_error(EmailService::TimeoutError)
   end
+
+  it 'logs and re-raises on transient error' do
+    allow(EmailService).to receive(:send_confirmation).and_raise(EmailService::TimeoutError)
+    expect(Rails.logger).to receive(:error).with(/transient error/)
+    expect { described_class.perform_now(order.id, order.customer_email, order.total) }
+      .to raise_error(EmailService::TimeoutError)
+  end
+
+  it 'discards silently on permanent error' do
+    allow(EmailService).to receive(:send_confirmation).and_raise(EmailService::InvalidEmailError)
+    expect { described_class.perform_now(order.id, "bad", order.total) }.not_to raise_error
+  end
 end
 ```
 
@@ -111,8 +123,6 @@ class OrderConfirmationEmailJob < ApplicationJob
   end
 end
 ```
-
-> **Note:** `discard_on` handles permanent errors at the framework level — no rescue block is needed for them. The rescue block above covers only transient errors that need logging before being re-raised to trigger retry.
 
 ---
 
@@ -166,37 +176,18 @@ end
 
 ## Phase 4: Failure Scenario Testing & Monitoring
 
-**Objective:** Verify retry/discard behaviour under injected failures and confirm observability.
+**Objective:** Verify retry/discard behaviour under injected failures at the integration/production level and confirm observability.
 
 **Steps:**
-1. Inject transient errors → assert job raises (triggering retry logic).
-2. Inject permanent errors → assert job does **not** raise and error is logged.
-3. Confirm timeout handling (stub slow operations).
-4. Verify metrics increment on success and failure paths.
+1. Inject transient errors at the integration level → assert job raises and the queue backend schedules a retry (not just that the error propagates in a unit test).
+2. Inject permanent errors → assert job does **not** raise, error is logged, and the job is not re-enqueued.
+3. Confirm timeout handling by stubbing slow operations and verifying the worker-level timeout fires correctly.
+4. Verify metrics increment on success and failure paths (assert StatsD/Datadog counters, not just that no exception is raised).
 5. Confirm queue-depth alerts fire when queue backs up.
 
-**Example failure scenario tests:**
-```ruby
-RSpec.describe OrderConfirmationEmailJob do
-  let(:order) { create(:order, :completed) }
-
-  it 'logs and re-raises on transient error' do
-    allow(EmailService).to receive(:send_confirmation).and_raise(EmailService::TimeoutError)
-    expect(Rails.logger).to receive(:error).with(/transient error/)
-    expect { described_class.perform_now(order.id, order.customer_email, order.total) }
-      .to raise_error(EmailService::TimeoutError)
-  end
-
-  it 'discards silently on permanent error' do
-    allow(EmailService).to receive(:send_confirmation).and_raise(EmailService::InvalidEmailError)
-    expect { described_class.perform_now(order.id, "bad", order.total) }.not_to raise_error
-  end
-end
-```
-
 **HARD GATE — Failure Scenarios Tested:**
-- [ ] Retry path tested (raises on transient error)
-- [ ] Discard path tested (no raise on permanent error)
+- [ ] Retry path tested end-to-end (job raises on transient error and backend re-enqueues)
+- [ ] Discard path tested (no raise on permanent error, job not re-enqueued)
 - [ ] Error logging assertions pass
 - [ ] Metrics verified on success and failure
 - [ ] Performance acceptable under expected load
@@ -268,20 +259,9 @@ When completing a background job implementation, output MUST include:
 ## Integration
 
 | Predecessor | This Persona | Successor |
-|-------------|--------------|-----------|
+|-------------|--------------|----------|
 | load-context | background-job | code-review |
 | tdd | background-job | quality |
 | None (standalone) | background-job | PR submission |
 
 **Use `implement-background-job` alone** if the job design is already decided and you only need to implement the job class and specs.
-
----
-
-## Anti-Patterns to Avoid
-
-- **Non-idempotent jobs** — always guard against duplicate execution.
-- **Missing retry/discard** — never deploy without both strategies configured.
-- **Silent failures** — always log and track errors.
-- **Unbounded retries** — cap attempts (3–5 is typical).
-- **Blocking operations** — keep jobs short; offload slow I/O.
-- **No monitoring** — wire metrics before going to production.
