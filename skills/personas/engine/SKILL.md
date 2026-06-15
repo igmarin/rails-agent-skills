@@ -30,7 +30,7 @@ metadata:
 
 **Kickoff command:**
 ```bash
-rails plugin new my_engine --mountable --skip-test
+rails plugin new my_engine --mountable --test
 ```
 
 **Key files to verify after scaffolding:**

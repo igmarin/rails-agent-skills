@@ -50,3 +50,7 @@ node_modules/
 LEAN-CTX.md
 AGENTS.md.lean-ctx.bak
 docs/engineering/
+report.json
+.rs-guard/cache
+review-result.txt
+rs-guard-metrics.json

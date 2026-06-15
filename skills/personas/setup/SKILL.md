@@ -40,7 +40,7 @@ cp .env.example .env 2>/dev/null || true
 - [ ] Ruby version correct (check `.ruby-version`)
 - [ ] Bundler installed and working
 - [ ] Database connection successful
-- [ ] All env vars loaded (check `config/credentials.yml.enc` or `.env`)
+- [ ] All env vars loaded (check `config/credentials.yml.enc` or your environment configuration file)
 - [ ] All external CI actions pinned to immutable commit SHAs (never mutable tags like @v4, @v1)
 
 **If environment check FAILS:** Fix the failing item above before proceeding to Phase 2.
@@ -141,7 +141,7 @@ When completing project setup, output MUST include:
 - Ruby: <version> (matches .ruby-version: ✓/✗)
 - Bundler: <version>
 - Database: <PostgreSQL version, connection status>
-- Env vars: <loaded from .env / credentials>
+- Env vars: <loaded from environment configuration file / credentials>
 
 ## Dependencies
 - bundle install: ✓ (<n> gems installed)
