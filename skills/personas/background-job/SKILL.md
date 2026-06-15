@@ -56,7 +56,7 @@ Orchestrates robust background job implementation with TDD discipline, proper re
 2. Write failing tests covering: successful execution, idempotency (run twice = same result), transient error raises, permanent error discards.
 3. Confirm tests **FAIL** for the right reason (job not yet implemented).
 4. Propose implementation approach and wait for explicit user approval.
-5. Implement job; confirm tests **PASS**.
+5. Implement job using the structure shown in Phase 3 (retry/discard declarations included from the start); confirm tests **PASS**.
 6. Run full test suite — confirm no regressions.
 
 **HARD GATE — Tests Pass:**
@@ -65,7 +65,7 @@ Orchestrates robust background job implementation with TDD discipline, proper re
 - [ ] All tests pass after implementation
 - [ ] Full suite green
 
-**Example job test skeleton:**
+**Example job test skeleton** (for `OrderConfirmationEmailJob` — see Phase 3 for the matching implementation):
 ```ruby
 # spec/jobs/order_confirmation_email_job_spec.rb
 RSpec.describe OrderConfirmationEmailJob do
@@ -100,7 +100,20 @@ RSpec.describe OrderConfirmationEmailJob do
 end
 ```
 
-**Example job implementation skeleton:**
+---
+
+## Phase 3: Retry/Discard Configuration
+
+**Objective:** Harden job for production with correct retry backoff, discard rules, timeouts, and monitoring hooks.
+
+**Steps:**
+1. Choose backend (Solid Queue for Rails 8+, Sidekiq for high scale) and configure worker concurrency.
+2. Apply `retry_on` with exponential backoff and a capped attempt count (3–5) for every transient error class.
+3. Apply `discard_on` for every permanent error class; log discards.
+4. Set job execution timeout and queue timeout at the worker/config level.
+5. Wire error tracking (e.g., Sentry) and metrics (e.g., StatsD/Datadog) in `ApplicationJob` callbacks.
+
+**Complete job implementation** (matches the test skeleton in Phase 2):
 ```ruby
 # app/jobs/order_confirmation_email_job.rb
 class OrderConfirmationEmailJob < ApplicationJob
@@ -123,19 +136,6 @@ class OrderConfirmationEmailJob < ApplicationJob
   end
 end
 ```
-
----
-
-## Phase 3: Retry/Discard Configuration
-
-**Objective:** Harden job for production with correct retry backoff, discard rules, timeouts, and monitoring hooks.
-
-**Steps:**
-1. Choose backend (Solid Queue for Rails 8+, Sidekiq for high scale) and configure worker concurrency.
-2. Apply `retry_on` with exponential backoff and a capped attempt count (3–5) for every transient error class.
-3. Apply `discard_on` for every permanent error class; log discards.
-4. Set job execution timeout and queue timeout at the worker/config level.
-5. Wire error tracking (e.g., Sentry) and metrics (e.g., StatsD/Datadog) in `ApplicationJob` callbacks.
 
 **Solid Queue (Rails 8+) snippet:**
 ```ruby

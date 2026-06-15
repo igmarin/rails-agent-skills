@@ -11,8 +11,6 @@ metadata:
 
 # Test Engine
 
-Use this skill when the task is to create or improve test coverage for a Rails engine.
-
 ## HARD-GATE
 
 ```text
@@ -29,11 +27,10 @@ If this fails, check the engine's `engine.rb` initializer order and ensure the e
 ## Core Process
 
 1. Identify the engine type and public behaviors.
-2. Decide which behaviors need unit tests versus dummy-app integration tests.
-3. Add the smallest integration test that proves mounting and boot work. **Verify it passes before continuing** — if it fails, check `engine.rb` initializer order and mount configuration rather than adding more specs on top of a broken foundation.
-4. Add request, routing, configuration, and generator coverage as needed.
-5. Add regression tests for coupling or reload bugs before refactoring.
-6. Run the full test suite (`bundle exec rspec`) to verify all specs pass.
+2. Add the smallest integration test that proves mounting and boot work. **Verify it passes before continuing** — if it fails, check `engine.rb` initializer order and mount configuration.
+3. Add request, routing, configuration, and generator coverage as needed.
+4. Add regression tests for coupling bugs before refactoring.
+5. Run the full test suite (`bundle exec rspec`) to verify all specs pass.
 
 **Minimal request spec to prove the engine mounts:**
 
@@ -67,26 +64,57 @@ RSpec.describe MyEngine::Configuration do
 end
 ```
 
+## Advanced Coverage Patterns
+
+**Namespace-scoped routing spec:**
+
+```ruby
+# spec/routing/my_engine/widgets_routing_spec.rb
+require 'rails_helper'
+
+RSpec.describe MyEngine::WidgetsController, type: :routing do
+  routes { MyEngine::Engine.routes }
+
+  it 'routes GET /widgets to widgets#index' do
+    expect(get: '/widgets').to route_to('my_engine/widgets#index')
+  end
+end
+```
+
+**Generator idempotency spec:**
+
+```ruby
+# spec/generators/my_engine/install_generator_spec.rb
+require 'rails_helper'
+require 'generators/my_engine/install/install_generator'
+
+RSpec.describe MyEngine::Generators::InstallGenerator, type: :generator do
+  destination File.expand_path('../tmp', __dir__)
+
+  before { prepare_destination }
+
+  it 'generates the initializer' do
+    run_generator
+    expect(file('config/initializers/my_engine.rb')).to exist
+  end
+
+  it 'is idempotent on re-run' do
+    run_generator
+    expect { run_generator }.not_to raise_error
+    expect(file('config/initializers/my_engine.rb')).to exist
+  end
+end
+```
+
 ## Output Style
 
-When completing engine test setup, output MUST include:
+When completing engine test setup, summarise results as:
 
-```markdown
-# Engine Test Report — [Engine Name]
-
-## Dummy App
-- Location: test/dummy/ or spec/dummy/
-- Boot: ✓ (rails server starts without errors)
-- Migrations: ✓ (engine migrations installed and run)
-
-## Specs
-- Engine mounting: ✓ tested
-- Generators: ✓ tested (if applicable)
-- Core functionality: ✓ (<n> examples, 0 failures)
-- Reload safety: ✓ tested in development mode
-
-## Suite
-- Full run: bundle exec rspec — <n> examples, 0 failures
+```
+Engine Test Report — [Engine Name]
+- Dummy app: [location], boot ✓, migrations ✓
+- Specs: mounting ✓, generators ✓, core (<n> examples, 0 failures)
+- Suite: bundle exec rspec — <n> examples, 0 failures
 ```
 
 ## Integration

@@ -58,7 +58,7 @@ it 'does not duplicate the route mount on rerun' do
 end
 ```
 
-For larger installers, extract extended guard patterns and spec templates into a dedicated `IDEMPOTENCY.md` bundle file alongside this skill to keep the generator lean and the SKILL.md focused on workflow.
+For larger installers, extract extended guard patterns and spec templates into a dedicated companion file alongside the generator (e.g. `lib/generators/my_engine/install/install_generator_patterns.rb`) to keep the generator lean and this skill focused on workflow. Reference that file explicitly in your generator's comments so future maintainers know where to find the shared patterns.
 
 ## Integration
 
