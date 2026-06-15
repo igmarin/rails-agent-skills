@@ -29,7 +29,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
         with:
           fetch-depth: 0
 
@@ -43,8 +43,9 @@ jobs:
         run: ruby scripts/stage-tessl-evals.rb
 
       - name: Set up Tessl
-        uses: tesslio/setup-tessl@v2
+        uses: tesslio/setup-tessl@25ec223fc0da33b41b8044ff5ab2b85235f4f91e # v2
         with:
+          version: "0.84.0"
           token: ${{ secrets.TESSL_TOKEN }}
 
       - name: Compute automatic patch version
