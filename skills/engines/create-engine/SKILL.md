@@ -13,7 +13,7 @@ metadata:
 
 Use this skill when the task is to create, scaffold, or refactor a Rails engine, Rails plugin, or engine gem.
 
-A good engine has a narrow purpose, a clear host-app integration story, and a small public API. Keep this skill focused on structure and design. Use adjacent skills for installer details, deep test coverage, release workflow, or documentation work.
+Keep this skill focused on structure and design. Use adjacent skills for installer details, deep test coverage, release workflow, or documentation work.
 
 ## Quick Reference
 
@@ -64,86 +64,9 @@ VERIFICATION COMMANDS:
 
 If the user does not specify the engine type, infer it from the requested behavior and say which type you chose.
 
-## Extended Resources (Progressive Disclosure)
+## Extended Resources
 
-Load these files only when their specific content is needed:
-
-> The sections below contain supplementary reference material. Core process steps above are sufficient to start; consult these for copy-paste scaffolding and structural guidance.
-
-### Recommended Structure
-
-```text
-my_engine/
-  lib/
-    my_engine.rb
-    my_engine/version.rb
-    my_engine/engine.rb
-    generators/
-  app/
-    controllers/
-    models/
-    jobs/
-    views/
-  config/
-    routes.rb
-    locales/
-  db/
-    migrate/
-  spec/ or test/
-    dummy/
-```
-
-Keep the root module small.
-
-### Code Examples
-
-**Minimal root module:**
-```ruby
-# lib/my_engine.rb
-require "my_engine/version"
-require "my_engine/configuration"
-require "my_engine/engine"
-
-module MyEngine
-  class << self
-    def configuration
-      @configuration ||= Configuration.new
-    end
-
-    def configure
-      yield(configuration)
-    end
-  end
-end
-```
-
-**Minimal mountable engine class:**
-```ruby
-# lib/my_engine/engine.rb
-module MyEngine
-  class Engine < ::Rails::Engine
-    isolate_namespace MyEngine
-
-    config.generators do |g|
-      g.test_framework :rspec
-      g.fixture_replacement :factory_bot
-    end
-  end
-end
-```
-
-**Routes namespaced under engine:**
-```ruby
-# config/routes.rb
-MyEngine::Engine.routes.draw do
-  root to: 'dashboard#index'
-  resources :widgets, only: %i[index show]
-end
-```
-
-### Reference Files
-
-- [reference.md](reference.md) — full host-app contract template
+- [reference.md](reference.md) — full host-app contract template, recommended file structure, and code scaffolding examples
 - [EXAMPLES.md](EXAMPLES.md) — extended engine examples
 - [TESTING.md](TESTING.md) — coverage requirements and dummy app setup
 - [assets/examples.md](assets/examples.md)

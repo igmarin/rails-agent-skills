@@ -11,34 +11,24 @@ metadata:
 
 # Create Engine Installer
 
-Use this skill when the task is to design or review how a host app installs and configures a Rails engine — generating initializers, copying migrations, mounting routes, or exposing a single install command.
-
-## Quick Reference
-
-| Component | Purpose |
-|-----------|----------|
-| Generator | Creates initializer, route mount, or setup files — must be idempotent |
-| Migrations | Copies engine migrations into host `db/migrate` |
-| Initializer | Provides configuration defaults; generated once, editable by host |
-| Routes | Adds `mount Engine, at: '/path'`; checks for existing mount before injecting |
-
 ## Validation Workflow (HARD-GATE)
 
 When building or reviewing an install generator, follow these steps in order. **DO NOT ship a generator without completing steps 3 and 4.**
 
-1. **GENERATE**: Run the generator against a clean host app. Show command + terminal output labeled **Observed output** for the first run. Confirm files are created in correct host paths.
+1. **GENERATE**: Run the generator against a clean host app. Show command + terminal output labeled **Observed output** for the first run. Confirm files are created in correct host paths (initializer at `config/initializers/`, migrations at `db/migrate/`, route mount in `config/routes.rb`).
 2. **VERIFY**: Check output files exist in the correct host paths. List shell commands confirming the initializer, routes, and migrations exist.
 3. **RERUN**: Run the generator a second time; confirm no duplicate files, routes, or initializer blocks are inserted. Show command + terminal output labeled **Observed output** demonstrating idempotent behavior (skipping/conflict resolution). Use unique, scenario-specific values rather than copying verbatim from templates.
-4. **TEST**: Cover both single-run and rerun behavior in generator specs (see spec template below). Confirm no duplicate inserts on rerun in specs.
+4. **TEST**: Cover both single-run and rerun behavior in generator specs (see spec template below).
 5. **DOCUMENT**: List what was generated vs. what the user must do manually, including required env vars, rollback steps, and any install docs — verified against what the generator actually produces.
 
 Key implementation rules:
 - Configure only in initializers (avoid boot-time mutation).
 - Document all required env vars alongside rollback steps.
-- Use idiomatic Rails/Thor generator commands (inheriting from `Rails::Generators::Base`, with `source_root`, `desc`, etc.).
 - Provide sensible defaults that are easy to edit.
 
-**Idempotency guards — check before creating or injecting:**
+## Idempotency Guards
+
+All generator actions must be safe to run multiple times. Guard every file creation and injection at the point of use:
 
 ```ruby
 def create_initializer
@@ -59,7 +49,7 @@ def mount_route
 end
 ```
 
-**Minimal rerun spec (must always pass):**
+**Minimal rerun spec:**
 
 ```ruby
 it 'does not duplicate the route mount on rerun' do
@@ -67,6 +57,8 @@ it 'does not duplicate the route mount on rerun' do
   expect(File.read(file('config/routes.rb')).scan('mount MyEngine::Engine').size).to eq(1)
 end
 ```
+
+For larger installers, extract extended guard patterns and spec templates into a dedicated `IDEMPOTENCY.md` bundle file alongside this skill to keep the generator lean and the SKILL.md focused on workflow.
 
 ## Integration
 

@@ -13,16 +13,6 @@ metadata:
 
 Use this skill when the task is to create or improve test coverage for a Rails engine.
 
-## Quick Reference
-
-| Spec Type | Engine-Specific Nuance |
-|-----------|------------------------|
-| Request | Test via engine's named route helper (e.g., `my_engine.root_path`) to verify correct mounting in the host |
-| Routing | Assert routes are scoped to the engine namespace; test with and without a custom mount point |
-| Generator | Assert idempotency (safe to run twice); verify files are copied to expected host app paths |
-| Config | Override default in `around` block; assert the engine uses the host-provided value, not its own default |
-| Reload-safety | Cover `to_prepare` hooks and decorator re-application across code reloads in development mode |
-
 ## HARD-GATE
 
 ```text
@@ -76,22 +66,6 @@ RSpec.describe MyEngine::Configuration do
   end
 end
 ```
-
-## Extended Resources (Progressive Disclosure)
-
-**Pitfalls**
-| Pitfall | What to do |
-|---------|------------|
-| Skipping reload-safety tests | Add regression coverage for decorators and patches in development |
-| Tests pass only with specific Rails version | Run a version matrix; pin nothing unless required |
-| Request specs use stubs instead of real wiring | Mount the engine in dummy and call through it |
-| Install generators without file assertions | Assert copied files and idempotency in generator specs |
-
-Load these files only when their specific content is needed:
-
-- **[assets/dummy_app_instructions.md](assets/dummy_app_instructions.md)** — Use when setting up the dummy app from scratch or troubleshooting boot failures
-- **[assets/examples.md](assets/examples.md)** — Use when writing generator, reload-safety, or integration specs
-- **[assets/spec_template.md](assets/spec_template.md)** — Use as starting point when creating the first engine spec file
 
 ## Output Style
 
