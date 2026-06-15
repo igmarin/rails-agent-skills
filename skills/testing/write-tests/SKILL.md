@@ -13,8 +13,6 @@ metadata:
 
 Use this skill when the task is to write, review, or clean up RSpec tests.
 
-**Core principle:** Prefer behavioral confidence over implementation coupling. Good specs are readable, deterministic, and cheap to maintain.
-
 ## Quick Reference
 
 | Aspect | Rule |
@@ -59,7 +57,7 @@ end
 
 ### One Behavior Per Example
 
-The word `and` in an `it` / `specify` description signals two behaviors in one example. Split it every time — no exceptions.
+Split `and` in `it`/`specify` descriptions every time — no exceptions.
 
 ```ruby
 # BAD — two assertions; if the first fails, the second never runs
@@ -91,26 +89,3 @@ Load these files only when their specific content is needed:
 - **[assets/spec_templates.md](assets/spec_templates.md)** — Standard templates for different types of specs.
 - **[assets/tdd_proof_checklist.md](assets/tdd_proof_checklist.md)** — Use when the task involves new behavior; defines RED/GREEN proof format, output formatting rules, and GREEN progress bar requirements.
 - **[assets/output_checklist.md](assets/output_checklist.md)** — Complete 18-point checklist for RSpec output structure, conventions, and self-auditing; also defines all output style rules (spec structure, file path mirroring, `frozen_string_literal`, `subject(:result)`, and TDD proof format).
-
-## Output Style
-
-When asked to write RSpec tests, your output MUST include:
-
-1. **Spec execution** — Execute the spec via `bundle exec rspec` and capture the actual test output (failure message or stack trace) rather than describing expected behavior
-2. **Spec type selection** — Pick the smallest spec type exercising the behavior (model > service > request > system)
-3. **File path mirroring** — Mirror the file paths of the source code being tested
-4. **Frozen string literal** — Use `# frozen_string_literal: true` at the top of spec files
-5. **Service spec structure** — For service specs, define `subject(:result)` and use `describe '.call'` pattern
-6. **One behavior per example** — Split examples that use `and` in descriptions; no exceptions
-7. **Language** — Must be in English unless explicitly requested otherwise
-
-## Integration
-
-| Skill | When to chain |
-|-------|---------------|
-| **plan-tests** | Choosing the best first failing spec for a Rails change |
-| **create-service-object** | Providing test structure for the `.call` pattern |
-| **refactor-code** | Adding characterization tests before refactoring |
-| **implement-graphql** | Writing specs for GraphQL resolvers and mutations |
-
-| **tdd-process** *(from ruby-core-skills)* | Process discipline: Red-Green-Refactor gates, checkpoint pattern |

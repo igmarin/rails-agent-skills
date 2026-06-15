@@ -74,12 +74,6 @@ Load these files only when their specific content is needed:
 - **[EXAMPLES.md](EXAMPLES.md)** — Use when you need complete seeding examples with environment-specific patterns and FactoryBot factory definitions
 - **[references/workflow.md](references/workflow.md)** — Use when implementing complex seeding workflows or migration-dependent seed data
 
-### Reference Links
-
-- [FactoryBot documentation](https://github.com/thoughtbot/factory_bot/blob/main/GETTING_STARTED.md)
-- [Faker gem](https://github.com/faker-ruby/faker)
-- [Rails Seeding Guide](https://guides.rubyonrails.org/active_record_migrations.html#migrations-and-seed-data)
-
 ## Output Style
 
 1. Use idiomatic Rails seeding patterns.

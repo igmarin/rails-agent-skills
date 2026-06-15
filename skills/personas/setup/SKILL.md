@@ -53,14 +53,8 @@ cp .env.example .env 2>/dev/null || true
 
 **Proceed only after environment check passes.**
 
-1. **CI/CD Proposal Checkpoint** — Decide on pipeline approach:
-   - GitHub Actions, GitLab CI, or other platform?
-   - Staging vs production environments?
-   - Deployment strategy (basic, blue-green, canary)?
-
-**Shared job preamble** (pin SHAs, never mutable tags — reuse these steps in every job below):
+**Canonical shared job preamble** (`SHARED_PREAMBLE` — paste verbatim at the start of every job's `steps`; both ci.yml and cd.yml use this block):
 ```yaml
-# shared-preamble (reference in all jobs)
 steps:
   - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
   - uses: ruby/setup-ruby@ff740bc00a01b3a50fffc55a1071b1060eeae9dc
@@ -69,9 +63,11 @@ steps:
       bundler-cache: true
 ```
 
-2. **Configure CI pipeline** — write to `.github/workflows/ci.yml` (save a reusable copy as `docs/ci-template.yml`).
+> **Tip:** If your repository uses a `templates/` directory, you may save the final `ci.yml` and `cd.yml` content there for reuse across projects. The instructions below are the canonical source of truth.
 
-   Start each job with the shared preamble above, then add:
+1. **Configure CI pipeline** — write to `.github/workflows/ci.yml`.
+
+   Start each job with `SHARED_PREAMBLE`, then add:
 ```yaml
       - run: bundle exec rails db:create db:migrate
       - run: bundle exec rspec
@@ -80,33 +76,33 @@ steps:
       - run: bundle exec bundle-audit check --update
 ```
 
-3. **Configure CD pipeline** — write to `.github/workflows/cd.yml` (save a reusable copy as `docs/cd-template.yml`).
+2. **Configure CD pipeline** — write to `.github/workflows/cd.yml`.
 
-   Each job starts with the shared preamble above. Replace `<platform-deploy-cli>` with your target (e.g., Heroku, Fly.io, or Kamal).
+   Fill in `DEPLOY_CLI` (e.g., `heroku`, `flyctl`, `kamal`) and the appropriate secret names before writing the file. Each job begins with `SHARED_PREAMBLE` (copy the block defined above verbatim):
 ```yaml
 jobs:
   deploy-staging:
     runs-on: ubuntu-latest
     environment: staging
     steps:
-      # <shared preamble — see above>
+      # --- Insert SHARED_PREAMBLE here ---
       - run: bundle exec rails db:migrate
         env:
           RAILS_ENV: staging
           DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
-      - run: <platform-deploy-cli> deploy --app ${{ secrets.STAGING_APP_NAME }}
+      - run: <DEPLOY_CLI> deploy --app ${{ secrets.STAGING_APP_NAME }}
 
   deploy-production:
     runs-on: ubuntu-latest
-    needs: deploy-staging
     environment: production
+    needs: deploy-staging
     steps:
-      # <shared preamble — see above>
+      # --- Insert SHARED_PREAMBLE here ---
       - run: bundle exec rails db:migrate
         env:
           RAILS_ENV: production
           DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
-      - run: <platform-deploy-cli> deploy --app ${{ secrets.PRODUCTION_APP_NAME }}
+      - run: <DEPLOY_CLI> deploy --app ${{ secrets.PRODUCTION_APP_NAME }}
 ```
 
 ---
@@ -115,15 +111,14 @@ jobs:
 
 **Verify everything works end-to-end:**
 
+Confirm the Phase 1 HARD GATE checklist is still fully passing, then additionally verify:
+
 ```bash
-# Local development
-bundle install
-rails db:create db:migrate
+# Bring up local server
 rails server
-bundle exec rspec
 
 # CI simulation (if possible locally)
-act push  # GitHub Actions local runner
+act push
 ```
 
 **Write `SETUP_CHECKLIST.md`** with the final state of all HARD GATE items (see Phase 1) plus:
@@ -167,36 +162,12 @@ When completing project setup, output MUST include:
 ## Error Recovery
 
 **System Modification Approval Gate (CRITICAL):**
-The items below may require installing system packages or configuring local services. Before suggesting ANY action that modifies the host system:
+Before suggesting ANY action that modifies the host system:
 1. Explain why it is needed
 2. Ask the user for explicit confirmation
 3. Only proceed if the user approves
 
-**Ruby version mismatch:**
-1. Check `.ruby-version` for expected version
-2. If the correct version is not installed, direct the user to their Ruby version manager documentation (e.g., rbenv, asdf, rvm) to install it
-3. Verify with `ruby -v`
-
-**Bundle install fails:**
-1. Check error output for missing native extension dependencies
-2. Direct the user to install required system packages for their OS (e.g., PostgreSQL development headers)
-3. Retry `bundle install`
-
-**Database connection fails:**
-1. Verify PostgreSQL is running: `pg_isready`
-2. Check `config/database.yml` credentials match actual database user/password
-3. If the database role does not exist, direct the user to create it via their database administration tool or documentation
-
-**CI actions use mutable tags:**
-1. Find the commit SHA for each tag: `git ls-remote https://github.com/<owner>/<repo> refs/tags/<tag>`
-2. Replace `@v4` with `@<full-sha>` in workflow files
-3. Verify CI still passes after pinning
-
----
-
-## Anti-Patterns to Avoid
-
-- **Missing .env.example:** Always create `.env.example` with placeholder values for all required environment variables
-- **Hardcoded Ruby version:** Always read from `.ruby-version` — never hardcode in CI workflows
-- **Skipping security scanning:** CI MUST include `brakeman` and `bundle-audit` alongside tests
-- **No SETUP_CHECKLIST.md:** Always produce a checklist so the next developer can verify setup
+**Non-obvious failure pointers:**
+- **Ruby version mismatch** → check `.ruby-version` and ensure the correct version is active in your version manager before retrying
+- **Database connection fails** → run `pg_isready` to confirm PostgreSQL is running; check `config/database.yml` credentials and create any missing role
+- **CI actions use mutable tags** → resolve SHA with `git ls-remote https://github.com/<owner>/<repo> refs/tags/<tag>`, replace `@v4` with `@<full-sha>` in workflow files, verify CI passes after pinning

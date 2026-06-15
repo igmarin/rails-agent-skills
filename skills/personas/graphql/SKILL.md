@@ -4,7 +4,7 @@ type: persona
 tags: [personas]
 license: MIT
 description: >
-  Orchestrates end-to-end GraphQL API development with hard gates: domain modeling mapping entities→Types and actions→Mutations with bounded context ownership → schema design with field-level authorization, cursor pagination, and structured error handling → TDD implementation where test MUST fail before code and full suite MUST pass after → security review checking authorization at field level, query depth/complexity limits, and rate limiting; phases domain modeling→schema design→TDD→security review. Use when building GraphQL APIs, adding GraphQL endpoints, or implementing GraphQL features with proper domain boundaries and security. Trigger: GraphQL API, GraphQL schema, GraphQL mutation, GraphQL query, add GraphQL endpoint, implement GraphQL.
+  Orchestrates end-to-end GraphQL API development across four hard-gated phases: (1) domain modeling — mapping entities→Types, actions→Mutations, with bounded context ownership; (2) schema design — field-level authorization, cursor pagination, and structured error handling; (3) TDD — tests must fail before implementation and full suite must pass after; (4) security review — query depth/complexity limits, rate limiting, N+1 elimination, and error sanitization. Use when building GraphQL APIs, adding GraphQL endpoints, or implementing GraphQL features with proper domain boundaries and security. Trigger: GraphQL API, GraphQL schema, GraphQL mutation, GraphQL query, add GraphQL endpoint, implement GraphQL.
 metadata:
   version: 1.0.0
   user-invocable: "true"
@@ -25,8 +25,17 @@ metadata:
 ### Phase 1: Domain Modeling
 
 **Steps:**
-1. Map entities → Types, actions → Mutations, read paths → Queries
-2. Assign each type to a bounded context and define which context owns and exposes it
+1. Map each domain entity and action to a GraphQL type or mutation, assigning it to a single owning bounded context
+2. Document entity relationships as GraphQL connections or nested types with explicit ownership
+
+**Example Domain → Schema Mapping:**
+
+| Domain Concept | GraphQL Construct | Owning Context |
+|---|---|---|
+| Order (entity) | `Types::OrderType` | Orders |
+| Customer (entity) | `Types::CustomerType` | Accounts |
+| PlaceOrder (command) | `Mutations::PlaceOrder` | Orders |
+| Order.lineItems | `Types::LineItemType` (connection) | Orders |
 
 **HARD GATE — Domain Language:**
 - Core GraphQL types and their owning bounded contexts identified
@@ -39,14 +48,10 @@ metadata:
 ### Phase 2: Schema Design
 
 **Steps:**
-1. Design types, queries, and mutations based on the domain model
-2. Implement schema with graphql-ruby
-3. Validate schema correctness
-
-**Schema Design Guidelines:**
-- Implement authorization at field level
-- Use cursor-based or offset pagination for list fields
-- Include structured error handling in mutation responses
+1. Use cursor-based or offset pagination for all list fields — never return unbounded arrays
+2. Enforce field-level authorization via `authorized?` on sensitive types and fields (see Phase 4 for the full security checklist)
+3. Wrap mutation responses in a result object with a structured `errors` field
+4. Validate schema correctness before proceeding
 
 **HARD GATE — Schema Validation:**
 
@@ -73,7 +78,6 @@ module Types
   class OrderType < Types::BaseObject
     field :id, ID, null: false
     field :customer, Types::CustomerType, null: false
-    field :line_items, [Types::LineItemType], null: false
     field :total, Float, null: false
     field :status, String, null: false
 
@@ -89,11 +93,9 @@ end
 ### Phase 3: TDD Implementation
 
 **For every resolver or mutation:**
-1. Write a failing test (resolver spec, mutation spec, or integration spec)
-2. Confirm the test FAILS for the right reason (missing functionality, not syntax error)
-3. Propose implementation and wait for explicit user approval
-4. Implement resolver/mutation code
-5. Confirm test PASSES, then run full suite to check for regressions
+1. Write a failing resolver spec, mutation spec, or integration spec targeting the specific graphql-ruby class under test
+2. Propose implementation, wait for explicit user approval, then implement the resolver/mutation code
+3. Run the full suite to confirm no regressions
 
 **HARD GATE — Test Verification:**
 - Test EXISTS and RUNS
@@ -101,9 +103,7 @@ end
 - Test PASSES after implementation
 - Full test suite PASSES (no regressions)
 
-> If a test fails for the wrong reason, fix the test (not the implementation) to accurately reflect intended behavior.
-
-**Example Resolver Test + Implementation:**
+**Example Resolver Test:**
 ```ruby
 RSpec.describe Resolvers::OrderResolver do
   let(:user) { create(:user) }
@@ -119,31 +119,20 @@ RSpec.describe Resolvers::OrderResolver do
     expect(result).to be_nil
   end
 end
-
-module Resolvers
-  class OrderResolver < GraphQL::Schema::Resolver
-    type Types::OrderType, null: true
-    argument :id, ID, required: true
-
-    def resolve(id:)
-      order = Order.find_by(id: id)
-      raise GraphQL::ExecutionError, "Not authorized" unless order&.customer == context[:current_user]
-      order
-    end
-  end
-end
 ```
 
 ---
 
 ### Phase 4: Security Review
 
+This is the authoritative phase for all authorization and security requirements.
+
 **Steps:**
 1. Audit authorization at field level — every sensitive field must have an `authorized?` guard
 2. Configure query depth and complexity limits on the schema class
 3. Implement rate limiting at the application layer
-4. Eliminate N+1 queries using `GraphQL::Batch` or `dataloader` — use `graphql-ruby`'s built-in dataloader or `batch-loader` gem for associations
-5. Ensure `rescue_from` on the schema class catches `StandardError` and returns a generic message, preventing stack traces or model details from leaking
+4. Eliminate N+1 queries using `GraphQL::Batch` or `dataloader`
+5. Ensure `rescue_from` on the schema class catches `StandardError` and returns a generic message
 
 **HARD GATE — Security Check:**
 - Authorization on all sensitive fields
@@ -174,13 +163,15 @@ end
 
 ## Error Recovery
 
-- **Schema validation fails:** Check circular type references with `MySchema.to_definition`, verify all referenced types are defined, confirm field return types match model attributes.
-- **Authorization bypass detected:** Add `authorized?` to the affected type, write a spec confirming unauthorized access returns nil/error, re-run security review phase.
-- **N+1 queries:** Identify with `bullet` gem, add `GraphQL::Batch` loader or `dataloader` for the association, verify query count drops via `ActiveSupport::Notifications`.
+| Problem | Remediation |
+|---|---|
+| Schema validation fails | Check circular references with `MySchema.to_definition`; verify all referenced types are defined |
+| Authorization bypass detected | Add `authorized?` to the affected type, write a failing spec, re-run Phase 4 |
+| N+1 queries | Identify with `bullet` gem; add `GraphQL::Batch` loader or `dataloader` for the association |
 
 ---
 
-## Anti-Patterns Checklist
+## Anti-Patterns
 
 - **God schema:** Use `app/graphql/types/`, `app/graphql/mutations/`, `app/graphql/resolvers/` — not one file
 - **Leaking internals:** Never expose ActiveRecord column names directly — map to domain-appropriate field names

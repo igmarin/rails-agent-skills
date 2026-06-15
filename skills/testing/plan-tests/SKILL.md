@@ -22,7 +22,6 @@ metadata:
 | Critical Turbo/Stimulus or browser-visible flow | System spec | `spec/system/` | Use only when browser interaction is the real risk |
 | Engine routing, generators, host integration | Engine spec | `spec/requests/` or engine path | Normal app specs miss engine wiring — see `test-engine` |
 | Bug fix | Reproduction spec | Where the bug is observed | Proves the fix and prevents regression |
-| Unsure between layers | Higher boundary first | — | Easier to prove real behavior before drilling down |
 
 ## HARD-GATE
 
@@ -49,7 +48,7 @@ Start at the highest-value boundary that proves the behavior with the least unne
 3. **Write one failing example:** Keep it minimal; one example is enough to open the gate. List additional cases as follow-up coverage.
 4. **Suggest the path:** Name the likely spec path using normal Rails conventions (e.g. `spec/requests/...`, `spec/services/...`, `spec/jobs/...`, `spec/models/...`).
 5. **Run and validate:** Confirm the failure is because the behavior is missing, not because the setup is broken.
-6. **Hand off:** Continue with `write-tests`, `test-service`, `test-engine`, or the implementation skill that fits the slice.
+6. **Hand off:** Continue with the skill that fits the slice — [`write-tests`](skills/write-tests/SKILL.md) for general spec writing, [`test-service`](skills/test-service/SKILL.md) for service-layer coverage, or [`test-engine`](skills/test-engine/SKILL.md) for engine integration.
 
 ### Examples
 
@@ -102,7 +101,6 @@ end
 | Writing three spec types before running any | Pick one slice, run it, prove the failure, then proceed |
 | Defaulting to one spec type for everything | Match the spec type to the layer where the real risk lives (HTTP, domain, async, browser) |
 | Jumping to system specs too early | Reserve for critical browser flows that lower layers cannot prove |
-|
 
 ## Extended Resources (Progressive Disclosure)
 
@@ -112,30 +110,10 @@ Load these files only when their specific content is needed:
 
 ## Output Style
 
-When completing test planning, output MUST include:
+When completing test planning, produce a brief structured summary and populate the full plan using **[assets/first_slice_template.md](assets/first_slice_template.md)**. The summary must cover:
 
-```markdown
-# Test Plan — [Feature/Change Name]
-
-## Behavior
-- User-visible outcome: <description>
-
-## First Slice
-- Spec type: <request / model / service / job / system>
-- Path: <spec/path/to_spec.rb>
-- Boundary rationale: <why this layer proves the behavior>
-
-## Opening Gate
-- Expected RED failure: <error class and message>
-- Failure reason: feature missing (not setup error)
-
-## Follow-up Coverage
-- [ ] <additional test case 1>
-- [ ] <additional test case 2>
-
-## Design Checkpoint
-- Behavior covered: ✓
-- Boundary correct: ✓
-- Edge cases listed: ✓
-- Failure reason validated: ✓
-```
+- **Behavior** — user-visible outcome being proved
+- **First Slice** — spec type, file path, and boundary rationale
+- **Opening Gate** — expected RED failure message and confirmation that failure reason is "feature missing, not setup error"
+- **Follow-up Coverage** — bulleted list of additional cases deferred from the initial gate
+- **Design Checkpoint** — confirmation that behavior, boundary, edge cases, and failure reason are all validated

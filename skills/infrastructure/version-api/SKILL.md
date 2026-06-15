@@ -3,13 +3,18 @@ name: version-api
 type: atomic
 license: MIT
 description: >
-  REST API versioning with hard gates: generated controller code MUST sanitize all
-  caller-supplied input (version identifiers, Accept headers) — never constantize or
-  evaluate untrusted values. Must maintain backward compatibility by inheriting new
-  version controllers from the previous version's controller overriding only changed
-  actions, and run compatibility specs via bundle exec rspec
+  Implements REST API versioning strategies for Rails APIs with hard security gates.
+  Use when the user asks about API versioning, adding a new API version (v1/v2),
+  deprecating API endpoints, maintaining backward compatibility in REST APIs,
+  versioned API routes, versioned endpoints, Rails API versioning, or API version
+  management. Generated controller code MUST sanitize all caller-supplied input
+  (version identifiers, Accept headers) — never constantize or evaluate untrusted
+  values. Maintains backward compatibility by inheriting new version controllers from
+  the previous version's controller, overriding only changed actions, and runs
+  compatibility specs via bundle exec rspec
   spec/requests/api/backward_compatibility_spec.rb to confirm no regressions before
-  merging. REST API versioning, URL path versioning, Deprecation headers.
+  merging. REST API versioning, URL path versioning, Deprecation headers,
+  versioned API routes, Rails API versioning, v1/v2 endpoints, API version management.
 metadata:
   version: 1.0.0
   user-invocable: "true"
