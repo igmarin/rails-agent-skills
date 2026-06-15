@@ -62,12 +62,12 @@ FROM ruby:3.2-slim
 
 # Install dependencies
 # Note: Command chaining with && is standard Docker practice for single RUN instructions
+# Clean apt cache for smaller image size
 RUN apt-get update -qq && apt-get install -y \
   build-essential \
   libpq-dev \
   git \
   curl \
-  # Clean apt cache for smaller image size
   && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
