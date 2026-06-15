@@ -57,7 +57,7 @@ jobs:
         if: steps.changed.outputs.has_changed_skills == 'true'
         uses: tesslio/setup-tessl@25ec223fc0da33b41b8044ff5ab2b85235f4f91e # v2
         with:
-          version: "0.73.0"
+          version: "0.84.0"
           token: ${{ secrets.TESSL_TOKEN }}
 
       - name: Review changed publishable skills
