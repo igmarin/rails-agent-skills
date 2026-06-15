@@ -1,0 +1,65 @@
+name: rs-guard PR Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: rs-guard-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Generate PR diff
+        run: |
+          git diff \
+            "${{ github.event.pull_request.base.sha }}" \
+            "${{ github.event.pull_request.head.sha }}" \
+            --unified=5 > pr.diff
+
+          if [ ! -s pr.diff ]; then
+            echo "Empty diff — nothing to review."
+            exit 0
+          fi
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo registry
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            ~/.cargo/bin/rs-guard
+          key: ${{ runner.os }}-rs-guard-v1.0.0
+
+      - name: Install rs-guard
+        run: |
+          if ! command -v rs-guard &>/dev/null; then
+            cargo install rs-guard --version 1.0.0 --locked
+          fi
+          rs-guard --version
+
+      - name: Run rs-guard review
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          rs-guard \
+            --diff-file pr.diff \
+            --prompt-file .github/review-prompt.md \
+            --provider deepseek
