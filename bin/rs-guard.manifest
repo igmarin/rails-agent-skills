@@ -1,0 +1,8 @@
+# Pinned rs-guard release for CI download and checksum verification.
+# Update these values when bumping rs-guard.
+#
+# RS_GUARD_ASSET is a raw Linux ELF binary from GitHub Releases — not an archive.
+# If the release format ever changes to .tar.gz/.zip, update rs-guard-install.sh accordingly.
+RS_GUARD_VERSION="v1.2.0"
+RS_GUARD_ASSET="rs-guard-x86_64-unknown-linux-gnu"
+RS_GUARD_SHA256="af200ebca61c67306e3f6aea72d59d942ff6f12c6fa08398542ba450e2f120cc"

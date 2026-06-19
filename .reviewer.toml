@@ -1,3 +1,15 @@
 provider = "deepseek"
 model = "deepseek-v4-flash"
 temperature = 0.1
+max_tokens = 4096
+
+# Custom review prompt is at .github/review-prompt.md
+# Loaded automatically via --prompt-file (set in CI workflow and pre-commit hook)
+
+chunk_head_lines = 400
+chunk_tail_lines = 400
+
+[circuit_breaker]
+enabled = true
+failure_threshold = 5
+recovery_timeout_secs = 60

@@ -1,0 +1,66 @@
+diff --git a/app/services/orders/create_service.rb b/app/services/orders/create_service.rb
+new file mode 100644
+index 0000000..e8f7d12
+--- /dev/null
++++ b/app/services/orders/create_service.rb
+@@ -0,0 +1,32 @@
++# frozen_string_literal: true
++
++module Orders
++  class CreateService
++    def self.call(params)
++      new(params).call
++    end
++
++    def initialize(params)
++      @params = params
++    end
++
++    def call
++      order = Order.new(@params)
++
++      if order.save
++        { success: true, response: { order: order } }
++      else
++        { success: false, response: { error: { message: order.errors.full_messages.join(", ") } } }
++      end
++    end
++  end
++end
+diff --git a/spec/services/orders/create_service_spec.rb b/spec/services/orders/create_service_spec.rb
+new file mode 100644
+index 0000000..a3b9f56
+--- /dev/null
++++ b/spec/services/orders/create_service_spec.rb
+@@ -0,0 +1,32 @@
++# frozen_string_literal: true
++
++require "rails_helper"
++
++RSpec.describe Orders::CreateService do
++  describe ".call" do
++    subject(:result) { described_class.call(params) }
++
++    let(:params) { { customer_name: "Alice", total: 99.99 } }
++
++    context "with valid params" do
++      it "returns a success response with the created order" do
++        expect(result[:success]).to be true
++        expect(result[:response][:order]).to be_an(Order)
++      end
++
++      it "creates a new order" do
++        expect { result }.to change(Order, :count).by(1)
++      end
++    end
++
++    context "with invalid params" do
++      let(:params) { { customer_name: "" } }
++
++      it "returns a failure response with error messages" do
++        expect(result[:success]).to be false
++        expect(result[:response][:error][:message]).to be_present
++      end
++    end
++  end
++end
