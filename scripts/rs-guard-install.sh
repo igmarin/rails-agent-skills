@@ -10,8 +10,16 @@ if [[ ! -f "$MANIFEST" ]]; then
   exit 1
 fi
 
-# shellcheck disable=SC1090
-source "$MANIFEST"
+read_manifest_value() {
+  local key="$1"
+  local raw
+  raw="$(sed -n "s/^${key}=\"\(.*\)\"$/\1/p" "$MANIFEST" || true)"
+  printf '%s' "$raw"
+}
+
+RS_GUARD_VERSION="$(read_manifest_value RS_GUARD_VERSION)"
+RS_GUARD_ASSET="$(read_manifest_value RS_GUARD_ASSET)"
+RS_GUARD_SHA256="$(read_manifest_value RS_GUARD_SHA256)"
 
 : "${RS_GUARD_VERSION:?RS_GUARD_VERSION is required in bin/rs-guard.manifest}"
 : "${RS_GUARD_ASSET:?RS_GUARD_ASSET is required in bin/rs-guard.manifest}"
