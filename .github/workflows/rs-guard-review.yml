@@ -2,7 +2,7 @@ name: rs-guard PR Review
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened, ready_for_review]
 
 permissions:
   contents: read
@@ -14,49 +14,22 @@ concurrency:
 
 jobs:
   review:
+    if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
-        # Pinned from actions/checkout@v5 (93cb6efe) to avoid Node.js 20 deprecation.
-        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
         with:
-          fetch-depth: 0
           persist-credentials: false
 
-      - name: Generate PR diff
-        run: |
-          git diff \
-            "${{ github.event.pull_request.base.sha }}" \
-            "${{ github.event.pull_request.head.sha }}" \
-            --unified=5 > pr.diff
-
-          if [ ! -s pr.diff ]; then
-            echo "Empty diff — nothing to review."
-            exit 0
-          fi
-
-      - name: Download rs-guard
-        run: |
-          set -euo pipefail
-          BINARY="rs-guard-x86_64-unknown-linux-gnu"
-          curl -L --fail -o "${BINARY}" \
-            "https://github.com/nebulaideas/rs-guard/releases/latest/download/${BINARY}"
-          curl -L --fail -o "${BINARY}.sha256" \
-            "https://github.com/nebulaideas/rs-guard/releases/latest/download/${BINARY}.sha256"
-          sha256sum -c "${BINARY}.sha256"
-          chmod +x "${BINARY}"
-          mv "${BINARY}" /usr/local/bin/rs-guard
-          rs-guard --version
+      - name: Download and verify rs-guard
+        run: ./scripts/rs-guard-install.sh
 
       - name: Run rs-guard review
+        run: ./rs-guard --prompt-file .github/review-prompt.md --provider deepseek
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_NUMBER: ${{ github.event.number }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
           REPO_FULL_NAME: ${{ github.repository }}
-        run: |
-          rs-guard \
-            --diff-file pr.diff \
-            --prompt-file .github/review-prompt.md \
-            --provider deepseek

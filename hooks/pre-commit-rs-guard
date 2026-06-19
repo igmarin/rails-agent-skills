@@ -5,29 +5,52 @@
 # Runs an AI-powered review of staged changes using rs-guard before each commit.
 # Uses --dry-run so it never blocks the commit — output is informational only.
 #
-# Requirements:
-#   - rs-guard installed: cargo install rs-guard
-#   - DEEPSEEK_API_KEY set in your shell environment
+# Provider is read from .reviewer.toml (default: deepseek). Set the matching
+# API key environment variable for your chosen provider:
+#
+#   Provider     | Environment variable
+#   -------------|---------------------
+#   DeepSeek     | DEEPSEEK_API_KEY
+#   OpenAI       | OPENAI_API_KEY
+#   Kimi         | KIMI_API_KEY
+#   Qwen         | DASHSCOPE_API_KEY
+#   OpenRouter   | OPENROUTER_API_KEY
+#
+# Binary resolution order:
+#   1. rs-guard in PATH
+#   2. ~/.cargo/bin/rs-guard     (installed via `cargo install rs-guard`)
+#
+# Install locally with: cargo install rs-guard --version 1.2.0 --locked
 #
 # Usage: This script is invoked automatically by git via hooks/hooks.json.
 # To install manually: cp hooks/pre-commit-rs-guard .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
 
 set -euo pipefail
 
-RS_GUARD_BIN="${RS_GUARD_BIN:-rs-guard}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-if ! command -v "$RS_GUARD_BIN" &>/dev/null; then
+if command -v rs-guard &>/dev/null; then
+  RS_GUARD_BIN="rs-guard"
+elif [ -x "$HOME/.cargo/bin/rs-guard" ]; then
   RS_GUARD_BIN="$HOME/.cargo/bin/rs-guard"
-fi
-
-if ! command -v "$RS_GUARD_BIN" &>/dev/null && [ ! -x "$RS_GUARD_BIN" ]; then
+else
   echo "[rs-guard] rs-guard not found — skipping pre-commit review."
-  echo "[rs-guard] Install with: cargo install rs-guard"
+  echo "[rs-guard] Install with: cargo install rs-guard --version 1.2.0 --locked"
   exit 0
 fi
 
-if [ -z "${DEEPSEEK_API_KEY:-}" ]; then
-  echo "[rs-guard] DEEPSEEK_API_KEY not set — skipping pre-commit review."
+has_api_key=false
+for key in DEEPSEEK_API_KEY OPENAI_API_KEY KIMI_API_KEY DASHSCOPE_API_KEY OPENROUTER_API_KEY; do
+  if [ -n "${!key:-}" ]; then
+    has_api_key=true
+    break
+  fi
+done
+
+if [ "$has_api_key" = false ]; then
+  echo "[rs-guard] No provider API key found — skipping pre-commit review."
+  echo "[rs-guard] Set one of: DEEPSEEK_API_KEY, OPENAI_API_KEY, KIMI_API_KEY, DASHSCOPE_API_KEY, OPENROUTER_API_KEY"
   exit 0
 fi
 
@@ -44,9 +67,8 @@ echo "[rs-guard] Running AI review on staged changes..."
 
 "$RS_GUARD_BIN" \
   --diff-file "$DIFF_FILE" \
-  --prompt-file ".github/review-prompt.md" \
-  --provider deepseek \
+  --prompt-file "$REPO_ROOT/.github/review-prompt.md" \
   --dry-run \
-  2>&1 || true
+  2>&1 || echo "[rs-guard] Review exited with a non-zero code (advisory only — commit proceeds)."
 
 echo "[rs-guard] Review complete. Commit proceeding."
