@@ -1,13 +1,13 @@
 #!/bin/bash
 
-# Rails Agent Skills - Plugin Validator
+# Rails Agent Skills - Skill Catalog Validator
 #
-# This script validates:
-# - Valid JSON syntax for .tessl-plugin/plugin.json
+# Validates:
+# - Valid JSON syntax for directory.json
 # - SKILL.md frontmatter consistency
-# - plugin.json synchronization with disk
+# - directory.json synchronization with disk
 #
-# Usage: ./scripts/validate-plugins.sh
+# Usage: ./scripts/validate-skills.sh
 
 set -e
 
@@ -53,28 +53,35 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PROJECT_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
 cd "$PROJECT_ROOT"
 
-PLUGIN_FILE=".tessl-plugin/plugin.json"
+DIRECTORY_FILE="directory.json"
 
-section "Validating Plugin Manifest"
+section "Validating directory.json"
 
-if [ ! -f "$PLUGIN_FILE" ]; then
-  check_fail "File not found: $PLUGIN_FILE"
+if [ ! -f "$DIRECTORY_FILE" ]; then
+  check_fail "File not found: $DIRECTORY_FILE"
   exit 1
 fi
 
-if jq empty "$PLUGIN_FILE" 2>/dev/null; then
+if jq empty "$DIRECTORY_FILE" 2>/dev/null; then
   check_pass "Valid JSON syntax"
 else
   check_fail "Invalid JSON syntax"
+  exit 1
 fi
 
-for field in "name" "version" "description" "skills"; do
-  if jq -e ".$field" "$PLUGIN_FILE" > /dev/null 2>&1; then
+for field in "name" "version" "skills"; do
+  if jq -e ".$field" "$DIRECTORY_FILE" > /dev/null 2>&1; then
     check_pass "Field present: $field"
   else
     check_fail "Field missing: $field"
   fi
 done
+
+if jq -e '.skills | type == "object"' "$DIRECTORY_FILE" > /dev/null 2>&1; then
+  check_pass "skills is an object map"
+else
+  check_fail "skills must be an object map of name -> { path }"
+fi
 
 section "Validating SKILL.md Frontmatter"
 
@@ -105,64 +112,54 @@ while IFS= read -r skill_file; do
   if [ -n "$fm_name" ] && [ "$fm_name" != "$skill_name" ]; then
     check_fail "$skill_name: frontmatter name ('$fm_name') does not match directory name"
   fi
-done < <(find skills -name "SKILL.md" -not -path "*/.tessl/*" | sort)
+done < <(find skills -name "SKILL.md" | sort)
 
 info "Total SKILL.md files found: $skill_count"
 
-section "plugin.json ↔ Disk Sync"
+section "directory.json ↔ Disk Sync"
 
-# Handle both auto-discovery (string) and explicit (array) formats
-SKILLS_TYPE=$(jq -r '.skills | type' "$PLUGIN_FILE" 2>/dev/null)
+# directory.json maps skill name -> { "path": "skills/.../SKILL.md" }
+DIRECTORY_PATHS=$(jq -r '.skills | to_entries[] | .value.path' "$DIRECTORY_FILE" 2>/dev/null | sed 's/^\.\///' | sort)
+DISK_SKILL_PATHS=$(find skills -name "SKILL.md" | sed 's/^\.\///' | sort)
 
-if [ "$SKILLS_TYPE" = 'string' ]; then
-  # Auto-discovery format: "skills": "./skills/"
-  SKILLS_DIR=$(jq -r '.skills' "$PLUGIN_FILE" 2>/dev/null)
-  info "Auto-discovery mode: skills = $SKILLS_DIR"
-  
-  if [ -d "$SKILLS_DIR" ]; then
-    check_pass "Skills directory exists: $SKILLS_DIR"
+while IFS= read -r path; do
+  [ -z "$path" ] && continue
+  if [ -f "$path" ]; then
+    check_pass "directory.json path exists: $path"
   else
-    check_fail "Skills directory not found: $SKILLS_DIR"
+    check_fail "directory.json path missing on disk: $path"
   fi
-  
-  # Validate all discovered skills have SKILL.md
-  # Normalize paths: strip trailing /SKILL.md and leading ./ for comparison
-  DISCOVERED_SKILLS=$(find "$SKILLS_DIR" -name "SKILL.md" -not -path "*/.tessl/*" | sed 's#/[^/]*$##' | sed 's/^\.\///' | sort)
-  DISK_SKILL_DIRS=$(find skills -name "SKILL.md" -not -path "*/.tessl/*" | sed 's#/[^/]*$##' | sed 's/^\.\///' | sort)
-  
-  while IFS= read -r path; do
-    [ -z "$path" ] && continue
-    if printf '%s\n' "$DISCOVERED_SKILLS" | grep -Fxq "$path"; then
-      check_pass "Auto-discovered: $path"
-    else
-      check_fail "Not auto-discovered: $path"
-    fi
-  done <<< "$DISK_SKILL_DIRS"
-elif [ "$SKILLS_TYPE" = 'array' ]; then
-  # Explicit array format: "skills": ["./skills/..."]
-  # Normalize paths: strip leading ./ for comparison
-  PLUGIN_SKILL_PATHS=$(jq -r '.skills[]' "$PLUGIN_FILE" 2>/dev/null | sed 's/^\.\///' | sort)
-  DISK_SKILL_DIRS=$(find skills -name "SKILL.md" -not -path "*/.tessl/*" | sed 's#/[^/]*$##' | sed 's/^\.\///' | sort)
+done <<< "$DIRECTORY_PATHS"
 
-  while IFS= read -r path; do
-    [ -z "$path" ] && continue
-    if printf '%s\n' "$PLUGIN_SKILL_PATHS" | grep -Fxq "$path"; then
-      check_pass "plugin.json includes: $path"
-    else
-      check_fail "plugin.json missing: $path"
-    fi
-  done <<< "$DISK_SKILL_DIRS"
-else
-  check_fail "Unsupported .skills type in plugin.json: $SKILLS_TYPE (expected 'string' or 'array')"
-fi
+while IFS= read -r path; do
+  [ -z "$path" ] && continue
+  if printf '%s\n' "$DIRECTORY_PATHS" | grep -Fxq "$path"; then
+    check_pass "disk skill registered: $path"
+  else
+    check_fail "disk skill not in directory.json: $path"
+  fi
+done <<< "$DISK_SKILL_PATHS"
 
-PERSONA_PATHS=$(find skills/personas -name "SKILL.md" -not -path "*/.tessl/*" | sort)
+# name key should match directory basename of path
+while IFS= read -r entry; do
+  [ -z "$entry" ] && continue
+  name="${entry%%|*}"
+  path="${entry#*|}"
+  dir_name=$(basename "$(dirname "$path")")
+  if [ "$name" = "$dir_name" ]; then
+    check_pass "directory.json key matches path: $name"
+  else
+    check_fail "directory.json key '$name' does not match path dir '$dir_name' ($path)"
+  fi
+done < <(jq -r '.skills | to_entries[] | "\(.key)|\(.value.path)"' "$DIRECTORY_FILE")
+
+PERSONA_PATHS=$(find skills/personas -name "SKILL.md" 2>/dev/null | sort)
 if [ -n "$PERSONA_PATHS" ]; then
   info "Persona SKILL.md files:"
   while IFS= read -r path; do
     info "  $path"
   done <<< "$PERSONA_PATHS"
-  has_type_field=$(grep -l "^type: persona" $PERSONA_PATHS 2>/dev/null | wc -l)
+  has_type_field=$(grep -l "^type: persona" $PERSONA_PATHS 2>/dev/null | wc -l | tr -d ' ')
   persona_count=$(echo "$PERSONA_PATHS" | wc -l | tr -d ' ')
   if [ "$has_type_field" -eq "$persona_count" ]; then
     check_pass "All persona SKILL.md files have type: persona"

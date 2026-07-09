@@ -1,12 +1,10 @@
 .DS_Store
-tessl_generations.log
 .agents/
 .github/skills/*
 # Claude Code internal state (worktrees, plans, session data)
 .claude/
 .antigravitycli/
 private-evals/
-tessl-evals/
 tmp/
 .lean-ctx/
 lean-ctx/
@@ -21,7 +19,7 @@ lean-ctx/
 .gemini-plugin/
 .cursor/
 .windsurf/
-# Personal and internal files (Hidden from Tessl)
+# Local / personal eval fixtures (tracked examples live under personal-evals/ when force-added)
 personal-evals/
 skills/**/README.md
 workflows/README.md
@@ -29,12 +27,8 @@ CHANGELOG.md
 docs/eval-provenance.md
 docs/evaluator-and-agents-roadmap.md
 
-.tessl/
 .ruby-lsp/
 .vscode/
-
-# Plugin manifests (required by CI - shared)
-# .cursor-plugin/ and .windsurf-plugin/ are NOT ignored - CI needs these
 
 # Node
 node_modules/

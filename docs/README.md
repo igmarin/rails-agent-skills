@@ -13,7 +13,7 @@ For the high-level project value proposition, start with the [root README](../RE
 | Reviewing code | [Review Guide](personas/review.md) |
 | Not sure where to start | `skill-router` *(from ruby-core-skills)* |
 | Installing the library | [Root README](../README.md) |
-| Validating skill quality | [Eval provenance](eval-provenance.md) and [Skill optimization](skill-optimization-guide.md) |
+| Validating skill quality | [Eval provenance](eval-provenance.md) |
 
 **Note:** This repository depends on `igmarin/ruby-core-skills` for foundational Ruby skills. Install both repositories for complete functionality.
 
@@ -47,7 +47,7 @@ Skills are building blocks. Personas define the sequence. Follow `skill-router` 
 
 ### Evaluation Ownership
 
-Tessl validates publishable skills from `directory.json` using `evals/`. The `personal-evals/` directory contains full-context examples for upcoming `ruby-skill-bench` validation.
+The `personal-evals/` directory contains full-context examples for upcoming `ruby-skill-bench` validation.
 
 ## Reference & Authoring
 

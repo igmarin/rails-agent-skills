@@ -19,11 +19,13 @@ pass() {
   printf '✓ %s\n' "$1"
 }
 
-section "Validating eval source"
-
-pass "root evals/ is the tracked Tessl eval source (plugin mode)"
-
 section "Validating personal eval scenarios"
+
+if [[ ! -d personal-evals ]]; then
+  fail "personal-evals/ directory is missing"
+else
+  pass "personal-evals/ directory exists"
+fi
 
 while IFS= read -r scenario_dir; do
   relative_dir="${scenario_dir#./}"
@@ -61,7 +63,7 @@ while IFS= read -r scenario_dir; do
       scenario_dir = ARGV.fetch(1)
       data = JSON.parse(File.read(File.join(scenario_dir, "metadata.json")))
 
-      required = %w[id target_type target_name context_mode requires_companion_resources tessl_export]
+      required = %w[id target_type target_name context_mode requires_companion_resources]
       missing = required.reject { |key| data.key?(key) }
       abort "missing required keys: #{missing.join(", ")}" unless missing.empty?
 
@@ -70,14 +72,11 @@ while IFS= read -r scenario_dir; do
       abort "context_mode must be skill_bundle_xml" unless data.fetch("context_mode") == "skill_bundle_xml"
       abort "requires_companion_resources must be boolean" unless [true, false].include?(data.fetch("requires_companion_resources"))
 
-      tessl_export = data.fetch("tessl_export")
-      abort "tessl_export.supported must be boolean" unless [true, false].include?(tessl_export["supported"])
-      abort "tessl_export.reason is required" if tessl_export["reason"].to_s.strip.empty?
-
       target_name = data.fetch("target_name")
+      target_type = data.fetch("target_type")
       target_path =
-        if data.fetch("target_type") == "agent"
-          File.join(root, "agents", target_name, "SKILL.md")
+        if target_type == "persona"
+          File.join(root, "skills", "personas", target_name, "SKILL.md")
         else
           local_path = Dir[File.join(root, "skills", "*", target_name, "SKILL.md")].first
           core_path = Dir[File.join(root, "..", "ruby-core-skills", "skills", "*", target_name, "SKILL.md")].first
@@ -89,7 +88,7 @@ while IFS= read -r scenario_dir; do
       && pass "$relative_dir metadata.json is valid" \
       || fail "$relative_dir metadata.json failed validation"
   fi
-done < <(find personal-evals -mindepth 1 -maxdepth 1 -type d | sort)
+done < <(find personal-evals -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sort)
 
 if [[ "$failures" -gt 0 ]]; then
   printf '\nFailed: %d\n' "$failures"

@@ -24,6 +24,5 @@ Master index for the Rails Agent Skills library. Start here to navigate the publ
 - [Skill Design Principles](skill-design-principles.md) - Why skills are structured this way.
 - [Architecture](architecture.md) - Repository layout and `SKILL.md` conventions.
 - [Skill Structure](skill-structure.md) - Canonical skill file shape.
-- [Skill Optimization](skill-optimization-guide.md) - Baseline-vs-context evaluation loop.
-- [Eval Provenance](eval-provenance.md) - Ownership rules for `evals/`, `personal-evals/`.
+- [Eval Provenance](eval-provenance.md) - Ownership rules for `personal-evals/`.
 - [Skill Template](skill-template.md) - Template for contributing new skills.

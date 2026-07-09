@@ -44,7 +44,6 @@ See the [Ecosystem Overview](https://github.com/igmarin/agent-mcp-runtime/blob/m
 > Official distribution
 >
 > [![GitHub tag](https://img.shields.io/github/v/tag/igmarin/rails-agent-skills?label=release)](https://github.com/igmarin/rails-agent-skills/tags)
-> [![tessl](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.tessl.io%2Fv1%2Fbadges%2Figmarin%2Frails-agent-skills)](https://tessl.io/registry/igmarin/rails-agent-skills)
 > [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 > [![skills.sh](https://skills.sh/b/igmarin/rails-agent-skills)](https://skills.sh/igmarin/rails-agent-skills)
 > [![Smithery](https://img.shields.io/badge/Smithery-orange)](https://smithery.ai/skills/ismael-marin/rails-agent-skills)
@@ -82,7 +81,6 @@ npx skills add igmarin/rails-agent-skills
 | `skills/` | 28 public atomic skills for Rails-specific development. Each skill has a `SKILL.md` entry point with task-specific instructions. |
 | `skills/personas/` | 9 callable personas that chain skills into full development loops (tdd, quality, review, setup, engine, bug-fix, graphql, migration, background-job). |
 | `docs/` | Public documentation, architecture, persona guides, skill catalog, and evaluation policy. |
-| `evals/` | Tessl-native eval scenarios for publishable skills in `directory.json`. |
 | `personal-evals/` | Open examples for the upcoming `ruby-skill-bench` full-context evaluator. |
 
 **Core Dependency:** This repository depends on `igmarin/ruby-core-skills` for 15 foundational Ruby skills (DDD, Ruby patterns, process skills, code quality, orchestration). Install both repositories for the complete skill set.
@@ -154,16 +152,9 @@ Use [docs/reference/skill-catalog.md](docs/reference/skill-catalog.md) for the c
 
 ## Quality And Evaluation
 
-This repo uses two complementary evaluation layers.
+Skill quality is validated through full-context scenarios in `personal-evals/`, intended for the upcoming `ruby-skill-bench` gem. Those examples load `SKILL.md` plus companion resources (bundled as XML) so skills and personas can be scored with realistic context.
 
-| Layer | Status | What it validates |
-|-------|--------|-------------------|
-| Tessl | Public and active | Tessl-native scenarios in `evals/` validate the quality of publishable skills from `directory.json`. Tessl does not validate repository personas today. |
-| `ruby-skill-bench` | Coming soon | The upcoming Ruby gem will run `personal-evals/` examples with full skill or agent context, including `SKILL.md` plus companion resources bundled as XML. |
-
-`evals/` is the tracked Tessl eval source for publishable skills. `personal-evals/` is the tracked source for open custom-evaluator examples.
-
-See [docs/eval-provenance.md](docs/eval-provenance.md) for the canonical eval ownership policy and [docs/skill-optimization-guide.md](docs/skill-optimization-guide.md) for the baseline-vs-context optimization loop.
+See [docs/eval-provenance.md](docs/eval-provenance.md) for the canonical eval ownership policy.
 
 ## Install Selected Skills With GitHub CLI
 
@@ -220,7 +211,6 @@ Pinning to a tag or commit SHA gives you reproducible installs. Provenance metad
 | Follow persona guides | [docs/persona-guide.md](docs/persona-guide.md) |
 | Understand repository structure | [docs/architecture.md](docs/architecture.md) |
 | Understand eval ownership | [docs/eval-provenance.md](docs/eval-provenance.md) |
-| Optimize skill eval quality | [docs/skill-optimization-guide.md](docs/skill-optimization-guide.md) |
 
 ## Contributing
 

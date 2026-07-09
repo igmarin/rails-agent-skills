@@ -157,7 +157,6 @@ Skills are located in subdirectories of this plugin. Read the relevant `SKILL.md
 
 ## Project Constraints
 
-- **The `evals/` directory is READ-ONLY.** These files contain intentional bugs, missing documentation, or non-standard patterns used to evaluate agent performance. Never "fix" or "improve" files in `evals/` unless explicitly instructed to update a test case scenario.
 - **Service response format:** Always return `{ success: bool, response: { ... } }` — data under `response:`, errors under `response: { error: { message: '...' } }`.
 
 **Ruby files:** Every `.rb` file begins with `# frozen_string_literal: true`.
@@ -178,7 +177,7 @@ Generated artifacts (YARD docs, Postman collections, READMEs) must be in **Engli
 
 ## Eval Strategy
 
-Skills are scored on two axes: **skill-specific criteria** AND **model performance baseline-vs-with-context**. A skill that only beats baseline marginally is under-specified — it should change the model's output meaningfully. See [docs/skill-optimization-guide.md](docs/skill-optimization-guide.md) for the optimization loop and per-skill targets.
+Full-context evaluation scenarios live in `personal-evals/` for the upcoming `ruby-skill-bench` evaluator. A skill should change the model's output meaningfully versus baseline instructions alone — if it does not, it is under-specified. See [docs/eval-provenance.md](docs/eval-provenance.md) and [docs/skill-design-principles.md](docs/skill-design-principles.md).
 
 <!-- lean-ctx -->
 ## lean-ctx

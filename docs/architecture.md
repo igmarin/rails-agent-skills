@@ -11,14 +11,13 @@ Conventions and structure for every `SKILL.md` in this library.
 rails-agent-skills/
 ├── docs/                    # Documentation
 ├── lean-ctx/                # Lean context configuration
-├── personal-evals/          # Tracked open custom evals
+├── personal-evals/          # Tracked open custom evals (ruby-skill-bench)
 ├── scripts/                 # Utility scripts
 ├── skills/                  # Categorized skills
 │   └── <category>/          # e.g., testing, code-quality
 │       └── <skill-name>/    # One directory per skill
 │           ├── SKILL.md     # Main skill file (required)
 │           └── EXAMPLES.md  # Optional reference/examples material
-├── evals/                   # Tessl eval scenarios
 ├── directory.json           # Skill directory manifest
 ├── CLAUDE.md                # Claude Code setup instructions
 └── README.md                # Root README

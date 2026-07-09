@@ -178,7 +178,7 @@ Generated artifacts (YARD docs, Postman collections, READMEs) must be in **Engli
 
 ## Eval Strategy
 
-Skills are scored on two axes: **skill-specific criteria** AND **model performance baseline-vs-with-context**. A skill that only beats baseline marginally is under-specified — it should change the model's output meaningfully. See [docs/skill-optimization-guide.md](docs/skill-optimization-guide.md) for the optimization loop and per-skill targets.
+Full-context evaluation scenarios live in `personal-evals/` for the upcoming `ruby-skill-bench` evaluator. A skill should change the model's output meaningfully versus baseline instructions alone — if it does not, it is under-specified. See [docs/eval-provenance.md](docs/eval-provenance.md) and [docs/skill-design-principles.md](docs/skill-design-principles.md).
 
 <!-- lean-ctx -->
 ## lean-ctx

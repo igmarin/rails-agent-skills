@@ -118,7 +118,6 @@ Every skill directory must contain a `SKILL.md` file with valid YAML frontmatter
 - If a skill is **moved to `ruby-core-skills`**: it must be added to `directory.json.deprecated_skills` with `moved_to`, `message`, and `removed_in` fields. Flag if the old entry is deleted without deprecation tracking
 - If a skill references `ruby-core-skills` (e.g. in `dependencies` or Integration tables), `depends_on` in `directory.json` must include `"igmarin/ruby-core-skills"`
 - Skills listed in `skills.sh.json` groupings must exist on disk. Flag broken references
-- If a skill file is **added or renamed**: verify that `.tessl-plugin/plugin.json` `skills` array includes the new path. Flag if missing
 
 **Suggestions:**
 

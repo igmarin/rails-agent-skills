@@ -1,5 +1,20 @@
 # Changelog
 
+## [Unreleased]
+
+### Removed
+- Tessl plugin packaging and registry integration (`.tessl-plugin/`, `tessl.json`, `.tesslignore`)
+- Tessl CI workflows (`tessl-publish.yml`, `tessl-review.yml`)
+- Tessl-native `evals/` scenarios and generator/validator scripts
+- Tessl-only docs (`docs/skill-optimization-guide.md`, `docs/skill-description-strategy.md`, root `skill-description-strategy.md`)
+- Tessl badge and documentation references from README and skill authoring docs
+
+### Changed
+- Skill catalog validation now uses `scripts/validate-skills.sh` against `directory.json` (replaces `validate-plugins.sh`)
+- `personal-evals/` metadata no longer includes Tessl export fields
+- Eval provenance policy documents only `personal-evals/` / `ruby-skill-bench`
+
+
 ## [7.0.0] - 2026-06-01
 
 ### Breaking Changes

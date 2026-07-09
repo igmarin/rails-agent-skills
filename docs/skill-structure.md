@@ -2,7 +2,7 @@
 
 The shape every `SKILL.md` in this library must converge on. The post-eval reinforcement pass uses this document as the audit checklist — if a skill is missing one of these sections, it is under-specified and will be brought into line.
 
-This is the *structural* spec. For *content* principles (when to write a skill, how it should change model behavior), see [skill-design-principles.md](skill-design-principles.md). For the eval-driven loop that decides which skills to reinforce next, see [skill-optimization-guide.md](skill-optimization-guide.md).
+This is the *structural* spec. For *content* principles (when to write a skill, how it should change model behavior), see [skill-design-principles.md](skill-design-principles.md).
 
 ---
 
@@ -31,8 +31,8 @@ name: rails-something
 description: >
   One paragraph. Lead with what the skill does, follow with when to use it,
   end with **trigger words / phrases** the model should pattern-match on.
-  This field is the discoverability surface — Tessl, Claude Code, Cursor,
-  and Windsurf all use it to route requests.
+  This field is the discoverability surface — Claude Code, Cursor,
+  Windsurf, and other skill hosts use it to route requests.
 ---
 ```
 
@@ -80,14 +80,14 @@ Keep steps imperative ("Write the spec", "Run `bundle exec rspec path/to/spec`")
 
 ## 5. Output Style
 
-The exact shape of every artifact this skill produces. This is the section most often missing today, and it is the biggest baseline-vs-context lever per the [optimization guide](skill-optimization-guide.md). Include:
+The exact shape of every artifact this skill produces. This is the section most often missing today, and missing it produces unstable artifacts across runs. Include:
 
 - Headings, ordering, severity labels (Critical / Suggestion / Nice-to-have).
 - Required fields (every PR review must end with a Critical/Suggestion summary; every PRD must include Goals, User Stories, Functional Requirements, Success Metrics).
 - Forbidden phrasings ("don't apologize", "no 'just' / 'simply'", "no performative agreement").
 - Output language: English unless the user explicitly requests another language.
 
-A skill without Output Style produces wildly different artifacts run-to-run; the eval cannot give it a stable score on the with-context axis.
+A skill without Output Style produces wildly different artifacts run-to-run; full-context evals cannot score it reliably.
 
 ## 6. Integration
 
@@ -104,14 +104,14 @@ Closes the loop with the rest of the library:
 
 ## Validator Coverage
 
-`scripts/validate-plugins.sh` checks the structural pieces the validator can verify deterministically:
+`scripts/validate-skills.sh` checks the structural pieces the validator can verify deterministically:
 
 - Frontmatter `name` matches directory name
 - Frontmatter has `name`, `type`, and `description` keys
 - Skill directory is registered in `directory.json.skills`
 - `directory.json ↔ disk` inventory is bidirectionally in sync
 
-The validator does **not** yet enforce the presence of HARD-GATE, Output Style, or Integration sections. Tessl evals catch the behavioural consequences of missing those sections — that is the loop the [optimization guide](skill-optimization-guide.md) describes.
+The validator does **not** yet enforce the presence of HARD-GATE, Output Style, or Integration sections. Reviewers and `personal-evals/` scenarios should catch missing behavioral sections.
 
 ---
 
@@ -119,5 +119,4 @@ The validator does **not** yet enforce the presence of HARD-GATE, Output Style, 
 
 - [skill-design-principles.md](skill-design-principles.md) — when to create a skill, how it should change model behavior, the 6 design principles.
 - [skill-template.md](skill-template.md) — fillable template that already follows this structure.
-- [skill-optimization-guide.md](skill-optimization-guide.md) — eval-driven loop for lifting baseline-vs-context scores.
 - [architecture.md](architecture.md) — repository layout and `SKILL.md` mechanical conventions.

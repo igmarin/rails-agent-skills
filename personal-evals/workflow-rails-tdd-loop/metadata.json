@@ -1,11 +1,7 @@
 {
   "id": "workflow-rails-tdd-loop",
-  "target_type": "agent",
+  "target_type": "persona",
   "target_name": "tdd",
   "context_mode": "skill_bundle_xml",
-  "requires_companion_resources": true,
-  "tessl_export": {
-    "supported": false,
-    "reason": "Requires agent context as an XML bundle with companion resources; Tessl currently consumes only SKILL.md."
-  }
+  "requires_companion_resources": true
 }

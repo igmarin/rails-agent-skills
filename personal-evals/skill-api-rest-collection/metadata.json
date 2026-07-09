@@ -3,9 +3,5 @@
   "target_type": "skill",
   "target_name": "generate-api-collection",
   "context_mode": "skill_bundle_xml",
-  "requires_companion_resources": true,
-  "tessl_export": {
-    "supported": true,
-    "reason": "Requires XML bundle context and source fixtures; Tessl currently consumes only SKILL.md."
-  }
+  "requires_companion_resources": true
 }
