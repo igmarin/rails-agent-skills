@@ -85,6 +85,11 @@ fi
 
 section "Validating SKILL.md Frontmatter"
 
+# Cache the find result once — previously this was run twice (here and in the
+# disk-sync section below). Stored in a newline-delimited string and replayed
+# via a process substitution. Portable across bash 3.2 (macOS) and bash 4+.
+DISK_SKILL_FILES_CACHE="$(find skills -name "SKILL.md" | sort)"
+
 skill_count=0
 while IFS= read -r skill_file; do
   skill_count=$((skill_count + 1))
@@ -112,7 +117,7 @@ while IFS= read -r skill_file; do
   if [ -n "$fm_name" ] && [ "$fm_name" != "$skill_name" ]; then
     check_fail "$skill_name: frontmatter name ('$fm_name') does not match directory name"
   fi
-done < <(find skills -name "SKILL.md" | sort)
+done < <(printf '%s\n' "$DISK_SKILL_FILES_CACHE")
 
 info "Total SKILL.md files found: $skill_count"
 
@@ -120,7 +125,8 @@ section "directory.json ↔ Disk Sync"
 
 # directory.json maps skill name -> { "path": "skills/.../SKILL.md" }
 DIRECTORY_PATHS=$(jq -r '.skills | to_entries[] | .value.path' "$DIRECTORY_FILE" 2>/dev/null | sed 's/^\.\///' | sort)
-DISK_SKILL_PATHS=$(find skills -name "SKILL.md" | sed 's/^\.\///' | sort)
+# Reuse the cached find result instead of walking the tree a second time.
+DISK_SKILL_PATHS=$(printf '%s\n' "$DISK_SKILL_FILES_CACHE" | sed 's/^\.\///' | sort)
 
 while IFS= read -r path; do
   [ -z "$path" ] && continue
@@ -156,15 +162,50 @@ done < <(jq -r '.skills | to_entries[] | "\(.key)|\(.value.path)"' "$DIRECTORY_F
 PERSONA_PATHS=$(find skills/personas -name "SKILL.md" 2>/dev/null | sort)
 if [ -n "$PERSONA_PATHS" ]; then
   info "Persona SKILL.md files:"
+  persona_count=0
+  persona_type_matches=0
   while IFS= read -r path; do
+    [ -z "$path" ] && continue
     info "  $path"
+    persona_count=$((persona_count + 1))
+    if grep -q "^type: persona" "$path" 2>/dev/null; then
+      persona_type_matches=$((persona_type_matches + 1))
+    fi
   done <<< "$PERSONA_PATHS"
-  has_type_field=$(grep -l "^type: persona" $PERSONA_PATHS 2>/dev/null | wc -l | tr -d ' ')
-  persona_count=$(echo "$PERSONA_PATHS" | wc -l | tr -d ' ')
-  if [ "$has_type_field" -eq "$persona_count" ]; then
+  if [ "$persona_type_matches" -eq "$persona_count" ]; then
     check_pass "All persona SKILL.md files have type: persona"
   else
-    check_fail "Some persona SKILL.md files missing type: persona"
+    check_fail "Some persona SKILL.md files missing type: persona ($persona_type_matches/$persona_count)"
+  fi
+fi
+
+section "skills.sh.json ↔ directory.json Sync"
+
+SKILLS_SH_FILE="skills.sh.json"
+if [ ! -f "$SKILLS_SH_FILE" ]; then
+  check_fail "File not found: $SKILLS_SH_FILE"
+else
+  if jq empty "$SKILLS_SH_FILE" 2>/dev/null; then
+    check_pass "$SKILLS_SH_FILE: valid JSON syntax"
+  else
+    check_fail "$SKILLS_SH_FILE: invalid JSON syntax"
+  fi
+
+  # Every skill referenced in skills.sh.json groupings must exist in directory.json.skills.
+  DIRECTORY_SKILL_KEYS=$(jq -r '.skills | keys[]' "$DIRECTORY_FILE" 2>/dev/null | sort)
+  SH_REFERENCED_SKILLS=$(jq -r '[.groupings[].skills[]] | unique[]' "$SKILLS_SH_FILE" 2>/dev/null | sort)
+
+  if [ -z "$SH_REFERENCED_SKILLS" ]; then
+    check_fail "$SKILLS_SH_FILE: no skills found in groupings"
+  else
+    while IFS= read -r skill_name; do
+      [ -z "$skill_name" ] && continue
+      if printf '%s\n' "$DIRECTORY_SKILL_KEYS" | grep -Fxq "$skill_name"; then
+        check_pass "$SKILLS_SH_FILE skill in directory.json: $skill_name"
+      else
+        check_fail "$SKILLS_SH_FILE skill missing from directory.json: $skill_name"
+      fi
+    done <<< "$SH_REFERENCED_SKILLS"
   fi
 fi
 

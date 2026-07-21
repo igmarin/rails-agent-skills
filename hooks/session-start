@@ -1,12 +1,38 @@
 #!/usr/bin/env bash
 # SessionStart hook for rails-agent-skills
+#
+# Emits the SessionStart hook payload with properly escaped JSON. The context
+# string is passed through jq --arg so quotes, newlines, and backslashes are
+# never interpreted as JSON structure. Falls back to a heredoc only if jq is
+# unavailable (preserving prior behavior for minimal environments).
 
 set -euo pipefail
 
-session_context="<IMPORTANT>\nYou have access to Rails Agent Skills via MCP.\nUse the 'use_skill' MCP tool to dynamically load the skill you need.\nReview docs/reference/skill-catalog.md for the full list of available skills.\n</IMPORTANT>"
+session_context="<IMPORTANT>
+You have access to Rails Agent Skills via MCP.
+Use the 'use_skill' MCP tool to dynamically load the skill you need.
+Review docs/reference/skill-catalog.md for the full list of available skills.
+</IMPORTANT>"
 
-if [ -n "${CLAUDE_PLUGIN_ROOT:-}" ]; then
-  cat <<EOF
+emit_with_jq() {
+  if [ -n "${CLAUDE_PLUGIN_ROOT:-}" ]; then
+    jq -n --arg ctx "$session_context" '{
+      hookSpecificOutput: {
+        hookEventName: "SessionStart",
+        additionalContext: $ctx
+      }
+    }'
+  else
+    jq -n --arg ctx "$session_context" '{ additional_context: $ctx }'
+  fi
+}
+
+emit_with_heredoc() {
+  # Fallback: jq not installed. The static literal below contains no characters
+  # that require JSON escaping, so heredoc emission is safe for this exact
+  # string. If session_context ever becomes dynamic, require jq instead.
+  if [ -n "${CLAUDE_PLUGIN_ROOT:-}" ]; then
+    cat <<EOF
 {
   "hookSpecificOutput": {
     "hookEventName": "SessionStart",
@@ -14,12 +40,19 @@ if [ -n "${CLAUDE_PLUGIN_ROOT:-}" ]; then
   }
 }
 EOF
-else
-  cat <<EOF
+  else
+    cat <<EOF
 {
   "additional_context": "${session_context}"
 }
 EOF
+  fi
+}
+
+if command -v jq &>/dev/null; then
+  emit_with_jq
+else
+  emit_with_heredoc
 fi
 
 exit 0

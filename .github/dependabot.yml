@@ -1,0 +1,18 @@
+version: 2
+updates:
+  # GitHub Actions workflows — keep pinned actions up to date.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+      - github-actions
+    commit-message:
+      prefix: "ci:"
+      include: scope
+
+  # No npm/cargo/ruby dependencies are declared in this repo — the rs-guard
+  # binary is pinned via bin/rs-guard.manifest and bumped manually with a
+  # checksum update. Add ecosystems here if runtime dependencies are introduced.

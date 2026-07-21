@@ -1,0 +1,22 @@
+# CODEOWNERS for rails-agent-skills
+# Requests review on paths that affect security, automation, and distribution.
+
+# Hooks execute in agent runtimes and CI — security-sensitive.
+/hooks/                        @igmarin
+
+# Scripts install binaries, validate the catalog, and run smoke tests.
+/scripts/                      @igmarin
+
+# CI workflows and review prompts drive automated review and binary download.
+/.github/                      @igmarin
+
+# Pinned binary checksum — bumping this changes what gets downloaded and executed.
+/bin/rs-guard.manifest         @igmarin
+
+# Registry manifests — skill discovery depends on these.
+/directory.json                @igmarin
+/skills.sh.json                @igmarin
+
+# Security policy and data-flow disclosure.
+/SECURITY.md                   @igmarin
+/docs/data-flow.md             @igmarin

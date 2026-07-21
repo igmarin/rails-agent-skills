@@ -37,22 +37,21 @@ BASE_URL="https://github.com/nebulaideas/rs-guard/releases/download/${RS_GUARD_V
 
 echo "Downloading rs-guard ${RS_GUARD_VERSION} (${RS_GUARD_ASSET})..."
 # Release asset is a pre-built ELF binary (not a .tar.gz/.zip). No extraction step needed.
-# Verified in CI: download → sha256sum -c → rs-guard --version → review completes successfully.
+# Verified in CI: download → sha256 vs manifest pin → rs-guard --version → review completes.
 curl "${CURL_OPTS[@]}" -o "$ASSET_PATH" "${BASE_URL}/${RS_GUARD_ASSET}"
-curl "${CURL_OPTS[@]}" -o "${ASSET_PATH}.sha256" "${BASE_URL}/${RS_GUARD_ASSET}.sha256"
 
 chmod +x "$ASSET_PATH"
 
-(
-  cd "$INSTALL_DIR"
-  sha256sum -c "${RS_GUARD_ASSET}.sha256"
-)
-
-ACTUAL_SHA256="$(awk '{ print $1 }' "$INSTALL_DIR/${RS_GUARD_ASSET}.sha256")"
+# Verify against the manifest-pinned checksum only. The previous flow also
+# downloaded a .sha256 sidecar from the same release and ran `sha256sum -c`
+# against it — but if the release is compromised, both the binary and the
+# sidecar can be replaced together, making that step redundant. The manifest
+# pin (committed to this repo) is the strong defense.
+ACTUAL_SHA256="$(sha256sum "$ASSET_PATH" | awk '{ print $1 }')"
 if [[ "$ACTUAL_SHA256" != "$RS_GUARD_SHA256" ]]; then
-  echo "Pinned manifest checksum does not match release checksum file." >&2
+  echo "Pinned manifest checksum does not match downloaded binary." >&2
   echo "Expected (manifest): $RS_GUARD_SHA256" >&2
-  echo "Actual (release):    $ACTUAL_SHA256" >&2
+  echo "Actual (download):   $ACTUAL_SHA256" >&2
   exit 1
 fi
 

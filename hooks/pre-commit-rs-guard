@@ -5,6 +5,16 @@
 # Runs an AI-powered review of staged changes using rs-guard before each commit.
 # Uses --dry-run so it never blocks the commit — output is informational only.
 #
+# OPT-IN: This hook sends staged diffs to a third-party LLM provider. It is
+# DISABLED by default and will not run unless BOTH conditions are met:
+#   1. RS_GUARD_ENABLED=true is set in the environment
+#   2. A provider API key is present (see below)
+# This prevents silent source-code exfiltration on commit. See
+# docs/data-flow.md for the full data flow and opt-out instructions.
+#
+# To enable for a repo:  export RS_GUARD_ENABLED=true
+# To disable:            unset RS_GUARD_ENABLED (or set RS_GUARD_ENABLED=false)
+#
 # Provider is read from .reviewer.toml (default: deepseek). Set the matching
 # API key environment variable for your chosen provider:
 #
@@ -30,6 +40,13 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
+# OPT-IN GATE: this hook sends staged diffs to a third-party LLM. It must not
+# run silently just because an API key happens to be in the environment.
+# Require an explicit RS_GUARD_ENABLED=true to activate. See docs/data-flow.md.
+if [ "${RS_GUARD_ENABLED:-}" != "true" ]; then
+  exit 0
+fi
+
 if command -v rs-guard &>/dev/null; then
   RS_GUARD_BIN="rs-guard"
 elif [ -x "$HOME/.cargo/bin/rs-guard" ]; then
@@ -49,7 +66,7 @@ for key in DEEPSEEK_API_KEY OPENAI_API_KEY KIMI_API_KEY DASHSCOPE_API_KEY OPENRO
 done
 
 if [ "$has_api_key" = false ]; then
-  echo "[rs-guard] No provider API key found — skipping pre-commit review."
+  echo "[rs-guard] RS_GUARD_ENABLED=true but no provider API key found — skipping pre-commit review."
   echo "[rs-guard] Set one of: DEEPSEEK_API_KEY, OPENAI_API_KEY, KIMI_API_KEY, DASHSCOPE_API_KEY, OPENROUTER_API_KEY"
   exit 0
 fi
