@@ -10,7 +10,6 @@ Conventions and structure for every `SKILL.md` in this library.
 ```text
 rails-agent-skills/
 ├── docs/                    # Documentation
-├── lean-ctx/                # Lean context configuration
 ├── personal-evals/          # Tracked open custom evals (ruby-skill-bench)
 ├── scripts/                 # Utility scripts
 ├── skills/                  # Categorized skills

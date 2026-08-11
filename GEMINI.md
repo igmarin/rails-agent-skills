@@ -178,10 +178,3 @@ Generated artifacts (YARD docs, Postman collections, READMEs) must be in **Engli
 ## Eval Strategy
 
 Full-context evaluation scenarios live in `personal-evals/` for the upcoming `ruby-skill-bench` evaluator. A skill should change the model's output meaningfully versus baseline instructions alone — if it does not, it is under-specified. See [docs/eval-provenance.md](docs/eval-provenance.md) and [docs/skill-design-principles.md](docs/skill-design-principles.md).
-
-<!-- lean-ctx -->
-## lean-ctx
-
-Prefer lean-ctx tools over native equivalents for token savings.
-Full rules: @LEAN-CTX.md
-<!-- /lean-ctx -->
