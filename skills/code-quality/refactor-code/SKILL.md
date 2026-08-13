@@ -3,7 +3,9 @@ name: refactor-code
 type: atomic
 license: MIT
 description: >
-  Use when refactoring Rails code to change structure without changing behavior — must write characterization tests and verify they pass on the current code BEFORE touching any production files, identify inputs/outputs keeping public interfaces stable, run verification after every step and the full suite at the end, and include a Stable behavior statement and Verification evidence showing actual command output under the Observed output label. Trigger words: refactor, restructure, extract service, split class, reduce duplication.
+  Use when changing Rails structure without changing behavior.
+  Characterization tests must be green first. Trigger words: refactor, extract,
+  restructure, split class.
 metadata:
   version: 1.0.0
   user-invocable: "true"

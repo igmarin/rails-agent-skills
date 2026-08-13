@@ -3,7 +3,9 @@ name: seed-database
 type: atomic
 license: MIT
 description: >
-  Use when managing development and test data in Rails — must write idempotent seeds using find_or_create_by!, run seeds with rails db:seed or rails db:setup, verify data by opening rails console and spot-checking records, use ENV variables or SecureRandom for non-production data without committing secrets in code, and use rails credentials:edit for production secrets. Trigger words: seeds, fixtures, seeding, db:seed, test data.
+  Use when choosing seeds, fixtures, or factories for Rails dev/test data.
+  Seeds must be idempotent. Trigger words: seeds, fixtures, test data,
+  development data.
 metadata:
   version: 1.0.0
   user-invocable: "true"

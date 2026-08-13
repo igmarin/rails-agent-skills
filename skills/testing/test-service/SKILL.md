@@ -3,7 +3,9 @@ name: test-service
 type: atomic
 license: MIT
 description: >
-  Use when writing RSpec tests for service objects in `spec/services/` — write spec FIRST and verify it fails for the right reason, use `subject(:service_call) { described_class.call(params) }` with `describe '.call'`, test the public contract not internal implementation, use `instance_double` for isolation and `create` for integration, cover happy path + error/edge cases + blank/invalid input, use `aggregate_failures` for multi-assertion tests, `change` matchers for state verification, `travel_to` for time-dependent logic, FactoryBot hash factories (`class: Hash` with `initialize_with`) for API responses. Covers `instance_double`, `shared_examples`, `subject`/`let` blocks, `context`/`describe` structure, and error scenario testing. Trigger words: service spec, test service object, spec/services.
+  Use when writing RSpec for a service object under spec/services/.
+  Test the public .call contract. Trigger words: service spec, test service
+  object, spec/services.
 metadata:
   version: 1.0.0
   user-invocable: "true"

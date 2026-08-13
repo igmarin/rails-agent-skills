@@ -51,9 +51,11 @@ The `personal-evals/` directory contains full-context examples for upcoming `rub
 
 ## Reference & Authoring
 
-- [Skill Catalog](reference/skill-catalog.md) - Complete list of 28 public Rails skills and 9 callable personas (plus 15 core skills from ruby-core-skills).
-- [Integration Matrix](reference/integration-matrix.md) - How skills connect.
-- [Persona Guide](persona-guide.md) - Narrative guide for daily use.
-- [Architecture](architecture.md) - Repository layout and `SKILL.md` conventions.
-- [Eval Provenance](eval-provenance.md) - Canonical eval ownership policy.
-- [Skill Template](skill-template.md) - Template for creating new skills.
+- [Skill Catalog](reference/skill-catalog.md) — 28 Rails skills and 9 personas.
+- [Gaps](reference/gaps.md) — Missing skills and known drift.
+- [Integration Matrix](reference/integration-matrix.md) — How skills connect.
+- [Persona Guide](persona-guide.md) — How to invoke loops.
+- [Architecture](architecture.md) — `SKILL.md` layout and description contract.
+- [Eval Provenance](eval-provenance.md) — Eval ownership.
+- [Skill Template](skill-template.md) — New-skill template.
+- Host context: [AGENTS.md](../AGENTS.md)

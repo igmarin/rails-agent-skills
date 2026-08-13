@@ -44,8 +44,9 @@ description: >
 - `type`: `atomic` for standalone skills, `persona` for orchestrating personas, `catalog` for root SKILL.md
 - `description`: starts with "Use when...", third person
 - Include concrete trigger words (error symptoms, tools, scenarios)
-- Do NOT summarize the workflow (prevents model from skipping the skill body)
-- Max 1024 characters total for frontmatter
+- Do NOT summarize the workflow (prevents the model from skipping the skill body)
+- `description` target ≤ 600 characters; hard fail at 1024 (Agent Skills spec)
+- First sentence = when to use. Procedure belongs in the body.
 
 ### 2. Title and Core Principle
 

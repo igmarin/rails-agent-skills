@@ -179,6 +179,63 @@ if [ -n "$PERSONA_PATHS" ]; then
   fi
 fi
 
+section "Description size and structure"
+
+# Canonical skills only (skills/**/SKILL.md). Root catalog SKILL.md is included.
+DESC_LIMIT=1024
+DESC_TARGET=600
+BODY_LINE_WARN=500
+
+while IFS= read -r skill_file; do
+  [ -z "$skill_file" ] && continue
+  skill_name=$(basename "$(dirname "$skill_file")")
+  [ "$skill_file" = "SKILL.md" ] && skill_name="rails-agent-skills"
+
+  if ! grep -q "^description:" "$skill_file"; then
+    check_fail "$skill_name: Missing 'description' field"
+    continue
+  fi
+  check_pass "$skill_name: Has 'description' field"
+
+  desc_len=$(python3 - "$skill_file" <<'PY'
+import re, sys
+from pathlib import Path
+text = Path(sys.argv[1]).read_text()
+m = re.search(r"^description:\s*>\s*\n((?:[ \t]+.+\n)+)", text, re.M)
+if m:
+    desc = " ".join(line.strip() for line in m.group(1).splitlines() if line.strip())
+    print(len(desc))
+else:
+    m = re.search(r"^description:\s+(.+)$", text, re.M)
+    print(len(m.group(1).strip()) if m else -1)
+PY
+)
+  if [ "$desc_len" -lt 0 ]; then
+    check_fail "$skill_name: could not parse description"
+  elif [ "$desc_len" -gt "$DESC_LIMIT" ]; then
+    check_fail "$skill_name: description is ${desc_len} chars (max ${DESC_LIMIT})"
+  elif [ "$desc_len" -gt "$DESC_TARGET" ]; then
+    check_fail "$skill_name: description is ${desc_len} chars (target ≤${DESC_TARGET})"
+  else
+    check_pass "$skill_name: description ${desc_len} chars (≤${DESC_TARGET})"
+  fi
+
+  body_lines=$(wc -l < "$skill_file" | tr -d ' ')
+  if [ "$body_lines" -gt "$BODY_LINE_WARN" ]; then
+    check_fail "$skill_name: SKILL.md is ${body_lines} lines (warn at ${BODY_LINE_WARN})"
+  else
+    check_pass "$skill_name: SKILL.md ${body_lines} lines"
+  fi
+
+  for heading in "Quick Reference" "HARD-GATE" "Core Process" "Output Style" "Integration"; do
+    if grep -Eq "^## ${heading}s?\$" "$skill_file"; then
+      check_pass "$skill_name: has ## ${heading}"
+    else
+      info "$skill_name: missing ## ${heading} (warning)"
+    fi
+  done
+done < <(printf '%s\n' "SKILL.md" "$DISK_SKILL_FILES_CACHE")
+
 section "skills.sh.json ↔ directory.json Sync"
 
 SKILLS_SH_FILE="skills.sh.json"

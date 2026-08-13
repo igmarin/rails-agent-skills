@@ -3,7 +3,9 @@ name: extract-engine
 type: atomic
 license: MIT
 description: >
-  Extracts existing Rails app code into a reusable engine incrementally — scaffolds engine structure, moves stable domain logic first, creates adapter interfaces to decouple host dependencies, and preserves regression coverage throughout each extraction slice. Each slice has one coherent responsibility, minimal new public API, passing regression tests, and a clear next step. Use when a developer needs to extract a feature into a Rails engine, move code out of a host app, decouple host coupling via adapters, or perform incremental extraction while preserving existing behavior. Trigger words: extract to engine, move feature to engine, host coupling, adapters, extraction slices, preserve behavior, incremental extraction.
+  Use when extracting a host-app feature into a Rails engine.
+  Do not change behavior in the same step. Trigger words: extract to engine,
+  move feature, host coupling.
 metadata:
   version: 1.0.0
   user-invocable: "true"

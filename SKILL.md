@@ -2,15 +2,9 @@
 name: rails-agent-skills
 type: catalog
 description: >
-  Entry point for Rails development workflows covering TDD, RSpec, Service Objects, DDD, GraphQL,
-  Engines, and Code Quality. Use when the user asks about Ruby on Rails development patterns,
-  needs RSpec test suites generated, wants service objects scaffolded, is setting up GraphQL schemas,
-  performing Rails code review, refactoring .rb files, working with domain-driven design, implementing
-  background jobs, conducting Rails security checks, or building Rails engines. Generates RSpec tests,
-  structures service objects, enforces TDD workflows, configures GraphQL schemas, and coordinates
-  domain-driven design patterns. Trigger keywords: Rails, RSpec, TDD, Rails testing, Rails refactor,
-  Rails API, Rails code review, domain driven design, service objects, GraphQL, Rails engine, Ruby,
-  .rb, background jobs, Rails migrations, Rails security check.
+  Use when starting Rails work and the matching atomic skill is not obvious.
+  Coordinates the Rails skill catalog. Trigger words: Rails, RSpec, TDD,
+  GraphQL, engine, migration, code review, background job.
 ---
 
 # Rails Agent Skills

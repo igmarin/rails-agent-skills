@@ -3,7 +3,9 @@ name: apply-code-conventions
 type: atomic
 license: MIT
 description: >
-  Use when applying code conventions to Rails files — must run linter (detect .rubocop.yml/.standard.yml, note absence, and state which linter was detected and that style defers to it), apply area-specific rules per path with concrete per-path recommendations, verify tests gate (state the failing spec, run command, expected failure, minimal implementation step, and passing rerun) BEFORE new behavior, chain to specialised skills, only recommend let_it_be if test-prof already in Gemfile.lock (otherwise default to let, reach for "let!" only if lazy evaluation breaks example, do not introduce test-prof), and load extended files (assets/checklist.md, assets/snippets.md) only when needed. Use when writing, reviewing, or refactoring Ruby on Rails code. Trigger words: code review, refactor, RoR, clean code, best practices.
+  Use when applying daily Rails conventions by path (DRY, YAGNI, PORO, CoC, KISS).
+  Style defers to the project linter. Trigger words: conventions, clean code,
+  RuboCop, DRY, YAGNI.
 metadata:
   version: 1.0.0
   user-invocable: "true"

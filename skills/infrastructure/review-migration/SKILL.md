@@ -3,7 +3,9 @@ name: review-migration
 type: atomic
 license: MIT
 description: >
-  Use when reviewing production database migrations, performing a migration safety review, planning zero-downtime migration, or deploying database changes safely. Reviews phased rollouts, lock behavior, rollback strategy, strong_migrations, and deployment ordering. Enforces: add nullable-first then backfill then enforce NOT NULL; add indexes with `algorithm: :concurrently` + `disable_ddl_transaction!` on large tables; backfill in batches outside migration transaction; check lock behavior for indexes/constraints/defaults/rewrites; use multi-step rollouts for renames/type changes/unique constraints; deploy code tolerating both old and new schemas during transitions. Never combines schema change and data backfill in one migration, never adds NOT NULL before backfill completes, never drops columns before removing all code references.
+  Use when planning or reviewing a production Rails migration.
+  Never mix schema change and backfill. Trigger words: migration, add column,
+  index, backfill, zero-downtime.
 metadata:
   version: 1.0.0
   user-invocable: "true"

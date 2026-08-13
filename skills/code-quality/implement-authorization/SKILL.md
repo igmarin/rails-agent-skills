@@ -3,7 +3,9 @@ name: implement-authorization
 type: atomic
 license: MIT
 description: >
-  Use when implementing or testing authorization in Rails using Pundit or CanCanCan — must always verify authorization by attempting an unauthorized action in the browser or console and confirming it raises Pundit::NotAuthorizedError or CanCan::AccessDenied as expected, use policy objects rather than inline controller logic, test with multiple roles, and check specific permissions instead of presence checks alone. Covers policy objects, role-based access control, permission checks, testing strategies. Use when implementing authorization, setting up roles/permissions, or mentions Pundit/CanCanCan.
+  Use when adding or reviewing Rails authorization with Pundit, CanCanCan,
+  or policy objects. Trigger words: authorization, Pundit, CanCanCan, policy,
+  roles, permissions.
 metadata:
   version: 1.0.0
   user-invocable: "true"

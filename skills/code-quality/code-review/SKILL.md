@@ -3,7 +3,8 @@ name: code-review
 type: atomic
 license: MIT
 description: >
-  Reviews Rails (Ruby on Rails) pull requests, diffs, and merge requests for quality, security, and conventions. Use when asked to do a PR review, review my diff, review my merge request, or code review of Ruby on Rails code. Grounds every finding in a real file:line from the actual diff, applies exactly three severity labels (Critical, Suggestion, Nice to have) where Critical covers security/data loss/crash and Always Critical flags (permit!, html_safe on user-supplied content, business logic in controllers, unparameterized SQL, destructive migrations), and always includes a "Code review before merge" task line. Follows the principle: review early, review often; self-review before PR; re-review after significant changes.
+  Use when reviewing a Rails PR, diff, or merge request. Ground findings
+  in a real file:line. Trigger words: review PR, code review, review my diff, CR.
 metadata:
   version: 1.0.0
   user-invocable: "true"

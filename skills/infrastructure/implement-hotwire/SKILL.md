@@ -3,7 +3,8 @@ name: implement-hotwire
 type: atomic
 license: MIT
 description: >
-  Use when creating Hotwire UIs with progressive enhancement in Rails — generates Stimulus controllers, Turbo Frame markup, Turbo Stream responses, and ActionCable broadcast setups, then verifies degraded mode by disabling JavaScript (or running rails test:system with Capybara rack_test driver) and confirming forms submit, links navigate, and data persists after reload. Includes a Verification section with explicit no-JavaScript checks. Stimulus, Turbo, Turbo Frames, Turbo Streams.
+  Use when adding Turbo Frames, Turbo Streams, or Stimulus controllers.
+  Trigger words: Hotwire, Turbo, Stimulus, frames, streams.
 metadata:
   version: 1.0.0
   user-invocable: "true"

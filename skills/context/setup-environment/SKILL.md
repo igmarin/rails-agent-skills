@@ -3,7 +3,9 @@ name: setup-environment
 type: atomic
 license: MIT
 description: >
-  Emit a generic Rails development-environment setup runbook for the user to execute locally — agent reads .ruby-version, Gemfile, docker-compose.yml, .env.example and flags mismatches but NEVER executes commands or reads filled-in .env or echoes secrets; covers Docker, environment variables, database, test suite, linters, and IDE in Steps 1–7 plus Final Verification. The agent does not read the user's repository or execute setup commands. Trigger words: onboarding, new dev, setup project, Docker, development environment, getting started.
+  Use when onboarding onto a Rails app: Ruby version, Docker, env, database,
+  test suite. Do not execute setup or echo secrets. Trigger words: onboarding,
+  setup project, Docker, getting started.
 metadata:
   version: 1.0.0
   user-invocable: "true"

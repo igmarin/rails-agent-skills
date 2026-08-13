@@ -3,7 +3,8 @@ name: release-engine
 type: atomic
 license: MIT
 description: >
-  Use when shipping a Rails engine gem — FIRST run full test suite (`bundle exec rspec`) and fix ALL failures, verify gemspec metadata and dependencies match tested Rails/Ruby versions, dry-run: `gem build *.gemspec && gem push --dry-run *.gem` and verify contents, generate CHANGELOG.md organized by category (added/changed/deprecated/removed/fixed), produce step-by-step upgrade notes with before/after code, set semantic version in `lib/[engine_name]/version.rb`, document deprecations with migration paths, load release assets conditionally and state which one informed the output. Trigger words: version bump, changelog, deprecation, gemspec, upgrade, release, publish gem, ship gem.
+  Use when preparing a versioned Rails engine release (SemVer, changelog).
+  Trigger words: release engine, version bump, publish gem, changelog.
 metadata:
   version: 1.0.0
   user-invocable: "true"

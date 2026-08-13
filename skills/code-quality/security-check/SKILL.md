@@ -3,7 +3,9 @@ name: security-check
 type: atomic
 license: MIT
 description: >
-  Rails security audit with hard gates: NEVER reproduce credentials, tokens, API keys, or secrets verbatim in output — flag secrets by file path and line number only. Use when the user asks for a security audit, vulnerability scan, security review, or penetration test of a Rails application, or asks to check for XSS, CSRF, SSRF, SQL injection, open redirects, secrets exposure, authentication flaws, or authorization bypasses. Must check authentication/authorization, parameter handling, redirects/rendering, file/network/job inputs, and secrets/logging, verify each finding is exploitable with a concrete attack scenario before reporting (excluding false positives without using representative file paths), and present sections in the exact order specified, even if empty. Code review for XSS, CSRF, SSRF, SQL injection, open redirects, secrets.
+  Use when auditing a Rails app for XSS, CSRF, SQLi, IDOR, secrets, or auth
+  bypass. Never print secrets. Trigger words: security, audit, XSS, CSRF,
+  SQL injection, vulnerability.
 metadata:
   version: 1.0.0
   user-invocable: "true"

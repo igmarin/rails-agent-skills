@@ -3,7 +3,8 @@ name: implement-graphql
 type: atomic
 license: MIT
 description: >
-  Use when building or reviewing GraphQL APIs in Rails with graphql-ruby — must follow the TDD gates by writing a failing spec in spec/graphql/ using AppSchema.execute rather than HTTP controller dispatch, define arguments/return types without leaking internal model names (use connection_type for pagination), implement resolver/mutation classes that delegate to services, prevent N+1 queries by using and priming the dataloader on association loads, and ensure mutations return result and errors shapes on failure. Trigger words: graphql, graphql-ruby, resolver, mutation, dataloader, schema.
+  Use when building or reviewing a graphql-ruby schema, resolver, or mutation.
+  Trigger words: GraphQL, graphql-ruby, resolver, mutation, dataloader, schema.
 metadata:
   version: 1.0.0
   user-invocable: "true"

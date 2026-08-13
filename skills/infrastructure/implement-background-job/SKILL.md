@@ -3,7 +3,9 @@ name: implement-background-job
 type: atomic
 license: MIT
 description: >
-  Use when adding or reviewing background jobs in Rails — must write the job spec covering idempotency, retry, and error handling and verify it FAILS before implementation, ensure the perform method only loads the record from the passed ID, guards for no-op, and delegates to a service, and run the full test suite to verify success. Active Job, Solid Queue, Sidekiq, idempotency, retry, discard, recurring job, queue.
+  Use when adding or reviewing an Active Job / Sidekiq / Solid Queue worker.
+  Cover idempotency, retry_on, and discard_on. Trigger words: background job,
+  Active Job, Sidekiq, Solid Queue, worker.
 metadata:
   version: 1.0.0
   user-invocable: "true"

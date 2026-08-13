@@ -3,7 +3,8 @@ name: create-engine-installer
 type: atomic
 license: MIT
 description: >
-  Use when creating install generators or initializer installers for Rails engines — must use idiomatic Rails Thor generator commands, and follow the strict workflow: GENERATE (run generator against clean host app), VERIFY (check output files exist in correct host paths), RERUN (run a second time confirming idempotent output), TEST (write a minimal rerun spec that must always pass), and DOCUMENT (list what was generated versus what the user must do manually). Idempotent setup, host-app onboarding, and route mount setup. Trigger words: install generator, mountable engine setup, gem installation, engine onboarding, copy migrations, initializer generator.
+  Use when writing an install generator for a Rails engine (migrations, config).
+  Trigger words: install generator, engine setup, copy migrations.
 metadata:
   version: 1.0.0
   user-invocable: "true"

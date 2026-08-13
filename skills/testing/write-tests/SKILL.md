@@ -3,7 +3,8 @@ name: write-tests
 type: atomic
 license: MIT
 description: >
-  Use when writing, reviewing, or configuring RSpec tests in Ruby on Rails — must execute the spec via `bundle exec rspec` and capture the actual test output (failure message or stack trace) rather than describing expected behavior, prefer behavioral confidence over implementation coupling, pick the smallest spec type exercising the behavior (model > service > request > system), mirror the file paths of the source, use # frozen_string_literal: true, define subject(:result) for service specs, and consult `assets/tdd_proof_checklist.md` when the task involves new behavior. Use when adding test coverage, refactoring specs, or practicing TDD. Trigger words: write spec, rspec, test-driven development, testing, write tests.
+  Use when writing or cleaning up Rails RSpec. Run the spec and keep the
+  real output. Trigger words: write spec, rspec, test-driven, write tests.
 metadata:
   version: 1.0.0
   user-invocable: "true"
@@ -25,9 +26,14 @@ Use this skill when the task is to write, review, or clean up RSpec tests.
 | `let` vs `let!` | Default to `let`; use `let!` only when object must exist before action |
 | Example names | Present tense; no `should`; **no `and`** (see assets/output_checklist.md) |
 
-## TDD Workflow (RED → GREEN → REFACTOR)
+## HARD-GATE
 
-> **HARD GATE: DO NOT write implementation code before a failing test exists.**
+```text
+DO NOT write implementation code before a failing test exists.
+Run bundle exec rspec and keep the real failure class and message.
+```
+
+## Core Process
 
 When driving new behaviour with RSpec, follow this sequence:
 
@@ -89,3 +95,15 @@ Load these files only when their specific content is needed:
 - **[assets/spec_templates.md](assets/spec_templates.md)** — Standard templates for different types of specs.
 - **[assets/tdd_proof_checklist.md](assets/tdd_proof_checklist.md)** — Use when the task involves new behavior; defines RED/GREEN proof format, output formatting rules, and GREEN progress bar requirements.
 - **[assets/output_checklist.md](assets/output_checklist.md)** — Complete 18-point checklist for RSpec output structure, conventions, and self-auditing; also defines all output style rules (spec structure, file path mirroring, `frozen_string_literal`, `subject(:result)`, and TDD proof format).
+
+## Output Style
+
+Follow **[assets/tdd_proof_checklist.md](assets/tdd_proof_checklist.md)** and **[assets/output_checklist.md](assets/output_checklist.md)**. Show real RED/GREEN command output. One behavior per example.
+
+## Integration
+
+| Skill | When to chain |
+|-------|---------------|
+| **plan-tests** | First-slice choice is not obvious |
+| **test-service** | The slice is a service `.call` |
+| **tdd** | Full feature loop through PR |

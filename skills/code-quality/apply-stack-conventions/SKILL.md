@@ -3,7 +3,9 @@ name: apply-stack-conventions
 type: atomic
 license: MIT
 description: >
-  Use when writing new Rails code (Ruby on Rails) for the PostgreSQL + Hotwire + Tailwind stack, including TDD (test-driven development), write-tests-first, or red-green-refactor workflows — must write specs and validate them RED BEFORE implementation, verify they pass GREEN after, show spec file content (not just spec path), include a Tests-first proof before implementation section showing actual spec code, the run command (bundle exec rspec spec/[path]_spec.rb), and the Observed RED output and Observed GREEN output labels, keeping steps testable in isolation. MVC structure, ActiveRecord queries, Turbo Frames/Streams, Stimulus controllers, and Tailwind patterns. Not for general Rails design principles — scoped to this specific stack.
+  Use when writing new Rails code for the PostgreSQL + Hotwire + Tailwind stack.
+  Not for general architecture review. Trigger words: stack conventions,
+  PostgreSQL, Hotwire, Tailwind, Turbo, Stimulus.
 metadata:
   version: 1.0.0
   user-invocable: "true"

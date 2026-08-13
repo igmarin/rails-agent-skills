@@ -3,7 +3,8 @@ name: create-engine
 type: atomic
 license: MIT
 description: >
-  Use when creating or refactoring a Rails engine — must keep a narrow purpose and small public API, verify that a dummy app exists under spec/dummy or test/dummy, define the host-app contract specifying what the host must provide and what the engine exposes, create the minimal engine structure verifying that bundle exec rake inside the engine passes, and write minimum integration coverage through the dummy app. Covers namespace isolation, file structure, engine scaffolding, mountable engine setup, and Rails plugin scaffolding.
+  Use when scaffolding a new Rails engine. Keep a narrow public API and a
+  dummy app. Trigger words: create engine, new engine, mountable engine.
 metadata:
   version: 1.1.0
   user-invocable: "true"

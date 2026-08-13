@@ -4,7 +4,8 @@ type: persona
 tags: [personas]
 license: MIT
 description: >
-  Complete Rails engine development loop with hard gates: scaffold engine structure with isolate_namespace and verify gemspec validation → set up dummy app and verify tests run with exit 0 → NEVER integrate engine into host app before engine tests pass standalone, namespace is isolated, migrations won't conflict, and dependencies are declared → code review and dependency auditing → release with SemVer, changelog, and upgrade notes; phases authoring→testing→implementation/review→documentation/release. Use when creating, extracting, or maintaining Rails engines. Trigger: create engine, extract engine, engine release, engine testing, mountable engine, gem extraction.
+  Use when running the full engine loop: author, test, review, release.
+  Trigger words: create engine, extract engine, engine release, mountable engine.
 metadata:
   version: 1.0.0
   user-invocable: "true"

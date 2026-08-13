@@ -4,7 +4,8 @@ type: persona
 tags: [personas]
 license: MIT
 description: >
-  Orchestrates end-to-end GraphQL API development across four hard-gated phases: (1) domain modeling — mapping entities→Types, actions→Mutations, with bounded context ownership; (2) schema design — field-level authorization, cursor pagination, and structured error handling; (3) TDD — tests must fail before implementation and full suite must pass after; (4) security review — query depth/complexity limits, rate limiting, N+1 elimination, and error sanitization. Use when building GraphQL APIs, adding GraphQL endpoints, or implementing GraphQL features with proper domain boundaries and security. Trigger: GraphQL API, GraphQL schema, GraphQL mutation, GraphQL query, add GraphQL endpoint, implement GraphQL.
+  Use when building a GraphQL feature end to end: domain, schema, TDD, security.
+  Trigger words: GraphQL API, GraphQL schema, mutation, query, graphql-ruby.
 metadata:
   version: 1.0.0
   user-invocable: "true"

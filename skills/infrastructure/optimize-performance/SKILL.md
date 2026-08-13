@@ -3,7 +3,9 @@ name: optimize-performance
 type: atomic
 license: MIT
 description: >
-  Use when optimizing Rails performance — follows a strict workflow: measure baseline, identify bottleneck, write failing RED regression spec asserting query count with db-query-matchers, apply fix, verify spec GREEN, check with EXPLAIN ANALYZE in rails dbconsole, and report quantified improvements. Regression spec must be written before any optimization is applied. Trigger words: performance, optimize, N+1, slow query, caching, Bullet, profiling.
+  Use when investigating N+1s, slow queries, caching, or query plans in Rails.
+  Profile before changing code. Trigger words: N+1, slow, performance,
+  caching, EXPLAIN.
 metadata:
   version: 1.0.0
   user-invocable: "true"

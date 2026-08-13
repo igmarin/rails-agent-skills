@@ -38,7 +38,7 @@ description: >
 
 **Rules:**
 - `name` MUST equal the directory name (validator enforces this).
-- `description` is single-paragraph, ≤ ~120 words, ends with a comma-separated list of trigger phrases.
+- `description` is when-to-use plus trigger phrases. Target ≤ 600 characters, hard fail at 1024. Do not summarize the workflow.
 - `type` must be `atomic` for standalone skills, `persona` for orchestrating workflows, or `catalog` for root SKILL.md (enforced by architecture spec).
 - No other frontmatter keys are required for the cross-platform manifest layer; `directory.json` carries the rest.
 

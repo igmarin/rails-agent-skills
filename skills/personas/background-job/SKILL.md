@@ -4,7 +4,9 @@ type: persona
 tags: [personas]
 license: MIT
 description: >
-  Orchestrates robust background job implementation with hard gates: design job with idempotency strategy and error classification (transient→retry, permanent→discard) → TDD implementation where test MUST fail before code → configure retry_on/discard_on strategies → test failure scenarios covering idempotency/retry/error handling → production monitoring; phases design→TDD→retry config→failure testing→monitoring. Use when adding async processing, implementing background jobs, or configuring job queues. Trigger: background job, async processing, sidekiq, solid queue, active job, job queue, worker.
+  Use when running the full background-job loop: design, TDD, retry, monitor.
+  Trigger words: background job, async processing, Sidekiq, Solid Queue,
+  Active Job, worker.
 metadata:
   version: 1.0.0
   user-invocable: "true"

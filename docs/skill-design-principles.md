@@ -7,8 +7,8 @@ This document outlines the core principles for designing and maintaining high-qu
 ### The 6 Principles of High-Quality Skill Design
 
 1. **Concise & Descriptive Metadata:**
-  - **YAML `name`**: Must be lowercase, `snake_case`, and match the directory name.
-  - **YAML `description`**: A concise paragraph (ideally 1-3 sentences). The first sentence should state the primary purpose. Focus on trigger words and outcomes for easy LLM discovery.
+  - **YAML `name`**: Must be lowercase, `kebab-case`, and match the directory name.
+  - **YAML `description`**: When to use the skill plus trigger words. Target ≤ 600 characters, hard fail at 1024. Do not pack the workflow into the first sentence.
 2. **Tool-Agnostic & Portable:**
   - **Focus on Principles, Not Tools**: Generalize specific tool names (e.g., `linter` instead of `RuboCop`, `API collection` instead of `Postman`). Exceptions are allowed for terms tightly coupled to a community standard (e.g., `graphql-ruby`, `RSpec`).
   - **Use Standard Markdown**: Ensure content is portable and renders correctly on any platform. Avoid custom syntax unless absolutely necessary and documented.

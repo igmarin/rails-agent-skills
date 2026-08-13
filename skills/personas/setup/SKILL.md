@@ -4,7 +4,8 @@ type: persona
 tags: [personas]
 license: MIT
 description: >
-  Complete Rails project setup loop with hard gates: verify Ruby version matches .ruby-version, Bundler installed, database connection successful, all env vars loaded, and ALL external CI actions pinned to immutable commit SHAs (never mutable tags like @v4) → configure CI/CD pipeline with linting, testing, and security scanning → validate end-to-end with bundle install, db:create, db:migrate, rspec, and write SETUP_CHECKLIST.md; phases context/onboarding→CI/CD configuration→environment validation. Use when starting a new Rails project, running `rails new`, configuring a Gemfile or .ruby-version, setting up a development environment, or wiring up CI/CD for a Ruby on Rails app. Trigger: setup project, new Rails app, configure CI/CD, dev environment setup, rails new, Gemfile setup, .ruby-version, Ruby on Rails project bootstrap.
+  Use when bootstrapping a Rails project: context, onboarding, CI.
+  Trigger words: setup project, rails new, CI/CD, dev environment, Gemfile.
 metadata:
   version: 1.0.0
   user-invocable: "true"

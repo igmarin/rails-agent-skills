@@ -4,7 +4,8 @@ type: persona
 tags: [personas]
 license: MIT
 description: >
-  Orchestrates safe database migration with hard gates: plan migration assessing lock behavior, rollback strategy, and performance impact with EXPLAIN → use expand-contract for column changes (add nullable→backfill→enforce NOT NULL), never combine schema change and data backfill in one migration → test idempotent migrate/rollback/re-migrate cycle and full suite in development → verify on staging with production-like data → deploy to production with monitoring and rollback readiness; phases planning→development testing→staging→production. Use when adding columns, creating tables, modifying indexes, or any database schema changes. Trigger: database migration, schema change, add column, create table, modify index, rails migration.
+  Use when running a safe migration loop: plan, test up/down, staging, production.
+  Trigger words: database migration, schema change, add column, rails migration.
 metadata:
   version: 1.0.0
   user-invocable: "true"
