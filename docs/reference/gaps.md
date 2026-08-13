@@ -26,7 +26,7 @@ Do not add these in the same change as a quality pass.
 | `create-prd`, `generate-tasks`, `plan-tickets` | Not in this repo. Planning lives in `agnostic-planning-skills` / core `generate-tdd-tasks`. |
 | `AGENTS.md` | Now the host-context source. `CLAUDE.md` and `GEMINI.md` are stubs. |
 | Description contract | When + triggers, ≤ 600 chars. Opposite of core's "pack every rule into sentence one". |
-| `personal-evals/` | Still has scenarios for moved skills (`skill-ruby-service-objects`, `skill-ddd-rails-modeling`). |
+| `personal-evals/` | Core-owned scenarios (`skill-ruby-service-objects`, `skill-ddd-rails-modeling`, `skill-rails-bug-triage`) now live in `ruby-core-skills`. |
 | `.claude/worktrees/` | Old copies of renamed skills. Not in `directory.json`. Do not treat as current. |
 
 ## Description strategy conflict

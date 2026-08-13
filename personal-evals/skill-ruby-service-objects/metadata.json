@@ -1,7 +1,0 @@
-{
-  "id": "skill-ruby-service-objects",
-  "target_type": "skill",
-  "target_name": "create-service-object",
-  "context_mode": "skill_bundle_xml",
-  "requires_companion_resources": true
-}

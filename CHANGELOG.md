@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Removed
+- Core-owned evals (`skill-ddd-rails-modeling`, `skill-rails-bug-triage`, `skill-ruby-service-objects`) — now in `ruby-core-skills`.
 - Tessl plugin packaging and registry integration (`.tessl-plugin/`, `tessl.json`, `.tesslignore`)
 - Tessl CI workflows (`tessl-publish.yml`, `tessl-review.yml`)
 - Tessl-native `evals/` scenarios and generator/validator scripts

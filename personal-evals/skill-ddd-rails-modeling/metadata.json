@@ -1,7 +1,0 @@
-{
-  "id": "skill-ddd-rails-modeling",
-  "target_type": "skill",
-  "target_name": "model-domain",
-  "context_mode": "skill_bundle_xml",
-  "requires_companion_resources": true
-}

@@ -1,7 +1,0 @@
-{
-  "id": "skill-rails-bug-triage",
-  "target_type": "skill",
-  "target_name": "triage-bug",
-  "context_mode": "skill_bundle_xml",
-  "requires_companion_resources": true
-}

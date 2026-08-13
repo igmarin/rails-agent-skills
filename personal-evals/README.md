@@ -4,6 +4,8 @@ This directory contains open example evaluation scenarios for measuring the effe
 
 These scenarios are the source of truth for the custom evaluator. They are not Tessl-native evals today because the custom evaluator loads a full XML context bundle: the target `SKILL.md` plus companion resources discovered from the skill or workflow directory.
 
+Scenarios that target skills in `ruby-core-skills` (`create-service-object`, `model-domain`, `triage-bug`) live in that repo's `personal-evals/`.
+
 The root `evals/` directory is reserved for generated Tessl staging output. Do not commit files under root `evals/`; generating that directory changes what Tessl runs for this repository.
 
 ## The Goal: Measuring "Lift"

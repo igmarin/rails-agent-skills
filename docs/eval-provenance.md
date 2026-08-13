@@ -4,7 +4,7 @@ This repository uses one public eval source area.
 
 | Path | Purpose | Commit policy |
 |------|---------|---------------|
-| `personal-evals/` | Open examples for the `ruby-skill-bench` full-context evaluator. | Tracked. |
+| `personal-evals/` | Open examples for the `ruby-skill-bench` full-context evaluator. Rails-owned skills only. Core-owned scenarios live in `igmarin/ruby-core-skills`. | Tracked. |
 
 `ruby-skill-bench` is planned as a Ruby gem for validating skills and workflows with full context. Its `personal-evals/` examples load `SKILL.md` plus companion resources as XML.
 
