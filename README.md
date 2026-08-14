@@ -59,8 +59,8 @@ npx skills add igmarin/ruby-core-skills --full-depth --all
 npx skills add igmarin/rails-agent-skills --full-depth --all
 
 # Interactive: pick which skills to install
-npx skills add igmarin/ruby-core-skills
-npx skills add igmarin/rails-agent-skills
+npx skills add igmarin/ruby-core-skills --full-depth
+npx skills add igmarin/rails-agent-skills --full-depth
 ```
 
 Or with GitHub CLI v2.90.0+ (`gh skill`):

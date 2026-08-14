@@ -15,6 +15,8 @@
 - Tessl badge and documentation references from README and skill authoring docs
 
 ### Changed
+- Interactive `npx skills add` examples include `--full-depth` so the picker lists nested skills
+- `skills.sh.json` now groups the 9 personas (they no longer fall into the ungrouped bucket)
 - Skill catalog validation now uses `scripts/validate-skills.sh` against `directory.json` (replaces `validate-plugins.sh`)
 - `personal-evals/` metadata no longer includes Tessl export fields
 - Eval provenance policy documents only `personal-evals/` / `ruby-skill-bench`

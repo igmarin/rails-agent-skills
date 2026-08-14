@@ -58,6 +58,21 @@
       ]
     },
     {
+      "title": "Personas",
+      "description": "Personas that chain atomic skills into full development loops.",
+      "skills": [
+        "background-job",
+        "bug-fix",
+        "engine",
+        "graphql",
+        "migration",
+        "quality",
+        "review",
+        "setup",
+        "tdd"
+      ]
+    },
+    {
       "title": "Testing",
       "description": "Skills for test planning, test writing, and service object testing.",
       "skills": [
