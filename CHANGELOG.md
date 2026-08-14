@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Fixed
+- `npx skills add` install docs now require `--full-depth` so nested skills are discovered (root `SKILL.md` is a catalog)
+
 ### Removed
 - Core-owned evals (`skill-ddd-rails-modeling`, `skill-rails-bug-triage`, `skill-ruby-service-objects`) — now in `ruby-core-skills`.
 - Tessl plugin packaging and registry integration (`.tessl-plugin/`, `tessl.json`, `.tesslignore`)

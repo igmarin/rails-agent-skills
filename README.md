@@ -51,7 +51,14 @@ Full list: [docs/reference/skill-catalog.md](docs/reference/skill-catalog.md). G
 
 ## Install
 
+> **`--full-depth` is required.** The root `SKILL.md` is a catalog (`type: catalog`), not a standalone skill. Without `--full-depth`, `npx skills add` finds that one file and skips nested skills under `skills/<category>/<name>/`. Without `--all`, the CLI opens an interactive multi-select picker.
+
 ```bash
+# Install ALL skills (non-interactive)
+npx skills add igmarin/ruby-core-skills --full-depth --all
+npx skills add igmarin/rails-agent-skills --full-depth --all
+
+# Interactive: pick which skills to install
 npx skills add igmarin/ruby-core-skills
 npx skills add igmarin/rails-agent-skills
 ```
