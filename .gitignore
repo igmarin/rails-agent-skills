@@ -52,3 +52,9 @@ report.json
 .rs-guard/cache
 review-result.txt
 rs-guard-metrics.json
+
+# AI code intelligence artifacts
+.codegraph/
+graphify-out/
+repomix-output.xml
+repomix-output.md

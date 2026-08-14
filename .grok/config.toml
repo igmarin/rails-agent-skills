@@ -1,0 +1,11 @@
+[mcp_servers.codegraph]
+command = "/Users/igmarin/.local/bin/codegraph"
+args = ["serve", "--mcp", "--path", "/Volumes/minimini/Developer/Projects/rails-agent-skills"]
+
+[mcp_servers.graphify]
+command = "/Users/igmarin/.local/bin/graphify-mcp"
+args = ["--graph", "/Volumes/minimini/Developer/Projects/rails-agent-skills/graphify-out/graph.json"]
+
+[mcp_servers.repomix]
+command = "/opt/homebrew/bin/repomix"
+args = ["--mcp", "--sandbox", "/Volumes/minimini/Developer/Projects/rails-agent-skills"]

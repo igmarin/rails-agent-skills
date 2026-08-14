@@ -1,0 +1,22 @@
+{
+  "context_servers": {
+    "codegraph": {
+      "command": {
+        "path": "codegraph",
+        "args": [
+          "serve",
+          "--mcp"
+        ]
+      }
+    },
+    "graphify": {
+      "command": {
+        "path": "graphify-mcp",
+        "args": [
+          "--graph",
+          "graphify-out/graph.json"
+        ]
+      }
+    }
+  }
+}

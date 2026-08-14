@@ -109,3 +109,12 @@ Generated artifacts are English unless the user asks for another language.
 `description` says when to use the skill and lists trigger words. It does not restate the procedure. Target ≤ 600 characters. Spec hard limit is 1024.
 
 See [docs/architecture.md](docs/architecture.md) and [docs/reference/gaps.md](docs/reference/gaps.md).
+
+## Code intelligence
+
+Use these tools before dumping whole files or grepping the tree.
+
+1. If `.codegraph/` exists, run `codegraph explore "<symbol or question>"` (or the CodeGraph MCP tools).
+2. If `graphify-out/graph.json` exists, use Graphify (`graphify explain`, `graphify path`, or the Graphify MCP).
+3. For a whole-repo pack, run `repomix` using `repomix.config.json`. Do not commit `repomix-output.*`.
+4. Regenerate Graphify with `graphify extract . --backend deepseek --no-cluster` (DeepSeek is the global LLM). Rust workspaces also pass `--cargo`.

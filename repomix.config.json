@@ -1,0 +1,45 @@
+{
+  "$schema": "https://repomix.com/schemas/latest/schema.json",
+  "output": {
+    "filePath": "repomix-output.xml",
+    "style": "xml",
+    "git": {
+      "sortByChanges": true
+    }
+  },
+  "include": [
+    "skills/**",
+    "SKILL.md",
+    "AGENTS.md",
+    "AGENT.md",
+    "README.md",
+    "docs/**",
+    "hooks/**",
+    "scripts/**"
+  ],
+  "ignore": {
+    "useGitignore": true,
+    "useDefaultPatterns": true,
+    "customPatterns": [
+      ".git",
+      ".idea",
+      ".cursor",
+      ".claude",
+      ".grok",
+      ".zed",
+      ".codegraph",
+      "graphify-out",
+      "repomix-output.xml",
+      "repomix-output.md",
+      "coverage",
+      "review-result.txt",
+      "rs-guard-metrics.json",
+      "*.gem",
+      ".DS_Store",
+      "personal-evals/",
+      "tessl_generations.log",
+      "*.bak",
+      "graphify-out/"
+    ]
+  }
+}
