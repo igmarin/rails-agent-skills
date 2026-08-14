@@ -49,6 +49,17 @@ if ! command -v jq &> /dev/null; then
   exit 1
 fi
 
+# Prefer /usr/bin/python3 (system) to avoid version-manager shims (mise,
+# asdf, pyenv) that may hang on startup. Fall back to python3 on PATH.
+if [ -x /usr/bin/python3 ]; then
+  PYTHON=/usr/bin/python3
+elif command -v python3 &> /dev/null; then
+  PYTHON=python3
+else
+  echo -e "${RED}Error: python3 is required but not installed.${NC}"
+  exit 1
+fi
+
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PROJECT_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
 cd "$PROJECT_ROOT"
@@ -197,7 +208,7 @@ while IFS= read -r skill_file; do
   fi
   check_pass "$skill_name: Has 'description' field"
 
-  desc_len=$(python3 - "$skill_file" <<'PY'
+  desc_len=$("$PYTHON" - "$skill_file" <<'PY'
 import re, sys
 from pathlib import Path
 text = Path(sys.argv[1]).read_text()

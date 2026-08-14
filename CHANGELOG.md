@@ -4,6 +4,7 @@
 
 ### Fixed
 - `npx skills add` install docs now require `--full-depth` so nested skills are discovered (root `SKILL.md` is a catalog)
+- `validate-skills.sh` prefers `/usr/bin/python3` so mise/asdf/pyenv shims cannot hang the validator
 
 ### Removed
 - Core-owned evals (`skill-ddd-rails-modeling`, `skill-rails-bug-triage`, `skill-ruby-service-objects`) — now in `ruby-core-skills`.
