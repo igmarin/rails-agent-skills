@@ -39,7 +39,7 @@ In scope:
 Out of scope (but documented for transparency):
 
 - The upstream `rs-guard` binary itself — report to `nebulaideas/rs-guard`. This repo only pins and verifies its release checksum.
-- Skill content quality (handled by `skills/code-quality/security-check/SKILL.md` and the review prompt at `.github/review-prompt.md`).
+- Skill content quality (handled by `skills/security-check/SKILL.md` and the review prompt at `.github/review-prompt.md`).
 
 ## Data Flow Disclosure
 

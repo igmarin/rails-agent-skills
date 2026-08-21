@@ -24,9 +24,9 @@ metadata:
 ## Agent Phases
 
 ### Phase 1: Context & Test Design
-1. **context/load-context**: Load schema, routes, and patterns.
-2. **testing/plan-tests**: Choose the best first failing spec.
-3. **testing/write-tests**: Write test and verify failure.
+1. **load-context**: Load schema, routes, and patterns.
+2. **plan-tests**: Choose the best first failing spec.
+3. **write-tests**: Write test and verify failure.
 
 **HARD GATE — tdd-process *(from ruby-core-skills)***
 - Test EXISTS and is RUN.
@@ -47,7 +47,7 @@ Return to Phase 1 for next behavior or proceed to Phase 4.
 ### Phase 4: Finish
 1. **Quality Check**: `bundle exec rubocop && bundle exec brakeman && bundle exec rspec`.
 2. **write-yard-docs *(from ruby-core-skills)***: Document public Ruby API.
-3. **code-quality/code-review**: Self-review PR diff.
+3. **code-review**: Self-review PR diff.
 4. **Open PR**: Feature complete.
 
 ## Concrete Example

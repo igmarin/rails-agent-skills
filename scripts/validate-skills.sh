@@ -170,7 +170,9 @@ while IFS= read -r entry; do
   fi
 done < <(jq -r '.skills | to_entries[] | "\(.key)|\(.value.path)"' "$DIRECTORY_FILE")
 
-PERSONA_PATHS=$(find skills/personas -name "SKILL.md" 2>/dev/null | sort)
+PERSONA_PATHS=$(find skills -name SKILL.md | while IFS= read -r f; do
+  grep -q '^type: persona' "$f" && echo "$f"
+done | sort)
 if [ -n "$PERSONA_PATHS" ]; then
   info "Persona SKILL.md files:"
   persona_count=0
@@ -192,7 +194,7 @@ fi
 
 section "Description size and structure"
 
-# Canonical skills only (skills/**/SKILL.md). Root catalog SKILL.md is included.
+# Canonical skills only (skills/**/SKILL.md). Catalog lives at skills/rails-agent-skills/.
 DESC_LIMIT=1024
 DESC_TARGET=600
 BODY_LINE_WARN=500
@@ -200,7 +202,6 @@ BODY_LINE_WARN=500
 while IFS= read -r skill_file; do
   [ -z "$skill_file" ] && continue
   skill_name=$(basename "$(dirname "$skill_file")")
-  [ "$skill_file" = "SKILL.md" ] && skill_name="rails-agent-skills"
 
   if ! grep -q "^description:" "$skill_file"; then
     check_fail "$skill_name: Missing 'description' field"
@@ -245,7 +246,7 @@ PY
       info "$skill_name: missing ## ${heading} (warning)"
     fi
   done
-done < <(printf '%s\n' "SKILL.md" "$DISK_SKILL_FILES_CACHE")
+done < <(printf '%s\n' "$DISK_SKILL_FILES_CACHE")
 
 section "skills.sh.json ↔ directory.json Sync"
 

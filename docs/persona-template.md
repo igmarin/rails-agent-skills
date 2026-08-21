@@ -192,8 +192,8 @@ For personas that involve code changes, include explicit TDD steps:
 ### TDD Enforcement
 
 **Before any code change:**
-1. **testing/plan-tests** — Choose the best first failing spec
-2. **testing/write-tests** — Write the test and verify it FAILS for the right reason
+1. **plan-tests** — Choose the best first failing spec
+2. **write-tests** — Write the test and verify it FAILS for the right reason
 3. **Implementation Checkpoint** — Propose minimal implementation
 4. **User Approval** — Wait for explicit confirmation
 5. **Implement** — Make smallest change to pass test
@@ -231,8 +231,8 @@ For personas that can encounter errors:
 ## Naming Conventions
 
 - **Persona names:** Use kebab-case (e.g., `tdd`, `quality`, `review`, `setup`, `engine`, `bug-fix`, `graphql`, `migration`, `background-job`)
-- **Directory names:** Match persona name (e.g., `skills/personas/tdd/SKILL.md`)
-- **Skill references:** Use full skill path (e.g., `skills/testing/write-tests`)
+- **Directory names:** Match persona name (e.g., `skills/tdd/SKILL.md`)
+- **Skill references:** Use full skill path (e.g., `skills/write-tests`)
 - **Phase names:** Use descriptive, action-oriented names (e.g., "Context & Test Design", not "Phase 1")
 
 ## Documentation Quality Checklist

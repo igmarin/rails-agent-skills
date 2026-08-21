@@ -32,7 +32,7 @@ metadata:
 
 ## Phase 1: Migration Planning
 
-1. **Invoke `skills/infrastructure/review-migration`** — assesses lock behavior, rollback strategy, backfill requirements, and performance impact (`EXPLAIN` queries). If unavailable, perform these checks manually: identify table lock duration, confirm a rollback path exists, enumerate backfill steps, and run `EXPLAIN ANALYZE` on affected queries.
+1. **Invoke `skills/review-migration`** — assesses lock behavior, rollback strategy, backfill requirements, and performance impact (`EXPLAIN` queries). If unavailable, perform these checks manually: identify table lock duration, confirm a rollback path exists, enumerate backfill steps, and run `EXPLAIN ANALYZE` on affected queries.
 2. **Choose deployment pattern:** expand-contract for column changes (see Key Safety Rules above), phased rollout for table-level changes, zero-downtime for everything touching large tables.
 
 **HARD GATE — Migration Safety Check:**

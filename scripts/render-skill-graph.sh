@@ -49,9 +49,11 @@ render_graph() {
       "  end"
   ' "$SKILLS_SH_FILE"
 
-  # Personas subgraph
+  # Personas subgraph (frontmatter type: persona)
   echo "  subgraph Personas"
-  jq -r '.skills | to_entries[] | select(.value.path | startswith("skills/personas/")) | .key' "$DIRECTORY_FILE" | sed 's/^/    /'
+  find "$REPO_ROOT/skills" -name SKILL.md | while IFS= read -r path; do
+    grep -q '^type: persona' "$path" && basename "$(dirname "$path")"
+  done | sed 's/^/    /'
   echo "  end"
 
   # Edges from Integration tables. For each local skill, scan its SKILL.md

@@ -81,7 +81,7 @@ CREDENTIAL HANDLING:
 ### Phase 2: Deep Dive (Optional)
 
 **Branch A — Security Review (if triggered):**
-- **skills/code-quality/security-check** — Deep security audit
+- **skills/security-check** — Deep security audit
   - Auth & session management
   - Authorization & IDOR
   - Input validation & SQL injection
@@ -93,7 +93,7 @@ CREDENTIAL HANDLING:
 - No architecture issues → Skip to Phase 3
 
 **Branch B — Architecture Review (if triggered):**
-- **skills/code-quality/review-architecture** — Structural review
+- **skills/review-architecture** — Structural review
   - Boundary recommendations
   - Extraction suggestions
   - Coupling assessment
@@ -118,7 +118,7 @@ CREDENTIAL HANDLING:
 
 Before implementing any code fix, follow this sequence:
 
-1. **Plan & write test** — Use **testing/plan-tests** and **testing/write-tests** to write a failing test reproducing the Critical finding; confirm it fails for the right reason.
+1. **Plan & write test** — Use **plan-tests** and **write-tests** to write a failing test reproducing the Critical finding; confirm it fails for the right reason.
 2. **Propose fix** — Propose a minimal fix addressing the root cause; wait for explicit user approval before proceeding.
 3. **Implement & verify** — Apply the minimal code change; confirm the reproduction test now PASSES.
 4. **Regression check** — Run the full test suite to ensure no new failures.
@@ -161,9 +161,9 @@ The following sub-skills are referenced in this persona and should be present in
 |-----------|---------------|
 | code-review | `skills/code-review` (self) |
 | review-process, respond-to-review | `ruby-core-skills/` bundle |
-| security-check | `skills/code-quality/security-check` |
-| review-architecture | `skills/code-quality/review-architecture` |
-| plan-tests, write-tests | `skills/testing/` bundle |
+| security-check | `skills/security-check` |
+| review-architecture | `skills/review-architecture` |
+| plan-tests, write-tests | `skills/plan-tests`, `skills/write-tests` |
 
 ---
 

@@ -2,8 +2,10 @@
 
 ## [Unreleased]
 
+### Changed
+- Flattened skills to `skills/<name>/SKILL.md` so `npx skills add` can pick all or one. Catalog moved from root `SKILL.md` to `skills/rails-agent-skills/`.
+
 ### Fixed
-- `npx skills add` install docs now require `--full-depth` so nested skills are discovered (root `SKILL.md` is a catalog)
 - `validate-skills.sh` prefers `/usr/bin/python3` so mise/asdf/pyenv shims cannot hang the validator
 
 ### Removed
@@ -15,7 +17,6 @@
 - Tessl badge and documentation references from README and skill authoring docs
 
 ### Changed
-- Interactive `npx skills add` examples include `--full-depth` so the picker lists nested skills
 - `skills.sh.json` now groups the 9 personas (they no longer fall into the ungrouped bucket)
 - Skill catalog validation now uses `scripts/validate-skills.sh` against `directory.json` (replaces `validate-plugins.sh`)
 - `personal-evals/` metadata no longer includes Tessl export fields
@@ -68,16 +69,16 @@ All 9 callable agents have been migrated from `agents/` to `skills/personas/` wi
 ### Security Hardening (Post-Release)
 
 **System Modification Approval Gate in `setup` persona**
-- Added explicit "System Modification Approval Gate (CRITICAL)" to `skills/personas/setup/SKILL.md` Error Recovery section
+- Added explicit "System Modification Approval Gate (CRITICAL)" to `skills/setup/SKILL.md` Error Recovery section
 - All system-level commands (`apt-get install`, `rbenv install`, `createuser`) now require explicit user confirmation before suggestion
 - Changed from imperative tone ("Install system dependencies") to conditional ("If needed, ask user to run...")
 - This hardens against W013 warnings from platform security scanners that flag system service modification attempts in skill instructions
 
 **Third-Party Content Defenses (Already Present)**
 The following personas already contain hardened input integrity gates for indirect prompt injection (W011) — no changes required:
-- `skills/personas/review/SKILL.md` — "HARD-GATE: Security & Input Integrity" (lines 25-56): treats PR descriptions/comments as untrusted, diff as sole authority, never executes embedded instructions
-- `skills/personas/bug-fix/SKILL.md` — "HARD-GATE: Input Integrity (Third-Party Content Defense)" (lines 25-35): treats bug reports as untrusted, verifies claims against actual code, ignores embedded directives
-- `skills/infrastructure/version-api/SKILL.md` — Code-generation skill (not runtime request processor); scanner false positive
+- `skills/review/SKILL.md` — "HARD-GATE: Security & Input Integrity" (lines 25-56): treats PR descriptions/comments as untrusted, diff as sole authority, never executes embedded instructions
+- `skills/bug-fix/SKILL.md` — "HARD-GATE: Input Integrity (Third-Party Content Defense)" (lines 25-35): treats bug reports as untrusted, verifies claims against actual code, ignores embedded directives
+- `skills/version-api/SKILL.md` — Code-generation skill (not runtime request processor); scanner false positive
 
 ## [6.0.20] - 2026-05-30
 

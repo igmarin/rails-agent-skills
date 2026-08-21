@@ -17,11 +17,11 @@ Integration matrix: which skill connects to which and in what order.
 ### TDD Feature Loop (Main)
 
 ```text
-skills/context/load-context
+skills/load-context
     ↓
-skills/testing/plan-tests
+skills/plan-tests
     ↓
-skills/testing/write-tests → [checkpoint: Test Feedback]
+skills/write-tests → [checkpoint: Test Feedback]
     ↓
 [checkpoint: Implementation Proposal]
     ↓
@@ -37,7 +37,7 @@ code-review → respond-to-review *(from ruby-core-skills)* (if feedback) → PR
 ### Feature from Scratch
 
 ```text
-skills/context/load-context
+skills/load-context
     ↓
 define-domain-language *(from ruby-core-skills)* → review-domain-boundaries *(from ruby-core-skills)* → model-domain *(from ruby-core-skills)*
     ↓

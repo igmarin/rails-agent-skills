@@ -8,7 +8,7 @@ An atomic unit of agent instructions stored in `SKILL.md` files. There are 38 pu
 
 ## Persona
 
-A high-level orchestrator that chains multiple atomic skills into a complete development loop (e.g., `tdd`, `bug-fix`, `review`). There are 9 personas available in `skills/personas/`.
+A high-level orchestrator that chains multiple atomic skills into a complete development loop (e.g., `tdd`, `bug-fix`, `review`). There are 9 personas (`type: persona`) under `skills/<name>/`.
 
 ## Skill Router
 A specialized skill (orchestrator) used to determine which atomic skills apply to a given user request.

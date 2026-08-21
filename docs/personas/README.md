@@ -54,15 +54,15 @@ flowchart TD
 
 ## Docs vs. Callable Persona Skills
 
-This directory contains **reference guides** describing each stage. For **executable orchestration**, use the callable personas in `skills/personas/`:
+This directory contains **reference guides** describing each stage. For **executable orchestration**, use the callable personas under `skills/` (`tdd`, `review`, `setup`, `quality`, `engine`, and the rest):
 
 | Stage Doc | Callable Skill | Status |
 |-----------|----------------|--------|
-| [development.md](development.md) | [`tdd`](../../skills/personas/tdd/SKILL.md) | Active |
-| [review.md](review.md) | [`review`](../../skills/personas/review/SKILL.md) | Active |
-| [setup.md](setup.md) | [`setup`](../../skills/personas/setup/SKILL.md) | Active |
-| [quality.md](quality.md) | [`quality`](../../skills/personas/quality/SKILL.md) | Active |
-| [engines.md](engines.md) | [`engine`](../../skills/personas/engine/SKILL.md) | Active |
+| [development.md](development.md) | [`tdd`](../../skills/tdd/SKILL.md) | Active |
+| [review.md](review.md) | [`review`](../../skills/review/SKILL.md) | Active |
+| [setup.md](setup.md) | [`setup`](../../skills/setup/SKILL.md) | Active |
+| [quality.md](quality.md) | [`quality`](../../skills/quality/SKILL.md) | Active |
+| [engines.md](engines.md) | [`engine`](../../skills/engine/SKILL.md) | Active |
 | [discovery.md](discovery.md) | *(none — linear, no orchestration needed)* | Doc only |
 
 **When to use which:** Read the stage doc to understand the full context and rationale. Invoke the callable persona when you want the agent to execute the orchestration automatically.
@@ -73,14 +73,14 @@ This directory contains **reference guides** describing each stage. For **execut
 
 | Situation | Persona | Quick Entry |
 |-----------|---------|-------------|
-| **Bug fix** | [`bug-fix`](../../skills/personas/bug-fix/SKILL.md) | `triage-bug` *(from core)* → reproduce test → fix → verify |
+| **Bug fix** | [`bug-fix`](../../skills/bug-fix/SKILL.md) | `triage-bug` *(from core)* → reproduce test → fix → verify |
 | **Refactoring** | [Refactor Safely](quality.md#refactor-code) | `refactor-code` → characterization tests → extract |
 | **Performance** | [Performance Optimization](development.md#performance) | `optimize-performance` |
-| **GraphQL** | [`graphql`](../../skills/personas/graphql/SKILL.md) | domain modeling *(from core)* → schema → TDD → security |
+| **GraphQL** | [`graphql`](../../skills/graphql/SKILL.md) | domain modeling *(from core)* → schema → TDD → security |
 | **Authorization** | [Authorization Setup](development.md#authorization) | `implement-authorization` |
 | **External API** | [API Integration](development.md#external-api-integration) | `integrate-api-client` *(from core)* |
-| **Database migration** | [`migration`](../../skills/personas/migration/SKILL.md) | plan → test → staging → production |
-| **Background job** | [`background-job`](../../skills/personas/background-job/SKILL.md) | design → TDD → retry config → monitoring |
+| **Database migration** | [`migration`](../../skills/migration/SKILL.md) | plan → test → staging → production |
+| **Background job** | [`background-job`](../../skills/background-job/SKILL.md) | design → TDD → retry config → monitoring |
 
 ---
 
