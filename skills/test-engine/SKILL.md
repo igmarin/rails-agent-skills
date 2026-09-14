@@ -12,6 +12,8 @@ metadata:
 
 # Test Engine
 
+Apply the [execution contract](../../../docs/agent-contract.md) before this procedure.
+
 ## HARD-GATE
 
 ```text

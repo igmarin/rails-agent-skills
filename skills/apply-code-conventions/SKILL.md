@@ -13,6 +13,8 @@ metadata:
 
 # Apply Code Conventions
 
+Apply the [execution contract](../../../docs/agent-contract.md) before this procedure.
+
 **Style source of truth:** Style and formatting defer to the project's configured linter(s). This skill adds **non-style behavior** and **architecture guidance** only. For Hotwire + Tailwind specifics, see **apply-stack-conventions**.
 
 ## Quick Reference
@@ -21,7 +23,7 @@ metadata:
 |-------|------|
 | Principles | DRY, YAGNI, PORO where it helps, CoC, KISS |
 | Comments / tags | Explain **why**; tagged notes need actionable context |
-| Logging | First arg: static string; second arg: hash with `event:` key; no interpolation; backtrace on errors |
+| Logging | One verified message argument (usually a JSON hash); no interpolation; include a redacted backtrace on errors |
 | Deep stacks | Chain **apply-stack-conventions** → domain skills (services, jobs, RSpec) |
 
 ## HARD-GATE
@@ -40,7 +42,7 @@ When reviewing or refactoring Rails code, follow this sequence. Each step maps t
 1. **Run linter** — Detect config (e.g. `.rubocop.yml` or `.standard.yml`), run the appropriate tool, note absence if none found. *Output: linter detected (or absent); style defers to it.*
 2. **Apply area-specific rules** — Check path patterns and apply targeted guidance from the Apply by area table. *Output: concrete per-path recommendations for every relevant changed file.*
 3. **Verify tests gate** — Confirm failing tests exist before any new behavior. *Output: failing spec, run command, expected failure, minimal implementation step, passing rerun.*
-4. **Enforce structured logging** — Ensure all `Rails.logger` calls use static strings + structured hashes with an `event:` key, plus backtrace for errors. *Output: apply structured logging rules from Sub-Rules below.*
+4. **Enforce structured logging** — Ensure all `Rails.logger` calls use the installed logger's verified single-message interface; include an `event:` field and redacted backtrace for errors. *Output: apply structured logging rules from Sub-Rules below.*
 5. **Enforce comment discipline** — Ensure all tags (`TODO:`, `FIXME:`) have actionable context (owner, ticket). *Output: apply comment discipline rules from Sub-Rules below.*
 6. **Chain to specialised skills** — Use the Integration table to pull in deeper guidance (security, jobs, specs) as needed.
 
@@ -59,22 +61,14 @@ Comment **why**, not **what**. Tags — `TODO:` / `FIXME:` / `HACK:` / `NOTE:` /
 ```
 
 ### Structured Logging
-**MANDATORY SHAPE — every `Rails.logger.*` call uses exactly two positional arguments.**
-```ruby
-Rails.logger.<level>(static_string_message, { event: "dot.namespaced", ...domain_fields })
+Use the project's installed logger interface. Standard Ruby/Rails loggers accept one message argument; a two-argument structured call requires a verified custom adapter. Log once at the recovery boundary, redact sensitive data, and preserve unexpected exceptions.
 
-# GOOD — error path with backtrace
-rescue StandardError => e
-  Rails.logger.error("order.processing_failed", {
-    event: "order.processing_failed",
-    error: e.message,
-    backtrace: e.backtrace.first(5).join("\n")
-  })
+```ruby
+rescue Timeout::Error => e
+  Rails.logger.error({ event: "order.processing_failed", error_class: e.class.name, backtrace: e.backtrace&.first(5) }.to_json)
   raise
 end
 ```
-- **1st arg (string):** static string literal.
-- **2nd arg (hash):** first key is always `event:`.
 
 ### Apply by area (path patterns)
 | Area | Path pattern | Guidance |

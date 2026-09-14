@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+- Evaluation bundles include nested references and linked pack documents, reject missing resources and paths outside the pack, and infer `skills/personas` and `skills/workflows` correctly.
+- Restore authorization and TDD report resources; fix relocated core links and default logger arity.
+
+- Preserve catalog identities while linking every skill to a portable execution contract: existing authorization, truthful test evidence, project conventions, and resumable handoffs.
+- Repair routing and instruction contradictions without changing supported capabilities.
+
+
 ### Changed
 - Flattened skills to `skills/<name>/SKILL.md` so `npx skills add` can pick all or one. Catalog moved from root `SKILL.md` to `skills/rails-agent-skills/`.
 

@@ -12,6 +12,8 @@ metadata:
 
 # Implement Hotwire
 
+Apply the [execution contract](../../../docs/agent-contract.md) before this procedure.
+
 Build modern Rails frontends with Hotwire using progressive enhancement.
 
 ## Quick Reference

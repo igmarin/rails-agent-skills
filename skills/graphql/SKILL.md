@@ -21,6 +21,8 @@ metadata:
 ---
 # GraphQL Persona
 
+Apply the [execution contract](../../../docs/agent-contract.md) before this procedure.
+
 ## Agent Phases
 
 ### Phase 1: Domain Modeling
@@ -95,7 +97,7 @@ end
 
 **For every resolver or mutation:**
 1. Write a failing resolver spec, mutation spec, or integration spec targeting the specific graphql-ruby class under test
-2. Propose implementation, wait for explicit user approval, then implement the resolver/mutation code
+2. Propose implementation, continue within authorized scope, then implement the resolver/mutation code
 3. Run the full suite to confirm no regressions
 
 **HARD GATE — Test Verification:**

@@ -74,14 +74,9 @@ while IFS= read -r scenario_dir; do
 
       target_name = data.fetch("target_name")
       target_type = data.fetch("target_type")
-      target_path =
-        if target_type == "persona"
-          File.join(root, "skills", "personas", target_name, "SKILL.md")
-        else
-          local_path = Dir[File.join(root, "skills", "*", target_name, "SKILL.md")].first
-          core_path = Dir[File.join(root, "..", "ruby-core-skills", "skills", "*", target_name, "SKILL.md")].first
-          local_path || core_path
-        end
+      local_paths = Dir[File.join(root, "skills", "**", target_name, "SKILL.md")]
+      core_paths = Dir[File.join(root, "..", "ruby-core-skills", "skills", "**", target_name, "SKILL.md")]
+      target_path = (local_paths + core_paths).first
 
       abort "target SKILL.md not found for #{target_name}" unless target_path && File.file?(target_path)
     ' "$ROOT_DIR" "$scenario_dir" \

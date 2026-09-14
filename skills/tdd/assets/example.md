@@ -27,7 +27,7 @@ Expected failure: `undefined method 'full_name'` (feature missing, not a typo/co
 
 Propose approach: "User#full_name: concatenate first_name + last_name with space"
 
-Wait for user approval.
+Continue within the authorized implementation request.
 
 ## Step 4: Implement (`app/models/user.rb`)
 

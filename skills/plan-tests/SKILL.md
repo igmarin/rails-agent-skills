@@ -13,6 +13,8 @@ metadata:
 
 # Plan Tests
 
+Apply the [execution contract](../../../docs/agent-contract.md) before this procedure.
+
 ## Quick Reference
 
 | Change type | First spec | Path | Why |
@@ -36,7 +38,7 @@ CHECKPOINT: Test Design Review
    - Is the boundary correct (request vs service vs model)?
    - Are the most important edge cases represented?
    - Is the failure reason correct (feature missing, not setup error)?
-3. Confirm: Only proceed to implementation once test design is approved.
+3. Confirm: Proceed after the test design meets the accepted requirements and RED is observed.
 ```
 
 ## Core Process
@@ -50,7 +52,7 @@ Start at the highest-value boundary that proves the behavior with the least unne
 3. **Write one failing example:** Keep it minimal; one example is enough to open the gate. List additional cases as follow-up coverage.
 4. **Suggest the path:** Name the likely spec path using normal Rails conventions (e.g. `spec/requests/...`, `spec/services/...`, `spec/jobs/...`, `spec/models/...`).
 5. **Run and validate:** Confirm the failure is because the behavior is missing, not because the setup is broken.
-6. **Hand off:** Continue with the skill that fits the slice — [`write-tests`](skills/write-tests/SKILL.md) for general spec writing, [`test-service`](skills/test-service/SKILL.md) for service-layer coverage, or [`test-engine`](skills/test-engine/SKILL.md) for engine integration.
+6. **Hand off:** Continue with the skill that fits the slice — [`write-tests`](../write-tests/SKILL.md) for general spec writing, [`test-service`](../test-service/SKILL.md) for service-layer coverage, or [`test-engine`](../../engines/test-engine/SKILL.md) for engine integration.
 
 ### Examples
 

@@ -12,6 +12,8 @@ metadata:
 
 # Create Engine
 
+Apply the [execution contract](../../../docs/agent-contract.md) before this procedure.
+
 Use this skill when the task is to create, scaffold, or refactor a Rails engine, Rails plugin, or engine gem.
 
 Keep this skill focused on structure and design. Use adjacent skills for installer details, deep test coverage, release workflow, or documentation work.

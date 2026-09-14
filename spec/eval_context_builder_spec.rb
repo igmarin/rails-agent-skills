@@ -68,6 +68,55 @@ module McpSkills
       assert_operator estimate, :>, 0
     end
 
+    def test_includes_nested_references_and_linked_pack_documentation_once
+      FileUtils.mkdir_p(@skill_dir.join("references"))
+      @skill_dir.join("references", "workflow.md").write("Workflow proof")
+      FileUtils.mkdir_p(@repo_root.join("docs"))
+      @repo_root.join("docs", "contract.md").write("Shared contract")
+      @skill_md.write(@skill_md.read + "\n[Contract](../../../docs/contract.md)\n[Again](../../../docs/contract.md)\n")
+
+      xml = EvalContextBuilder.new(repo_root: @repo_root).call(target_path: @skill_md)
+      assert_includes xml, "Workflow proof"
+      assert_equal 1, xml.scan("Shared contract").length
+    end
+
+    def test_infers_persona_and_workflow_from_nested_skills_layout
+      %w[personas workflows].each do |directory|
+        path = @repo_root.join("skills", directory, "sample", "SKILL.md")
+        FileUtils.mkdir_p(path.dirname)
+        path.write(@skill_md.read)
+        xml = EvalContextBuilder.new(repo_root: @repo_root).call(target_path: path)
+        assert_includes xml, %(target_type="#{directory.delete_suffix('s')}")
+      end
+    end
+
+    def test_rejects_missing_local_resource_instead_of_silently_omitting_it
+      @skill_md.write(@skill_md.read + "\n[Missing](references/missing.md)\n")
+      assert_raises(EvalContextBuilder::Error) do
+        EvalContextBuilder.new(repo_root: @repo_root).call(target_path: @skill_md)
+      end
+    end
+
+    def test_resource_cycles_terminate_and_external_urls_are_not_loaded
+      @skill_dir.join("EXAMPLES.md").write("[Back](SKILL.md)\nExample evidence")
+      @skill_md.write(@skill_md.read + "\n[Web](https://example.invalid/private.md)\n")
+      xml = EvalContextBuilder.new(repo_root: @repo_root).call(target_path: @skill_md)
+      assert_equal 1, xml.scan('Example evidence').length
+      assert_equal 1, xml.scan('<primary ').length
+    end
+
+    def test_symlink_cannot_pull_a_resource_from_outside_the_pack
+      Dir.mktmpdir do |outside|
+        secret = Pathname.new(outside).join('outside.md')
+        secret.write('outside content')
+        File.symlink(secret, @skill_dir.join('EXAMPLES.md'))
+        error = assert_raises(EvalContextBuilder::Error) do
+          EvalContextBuilder.new(repo_root: @repo_root).call(target_path: @skill_md)
+        end
+        assert_match(/escapes repository/, error.message)
+      end
+    end
+
     def test_estimate_tokens_scales_with_content_size
       builder = EvalContextBuilder.new(repo_root: @repo_root)
       small = builder.estimate_tokens(target_path: @skill_md)

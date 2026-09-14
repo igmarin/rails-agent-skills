@@ -252,7 +252,8 @@ rails db:create
 
 ```bash
 # Clear cache and reinstall
-rm -rf vendor/bundlebundle install --path vendor/bundle
+rm -rf vendor/bundle
+bundle install --path vendor/bundle
 
 # Update bundler
 gem install bundler

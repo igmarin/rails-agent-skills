@@ -96,8 +96,8 @@ Read the matching `SKILL.md` before acting. Descriptions are triggers only — t
 These apply to every `.rb` file this pack produces:
 
 - `# frozen_string_literal: true` on every Ruby file.
-- Service result: `{ success: bool, response: { ... } }`. Errors under `response: { error: { message: '...' } }`.
-- `rescue StandardError` logs `e.message` and the first five backtrace lines.
+- Preserve the project service result contract. For new services without one, prefer `{ success: bool, response: { ... } }`.
+- Rescue expected errors at a recovery boundary; propagate unexpected failures. Use the configured logger without leaking sensitive exception data.
 - Public methods that can raise get one YARD `@raise` per exception class.
 - Time-dependent specs use `travel_to`. Do not stub `Time.now`.
 - Jobs: `retry_on` for transient errors, `discard_on` for permanent ones (`ActiveRecord::RecordNotFound`).

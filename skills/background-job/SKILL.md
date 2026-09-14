@@ -22,6 +22,8 @@ metadata:
 ---
 # Background Job Persona
 
+Apply the [execution contract](../../../docs/agent-contract.md) before this procedure.
+
 Orchestrates robust background job implementation with TDD discipline, proper retry/discard strategies, comprehensive failure scenario testing, and production monitoring to ensure reliable async processing.
 
 ---
@@ -57,7 +59,7 @@ Orchestrates robust background job implementation with TDD discipline, proper re
 1. Choose unit vs. integration test approach.
 2. Write failing tests covering: successful execution, idempotency (run twice = same result), transient error raises, permanent error discards.
 3. Confirm tests **FAIL** for the right reason (job not yet implemented).
-4. Propose implementation approach and wait for explicit user approval.
+4. Propose implementation approach and continue within authorized scope.
 5. Implement job using the structure shown in Phase 3 (retry/discard declarations included from the start); confirm tests **PASS**.
 6. Run full test suite — confirm no regressions.
 

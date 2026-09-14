@@ -19,6 +19,8 @@ metadata:
 ---
 # Migration Persona
 
+Apply the [execution contract](../../../docs/agent-contract.md) before this procedure.
+
 ## Key Safety Rules
 
 - Use **expand-contract** for column changes on large tables: three separate migration files — (1) add nullable column + index, (2) batch backfill existing rows, (3) enforce NOT NULL and set default
