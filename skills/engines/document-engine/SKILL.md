@@ -12,6 +12,8 @@ metadata:
 
 # Document Engine
 
+Apply the [execution contract](../../../docs/agent-contract.md) before this procedure.
+
 Use this skill when writing or maintaining documentation for Rails engines.
 
 ## Core Process & Constraints

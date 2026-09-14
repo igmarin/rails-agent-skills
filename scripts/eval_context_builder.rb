@@ -77,19 +77,37 @@ module McpSkills
       raise Error, "SKILL.md not found: #{path}" unless path.file?
       raise Error, "target path must point to SKILL.md: #{path}" unless path.basename.to_s == 'SKILL.md'
 
-      path.realpath
+      ensure_inside_repo!(path.realpath)
     end
 
     def companion_resources(target_dir, primary_path)
-      direct_files = target_dir.children.select(&:file?)
-                               .reject { |path| path == primary_path }
-                               .select { |path| text_file?(path) }
+      pending = [primary_path] + target_dir.glob('**/*').select { |path| path.file? && text_file?(path) }
+      visited = []
+      until pending.empty?
+        path = ensure_inside_repo!(pending.shift.realpath)
+        next if visited.include?(path)
 
-      asset_files = target_dir.join('assets').exist? ? target_dir.join('assets').glob('**/*').select(&:file?) : []
+        visited << path
+        enforce_size_guard!(path)
+        next unless path.extname == '.md'
 
-      (direct_files + asset_files.select { |path| text_file?(path) })
-        .uniq
-        .sort_by { |path| relative_path(path) }
+        path.read.scan(/\[[^\]]*\]\(([^\s)]+)(?:\s+"[^"]*")?\)/).flatten.each do |link|
+          next if link.start_with?('#') || link.match?(/\A[a-z][a-z\d+.-]*:/i)
+
+          target = path.dirname.join(link.split('#', 2).first).cleanpath
+          raise Error, "Missing linked resource in #{relative_path(path)}: #{link}" unless target.exist?
+          next unless target.file? && text_file?(target)
+
+          pending << ensure_inside_repo!(target.realpath)
+        end
+      end
+      (visited - [primary_path]).sort_by { |path| relative_path(path) }
+    end
+
+    def ensure_inside_repo!(path)
+      raise Error, "Resource escapes repository: #{path}" unless path.to_s.start_with?(@repo_root.to_s + File::SEPARATOR)
+
+      path
     end
 
     def render_context(primary_path:, target_type:, target_name:, resources:)
@@ -141,8 +159,8 @@ module McpSkills
 
     def infer_target_type(path)
       relative = relative_path(path)
-      return 'persona' if relative.start_with?('personas/')
-      return 'workflow' if relative.start_with?('workflows/')
+      return 'persona' if relative.match?(%r{\A(?:skills/)?personas/})
+      return 'workflow' if relative.match?(%r{\A(?:skills/)?workflows/})
 
       'skill'
     end

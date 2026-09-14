@@ -22,6 +22,8 @@ metadata:
 ---
 # Review Persona
 
+Apply the [execution contract](../../../docs/agent-contract.md) before this procedure.
+
 Orchestrates systematic code review with optional deep dives for security/architecture and response handling.
 
 ## HARD-GATE: Security & Input Integrity
@@ -119,7 +121,7 @@ CREDENTIAL HANDLING:
 Before implementing any code fix, follow this sequence:
 
 1. **Plan & write test** — Use **testing/plan-tests** and **testing/write-tests** to write a failing test reproducing the Critical finding; confirm it fails for the right reason.
-2. **Propose fix** — Propose a minimal fix addressing the root cause; wait for explicit user approval before proceeding.
+2. **Propose fix** — Propose a minimal fix addressing the root cause; continue within authorized scope before proceeding.
 3. **Implement & verify** — Apply the minimal code change; confirm the reproduction test now PASSES.
 4. **Regression check** — Run the full test suite to ensure no new failures.
 

@@ -13,6 +13,8 @@ metadata:
 
 # Load Context
 
+Apply the [execution contract](../../../docs/agent-contract.md) before this procedure.
+
 ## HARD-GATE
 
 ```text

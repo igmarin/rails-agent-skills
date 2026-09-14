@@ -21,6 +21,8 @@ metadata:
 ---
 # TDD Persona
 
+Apply the [execution contract](../../../docs/agent-contract.md) before this procedure.
+
 ## Agent Phases
 
 ### Phase 1: Context & Test Design
@@ -35,7 +37,7 @@ metadata:
 
 ### Phase 2: Implementation
 1. **Proposal Checkpoint**: Propose implementation (e.g., "Concatenate first + last name").
-2. **User Approval**: Wait for explicit confirmation.
+2. **Scope Check**: Continue within the existing authorized scope.
 3. **Minimal Implement**: Smallest change to pass test.
 4. **Verify PASS**: `bundle exec rspec spec/path/to/spec.rb`.
 
@@ -68,8 +70,8 @@ end
 Run: `bundle exec rspec spec/models/user_spec.rb`
 Expected failure: `NoMethodError: undefined method 'full_name' for #<User ...>` ✅
 
-**Step 2 — Propose & confirm**
-> Proposal: Add `def full_name = "#{first_name} #{last_name}"` to `app/models/user.rb`. Proceed?
+**Step 2 — State the approach**
+> Proposal: Add `def full_name = "#{first_name} #{last_name}"` to `app/models/user.rb`.
 
 **Step 3 — Minimal implementation** (`app/models/user.rb`):
 ```ruby
@@ -92,7 +94,7 @@ All green → write YARD docs → self-review → open PR.
 When completing a TDD cycle, produce a report following the template in [assets/tdd-report-template.md](assets/tdd-report-template.md). At minimum the report must include:
 
 - **RED**: spec file path and line, exact failure class and message, confirmation the failure is for the correct reason.
-- **Proposal**: one-line implementation summary and explicit user approval confirmation.
+- **Proposal**: one-line implementation summary and the authorization scope.
 - **GREEN**: implementation file path and line range, spec pass confirmation.
 - **Iterate**: number of additional RED→GREEN cycles and a summary of each.
 - **Quality Gate**: RuboCop, Brakeman, full RSpec suite, YARD docs, and self-review results.

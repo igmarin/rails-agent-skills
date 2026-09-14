@@ -12,6 +12,8 @@ metadata:
 
 # Write Tests
 
+Apply the [execution contract](../../../docs/agent-contract.md) before this procedure.
+
 Use this skill when the task is to write, review, or clean up RSpec tests.
 
 ## Quick Reference

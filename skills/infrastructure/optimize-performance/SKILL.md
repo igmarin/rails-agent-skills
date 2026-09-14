@@ -13,6 +13,8 @@ metadata:
 
 # Optimize Performance
 
+Apply the [execution contract](../../../docs/agent-contract.md) before this procedure.
+
 Identify and fix performance bottlenecks in Rails applications.
 
 ## Quick Reference

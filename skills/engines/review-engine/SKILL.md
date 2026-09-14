@@ -12,6 +12,8 @@ metadata:
 
 # Review Engine
 
+Apply the [execution contract](../../../docs/agent-contract.md) before this procedure.
+
 Use this skill when the task is to review an existing Rails engine or propose improvements.
 
 ## Quick Reference

@@ -12,6 +12,8 @@ metadata:
 
 # Create Engine Installer
 
+Apply the [execution contract](../../../docs/agent-contract.md) before this procedure.
+
 ## Validation Workflow (HARD-GATE)
 
 When building or reviewing an install generator, follow these steps in order. **DO NOT ship a generator without completing steps 3 and 4.**

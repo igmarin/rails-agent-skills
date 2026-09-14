@@ -13,6 +13,8 @@ metadata:
 
 # Apply Code Conventions
 
+Apply the [execution contract](../../../docs/agent-contract.md) before this procedure.
+
 **Style source of truth:** Style and formatting defer to the project's configured linter(s). This skill adds **non-style behavior** and **architecture guidance** only. For Hotwire + Tailwind specifics, see **apply-stack-conventions**.
 
 ## Quick Reference
@@ -59,22 +61,14 @@ Comment **why**, not **what**. Tags — `TODO:` / `FIXME:` / `HACK:` / `NOTE:` /
 ```
 
 ### Structured Logging
-**MANDATORY SHAPE — every `Rails.logger.*` call uses exactly two positional arguments.**
-```ruby
-Rails.logger.<level>(static_string_message, { event: "dot.namespaced", ...domain_fields })
+Use the project's installed logger interface. Standard Ruby/Rails loggers accept one message argument; a two-argument structured call requires a verified custom adapter. Log once at the recovery boundary, redact sensitive data, and preserve unexpected exceptions.
 
-# GOOD — error path with backtrace
-rescue StandardError => e
-  Rails.logger.error("order.processing_failed", {
-    event: "order.processing_failed",
-    error: e.message,
-    backtrace: e.backtrace.first(5).join("\n")
-  })
+```ruby
+rescue Timeout::Error => e
+  Rails.logger.error({ event: "order.processing_failed", error_class: e.class.name }.to_json)
   raise
 end
 ```
-- **1st arg (string):** static string literal.
-- **2nd arg (hash):** first key is always `event:`.
 
 ### Apply by area (path patterns)
 | Area | Path pattern | Guidance |

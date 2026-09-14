@@ -13,6 +13,8 @@ metadata:
 
 # Generate API Collection
 
+Apply the [execution contract](../../../docs/agent-contract.md) before this procedure.
+
 **Core principle:** Every API surface (Rails app or engine) has a single API collection file that stays in sync with its endpoints.
 
 ## Rules at a Glance

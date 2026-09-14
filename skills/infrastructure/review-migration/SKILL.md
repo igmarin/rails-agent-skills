@@ -13,6 +13,8 @@ metadata:
 
 # Review Migration
 
+Apply the [execution contract](../../../docs/agent-contract.md) before this procedure.
+
 Use this skill when schema changes must be safe in real environments.
 
 ## HARD-GATE

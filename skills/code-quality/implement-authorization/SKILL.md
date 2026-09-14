@@ -13,6 +13,8 @@ metadata:
 
 # Implement Authorization
 
+Apply the [execution contract](../../../docs/agent-contract.md) before this procedure.
+
 ## Quick Reference
 
 | Gem | Pattern | Best For |
@@ -24,7 +26,7 @@ metadata:
 
 ### Implementation Workflow
 
-1. **Add gem** — add `pundit` or `cancancan` to Gemfile and run `bundle install`
+1. **Inspect existing authorization** — reuse the installed policy framework; add `pundit` or `cancancan` only if the task requires a new framework and project conventions permit it
 2. **Generate base** — run the gem's installer (`rails g pundit:install` or `rails g cancan:ability`)
 3. **Define policies/abilities** — create policy classes (Pundit) or populate the Ability class (CanCanCan); always use policy objects, never inline authorization logic in controllers
 4. **Authorize in controllers** — call `authorize @record` (Pundit) or `authorize! :action, @record` (CanCanCan) in each action
@@ -99,7 +101,7 @@ end
 
 When implementing or reviewing authorization, the output `answer.md` must include:
 
-1. **Manual Denied-Action Verification** — a dedicated section with simulated Rails console output showing the authorization exception raised when an unauthorized action is attempted. Always use persisted records (`User.create!`, `Post.create!`), never unsaved ones.
+1. **Manual Denied-Action Verification** — a dedicated section with actual Rails console output, or an explicit unrun status showing the authorization exception raised when an unauthorized action is attempted. Always use persisted records (`User.create!`, `Post.create!`), never unsaved ones.
 2. **HTTP and Policy Verification** — concrete `curl` requests or controller test commands with expected HTTP response codes (e.g. `403 Forbidden` or `302 Found`) when access is denied.
 3. **Language** — English unless explicitly requested otherwise.
 

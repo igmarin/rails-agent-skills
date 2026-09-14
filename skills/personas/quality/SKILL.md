@@ -21,6 +21,8 @@ metadata:
 ---
 # Quality Persona
 
+Apply the [execution contract](../../../docs/agent-contract.md) before this procedure.
+
 Orchestrates systematic code quality checks, safe refactoring, and documentation updates across three phases. Use this instead of individual refactoring or documentation skills when full production-readiness is required end-to-end. If unsure which skill applies, use `skill-router`.
 
 ## Complexity Thresholds
@@ -66,7 +68,7 @@ bundle exec bundle-audit check --update
 1. **testing/plan-tests** — Choose the best characterization test to document current behavior
 2. **testing/write-tests** — Write characterization test and verify it PASSES (documents current behavior)
 3. **Refactoring Checkpoint** — Propose specific refactoring (e.g., "Extract `calculate_discount` method to `DiscountCalculator` class")
-4. **User Approval** — Wait for explicit confirmation
+4. **Scope Check** — Wait for explicit confirmation
 5. **Implement Refactoring** — Make the structural change only
 6. **Verify PASS** — Run characterization test to confirm behavior is preserved
 7. **Regression Check** — Run full test suite to ensure no regressions

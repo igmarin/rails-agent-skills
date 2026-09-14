@@ -12,6 +12,8 @@ metadata:
 ---
 # Setup Environment
 
+Apply the [execution contract](../../../docs/agent-contract.md) before this procedure.
+
 ## Roles & Constraints
 
 - **Agent reads:** `.ruby-version`, `.tool-versions`, `Gemfile`, `docker-compose.yml`, `.env.example`, `config/database.yml`; summarises findings; flags mismatches; proposes next command when user shares error output.

@@ -19,6 +19,8 @@ metadata:
 ---
 # Setup Persona
 
+Apply the [execution contract](../../../docs/agent-contract.md) before this procedure.
+
 ## Agent Phases
 
 ### Phase 1: Context & Onboarding
