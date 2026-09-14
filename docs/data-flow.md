@@ -4,7 +4,7 @@ This document describes every surface in `rails-agent-skills` that sends reposit
 
 ## Why this matters
 
-This repository teaches security discipline (see `skills/code-quality/security-check/SKILL.md`). Two of its own automation surfaces send source code — staged diffs and PR diffs — to external LLM providers. That is a real data-flow concern. Both surfaces are documented here so contributors can make an informed choice.
+This repository teaches security discipline (see `skills/security-check/SKILL.md`). Two of its own automation surfaces send source code — staged diffs and PR diffs — to external LLM providers. That is a real data-flow concern. Both surfaces are documented here so contributors can make an informed choice.
 
 ## Surface 1: Pre-commit hook (`hooks/pre-commit-rs-guard`)
 

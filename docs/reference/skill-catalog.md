@@ -64,15 +64,15 @@ No atomic skill yet. See [gaps.md](gaps.md) for `setup-ci-cd`. Use the `setup` p
 
 | Persona | Path | Loop |
 |---------|------|------|
-| **tdd** | `skills/personas/tdd/` | test → implement → review → PR |
-| **review** | `skills/personas/review/` | review → deep dive → response |
-| **setup** | `skills/personas/setup/` | context → onboarding → CI |
-| **quality** | `skills/personas/quality/` | conventions → refactor → docs |
-| **engine** | `skills/personas/engine/` | author → test → review → release |
-| **bug-fix** | `skills/personas/bug-fix/` | triage → reproduce → fix → verify |
-| **graphql** | `skills/personas/graphql/` | domain → schema → TDD → security |
-| **migration** | `skills/personas/migration/` | plan → test → deploy |
-| **background-job** | `skills/personas/background-job/` | design → TDD → retry → monitor |
+| **tdd** | `skills/tdd/` | test → implement → review → PR |
+| **review** | `skills/review/` | review → deep dive → response |
+| **setup** | `skills/setup/` | context → onboarding → CI |
+| **quality** | `skills/quality/` | conventions → refactor → docs |
+| **engine** | `skills/engine/` | author → test → review → release |
+| **bug-fix** | `skills/bug-fix/` | triage → reproduce → fix → verify |
+| **graphql** | `skills/graphql/` | domain → schema → TDD → security |
+| **migration** | `skills/migration/` | plan → test → deploy |
+| **background-job** | `skills/background-job/` | design → TDD → retry → monitor |
 
 ## If you need…
 

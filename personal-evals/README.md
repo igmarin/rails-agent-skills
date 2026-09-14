@@ -63,7 +63,7 @@ Generate a bundle for inspection:
 
 ```bash
 ruby scripts/eval_context_builder.rb skills/patterns/create-service-object
-ruby scripts/eval_context_builder.rb skills/personas/tdd
+ruby scripts/eval_context_builder.rb skills/tdd
 ```
 
 ## Best Practices

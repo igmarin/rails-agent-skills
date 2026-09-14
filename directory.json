@@ -8,115 +8,118 @@
   ],
   "skills": {
     "generate-api-collection": {
-      "path": "skills/api/generate-api-collection/SKILL.md"
+      "path": "skills/generate-api-collection/SKILL.md"
     },
     "implement-graphql": {
-      "path": "skills/api/implement-graphql/SKILL.md"
+      "path": "skills/implement-graphql/SKILL.md"
     },
     "apply-code-conventions": {
-      "path": "skills/code-quality/apply-code-conventions/SKILL.md"
+      "path": "skills/apply-code-conventions/SKILL.md"
     },
     "apply-stack-conventions": {
-      "path": "skills/code-quality/apply-stack-conventions/SKILL.md"
+      "path": "skills/apply-stack-conventions/SKILL.md"
     },
     "code-review": {
-      "path": "skills/code-quality/code-review/SKILL.md"
+      "path": "skills/code-review/SKILL.md"
     },
     "implement-authorization": {
-      "path": "skills/code-quality/implement-authorization/SKILL.md"
+      "path": "skills/implement-authorization/SKILL.md"
     },
     "refactor-code": {
-      "path": "skills/code-quality/refactor-code/SKILL.md"
+      "path": "skills/refactor-code/SKILL.md"
     },
     "review-architecture": {
-      "path": "skills/code-quality/review-architecture/SKILL.md"
+      "path": "skills/review-architecture/SKILL.md"
     },
     "security-check": {
-      "path": "skills/code-quality/security-check/SKILL.md"
+      "path": "skills/security-check/SKILL.md"
     },
     "load-context": {
-      "path": "skills/context/load-context/SKILL.md"
+      "path": "skills/load-context/SKILL.md"
     },
     "setup-environment": {
-      "path": "skills/context/setup-environment/SKILL.md"
+      "path": "skills/setup-environment/SKILL.md"
     },
     "create-engine": {
-      "path": "skills/engines/create-engine/SKILL.md"
+      "path": "skills/create-engine/SKILL.md"
     },
     "upgrade-engine": {
-      "path": "skills/engines/upgrade-engine/SKILL.md"
+      "path": "skills/upgrade-engine/SKILL.md"
     },
     "document-engine": {
-      "path": "skills/engines/document-engine/SKILL.md"
+      "path": "skills/document-engine/SKILL.md"
     },
     "extract-engine": {
-      "path": "skills/engines/extract-engine/SKILL.md"
+      "path": "skills/extract-engine/SKILL.md"
     },
     "create-engine-installer": {
-      "path": "skills/engines/create-engine-installer/SKILL.md"
+      "path": "skills/create-engine-installer/SKILL.md"
     },
     "release-engine": {
-      "path": "skills/engines/release-engine/SKILL.md"
+      "path": "skills/release-engine/SKILL.md"
     },
     "review-engine": {
-      "path": "skills/engines/review-engine/SKILL.md"
+      "path": "skills/review-engine/SKILL.md"
     },
     "test-engine": {
-      "path": "skills/engines/test-engine/SKILL.md"
+      "path": "skills/test-engine/SKILL.md"
     },
     "implement-hotwire": {
-      "path": "skills/infrastructure/implement-hotwire/SKILL.md"
+      "path": "skills/implement-hotwire/SKILL.md"
     },
     "implement-background-job": {
-      "path": "skills/infrastructure/implement-background-job/SKILL.md"
+      "path": "skills/implement-background-job/SKILL.md"
     },
     "optimize-performance": {
-      "path": "skills/infrastructure/optimize-performance/SKILL.md"
+      "path": "skills/optimize-performance/SKILL.md"
     },
     "review-migration": {
-      "path": "skills/infrastructure/review-migration/SKILL.md"
+      "path": "skills/review-migration/SKILL.md"
     },
     "seed-database": {
-      "path": "skills/infrastructure/seed-database/SKILL.md"
+      "path": "skills/seed-database/SKILL.md"
     },
     "version-api": {
-      "path": "skills/infrastructure/version-api/SKILL.md"
+      "path": "skills/version-api/SKILL.md"
     },
     "plan-tests": {
-      "path": "skills/testing/plan-tests/SKILL.md"
+      "path": "skills/plan-tests/SKILL.md"
     },
     "write-tests": {
-      "path": "skills/testing/write-tests/SKILL.md"
+      "path": "skills/write-tests/SKILL.md"
     },
     "test-service": {
-      "path": "skills/testing/test-service/SKILL.md"
+      "path": "skills/test-service/SKILL.md"
     },
     "tdd": {
-      "path": "skills/personas/tdd/SKILL.md"
+      "path": "skills/tdd/SKILL.md"
     },
     "review": {
-      "path": "skills/personas/review/SKILL.md"
+      "path": "skills/review/SKILL.md"
     },
     "setup": {
-      "path": "skills/personas/setup/SKILL.md"
+      "path": "skills/setup/SKILL.md"
     },
     "quality": {
-      "path": "skills/personas/quality/SKILL.md"
+      "path": "skills/quality/SKILL.md"
     },
     "engine": {
-      "path": "skills/personas/engine/SKILL.md"
+      "path": "skills/engine/SKILL.md"
     },
     "bug-fix": {
-      "path": "skills/personas/bug-fix/SKILL.md"
+      "path": "skills/bug-fix/SKILL.md"
     },
     "graphql": {
-      "path": "skills/personas/graphql/SKILL.md"
+      "path": "skills/graphql/SKILL.md"
     },
     "migration": {
-      "path": "skills/personas/migration/SKILL.md"
+      "path": "skills/migration/SKILL.md"
     },
     "background-job": {
-      "path": "skills/personas/background-job/SKILL.md"
+      "path": "skills/background-job/SKILL.md"
+    },
+    "rails-agent-skills": {
+      "path": "skills/rails-agent-skills/SKILL.md"
     }
   },
   "deprecated_skills": {

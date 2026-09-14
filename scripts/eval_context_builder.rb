@@ -92,9 +92,9 @@ module McpSkills
         next unless path.extname == '.md'
 
         path.read.scan(/\[[^\]]*\]\(([^\s)]+)(?:\s+"[^"]*")?\)/).flatten.each do |link|
-          next if link.start_with?('#') || link.match?(/\A[a-z][a-z\d+.-]*:/i)
+          next if link.start_with?('#', '//') || link.match?(/\A[a-z][a-z\d+.-]*:/i)
 
-          target = path.dirname.join(link.split('#', 2).first).cleanpath
+          target = path.dirname.join(link.split(/[?#]/, 2).first).cleanpath
           raise Error, "Missing linked resource in #{relative_path(path)}: #{link}" unless target.exist?
           next unless target.file? && text_file?(target)
 

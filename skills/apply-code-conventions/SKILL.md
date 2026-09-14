@@ -23,7 +23,7 @@ Apply the [execution contract](../../../docs/agent-contract.md) before this proc
 |-------|------|
 | Principles | DRY, YAGNI, PORO where it helps, CoC, KISS |
 | Comments / tags | Explain **why**; tagged notes need actionable context |
-| Logging | First arg: static string; second arg: hash with `event:` key; no interpolation; backtrace on errors |
+| Logging | One verified message argument (usually a JSON hash); no interpolation; include a redacted backtrace on errors |
 | Deep stacks | Chain **apply-stack-conventions** → domain skills (services, jobs, RSpec) |
 
 ## HARD-GATE
@@ -42,7 +42,7 @@ When reviewing or refactoring Rails code, follow this sequence. Each step maps t
 1. **Run linter** — Detect config (e.g. `.rubocop.yml` or `.standard.yml`), run the appropriate tool, note absence if none found. *Output: linter detected (or absent); style defers to it.*
 2. **Apply area-specific rules** — Check path patterns and apply targeted guidance from the Apply by area table. *Output: concrete per-path recommendations for every relevant changed file.*
 3. **Verify tests gate** — Confirm failing tests exist before any new behavior. *Output: failing spec, run command, expected failure, minimal implementation step, passing rerun.*
-4. **Enforce structured logging** — Ensure all `Rails.logger` calls use static strings + structured hashes with an `event:` key, plus backtrace for errors. *Output: apply structured logging rules from Sub-Rules below.*
+4. **Enforce structured logging** — Ensure all `Rails.logger` calls use the installed logger's verified single-message interface; include an `event:` field and redacted backtrace for errors. *Output: apply structured logging rules from Sub-Rules below.*
 5. **Enforce comment discipline** — Ensure all tags (`TODO:`, `FIXME:`) have actionable context (owner, ticket). *Output: apply comment discipline rules from Sub-Rules below.*
 6. **Chain to specialised skills** — Use the Integration table to pull in deeper guidance (security, jobs, specs) as needed.
 
@@ -65,7 +65,7 @@ Use the project's installed logger interface. Standard Ruby/Rails loggers accept
 
 ```ruby
 rescue Timeout::Error => e
-  Rails.logger.error({ event: "order.processing_failed", error_class: e.class.name }.to_json)
+  Rails.logger.error({ event: "order.processing_failed", error_class: e.class.name, backtrace: e.backtrace&.first(5) }.to_json)
   raise
 end
 ```

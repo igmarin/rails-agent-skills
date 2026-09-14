@@ -51,16 +51,19 @@ Full list: [docs/reference/skill-catalog.md](docs/reference/skill-catalog.md). G
 
 ## Install
 
-> **`--full-depth` is required.** The root `SKILL.md` is a catalog (`type: catalog`), not a standalone skill. Without `--full-depth`, `npx skills add` finds that one file and skips nested skills under `skills/<category>/<name>/`. Without `--all`, the CLI opens an interactive multi-select picker.
+There is **no** root `SKILL.md`. Each folder under `skills/` is its own skill, so the CLI can prompt for **all** or **one**.
 
 ```bash
-# Install ALL skills (non-interactive)
-npx skills add igmarin/ruby-core-skills --full-depth --all
-npx skills add igmarin/rails-agent-skills --full-depth --all
+# picker: all skills, or a subset
+npx skills add igmarin/ruby-core-skills
+npx skills add igmarin/rails-agent-skills
 
-# Interactive: pick which skills to install
-npx skills add igmarin/ruby-core-skills --full-depth
-npx skills add igmarin/rails-agent-skills --full-depth
+# all skills, skip prompts
+npx skills add igmarin/ruby-core-skills --skill '*'
+npx skills add igmarin/rails-agent-skills --skill '*'
+
+# one skill
+npx skills add igmarin/rails-agent-skills --skill load-context
 ```
 
 Or with GitHub CLI v2.90.0+ (`gh skill`):

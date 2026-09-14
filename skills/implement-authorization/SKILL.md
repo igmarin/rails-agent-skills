@@ -27,7 +27,7 @@ Apply the [execution contract](../../../docs/agent-contract.md) before this proc
 ### Implementation Workflow
 
 1. **Inspect existing authorization** — reuse the installed policy framework; add `pundit` or `cancancan` only if the task requires a new framework and project conventions permit it
-2. **Generate base** — run the gem's installer (`rails g pundit:install` or `rails g cancan:ability`)
+2. **Generate base only when needed** — run the gem's installer (`rails g pundit:install` or `rails g cancan:ability`) only when no supported framework is present and the project permits the generator; otherwise proceed with the detected framework without invoking generators
 3. **Define policies/abilities** — create policy classes (Pundit) or populate the Ability class (CanCanCan); always use policy objects, never inline authorization logic in controllers
 4. **Authorize in controllers** — call `authorize @record` (Pundit) or `authorize! :action, @record` (CanCanCan) in each action
 5. **Verify authorization** — attempt an unauthorized action in the browser or console and confirm it raises `Pundit::NotAuthorizedError` or `CanCan::AccessDenied` as expected; use persisted records (e.g., `User.create!`) not unsaved ones

@@ -3,6 +3,13 @@
   "notGrouped": "bottom",
   "groupings": [
     {
+      "title": "Catalog",
+      "description": "Pack entry point. Sequences atomic skills for a Rails task.",
+      "skills": [
+        "rails-agent-skills"
+      ]
+    },
+    {
       "title": "API",
       "description": "Skills for REST API collections and GraphQL implementation.",
       "skills": [
@@ -79,6 +86,21 @@
         "plan-tests",
         "test-service",
         "write-tests"
+      ]
+    },
+    {
+      "title": "Personas",
+      "description": "End-to-end Rails workflows.",
+      "skills": [
+        "tdd",
+        "review",
+        "setup",
+        "quality",
+        "engine",
+        "bug-fix",
+        "graphql",
+        "migration",
+        "background-job"
       ]
     }
   ]
