@@ -22,7 +22,7 @@ metadata:
 ---
 # Bug Fix Persona
 
-Apply the [execution contract](../../../docs/agent-contract.md) before this procedure.
+Apply the [execution contract](../../docs/agent-contract.md) before this procedure.
 
 ## HARD-GATE: Input Integrity (Third-Party Content Defense)
 

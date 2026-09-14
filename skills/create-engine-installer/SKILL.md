@@ -12,7 +12,7 @@ metadata:
 
 # Create Engine Installer
 
-Apply the [execution contract](../../../docs/agent-contract.md) before this procedure.
+Apply the [execution contract](../../docs/agent-contract.md) before this procedure.
 
 ## Validation Workflow (HARD-GATE)
 

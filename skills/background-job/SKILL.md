@@ -22,7 +22,7 @@ metadata:
 ---
 # Background Job Persona
 
-Apply the [execution contract](../../../docs/agent-contract.md) before this procedure.
+Apply the [execution contract](../../docs/agent-contract.md) before this procedure.
 
 Orchestrates robust background job implementation with TDD discipline, proper retry/discard strategies, comprehensive failure scenario testing, and production monitoring to ensure reliable async processing.
 

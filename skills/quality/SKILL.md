@@ -21,7 +21,7 @@ metadata:
 ---
 # Quality Persona
 
-Apply the [execution contract](../../../docs/agent-contract.md) before this procedure.
+Apply the [execution contract](../../docs/agent-contract.md) before this procedure.
 
 Orchestrates systematic code quality checks, safe refactoring, and documentation updates across three phases. Use this instead of individual refactoring or documentation skills when full production-readiness is required end-to-end. If unsure which skill applies, use `skill-router`.
 

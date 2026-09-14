@@ -21,7 +21,7 @@ metadata:
 ---
 # GraphQL Persona
 
-Apply the [execution contract](../../../docs/agent-contract.md) before this procedure.
+Apply the [execution contract](../../docs/agent-contract.md) before this procedure.
 
 ## Agent Phases
 
