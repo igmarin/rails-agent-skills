@@ -12,7 +12,6 @@ metadata:
 
 # Upgrade Engine
 
-Apply the [execution contract](../../docs/agent-contract.md) before this procedure.
 
 **Core principle:** Every claimed Rails/Ruby version must be in the CI matrix. Prefer explicit support targets over accidental compatibility.
 

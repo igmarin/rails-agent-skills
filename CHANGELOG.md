@@ -1,4 +1,8 @@
 # Changelog
+## [8.0.0] - 2026-09-26
+
+Breaking skill-profile release. See README.md for the migration map.
+
 
 ## [Unreleased]
 

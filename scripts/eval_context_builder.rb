@@ -19,9 +19,7 @@ module McpSkills
       '.yml' => 'application/yaml'
     }.freeze
 
-    # Maximum bytes for a single companion or primary file. Guards against
-    # accidentally huge assets blowing memory when rendered into the context
-    # bundle. 256 KB is generous for skill-size Markdown/Ruby assets.
+    # Guard the only file this builder loads. References are never traversed.
     MAX_FILE_SIZE_BYTES = 256 * 1024
 
     # Accepted values for target_type. Anything else raises Error.
@@ -42,20 +40,16 @@ module McpSkills
       validate_target_type!(target_type) unless target_type.nil?
 
       primary_path = resolve_primary_path(target_path)
-      target_dir = primary_path.dirname
       metadata = frontmatter(primary_path)
 
       render_context(
         primary_path: primary_path,
         target_type: target_type || infer_target_type(primary_path),
-        target_name: target_name || metadata.fetch('name', target_dir.basename.to_s),
-        resources: companion_resources(target_dir, primary_path)
+        target_name: target_name || metadata.fetch('name', primary_path.dirname.basename.to_s)
       )
     end
 
-    # Rough token estimate (chars / 4) for a skill + its companion resources.
-    # Useful for agents deciding whether loading a skill will blow their
-    # context budget. Returns an Integer.
+    # Rough token estimate (chars / 4) for the primary skill only.
     def estimate_tokens(target_path:, target_type: nil, target_name: nil)
       xml = call(target_path: target_path, target_type: target_type, target_name: target_name)
       xml.length / 4
@@ -77,31 +71,9 @@ module McpSkills
       raise Error, "SKILL.md not found: #{path}" unless path.file?
       raise Error, "target path must point to SKILL.md: #{path}" unless path.basename.to_s == 'SKILL.md'
 
-      ensure_inside_repo!(path.realpath)
-    end
-
-    def companion_resources(target_dir, primary_path)
-      pending = [primary_path] + target_dir.glob('**/*').select { |path| path.file? && text_file?(path) }
-      visited = []
-      until pending.empty?
-        path = ensure_inside_repo!(pending.shift.realpath)
-        next if visited.include?(path)
-
-        visited << path
-        enforce_size_guard!(path)
-        next unless path.extname == '.md'
-
-        path.read.scan(/\[[^\]]*\]\(([^\s)]+)(?:\s+"[^"]*")?\)/).flatten.each do |link|
-          next if link.start_with?('#', '//') || link.match?(/\A[a-z][a-z\d+.-]*:/i)
-
-          target = path.dirname.join(link.split(/[?#]/, 2).first).cleanpath
-          raise Error, "Missing linked resource in #{relative_path(path)}: #{link}" unless target.exist?
-          next unless target.file? && text_file?(target)
-
-          pending << ensure_inside_repo!(target.realpath)
-        end
-      end
-      (visited - [primary_path]).sort_by { |path| relative_path(path) }
+      primary_path = ensure_inside_repo!(path.realpath)
+      enforce_size_guard!(primary_path)
+      primary_path
     end
 
     def ensure_inside_repo!(path)
@@ -110,28 +82,23 @@ module McpSkills
       path
     end
 
-    def render_context(primary_path:, target_type:, target_name:, resources:)
+    def render_context(primary_path:, target_type:, target_name:)
       lines = []
       lines << %(<skill_context target_type="#{escape_attr(target_type)}" target_name="#{escape_attr(target_name)}">)
       lines << render_file('primary', primary_path)
-      lines << '  <resources>'
-      resources.each { |path| lines << render_file('resource', path, role: role_for(path)) }
-      lines << '  </resources>'
+      lines << '  <resources/>'
       lines << '</skill_context>'
       lines.join("\n")
     end
 
-    def render_file(tag_name, path, role: nil)
-      enforce_size_guard!(path)
-
+    def render_file(tag_name, path)
       attrs = {
         path: relative_path(path),
         media_type: media_type(path)
       }
-      attrs[:role] = role if role
 
       opening = attrs.map { |key, value| %(#{key}="#{escape_attr(value)}") }.join(' ')
-      indent = tag_name == 'primary' ? '  ' : '    '
+      indent = '  '
 
       [
         "#{indent}<#{tag_name} #{opening}>",
@@ -163,24 +130,6 @@ module McpSkills
       return 'workflow' if relative.match?(%r{\A(?:skills/)?workflows/})
 
       'skill'
-    end
-
-    def role_for(path)
-      relative = relative_path(path)
-      basename = path.basename.to_s
-
-      return 'asset' if relative.include?('/assets/')
-      return 'examples' if basename == 'EXAMPLES.md'
-      return 'testing' if basename == 'TESTING.md'
-      return 'patterns' if basename == 'PATTERNS.md'
-      return 'heuristics' if basename == 'HEURISTICS.md'
-      return 'task_templates' if basename == 'TASK_TEMPLATES.md'
-
-      'companion'
-    end
-
-    def text_file?(path)
-      TEXT_EXTENSIONS.include?(path.extname)
     end
 
     def media_type(path)

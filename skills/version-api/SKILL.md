@@ -13,7 +13,6 @@ metadata:
 
 # Version API
 
-Apply the [execution contract](../../docs/agent-contract.md) before this procedure.
 
 Implement versioning strategies for Rails APIs.
 

@@ -13,7 +13,6 @@ metadata:
 
 # Implement Background Job
 
-Apply the [execution contract](../../docs/agent-contract.md) before this procedure.
 
 Use this skill when the task is to add, configure, or review background jobs in a Rails application.
 

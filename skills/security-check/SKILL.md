@@ -13,7 +13,6 @@ metadata:
 
 # Security Check
 
-Apply the [execution contract](../../docs/agent-contract.md) before this procedure.
 
 ## HARD-GATE: Credential Handling
 

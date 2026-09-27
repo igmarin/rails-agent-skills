@@ -13,7 +13,6 @@ metadata:
 
 # Extract Engine
 
-Apply the [execution contract](../../docs/agent-contract.md) before this procedure.
 
 Use this skill when the task is to move existing code out of a Rails app and into an engine.
 Prefer incremental extraction over big-bang rewrites. Preserve behavior first, then improve design.
