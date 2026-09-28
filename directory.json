@@ -1,6 +1,6 @@
 {
   "name": "igmarin/rails-agent-skills",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "license": "MIT",
   "summary": "Curated library of 28 atomic skills and 9 personas for Ruby on Rails development. Organized by category: testing, code-quality, engines, infrastructure, api, context, and personas. Covers code review, architecture, security, testing (RSpec), engines, Hotwire, and TDD automation. Shared Ruby skills (YARD docs, DDD, service objects) have moved to ruby-core-skills.",
   "depends_on": [
@@ -91,35 +91,14 @@
     "test-service": {
       "path": "skills/test-service/SKILL.md"
     },
-    "tdd": {
-      "path": "skills/tdd/SKILL.md"
+    "rails-feature": {
+      "path": "skills/rails-feature/SKILL.md"
     },
-    "review": {
-      "path": "skills/review/SKILL.md"
+    "rails-review": {
+      "path": "skills/rails-review/SKILL.md"
     },
-    "setup": {
-      "path": "skills/setup/SKILL.md"
-    },
-    "quality": {
-      "path": "skills/quality/SKILL.md"
-    },
-    "engine": {
-      "path": "skills/engine/SKILL.md"
-    },
-    "bug-fix": {
-      "path": "skills/bug-fix/SKILL.md"
-    },
-    "graphql": {
-      "path": "skills/graphql/SKILL.md"
-    },
-    "migration": {
-      "path": "skills/migration/SKILL.md"
-    },
-    "background-job": {
-      "path": "skills/background-job/SKILL.md"
-    },
-    "rails-agent-skills": {
-      "path": "skills/rails-agent-skills/SKILL.md"
+    "rails-maintenance": {
+      "path": "skills/rails-maintenance/SKILL.md"
     }
   },
   "deprecated_skills": {

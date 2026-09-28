@@ -13,7 +13,6 @@ metadata:
 
 # Apply Code Conventions
 
-Apply the [execution contract](../../docs/agent-contract.md) before this procedure.
 
 **Style source of truth:** Style and formatting defer to the project's configured linter(s). This skill adds **non-style behavior** and **architecture guidance** only. For Hotwire + Tailwind specifics, see **apply-stack-conventions**.
 

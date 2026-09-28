@@ -3,104 +3,70 @@
   "notGrouped": "bottom",
   "groupings": [
     {
-      "title": "Catalog",
-      "description": "Pack entry point. Sequences atomic skills for a Rails task.",
+      "title": "Workflows",
+      "description": "One entry for ordinary Rails feature, review, or maintenance work.",
       "skills": [
-        "rails-agent-skills"
+        "rails-feature",
+        "rails-review",
+        "rails-maintenance"
       ]
     },
     {
-      "title": "API",
-      "description": "Skills for REST API collections and GraphQL implementation.",
-      "skills": [
-        "generate-api-collection",
-        "implement-graphql"
-      ]
-    },
-    {
-      "title": "Code Quality",
-      "description": "Skills for code review, security, architecture review, code conventions, and authorization.",
-      "skills": [
-        "apply-code-conventions",
-        "apply-stack-conventions",
-        "code-review",
-        "implement-authorization",
-        "refactor-code",
-        "review-architecture",
-        "security-check"
-      ]
-    },
-    {
-      "title": "Context",
-      "description": "Skills for context loading and development environment setup.",
+      "title": "Context and tests",
+      "description": "Project context, setup, and focused test work.",
       "skills": [
         "load-context",
-        "setup-environment"
+        "setup-environment",
+        "plan-tests",
+        "write-tests",
+        "test-service"
       ]
     },
     {
-      "title": "Engines",
-      "description": "Skills for creating, testing, documenting, reviewing, releasing, extracting, and upgrading Rails engines.",
+      "title": "Web and APIs",
+      "description": "Authorization, GraphQL, Hotwire, and REST API work.",
       "skills": [
-        "create-engine",
-        "create-engine-installer",
-        "document-engine",
-        "extract-engine",
-        "release-engine",
-        "review-engine",
-        "test-engine",
-        "upgrade-engine"
-      ]
-    },
-    {
-      "title": "Infrastructure",
-      "description": "Skills for migrations, background jobs, seeding, performance, API versioning, and Hotwire.",
-      "skills": [
-        "implement-background-job",
+        "implement-authorization",
+        "implement-graphql",
         "implement-hotwire",
-        "optimize-performance",
-        "review-migration",
-        "seed-database",
+        "generate-api-collection",
         "version-api"
       ]
     },
     {
-      "title": "Personas",
-      "description": "Personas that chain atomic skills into full development loops.",
+      "title": "Operations",
+      "description": "Jobs, data, performance, and security-sensitive operations.",
       "skills": [
-        "background-job",
-        "bug-fix",
-        "engine",
-        "graphql",
-        "migration",
-        "quality",
-        "review",
-        "setup",
-        "tdd"
+        "implement-background-job",
+        "seed-database",
+        "optimize-performance",
+        "review-migration",
+        "security-check"
       ]
     },
     {
-      "title": "Testing",
-      "description": "Skills for test planning, test writing, and service object testing.",
+      "title": "Engines",
+      "description": "Create, extract, test, document, review, release, and upgrade engines.",
       "skills": [
-        "plan-tests",
-        "test-service",
-        "write-tests"
+        "create-engine",
+        "create-engine-installer",
+        "extract-engine",
+        "test-engine",
+        "document-engine",
+        "review-engine",
+        "release-engine",
+        "upgrade-engine"
       ]
     },
     {
-      "title": "Personas",
-      "description": "End-to-end Rails workflows.",
+      "title": "Conventions",
+      "description": "Rails and application-specific conventions and architecture.",
       "skills": [
-        "tdd",
-        "review",
-        "setup",
-        "quality",
-        "engine",
-        "bug-fix",
-        "graphql",
-        "migration",
-        "background-job"
+        "apply-code-conventions",
+        "apply-stack-conventions",
+        "refactor-code",
+        "review-architecture",
+        "code-review"
       ]
     }
   ]

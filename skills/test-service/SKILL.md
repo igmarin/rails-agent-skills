@@ -12,7 +12,6 @@ metadata:
 ---
 # Test Service
 
-Apply the [execution contract](../../docs/agent-contract.md) before this procedure.
 
 ## Quick Reference
 

@@ -68,7 +68,7 @@ module McpSkills
       assert_operator estimate, :>, 0
     end
 
-    def test_includes_nested_references_and_linked_pack_documentation_once
+    def test_references_are_not_loaded_into_the_default_context
       FileUtils.mkdir_p(@skill_dir.join("references"))
       @skill_dir.join("references", "workflow.md").write("Workflow proof")
       FileUtils.mkdir_p(@repo_root.join("docs"))
@@ -76,8 +76,9 @@ module McpSkills
       @skill_md.write(@skill_md.read + "\n[Contract](../../../docs/contract.md)\n[Again](../../../docs/contract.md)\n")
 
       xml = EvalContextBuilder.new(repo_root: @repo_root).call(target_path: @skill_md)
-      assert_includes xml, "Workflow proof"
-      assert_equal 1, xml.scan("Shared contract").length
+      refute_includes xml, "Workflow proof"
+      refute_includes xml, "Shared contract"
+      refute_includes xml, "<resource "
     end
 
     def test_infers_persona_and_workflow_from_nested_skills_layout
@@ -90,34 +91,32 @@ module McpSkills
       end
     end
 
-    def test_rejects_missing_local_resource_instead_of_silently_omitting_it
+    def test_missing_reference_does_not_block_primary_skill_context
       @skill_md.write(@skill_md.read + "\n[Missing](references/missing.md)\n")
-      assert_raises(EvalContextBuilder::Error) do
-        EvalContextBuilder.new(repo_root: @repo_root).call(target_path: @skill_md)
-      end
+      xml = EvalContextBuilder.new(repo_root: @repo_root).call(target_path: @skill_md)
+      assert_includes xml, "Body text for the sample skill."
+      refute_includes xml, "<resource "
     end
 
-    def test_resource_cycles_terminate_and_external_urls_are_not_loaded
+    def test_linked_examples_and_external_urls_are_not_loaded
       @skill_dir.join("EXAMPLES.md").write("[Back](SKILL.md)\nExample evidence")
       @skill_md.write(@skill_md.read + "\n[Web](https://example.invalid/private.md)\n")
       xml = EvalContextBuilder.new(repo_root: @repo_root).call(target_path: @skill_md)
-      assert_equal 1, xml.scan('Example evidence').length
+      refute_includes xml, "Example evidence"
       assert_equal 1, xml.scan('<primary ').length
     end
 
-    def test_symlink_cannot_pull_a_resource_from_outside_the_pack
+    def test_unrequested_symlink_resource_is_not_read
       Dir.mktmpdir do |outside|
         secret = Pathname.new(outside).join('outside.md')
         secret.write('outside content')
         File.symlink(secret, @skill_dir.join('EXAMPLES.md'))
-        error = assert_raises(EvalContextBuilder::Error) do
-          EvalContextBuilder.new(repo_root: @repo_root).call(target_path: @skill_md)
-        end
-        assert_match(/escapes repository/, error.message)
+        xml = EvalContextBuilder.new(repo_root: @repo_root).call(target_path: @skill_md)
+        refute_includes xml, 'outside content'
       end
     end
 
-    def test_estimate_tokens_scales_with_content_size
+    def test_estimate_tokens_ignores_unrequested_companion_resources
       builder = EvalContextBuilder.new(repo_root: @repo_root)
       small = builder.estimate_tokens(target_path: @skill_md)
 
@@ -126,29 +125,26 @@ module McpSkills
       big_asset.write("x" * 4000)
 
       large = builder.estimate_tokens(target_path: @skill_md)
-      assert_operator large, :>, small
+      assert_equal small, large
     end
 
-    def test_size_guard_rejects_oversize_companion_file
-      # Create a companion file larger than the guard threshold.
+    def test_size_guard_ignores_oversize_unrequested_companion_file
       oversize = @skill_dir.join("EXAMPLES.md")
       oversize.write("x" * (EvalContextBuilder::MAX_FILE_SIZE_BYTES + 1))
 
       builder = EvalContextBuilder.new(repo_root: @repo_root)
+      xml = builder.call(target_path: @skill_md)
+      refute_includes xml, "EXAMPLES.md"
+    end
+
+    def test_size_guard_still_rejects_oversize_primary_file
+      @skill_md.write("x" * (EvalContextBuilder::MAX_FILE_SIZE_BYTES + 1))
+      builder = EvalContextBuilder.new(repo_root: @repo_root)
       err = assert_raises(EvalContextBuilder::Error) do
         builder.call(target_path: @skill_md)
       end
-      assert_match(/EXAMPLES.md/, err.message)
+      assert_match(/SKILL.md/, err.message)
       assert_match(/size|exceeds|too large/i, err.message)
-    end
-
-    def test_size_guard_allows_under_threshold_file
-      within = @skill_dir.join("EXAMPLES.md")
-      within.write("x" * 100)
-
-      builder = EvalContextBuilder.new(repo_root: @repo_root)
-      xml = builder.call(target_path: @skill_md)
-      assert_includes xml, "EXAMPLES.md"
     end
   end
 end

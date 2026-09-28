@@ -13,7 +13,6 @@ metadata:
 
 # Seed Database
 
-Apply the [execution contract](../../docs/agent-contract.md) before this procedure.
 
 Manage development and test data effectively.
 

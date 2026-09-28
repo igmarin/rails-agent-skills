@@ -12,7 +12,6 @@ metadata:
 
 # Implement GraphQL
 
-Apply the [execution contract](../../docs/agent-contract.md) before this procedure.
 
 Use this skill when **designing, implementing, or reviewing GraphQL APIs** in a Rails application with the `graphql-ruby` gem.
 

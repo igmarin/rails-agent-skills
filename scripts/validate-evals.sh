@@ -68,9 +68,30 @@ while IFS= read -r scenario_dir; do
       abort "missing required keys: #{missing.join(", ")}" unless missing.empty?
 
       abort "id must match directory name" unless data.fetch("id") == File.basename(scenario_dir)
-      abort "target_type must be skill or persona" unless %w[skill persona].include?(data.fetch("target_type"))
+      abort "target_type must be skill, persona, or workflow" unless %w[skill persona workflow].include?(data.fetch("target_type"))
       abort "context_mode must be skill_bundle_xml" unless data.fetch("context_mode") == "skill_bundle_xml"
       abort "requires_companion_resources must be boolean" unless [true, false].include?(data.fetch("requires_companion_resources"))
+
+      root_path = File.realpath(root)
+      validate_paths = lambda do |field, paths, skill_only|
+        abort "#{field} must be an array" unless paths.is_a?(Array)
+        paths.each do |relative|
+          abort "#{field} entries must be non-empty relative paths" unless relative.is_a?(String) && !relative.empty? && !relative.start_with?(File::SEPARATOR)
+
+          candidate = File.expand_path(relative, root_path)
+          resolved = File.realpath(candidate)
+          abort "#{field} path escapes repository: #{relative}" unless resolved.start_with?(root_path + File::SEPARATOR)
+          abort "#{field} path is not a file: #{relative}" unless File.file?(resolved)
+          abort "#{field} skill dependency must end in SKILL.md: #{relative}" if skill_only && File.basename(resolved) != "SKILL.md"
+        rescue Errno::ENOENT
+          abort "#{field} path does not exist: #{relative}"
+        end
+      end
+      companion_resources = data.fetch("companion_resources", [])
+      skill_dependencies = data.fetch("skill_dependencies", [])
+      abort "requires_companion_resources is true but companion_resources is empty" if data.fetch("requires_companion_resources") && companion_resources.empty?
+      validate_paths.call("companion_resources", companion_resources, false)
+      validate_paths.call("skill_dependencies", skill_dependencies, true)
 
       target_name = data.fetch("target_name")
       target_type = data.fetch("target_type")

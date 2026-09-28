@@ -12,7 +12,6 @@ metadata:
 
 # Release Engine
 
-Apply the [execution contract](../../docs/agent-contract.md) before this procedure.
 
 Use this skill when the task is to ship a Rails engine as a gem or prepare a new version.
 
@@ -39,7 +38,8 @@ DO NOT release without updating CHANGELOG and version file.
 5. Verify gemspec metadata and dependencies match tested Rails/Ruby versions.
 6. Dry-run the gem build: `gem build *.gemspec && gem push --dry-run *.gem`. Verify contents.
 7. Confirm installation docs and README match the release — update if needed.
-8. Publish: `gem push *.gem`.
+8. Ask the user to approve publishing the exact gem name and version. Preparing a release is not authorization to publish.
+9. Publish only after that approval: `gem push *.gem`.
 
 ## Extended Resources
 

@@ -8,11 +8,7 @@
 
 set -euo pipefail
 
-session_context="<IMPORTANT>
-You have access to Rails Agent Skills via MCP.
-Use the 'use_skill' MCP tool to dynamically load the skill you need.
-Review docs/reference/skill-catalog.md for the full list of available skills.
-</IMPORTANT>"
+session_context="Use the active project profile. For a clear task, load one matching skill. If routing is unclear, use the shared work-router from agnostic-planning-skills."
 
 emit_with_jq() {
   if [ -n "${CLAUDE_PLUGIN_ROOT:-}" ]; then

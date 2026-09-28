@@ -3,5 +3,9 @@
   "target_type": "skill",
   "target_name": "create-engine",
   "context_mode": "skill_bundle_xml",
-  "requires_companion_resources": true
+  "requires_companion_resources": true,
+  "companion_resources": [
+    "skills/create-engine/reference.md",
+    "skills/create-engine/TESTING.md"
+  ]
 }

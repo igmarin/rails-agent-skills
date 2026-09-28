@@ -1,7 +1,13 @@
 {
   "id": "workflow-rails-review-flow",
-  "target_type": "persona",
-  "target_name": "review",
+  "target_type": "workflow",
+  "target_name": "rails-review",
   "context_mode": "skill_bundle_xml",
-  "requires_companion_resources": true
+  "requires_companion_resources": true,
+  "companion_resources": [
+    "skills/code-review/assets/checklist.md"
+  ],
+  "skill_dependencies": [
+    "skills/code-review/SKILL.md"
+  ]
 }
