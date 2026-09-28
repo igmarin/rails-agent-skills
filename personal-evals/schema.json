@@ -23,7 +23,8 @@
     },
     "requires_companion_resources": {
       "type": "boolean",
-      "default": true
+      "default": false,
+      "description": "Whether companion materials must be supplied separately; the XML context builder includes only the target SKILL.md."
     },
     "criteria_version": {
       "type": "string",

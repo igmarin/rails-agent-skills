@@ -2,7 +2,7 @@
 
 This directory contains open example evaluation scenarios for measuring the effectiveness of the skills and workflows in this repository.
 
-These scenarios are the source of truth for the custom evaluator. They are not Tessl-native evals today because the custom evaluator loads a full XML context bundle: the target `SKILL.md` plus companion resources discovered from the skill or workflow directory.
+These scenarios are the source of truth for the custom evaluator. The XML context builder includes only the target `SKILL.md`; it does not follow links or load sibling files or assets. Add any scenario-specific input to `task.md` or provide it separately to the evaluator.
 
 Scenarios that target skills in `ruby-core-skills` (`create-service-object`, `model-domain`, `triage-bug`) live in that repo's `personal-evals/`.
 
@@ -33,7 +33,7 @@ A weighted checklist that evaluates adherence to our **strict conventions** and 
 
 ### 3. `metadata.json` (The Target Contract)
 
-Every scenario must include metadata that follows `personal-evals/schema.json`. Use it to declare the target skill, persona, or workflow, the XML context mode, and whether the scenario can be exported to Tessl later.
+Every scenario must include metadata that follows `personal-evals/schema.json`. Use it to declare the target skill, persona, or workflow, the XML context mode, whether companion resources must be provided separately, and Tessl export support.
 
 ```json
 {
@@ -41,29 +41,26 @@ Every scenario must include metadata that follows `personal-evals/schema.json`. 
   "target_type": "workflow",
   "target_name": "rails-feature",
   "context_mode": "skill_bundle_xml",
-  "requires_companion_resources": true,
+  "requires_companion_resources": false,
   "tessl_export": {
     "supported": false,
-    "reason": "Requires XML bundle with companion resources; Tessl currently consumes SKILL.md only."
+    "reason": "This custom evaluation uses repository-specific XML context and metadata; no Tessl-native export is configured."
   }
 }
 ```
 
 ## XML Context Bundle
 
-The evaluator builds context by filesystem convention:
+The builder emits the target `SKILL.md` as the primary XML document. It does not automatically include companion resources:
 
-- `SKILL.md` is always the primary document.
-- Direct companion text files such as `EXAMPLES.md`, `TESTING.md`, `TASK_TEMPLATES.md`, `PATTERNS.md`, and `HEURISTICS.md` are included.
-- Text files under `assets/` are included recursively.
-- Binary files are skipped.
-- Resources are sorted by path so prompts are deterministic.
+- Linked docs, examples, and files under `assets/` are not loaded.
+- `requires_companion_resources` is `true` only when the evaluator supplies those materials separately; the context builder does not.
 
 Generate a bundle for inspection:
 
 ```bash
-ruby scripts/eval_context_builder.rb skills/patterns/create-service-object
-ruby scripts/eval_context_builder.rb skills/rails-feature
+ruby scripts/eval_context_builder.rb skills/create-engine
+ruby scripts/eval_context_builder.rb skills/rails-feature --target-type workflow
 ```
 
 ## Best Practices

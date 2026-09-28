@@ -3,5 +3,5 @@
   "target_type": "workflow",
   "target_name": "rails-feature",
   "context_mode": "skill_bundle_xml",
-  "requires_companion_resources": true
+  "requires_companion_resources": false
 }
