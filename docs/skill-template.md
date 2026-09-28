@@ -1,5 +1,6 @@
 ---
 name: skill-name
+type: atomic
 description: Use when [specific task or trigger]. [State the useful outcome.]
 ---
 

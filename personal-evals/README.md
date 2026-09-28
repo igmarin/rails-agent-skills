@@ -33,13 +33,13 @@ A weighted checklist that evaluates adherence to our **strict conventions** and 
 
 ### 3. `metadata.json` (The Target Contract)
 
-Every scenario must include metadata that follows `personal-evals/schema.json`. Use it to declare the target skill or agent, the XML context mode, and whether the scenario can be exported to Tessl later.
+Every scenario must include metadata that follows `personal-evals/schema.json`. Use it to declare the target skill, persona, or workflow, the XML context mode, and whether the scenario can be exported to Tessl later.
 
 ```json
 {
   "id": "workflow-rails-tdd-loop",
-  "target_type": "agent",
-  "target_name": "tdd",
+  "target_type": "workflow",
+  "target_name": "rails-feature",
   "context_mode": "skill_bundle_xml",
   "requires_companion_resources": true,
   "tessl_export": {
@@ -63,7 +63,7 @@ Generate a bundle for inspection:
 
 ```bash
 ruby scripts/eval_context_builder.rb skills/patterns/create-service-object
-ruby scripts/eval_context_builder.rb skills/tdd
+ruby scripts/eval_context_builder.rb skills/rails-feature
 ```
 
 ## Best Practices

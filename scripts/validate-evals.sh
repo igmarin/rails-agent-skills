@@ -68,7 +68,7 @@ while IFS= read -r scenario_dir; do
       abort "missing required keys: #{missing.join(", ")}" unless missing.empty?
 
       abort "id must match directory name" unless data.fetch("id") == File.basename(scenario_dir)
-      abort "target_type must be skill or persona" unless %w[skill persona].include?(data.fetch("target_type"))
+      abort "target_type must be skill, persona, or workflow" unless %w[skill persona workflow].include?(data.fetch("target_type"))
       abort "context_mode must be skill_bundle_xml" unless data.fetch("context_mode") == "skill_bundle_xml"
       abort "requires_companion_resources must be boolean" unless [true, false].include?(data.fetch("requires_companion_resources"))
 
