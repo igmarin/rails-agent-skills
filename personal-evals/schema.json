@@ -24,7 +24,23 @@
     "requires_companion_resources": {
       "type": "boolean",
       "default": false,
-      "description": "Whether companion materials must be supplied separately; the XML context builder includes only the target SKILL.md."
+      "description": "Whether companion_resources must be supplied separately; the XML context builder includes only the target SKILL.md."
+    },
+    "companion_resources": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "Repository-relative files supplied separately from the target skill."
+    },
+    "skill_dependencies": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "Repository-relative SKILL.md files for separately delegated skills."
     },
     "criteria_version": {
       "type": "string",

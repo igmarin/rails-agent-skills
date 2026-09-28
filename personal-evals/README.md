@@ -55,6 +55,8 @@ The builder emits the target `SKILL.md` as the primary XML document. It does not
 
 - Linked docs, examples, and files under `assets/` are not loaded.
 - `requires_companion_resources` is `true` only when the evaluator supplies those materials separately; the context builder does not.
+- When true, list each repository-relative file in `companion_resources`. List separately delegated `SKILL.md` files in `skill_dependencies`; that list is independent of the companion-resource flag.
+- The XML builder emits only the primary target. The evaluation setup must supply each listed resource and dependency as separate context inputs.
 
 Generate a bundle for inspection:
 
